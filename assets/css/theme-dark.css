@@ -1,0 +1,64 @@
+/**
+ * Ensemble Dark Theme
+ * 
+ * @package Ensemble
+ */
+
+:root {
+    --es-primary: #3582c4;
+    --es-primary-hover: #2271b1;
+    --es-background: #1e1e1e;
+    --es-surface: #2c2c2c;
+    --es-surface-secondary: #383838;
+    --es-surface-hover: #404040;
+    --es-text: #e0e0e0;
+    --es-text-secondary: #a0a0a0;
+    --es-border: #404040;
+    --es-danger: #f66;
+    --es-danger-hover: #d44;
+    --es-success: #4caf50;
+    --es-warning: #f0b849;
+}
+
+/* Override WordPress admin colors for dark theme */
+.es-wizard-wrap input[type="text"],
+.es-wizard-wrap input[type="date"],
+.es-wizard-wrap input[type="time"],
+.es-wizard-wrap input[type="number"],
+.es-wizard-wrap select,
+.es-wizard-wrap textarea {
+    background: var(--es-surface);
+    color: var(--es-text);
+    border-color: var(--es-border);
+}
+
+/* Ensure labels are visible */
+.es-wizard-wrap label,
+.es-wizard-wrap .es-form-row label {
+    color: var(--es-text);
+}
+
+/* Field help text */
+.es-field-help,
+.es-wizard-wrap .description {
+    color: var(--es-text-secondary) !important;
+}
+
+/* Settings page in dark mode */
+.es-settings-wrap .form-table th,
+.es-settings-wrap .form-table td {
+    color: var(--es-text);
+}
+
+.es-settings-wrap .description {
+    color: var(--es-text-secondary);
+}
+
+/* Calendar in dark mode */
+.es-calendar-event .es-event-title {
+    color: var(--es-text);
+}
+
+.es-calendar-event .es-event-time {
+    color: var(--es-text-secondary);
+}

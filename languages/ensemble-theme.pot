@@ -1,0 +1,383 @@
+# Copyright (C) 2024 Kraftwerk Marketing
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Ensemble Theme 2.5.0\n"
+"Report-Msgid-Bugs-To: https://kraftwerk-marketing.de\n"
+"POT-Creation-Date: 2024-12-25 12:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: functions.php
+msgid "Primary Menu"
+msgstr ""
+
+#: functions.php
+msgid "Secondary Menu"
+msgstr ""
+
+#: functions.php
+msgid "Footer Menu"
+msgstr ""
+
+#: functions.php
+msgid "Social Links"
+msgstr ""
+
+#: functions.php
+msgid "Sidebar"
+msgstr ""
+
+#: functions.php
+msgid "Main sidebar widgets"
+msgstr ""
+
+#: functions.php
+msgid "Footer Column %d"
+msgstr ""
+
+#: functions.php
+msgid "Footer column %d widgets"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Ensemble Theme"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header, footer, and blog settings. Colors and fonts are inherited from Ensemble Designer."
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header"
+msgstr ""
+
+#: inc/customizer.php
+msgid "💡 Colors and fonts are automatically inherited from Ensemble Designer."
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header Layout"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Classic – Logo left, menu right"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Minimal – Logo + fullscreen burger menu"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Centered – Logo center, menu below"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Split – Menu left, logo center"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Fixed Header"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header stays visible when scrolling"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Shrink on Scroll"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header becomes smaller when scrolling"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Hide on Scroll Down"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header hides when scrolling down, shows when scrolling up"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Transparent on Front Page"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Header overlays hero with white text"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Show Search Icon"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Footer"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Footer Layout"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Classic – Multi-column with widgets"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Minimal – Single line"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Centered – Logo + nav centered"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Widget Columns"
+msgstr ""
+
+#: inc/customizer.php
+msgid "For Classic layout"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Copyright Text"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Use {year} for current year, {site} for site name"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Show Social Links"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Blog & Archives"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Blog Layout"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Grid – Card layout"
+msgstr ""
+
+#: inc/customizer.php
+msgid "List – Horizontal cards"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Posts per Row"
+msgstr ""
+
+#: inc/customizer.php
+msgid "For Grid layout"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Show Sidebar"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Excerpt Length"
+msgstr ""
+
+#: inc/customizer.php
+msgid "Number of words"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "All rights reserved."
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Previous"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Next"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Related Posts"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Home"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Breadcrumb"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Search: %s"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "404 Not Found"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Share:"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Share on Twitter"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Share on Facebook"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Share on LinkedIn"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Share via Email"
+msgstr ""
+
+#: inc/template-functions.php
+msgid "Back to top"
+msgstr ""
+
+#: inc/template-functions.php
+#, php-format
+msgid "%d min read"
+msgid_plural "%d min read"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php
+#, php-format
+msgid "%d Comment"
+msgid_plural "%d Comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: comments.php
+msgid "← Older Comments"
+msgstr ""
+
+#: comments.php
+msgid "Newer Comments →"
+msgstr ""
+
+#: comments.php
+msgid "Comments are closed."
+msgstr ""
+
+#: comments.php
+msgid "Leave a Comment"
+msgstr ""
+
+#: comments.php
+msgid "Cancel"
+msgstr ""
+
+#: comments.php
+msgid "Post Comment"
+msgstr ""
+
+#: comments.php
+msgid "Comment"
+msgstr ""
+
+#: comments.php
+msgid "Write your comment..."
+msgstr ""
+
+#: comments.php
+msgid "Name"
+msgstr ""
+
+#: comments.php
+msgid "Your Name *"
+msgstr ""
+
+#: comments.php
+msgid "Email"
+msgstr ""
+
+#: comments.php
+msgid "Your Email *"
+msgstr ""
+
+#: comments.php
+msgid "Website"
+msgstr ""
+
+#: comments.php
+msgid "Website (optional)"
+msgstr ""
+
+#: comments.php
+msgid "at"
+msgstr ""
+
+#: comments.php
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: comments.php
+msgid "Edit"
+msgstr ""
+
+#: template-parts/header/header-classic.php
+msgid "Primary Navigation"
+msgstr ""
+
+#: template-parts/header/header-classic.php
+msgid "Search"
+msgstr ""
+
+#: template-parts/header/header-classic.php
+msgid "Menu"
+msgstr ""
+
+#: template-parts/header/header-classic.php
+msgid "Search..."
+msgstr ""
+
+#: template-parts/header/header-classic.php
+msgid "Close"
+msgstr ""
+
+#: 404.php
+msgid "Page not found"
+msgstr ""
+
+#: 404.php
+msgid "The page you're looking for doesn't exist or has been moved."
+msgstr ""
+
+#: 404.php
+msgid "Back to Home"
+msgstr ""
+
+#: search.php
+msgid "Search Results for: %s"
+msgstr ""
+
+#: search.php
+msgid "No results found"
+msgstr ""
+
+#: search.php
+msgid "Try different keywords or browse our categories."
+msgstr ""
+
+#: template-parts/content/content-none.php
+msgid "Nothing found"
+msgstr ""
+
+#: template-parts/content/content-none.php
+msgid "No posts to display."
+msgstr ""

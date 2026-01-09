@@ -1,0 +1,369 @@
+/**
+ * Ensemble Additional Layout Styles
+ * 
+ * Styles for new layout variants: compact, cards, slider
+ * Uses CSS Variables from the Designer (--ensemble-*)
+ * 
+ * @package Ensemble
+ * @version 2.8.0
+ */
+
+/* ========================================
+   ARTIST COMPACT LAYOUT
+   Small avatars in a grid
+   ======================================== */
+
+.ensemble-artists-list.ensemble-layout-compact {
+    display: grid;
+    gap: var(--ensemble-card-gap, 16px);
+}
+
+.ensemble-artist-compact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e0e0e0);
+    border-radius: var(--ensemble-card-radius, 8px);
+    text-decoration: none;
+    color: var(--ensemble-text, #1a1a1a);
+    transition: all 0.2s ease;
+}
+
+.ensemble-artist-compact:hover {
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.ensemble-artist-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--ensemble-primary, #667eea);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.ensemble-artist-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ensemble-artist-compact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0; /* For text truncation */
+}
+
+.ensemble-artist-compact-name {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-weight: var(--ensemble-heading-weight, 600);
+    font-size: var(--ensemble-small-size, 14px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ensemble-artist-compact-genre {
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-secondary, #666);
+}
+
+/* ========================================
+   ARTIST LARGE CARDS LAYOUT
+   Portrait-style cards
+   ======================================== */
+
+.ensemble-artists-list.ensemble-layout-cards {
+    display: grid;
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+.ensemble-artist-card--large {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e0e0e0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.ensemble-artist-card--large:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+.ensemble-artist-portrait {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--ensemble-primary, #667eea), var(--ensemble-secondary, #764ba2));
+}
+
+.ensemble-artist-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.ensemble-artist-card--large:hover .ensemble-artist-portrait img {
+    transform: scale(1.05);
+}
+
+.ensemble-artist-placeholder-large {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ensemble-artist-placeholder-large .dashicons {
+    font-size: var(--ensemble-hero-size, 72px);
+    width: 64px;
+    height: 64px;
+}
+
+.ensemble-artist-card--large .ensemble-artist-card-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.ensemble-artist-card--large .ensemble-artist-title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 20px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    margin: 0 0 8px 0;
+}
+
+.ensemble-artist-card--large .ensemble-artist-title a {
+    color: var(--ensemble-text, #1a1a1a);
+    text-decoration: none;
+}
+
+.ensemble-artist-card--large .ensemble-artist-title a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-artist-card--large .ensemble-artist-genre {
+    color: var(--ensemble-text-secondary, #666);
+    font-size: var(--ensemble-small-size, 14px);
+    margin-bottom: 12px;
+}
+
+.ensemble-artist-card--large .ensemble-artist-bio {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #666);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+/* ========================================
+   LOCATION LARGE CARDS LAYOUT
+   ======================================== */
+
+.ensemble-locations-list.ensemble-layout-cards {
+    display: grid;
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+.ensemble-location-card--large {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e0e0e0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.ensemble-location-card--large:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+.ensemble-location-image-large {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--ensemble-primary, #667eea), var(--ensemble-secondary, #764ba2));
+}
+
+.ensemble-location-image-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.ensemble-location-card--large:hover .ensemble-location-image-large img {
+    transform: scale(1.05);
+}
+
+.ensemble-location-type-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--ensemble-primary, #667eea);
+    color: #ffffff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ensemble-location-placeholder-large {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ensemble-location-placeholder-large .dashicons {
+    font-size: var(--ensemble-hero-size, 72px);
+    width: 64px;
+    height: 64px;
+}
+
+.ensemble-location-card--large .ensemble-location-card-content {
+    padding: 20px;
+}
+
+.ensemble-location-card--large .ensemble-location-title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 20px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    margin: 0 0 12px 0;
+}
+
+.ensemble-location-card--large .ensemble-location-title a {
+    color: var(--ensemble-text, #1a1a1a);
+    text-decoration: none;
+}
+
+.ensemble-location-card--large .ensemble-location-title a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-location-card--large .ensemble-location-address,
+.ensemble-location-card--large .ensemble-location-capacity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ensemble-text-secondary, #666);
+    font-size: var(--ensemble-small-size, 14px);
+    margin-bottom: 8px;
+}
+
+.ensemble-location-card--large .ensemble-location-address .dashicons,
+.ensemble-location-card--large .ensemble-location-capacity .dashicons {
+    font-size: var(--ensemble-body-size, 16px);
+    width: 16px;
+    height: 16px;
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-location-card--large .ensemble-location-description {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #666);
+    line-height: 1.5;
+    margin: 12px 0 16px;
+}
+
+/* ========================================
+   RESPONSIVE GRID COLUMNS
+   ======================================== */
+
+/* Compact layout columns */
+.ensemble-artists-list.ensemble-layout-compact.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.ensemble-artists-list.ensemble-layout-compact.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ensemble-artists-list.ensemble-layout-compact.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Cards layout columns */
+.ensemble-artists-list.ensemble-layout-cards.ensemble-columns-2,
+.ensemble-locations-list.ensemble-layout-cards.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.ensemble-artists-list.ensemble-layout-cards.ensemble-columns-3,
+.ensemble-locations-list.ensemble-layout-cards.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ensemble-artists-list.ensemble-layout-cards.ensemble-columns-4,
+.ensemble-locations-list.ensemble-layout-cards.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .ensemble-artists-list.ensemble-layout-compact.ensemble-columns-4,
+    .ensemble-artists-list.ensemble-layout-compact.ensemble-columns-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .ensemble-artists-list.ensemble-layout-cards.ensemble-columns-4,
+    .ensemble-artists-list.ensemble-layout-cards.ensemble-columns-3,
+    .ensemble-locations-list.ensemble-layout-cards.ensemble-columns-4,
+    .ensemble-locations-list.ensemble-layout-cards.ensemble-columns-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .ensemble-artists-list.ensemble-layout-compact {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .ensemble-artists-list.ensemble-layout-cards,
+    .ensemble-locations-list.ensemble-layout-cards {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .ensemble-artist-portrait {
+        aspect-ratio: 4 / 3;
+    }
+}
+
+/* ========================================
+   DARK MODE
+   ======================================== */
+
+.es-mode-dark .ensemble-artist-compact,
+.es-mode-dark .ensemble-artist-card--large,
+.es-mode-dark .ensemble-location-card--large {
+    background: var(--ensemble-card-bg, #1f2937);
+    border-color: var(--ensemble-card-border, #374151);
+}
+
+.es-mode-dark .ensemble-artist-compact:hover {
+    border-color: var(--ensemble-primary, #667eea);
+}
+
+.es-mode-dark .ensemble-artist-compact-name,
+.es-mode-dark .ensemble-artist-card--large .ensemble-artist-title a,
+.es-mode-dark .ensemble-location-card--large .ensemble-location-title a {
+    color: var(--ensemble-text, #f3f4f6);
+}

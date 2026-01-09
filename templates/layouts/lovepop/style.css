@@ -1,0 +1,2878 @@
+/**
+ * Lovepop Layout Styles
+ * 
+ * Dark gradient background with magenta accents
+ * Bold, impactful design with glowing borders
+ * 
+ * @package Ensemble
+ * @version 2.0.0
+ */
+
+/* =====================================================
+   CSS VARIABLES - All styles controlled via Designer
+   Layout only defines structure, not colors/fonts
+   Lovepop uses Dark Mode settings when available
+   ===================================================== */
+
+/* Make Lovepop containers use dark mode variables */
+.es-lovepop-layout,
+.es-lovepop-single,
+.es-lovepop-event,
+.es-lovepop-card,
+.es-lovepop-artist-card,
+.es-lovepop-location-card {
+    /* Colors - prefer Dark Mode settings, fallback to Light Mode, then Lovepop defaults */
+    --lp-bg: var(--ensemble-dark-bg, var(--ensemble-bg, #0a0a0f));
+    --lp-card-bg: var(--ensemble-dark-card-bg, var(--ensemble-card-bg, rgba(20, 20, 35, 0.8)));
+    --lp-card-border: var(--ensemble-dark-card-border, var(--ensemble-card-border, rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3)));
+    --lp-text: var(--ensemble-dark-text, var(--ensemble-text, #ffffff));
+    --lp-text-secondary: var(--ensemble-dark-text-secondary, var(--ensemble-text-secondary, #e0e0e0));
+    --lp-primary: var(--ensemble-dark-primary, var(--ensemble-primary, #e91e8c));
+    --lp-hover: var(--ensemble-dark-hover, var(--ensemble-hover, #ff4da6));
+    --lp-link: var(--ensemble-dark-link, var(--ensemble-link, var(--lp-primary)));
+    
+    /* Spacing & Radius - from Designer */
+    --lp-radius: var(--ensemble-card-radius, 12px);
+    --lp-card-padding: var(--ensemble-card-padding, 25px);
+    --lp-card-gap: var(--ensemble-card-gap, 24px);
+    --lp-section-spacing: var(--ensemble-section-spacing, 48px);
+    --lp-card-border-width: var(--ensemble-card-border-width, 1px);
+    
+    /* Card Effects - from Designer */
+    --lp-card-shadow: var(--ensemble-card-shadow, 0 4px 6px rgba(0, 0, 0, 0.1));
+    --lp-card-hover-transform: var(--ensemble-card-hover-transform, translateY(-5px));
+    --lp-card-hover-shadow: var(--ensemble-card-hover-shadow, 0 10px 40px rgba(0, 0, 0, 0.2));
+    
+    /* Typography - Fonts from Designer */
+    --lp-font-heading: var(--ensemble-font-heading, 'Montserrat', sans-serif);
+    --lp-font-body: var(--ensemble-font-body, 'Montserrat', sans-serif);
+    
+    /* Typography - Sizes from Designer */
+    --lp-h1-size: var(--ensemble-h1-size, 36px);
+    --lp-h2-size: var(--ensemble-h2-size, 28px);
+    --lp-h3-size: var(--ensemble-h3-size, 24px);
+    --lp-body-size: var(--ensemble-body-size, 16px);
+    --lp-small-size: var(--ensemble-small-size, 14px);
+    --lp-xs-size: var(--ensemble-xs-size, 12px);
+    --lp-meta-size: var(--ensemble-meta-size, 14px);
+    --lp-lg-size: var(--ensemble-lg-size, 18px);
+    --lp-xl-size: var(--ensemble-xl-size, 20px);
+    --lp-price-size: var(--ensemble-price-size, 32px);
+    --lp-hero-title-size: var(--ensemble-hero-size, 72px);
+    
+    /* Typography - Weights from Designer */
+    --lp-heading-weight: var(--ensemble-heading-weight, 700);
+    --lp-body-weight: var(--ensemble-body-weight, 400);
+    
+    /* Typography - Line Heights from Designer */
+    --lp-line-height-heading: var(--ensemble-line-height-heading, 1.2);
+    --lp-line-height-body: var(--ensemble-line-height-body, 1.6);
+    
+    /* Buttons - prefer Dark Mode settings */
+    --lp-btn-bg: var(--ensemble-dark-button-bg, var(--ensemble-button-bg, var(--lp-primary)));
+    --lp-btn-text: var(--ensemble-dark-button-text, var(--ensemble-button-text, #ffffff));
+    --lp-btn-hover-bg: var(--ensemble-dark-button-hover-bg, var(--ensemble-button-hover-bg, var(--lp-hover)));
+    --lp-btn-hover-text: var(--ensemble-dark-button-hover-text, var(--ensemble-button-hover-text, #ffffff));
+    --lp-btn-radius: var(--ensemble-button-radius, 8px);
+    --lp-btn-padding-v: var(--ensemble-button-padding-v, 14px);
+    --lp-btn-padding-h: var(--ensemble-button-padding-h, 24px);
+    --lp-btn-weight: var(--ensemble-button-weight, 600);
+    --lp-btn-font-size: var(--ensemble-button-font-size, 16px);
+    --lp-btn-border-width: var(--ensemble-button-border-width, 2px);
+    
+    /* Grid - from Designer (Desktop only) */
+    --lp-grid-columns: var(--ensemble-grid-columns, 3);
+}
+
+/* =====================================================
+   RESPONSIVE TYPOGRAPHY - Tablet (max-width: 1024px)
+   Scales base heading sizes, hero and price use their own global vars
+   ===================================================== */
+@media (max-width: 1024px) {
+    .es-lovepop-layout,
+    .es-lovepop-single,
+    .es-lovepop-event {
+        /* Scale heading sizes */
+        --lp-h1-size: calc(var(--ensemble-h1-size, 36px) * 0.9);
+        --lp-h2-size: calc(var(--ensemble-h2-size, 28px) * 0.9);
+        --lp-h3-size: calc(var(--ensemble-h3-size, 24px) * 0.9);
+        /* Hero scales independently from global hero-size */
+        --lp-hero-title-size: calc(var(--ensemble-hero-size, 72px) * 0.8);
+    }
+}
+
+/* =====================================================
+   RESPONSIVE TYPOGRAPHY - Mobile (max-width: 768px)
+   ===================================================== */
+@media (max-width: 768px) {
+    .es-lovepop-layout,
+    .es-lovepop-single,
+    .es-lovepop-event {
+        /* Scale heading sizes */
+        --lp-h1-size: calc(var(--ensemble-h1-size, 36px) * 0.75);
+        --lp-h2-size: calc(var(--ensemble-h2-size, 28px) * 0.8);
+        --lp-h3-size: calc(var(--ensemble-h3-size, 24px) * 0.85);
+        --lp-body-size: calc(var(--ensemble-body-size, 16px) * 0.95);
+        /* Hero and price scale independently - 25% smaller on mobile */
+        --lp-hero-title-size: calc(var(--ensemble-hero-size, 72px) * 0.45);
+        --lp-price-size: calc(var(--ensemble-price-size, 32px) * 0.85);
+    }
+}
+
+/* =====================================================
+   RESPONSIVE TYPOGRAPHY - Small Mobile (max-width: 480px)
+   ===================================================== */
+@media (max-width: 480px) {
+    .es-lovepop-layout,
+    .es-lovepop-single,
+    .es-lovepop-event {
+        /* Scale heading sizes */
+        --lp-h1-size: calc(var(--ensemble-h1-size, 36px) * 0.65);
+        --lp-h2-size: calc(var(--ensemble-h2-size, 28px) * 0.7);
+        --lp-h3-size: calc(var(--ensemble-h3-size, 24px) * 0.75);
+        --lp-body-size: calc(var(--ensemble-body-size, 16px) * 0.9);
+        --lp-small-size: calc(var(--ensemble-small-size, 14px) * 0.9);
+        /* Hero and price scale independently - even smaller on small phones */
+        --lp-hero-title-size: calc(var(--ensemble-hero-size, 72px) * 0.35);
+        --lp-price-size: calc(var(--ensemble-price-size, 32px) * 0.75);
+    }
+}
+
+/* =====================================================
+   BODY BACKGROUND - Uses Designer Dark Mode background
+   Note: Body uses :root variables directly since body is
+   not inside Lovepop containers
+   ===================================================== */
+body:has(.es-lovepop-layout),
+body:has(.es-lovepop-single),
+body:has(.es-lovepop-event) {
+    background: var(--ensemble-dark-bg, linear-gradient(180deg, #0a0a0f 0%, #12121c 50%, #0f0f18 100%)) !important;
+    min-height: 100vh;
+}
+
+/* =====================================================
+   BASE CONTAINER - No border/background
+   ===================================================== */
+.es-lovepop-layout,
+.es-lovepop-single,
+.es-lovepop-event {
+    background: transparent;
+    min-height: 100vh;
+    color: var(--lp-text);
+    font-family: var(--lp-font-body);
+    line-height: var(--lp-line-height-body);
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Global Typography - All Headings */
+.es-lovepop-layout h1,
+.es-lovepop-layout h2,
+.es-lovepop-layout h3,
+.es-lovepop-layout h4,
+.es-lovepop-layout h5,
+.es-lovepop-layout h6,
+.es-lovepop-single h1,
+.es-lovepop-single h2,
+.es-lovepop-single h3,
+.es-lovepop-single h4,
+.es-lovepop-single h5,
+.es-lovepop-single h6,
+.es-lovepop-event h1,
+.es-lovepop-event h2,
+.es-lovepop-event h3,
+.es-lovepop-event h4,
+.es-lovepop-event h5,
+.es-lovepop-event h6,
+.es-lovepop-card h1,
+.es-lovepop-card h2,
+.es-lovepop-card h3,
+.es-lovepop-card h4,
+.es-lovepop-card h5,
+.es-lovepop-card h6 {
+    font-family: var(--lp-font-heading) !important;
+    font-weight: var(--lp-heading-weight) !important;
+    line-height: var(--lp-line-height-heading);
+    color: var(--lp-text) !important;
+}
+
+/* Global Typography - Body Text */
+.es-lovepop-layout p,
+.es-lovepop-layout span,
+.es-lovepop-layout li,
+.es-lovepop-layout strong,
+.es-lovepop-layout em,
+.es-lovepop-single p,
+.es-lovepop-single span,
+.es-lovepop-single li,
+.es-lovepop-single strong,
+.es-lovepop-single em,
+.es-lovepop-event p,
+.es-lovepop-event span,
+.es-lovepop-event li,
+.es-lovepop-event strong,
+.es-lovepop-event em,
+.es-lovepop-card p,
+.es-lovepop-card span,
+.es-lovepop-card strong,
+.es-lovepop-card em {
+    font-family: var(--lp-font-body) !important;
+    color: var(--lp-text-secondary) !important;
+}
+
+/* Links - exclude button links */
+.es-lovepop-layout a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary),
+.es-lovepop-single a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary),
+.es-lovepop-event a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary),
+.es-lovepop-card a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary) {
+    font-family: var(--lp-font-body) !important;
+    color: var(--lp-link, var(--lp-primary)) !important;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.es-lovepop-layout a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary):hover,
+.es-lovepop-single a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary):hover,
+.es-lovepop-event a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary):hover,
+.es-lovepop-card a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary):hover {
+    color: var(--lp-hover) !important;
+}
+
+.es-lovepop-layout.ensemble-container,
+.es-lovepop-single.ensemble-container {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.es-lovepop-layout *,
+.es-lovepop-single * {
+    box-sizing: border-box;
+}
+
+/* =====================================================
+   SINGLE EVENT LAYOUT STRUCTURE
+   ===================================================== */
+.es-lovepop-body {
+    padding: 0 20px;
+}
+
+.es-lovepop-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.es-lovepop-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .es-lovepop-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.es-lovepop-main {
+    min-width: 0;
+}
+
+.es-lovepop-aside {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .es-lovepop-aside {
+        position: static;
+    }
+}
+
+/* Allgemeine Sidebar Styles für Add-on Elemente */
+.es-lovepop-aside .es-reservation-wrapper,
+.es-lovepop-aside .es-section,
+.es-lovepop-aside .es-reservation-section {
+    color: var(--lp-text) !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Nested sections inside cards - kein extra styling */
+.es-lovepop-ticket-card .es-section,
+.es-lovepop-reservation-card .es-section,
+.es-lovepop-info-card .es-section {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.es-lovepop-aside .es-section-title,
+.es-lovepop-aside .es-reservation-header h3,
+.es-lovepop-aside h3 {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-section-title-size);
+    font-weight: var(--lp-heading-weight);
+    color: var(--lp-text) !important;
+    margin: 0 0 15px 0;
+}
+
+.es-lovepop-aside .es-btn,
+.es-lovepop-aside .es-btn-primary,
+.es-lovepop-aside button {
+    background: var(--lp-btn-bg) !important;
+    color: var(--lp-btn-text) !important;
+    border: none !important;
+    padding: 12px 20px !important;
+    border-radius: var(--lp-btn-radius) !important;
+    font-weight: var(--lp-btn-weight) !important;
+    font-size: var(--lp-btn-font-size) !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    display: block !important;
+}
+
+.es-lovepop-aside .es-btn:hover,
+.es-lovepop-aside .es-btn-primary:hover,
+.es-lovepop-aside button:hover {
+    background: var(--lp-btn-hover-bg) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px color-mix(in srgb, var(--lp-primary) 40%, transparent);
+}
+
+.es-lovepop-aside .es-btn-secondary {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--lp-text) !important;
+    border: 1px solid var(--lp-primary) !important;
+}
+
+.es-lovepop-aside .es-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: none;
+}
+
+.es-lovepop-aside .es-form-group {
+    margin-bottom: 15px;
+}
+
+.es-lovepop-aside .es-form-group label {
+    display: block;
+    font-size: var(--lp-label-size);
+    color: var(--lp-text-secondary) !important;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.es-lovepop-aside input[type="text"],
+.es-lovepop-aside input[type="email"],
+.es-lovepop-aside input[type="tel"],
+.es-lovepop-aside input[type="number"],
+.es-lovepop-aside select,
+.es-lovepop-aside textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 6px;
+    color: var(--lp-text) !important;
+    font-size: var(--lp-body-size);
+}
+
+.es-lovepop-aside input:focus,
+.es-lovepop-aside select:focus,
+.es-lovepop-aside textarea:focus {
+    outline: none;
+    border-color: var(--lp-primary) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--lp-primary) 20%, transparent);
+}
+
+/* Ticket Card (Top of Sidebar) */
+.es-lovepop-ticket-card {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--lp-primary) 15%, transparent), color-mix(in srgb, var(--lp-primary) 10%, transparent));
+    border: 2px solid color-mix(in srgb, var(--lp-primary) 50%, transparent);
+    border-radius: var(--lp-radius);
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
+
+.es-lovepop-ticket-price {
+    font-size: var(--lp-price-size);
+    font-weight: 800;
+    color: var(--lp-text);
+    margin-bottom: 15px;
+    text-shadow: 0 2px 10px color-mix(in srgb, var(--lp-primary) 30%, transparent);
+}
+
+/* Primary Button (Ticket) - uses Designer variables */
+.es-lovepop-btn-ticket {
+    display: block;
+    width: 100%;
+    padding: var(--lp-btn-padding-v) var(--lp-btn-padding-h);
+    background: var(--lp-btn-bg) !important;
+    color: var(--lp-btn-text) !important;
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--lp-font-heading) !important;
+    font-weight: var(--lp-btn-weight) !important;
+    font-size: var(--lp-btn-font-size) !important;
+    border-radius: var(--lp-btn-radius);
+    border: var(--lp-btn-border-width) solid transparent;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 25px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.es-lovepop-btn-ticket:hover {
+    background: var(--lp-btn-hover-bg) !important;
+    color: var(--lp-btn-hover-text) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 35px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.5);
+}
+
+/* External Link Button */
+.es-lovepop-external-link {
+    margin-bottom: 20px;
+}
+
+/* Secondary Button (Outline) - uses Designer variables */
+.es-lovepop-btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: var(--lp-btn-padding-v) var(--lp-btn-padding-h);
+    background: transparent !important;
+    color: var(--lp-btn-bg) !important;
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--lp-font-heading) !important;
+    font-weight: var(--lp-btn-weight) !important;
+    font-size: var(--lp-btn-font-size) !important;
+    border: var(--lp-btn-border-width) solid var(--lp-btn-bg);
+    border-radius: var(--lp-btn-radius);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.es-lovepop-btn-secondary:hover {
+    background: var(--lp-btn-bg) !important;
+    color: var(--lp-btn-text) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+.es-lovepop-btn-secondary .dashicons {
+    font-size: var(--lp-lg-size, 18px);
+    width: 18px;
+    height: 18px;
+}
+
+/* Additional Info Section */
+.es-lovepop-additional-info {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--lp-radius);
+    padding: 25px !important;
+    backdrop-filter: blur(10px);
+    font-size: var(--lp-body-size, 16px) !important;
+}
+
+.es-lovepop-additional-info .es-lovepop-section-title {
+    margin-bottom: 20px;
+    padding-left: 0;
+    border-left: none;
+}
+
+.es-lovepop-additional-info .es-lovepop-info-content,
+.es-lovepop-additional-info .es-lovepop-info-content p,
+.es-lovepop-additional-info .es-lovepop-prose,
+.es-lovepop-additional-info .es-lovepop-prose p {
+    font-size: var(--lp-body-size, 16px) !important;
+}
+
+.es-lovepop-info-content {
+    color: var(--lp-text-secondary, #a0a0b0);
+    font-size: var(--lp-body-size, 16px) !important;
+    font-weight: 400;
+}
+
+.es-lovepop-info-content p {
+    font-size: var(--lp-body-size, 16px) !important;
+    font-weight: 400;
+}
+
+.es-lovepop-info-content ul,
+.es-lovepop-info-content ol {
+    margin: 15px 0;
+    padding-left: 24px;
+    font-size: var(--lp-body-size, 16px) !important;
+    font-weight: 400;
+}
+
+.es-lovepop-info-content li {
+    margin-bottom: 8px;
+    font-size: var(--lp-body-size, 16px) !important;
+    font-weight: 400;
+}
+
+/* Event Genres Meta (über Line-Up wenn keine Venues) */
+.es-lovepop-genre-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--lp-card-border);
+}
+
+.es-lovepop-genre-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    background: color-mix(in srgb, var(--lp-primary) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--lp-primary) 30%, transparent);
+    border-radius: 20px;
+    font-size: var(--lp-small-size);
+    color: var(--lp-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+/* Catalog Section */
+.es-lovepop-catalog {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--lp-radius);
+    padding: 25px !important;
+    backdrop-filter: blur(10px);
+}
+
+.es-lovepop-catalog .es-catalog-section,
+.es-lovepop-catalog .es-menu-section {
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.es-lovepop-catalog .es-catalog,
+.es-lovepop-catalog .es-catalog-content {
+    padding: 0;
+    margin: 0;
+}
+
+.es-lovepop-catalog .es-catalog-items {
+    margin: 0;
+}
+
+.es-lovepop-catalog .es-catalog-item {
+    background: transparent;
+    border: none;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.es-lovepop-catalog .es-catalog-item:last-child {
+    border-bottom: none;
+}
+
+.es-lovepop-catalog .es-item-header {
+    padding: 0;
+}
+
+.es-lovepop-catalog .es-item-name {
+    color: var(--lp-text, #ffffff);
+}
+
+.es-lovepop-catalog .es-item-price {
+    color: var(--lp-primary, #e91e8c);
+}
+
+.es-lovepop-catalog .es-catalog-category-header {
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.es-lovepop-catalog .es-catalog-category-header h4 {
+    color: var(--lp-text-secondary, #a0a0b0);
+    text-transform: uppercase;
+    font-size: var(--lp-small-size);
+    letter-spacing: 1px;
+}
+
+/* Reservation Card */
+.es-lovepop-reservation-card {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--lp-radius);
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.es-lovepop-reservation-card:empty {
+    display: none;
+}
+
+.es-lovepop-reservation-card .es-section,
+.es-lovepop-reservation-card .es-reservation-wrapper,
+.es-lovepop-reservation-card .es-reservation-section {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.es-lovepop-reservation-card .es-section-title,
+.es-lovepop-reservation-card h3 {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-section-title-size);
+    font-weight: var(--lp-heading-weight);
+    color: var(--lp-text);
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+/* Tickets Add-on Card (Sidebar) */
+.es-lovepop-tickets-addon {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--lp-radius);
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.es-lovepop-tickets-addon:empty {
+    display: none;
+}
+
+.es-lovepop-tickets-addon .es-section,
+.es-lovepop-tickets-addon .es-tickets-wrapper,
+.es-lovepop-tickets-addon .es-tickets-section {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.es-lovepop-tickets-addon .es-section-title,
+.es-lovepop-tickets-addon h3 {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-section-title-size);
+    font-weight: var(--lp-heading-weight);
+    color: var(--lp-text);
+    margin: 0 0 15px 0;
+    padding: 0;
+}
+
+/* Info Card (Sidebar) */
+.es-lovepop-info-card {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.es-lovepop-info-row {
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.es-lovepop-info-row:last-child {
+    border-bottom: none;
+}
+
+.es-lovepop-info-label {
+    font-size: var(--lp-label-size);
+    color: var(--lp-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.es-lovepop-info-value {
+    font-size: var(--lp-body-size);
+    font-weight: 600;
+    color: var(--lp-text);
+}
+
+.es-lovepop-info-link {
+    color: var(--lp-primary);
+    text-decoration: none;
+}
+
+.es-lovepop-info-link:hover {
+    text-decoration: underline;
+}
+
+.es-lovepop-info-sub {
+    font-size: var(--lp-meta-size);
+    color: var(--lp-text-secondary);
+}
+
+.es-lovepop-info-hint {
+    display: block;
+    font-size: var(--lp-small-size);
+    color: var(--lp-text-secondary);
+    margin-top: 6px;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.es-lovepop-info-price {
+    color: var(--lp-primary);
+    font-size: var(--lp-h3-size);
+}
+
+/* Social Links */
+.es-lovepop-social-row {
+    padding: 12px 0;
+}
+
+.es-lovepop-facebook-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #1877f2;
+    color: #fff !important;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: var(--lp-meta-size);
+    transition: all 0.3s ease;
+}
+
+.es-lovepop-facebook-link:hover {
+    background: #166fe5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+}
+
+.es-lovepop-facebook-link .dashicons {
+    font-size: var(--lp-body-size);
+    width: 18px;
+    height: 18px;
+}
+
+/* Generic Button */
+.es-lovepop-btn {
+    display: block;
+    width: 100%;
+    padding: var(--lp-btn-padding-v) var(--lp-btn-padding-h);
+    background: var(--lp-btn-bg) !important;
+    color: var(--lp-btn-text) !important;
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--lp-font-heading) !important;
+    font-weight: var(--lp-btn-weight) !important;
+    font-size: var(--lp-btn-font-size) !important;
+    border-radius: var(--lp-btn-radius);
+    border: var(--lp-btn-border-width) solid transparent;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: var(--lp-card-shadow);
+}
+
+.es-lovepop-btn:hover {
+    background: var(--lp-btn-hover-bg) !important;
+    color: var(--lp-btn-hover-text) !important;
+    transform: var(--lp-card-hover-transform);
+    box-shadow: var(--lp-card-hover-shadow);
+}
+
+/* Section */
+.es-lovepop-section {
+    margin-bottom: 40px;
+}
+
+.es-lovepop-section-title {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-h2-size);
+    font-weight: var(--lp-heading-weight);
+    color: var(--lp-text);
+    margin-bottom: 20px;
+    padding-left: 15px;
+    border-left: 4px solid var(--lp-primary);
+}
+
+/* Prose */
+.es-lovepop-prose {
+    color: var(--lp-text-secondary) !important;
+    font-size: var(--lp-body-size, 16px) !important;
+    line-height: 1.8;
+}
+
+.es-lovepop-prose p,
+.es-lovepop-prose span,
+.es-lovepop-prose li,
+.es-lovepop-prose strong,
+.es-lovepop-prose em {
+    color: var(--lp-text-secondary) !important;
+    font-size: var(--lp-body-size, 16px) !important;
+    margin-bottom: 1em;
+}
+
+/* Artist Grid */
+.es-lovepop-artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.es-lovepop-artist-item {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: 15px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.es-lovepop-artist-item:hover {
+    border-color: var(--lp-primary);
+    transform: translateY(-3px);
+}
+
+.es-lovepop-artist-img {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.es-lovepop-artist-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-lovepop-artist-info h4 {
+    font-size: var(--lp-body-size);
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: var(--lp-text);
+}
+
+.es-lovepop-artist-genre {
+    font-size: var(--lp-small-size);
+    color: var(--lp-primary);
+    display: block;
+}
+
+.es-lovepop-artist-references {
+    font-size: var(--lp-label-size);
+    color: var(--lp-text-secondary);
+    display: block;
+    margin-top: 4px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.es-lovepop-artist-time {
+    display: block;
+    margin-top: 6px;
+    font-size: var(--lp-label-size);
+    font-weight: 600;
+    color: var(--lp-primary);
+}
+
+.es-lovepop-venue-group {
+    margin-bottom: 30px;
+}
+
+.es-lovepop-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
+}
+
+.es-lovepop-venue-title {
+    font-size: var(--lp-h3-size);
+    font-weight: var(--lp-heading-weight);
+    color: var(--lp-primary);
+    margin: 0;
+}
+
+.es-lovepop-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.es-lovepop-venue-genre {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
+    border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3);
+    border-radius: 20px;
+    font-size: var(--lp-xs-size);
+    color: var(--lp-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Ticket Note (Fine Print) */
+.es-lovepop-ticket-note {
+    font-size: var(--lp-meta-size);
+    color: var(--lp-text-secondary);
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+/* =====================================================
+   EVENT CARDS - Grid View
+   ===================================================== */
+.es-lovepop-card {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.es-lovepop-card:hover {
+    border-color: var(--lp-card-border-hover);
+    box-shadow: 0 0 30px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+.es-lovepop-card-inner {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Card Media */
+.es-lovepop-card-media {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+}
+
+.es-lovepop-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.es-lovepop-card:hover .es-lovepop-card-media img {
+    transform: scale(1.05);
+}
+
+.es-lovepop-card-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(10, 10, 15, 0) 0%,
+        rgba(10, 10, 15, 0.3) 50%,
+        rgba(10, 10, 15, 0.9) 100%
+    );
+    pointer-events: none;
+}
+
+.es-lovepop-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--lp-card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lp-primary);
+}
+
+.es-lovepop-placeholder svg {
+    width: 48px;
+    height: 48px;
+    opacity: 0.5;
+}
+
+/* Status Badge */
+.es-lovepop-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--lp-primary);
+    color: var(--lp-text);
+    padding: 6px 14px;
+    font-size: var(--lp-xs-size);
+    font-weight: var(--lp-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    z-index: 2;
+    box-shadow: 0 4px 15px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+/* Card Content */
+.es-lovepop-card-content {
+    padding: 20px;
+    position: relative;
+}
+
+.es-lovepop-date {
+    display: inline-block;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
+    border: 1px solid var(--lp-card-border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: var(--lp-small-size);
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--lp-primary-light);
+}
+
+/* Hide unused icon classes */
+.es-lovepop-date-icon {
+    display: none;
+}
+
+.es-lovepop-title {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-card-title-size);
+    font-weight: var(--lp-heading-weight);
+    line-height: var(--lp-line-height-heading);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.es-lovepop-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: var(--lp-meta-size);
+    color: var(--lp-text-secondary);
+}
+
+.es-lovepop-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Hide card meta icons */
+.es-lovepop-meta-icon {
+    display: none;
+}
+
+/* Use separators instead */
+.es-lovepop-meta-item::before {
+    content: '•';
+    color: var(--lp-primary);
+    font-weight: bold;
+}
+
+.es-lovepop-price {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, var(--lp-primary), var(--lp-primary-dark));
+    color: var(--lp-text);
+    font-size: var(--lp-meta-size);
+    font-weight: var(--lp-heading-weight);
+    border-radius: 4px;
+}
+
+/* =====================================================
+   EVENT GRID - Designer Settings Integration
+   Uses CSS variables from Designer for gap, columns, etc.
+   ===================================================== */
+
+/* Event Grid - use designer gap setting */
+.es-lovepop-layout .ensemble-events-grid,
+.es-layout-lovepop .ensemble-events-grid,
+.es-lovepop-event .ensemble-events-grid {
+    gap: var(--ensemble-card-gap, 24px);
+    background: transparent !important;
+}
+
+/* Grid Container - ensure transparent background */
+.es-lovepop-layout .ensemble-container,
+.es-layout-lovepop .ensemble-container {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Grid Wrapper - transparent for Lovepop */
+.es-lovepop-layout .ensemble-events-grid-wrapper,
+.es-layout-lovepop .ensemble-events-grid-wrapper,
+.ensemble-events-grid-wrapper.es-layout-lovepop {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Grid Filters - Lovepop styling */
+.es-lovepop-layout .ensemble-grid-filters,
+.es-layout-lovepop .ensemble-grid-filters {
+    background: var(--lp-card-bg) !important;
+    border: 1px solid var(--lp-card-border) !important;
+    border-radius: var(--lp-radius) !important;
+}
+
+.es-lovepop-layout .ensemble-grid-filters input,
+.es-lovepop-layout .ensemble-grid-filters select,
+.es-layout-lovepop .ensemble-grid-filters input,
+.es-layout-lovepop .ensemble-grid-filters select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: var(--lp-card-border) !important;
+    color: var(--lp-text) !important;
+}
+
+/* Slider wrapper gap */
+.es-lovepop-layout .es-slider,
+.es-layout-lovepop .es-slider {
+    --es-slide-gap: var(--ensemble-card-gap, 24px);
+}
+
+/* =====================================================
+   EVENT CARDS - Overlay Style (Fullscreen with Hover)
+   ===================================================== */
+.es-lovepop-card--overlay {
+    background: transparent;
+    border: var(--ensemble-card-border-width, 0) solid var(--lp-card-border);
+    backdrop-filter: none;
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.es-lovepop-card--overlay:hover {
+    border-color: transparent;
+    box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+.es-lovepop-card-link {
+    display: block;
+    position: relative;
+    aspect-ratio: 4/5;
+    text-decoration: none;
+    color: var(--lp-text);
+    overflow: hidden;
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+/* Background Image */
+.es-lovepop-card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.es-lovepop-card-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.es-lovepop-card--overlay:hover .es-lovepop-card-bg img {
+    transform: scale(1.08);
+}
+
+.es-lovepop-placeholder-bg {
+    width: 100%;
+    height: 100%;
+    background: var(--lp-card-bg);
+}
+
+/* Gradient Overlay - like Hero/Related Events */
+.es-lovepop-card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(10, 10, 15, 0.95) 0%,
+        rgba(10, 10, 15, 0.6) 30%,
+        rgba(10, 10, 15, 0.2) 60%,
+        rgba(10, 10, 15, 0) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Status Badge */
+.es-lovepop-card-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--lp-primary);
+    color: var(--lp-text);
+    padding: 6px 14px;
+    font-size: var(--lp-xs-size);
+    font-weight: var(--lp-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    z-index: 5;
+    box-shadow: 0 4px 15px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+/* Content Overlay - padding from designer settings */
+.es-lovepop-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--lp-card-padding, 25px);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Date Display */
+.es-lovepop-card-date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.es-lovepop-card-day {
+    font-size: var(--lp-h1-size);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--lp-text);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.es-lovepop-card-month {
+    font-size: var(--lp-meta-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--lp-primary-light);
+}
+
+/* Artists Display (hidden by default) */
+.es-lovepop-card-artists {
+    font-size: var(--lp-small-size);
+    font-weight: 500;
+    color: var(--lp-primary-light);
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.es-lovepop-card-artists .es-more {
+    opacity: 0.7;
+}
+
+/* Title - Like Related Events but XL size */
+.es-lovepop-card-title {
+    margin: 0;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--lp-xl-size, 20px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    line-height: var(--ensemble-line-height-heading, 1.4);
+    color: var(--lp-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Hover Effect - Swap Date with Artists */
+.es-lovepop-card--overlay:hover .es-lovepop-card-date {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.es-lovepop-card--overlay:hover .es-lovepop-card-artists {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 60px;
+    margin-bottom: 12px;
+}
+
+/* Mobile - Always show date, hide artists swap */
+@media (max-width: 768px) {
+    .es-lovepop-card-link {
+        aspect-ratio: 3/4;
+    }
+    
+    .es-lovepop-card-day {
+        font-size: calc(var(--lp-h1-size) * 0.75);
+    }
+    
+    .es-lovepop-card-title {
+        font-size: var(--lp-lg-size, 18px);
+    }
+    
+    /* On touch devices, show both date and artists (stacked) */
+    .es-lovepop-card--overlay .es-lovepop-card-artists {
+        opacity: 0.8;
+        transform: translateY(0);
+        max-height: 40px;
+        font-size: var(--lp-xs-size);
+    }
+    
+    .es-lovepop-card--overlay .es-lovepop-card-date {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 8px;
+    }
+    
+    .es-lovepop-card--overlay .es-lovepop-card-day {
+        font-size: var(--lp-h3-size);
+    }
+}
+
+/* =====================================================
+   SINGLE EVENT - Hero Header (Full Width)
+   ===================================================== */
+.es-lovepop-hero {
+    position: relative;
+    height: 550px;
+    overflow: hidden;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
+
+.es-lovepop-hero-image {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.es-lovepop-hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.es-lovepop-hero-image img,
+.es-lovepop-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-lovepop-hero-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        to bottom,
+        rgba(10, 10, 15, 0.2) 0%,
+        rgba(10, 10, 15, 0.4) 50%,
+        rgba(10, 10, 15, 0.95) 100%
+    );
+}
+
+.es-lovepop-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        to bottom,
+        rgba(10, 10, 15, 0.2) 0%,
+        rgba(10, 10, 15, 0.4) 50%,
+        rgba(10, 10, 15, 0.95) 100%
+    );
+}
+
+.es-lovepop-hero-content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1400px;
+    padding: 50px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.es-lovepop-hero-status {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: var(--lp-primary);
+    color: var(--lp-text);
+    padding: 10px 20px;
+    font-size: var(--lp-small-size);
+    font-weight: var(--lp-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    z-index: 3;
+    box-shadow: 0 4px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+/* Event Badge */
+.es-lovepop-hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+    color: var(--lp-text);
+    padding: 8px 16px;
+    font-size: var(--lp-label-size);
+    font-weight: var(--lp-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(238, 90, 90, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-sold_out {
+    background: linear-gradient(135deg, #dc3232, #c62828);
+    box-shadow: 0 4px 15px rgba(220, 50, 50, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-few_tickets {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-free {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-new {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-premiere {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-last_show {
+    background: linear-gradient(135deg, #ec4899, #db2777);
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+}
+
+.es-lovepop-hero-badge.es-badge-special {
+    background: linear-gradient(135deg, var(--lp-primary), #b8157a);
+    box-shadow: 0 4px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+.es-lovepop-hero-date {
+    display: inline-block;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
+    border: 1px solid var(--lp-primary);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: var(--lp-meta-size);
+    font-weight: 600;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.es-lovepop-hero-time {
+    margin-left: 10px;
+    opacity: 0.8;
+}
+
+.es-lovepop-hero-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.es-lovepop-hero-cats span {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: var(--lp-label-size);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.es-lovepop-hero-date .dashicons {
+    display: none;
+}
+
+.es-lovepop-hero-title {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-hero-title-size);
+    font-weight: 800;
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+    max-width: 900px;
+    margin: 0;
+    /* Prevent long words from overflowing */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+    /* Gradient Text */
+    background: linear-gradient(90deg, var(--lp-text) 0%, var(--lp-text) 40%, var(--lp-primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    /* Glow Effect via filter */
+    filter: drop-shadow(0 2px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4)) drop-shadow(0 0 40px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2));
+}
+
+/* =====================================================
+   SINGLE EVENT - Content Layout
+   ===================================================== */
+.es-lovepop-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.es-lovepop-main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.es-lovepop-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* =====================================================
+   SECTIONS - Clean Style (no border/background)
+   ===================================================== */
+.es-lovepop-section {
+    padding: 30px 0;
+    border-bottom: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
+}
+
+.es-lovepop-section:last-child {
+    border-bottom: none;
+}
+
+.es-lovepop-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
+}
+
+.es-lovepop-section-header h2 {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-section-title-size);
+    font-weight: var(--lp-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+/* Simple accent bar instead of icon box */
+.es-lovepop-section-header::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: linear-gradient(180deg, var(--lp-primary), var(--lp-primary-dark));
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+/* Hide the icon box */
+.es-lovepop-section-icon {
+    display: none;
+}
+
+/* =====================================================
+   ARTISTS GRID
+   ===================================================== */
+.es-lovepop-artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+}
+
+.es-lovepop-artist {
+    text-align: center;
+    padding: 20px 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.es-lovepop-artist:hover {
+    border-color: var(--lp-primary);
+    transform: translateY(-3px);
+}
+
+.es-lovepop-artist img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    border: 2px solid var(--lp-primary);
+}
+
+.es-lovepop-artist h3 {
+    font-size: var(--lp-meta-size);
+    font-weight: 600;
+    margin: 0;
+}
+
+.es-lovepop-artist-genre {
+    font-size: var(--lp-label-size);
+    color: var(--lp-text-secondary);
+    margin-top: 5px;
+    display: block;
+}
+
+.es-lovepop-artist-references {
+    font-size: var(--lp-xs-size);
+    color: var(--lp-text-secondary);
+    display: block;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* Venue Groups */
+.es-lovepop-venue-group {
+    margin-bottom: 25px;
+}
+
+.es-lovepop-venue-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-lovepop-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3);
+}
+
+.es-lovepop-venue-title {
+    font-size: var(--lp-meta-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lp-primary);
+    margin: 0;
+}
+
+.es-lovepop-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.es-lovepop-venue-genre {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.1);
+    border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.25);
+    border-radius: 12px;
+    font-size: var(--lp-xs-size);
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* =====================================================
+   DESCRIPTION
+   ===================================================== */
+.es-lovepop-description {
+    font-size: var(--lp-body-size);
+    color: var(--lp-text-secondary) !important;
+    line-height: var(--lp-line-height-body);
+}
+
+.es-lovepop-description p,
+.es-lovepop-description span,
+.es-lovepop-description li,
+.es-lovepop-description strong,
+.es-lovepop-description em {
+    color: var(--lp-text-secondary) !important;
+    margin-bottom: 1em;
+}
+
+.es-lovepop-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* =====================================================
+   GALLERY
+   ===================================================== */
+.es-lovepop-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.es-lovepop-gallery-item {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--lp-card-border);
+    transition: all 0.3s ease;
+}
+
+.es-lovepop-gallery-item:hover {
+    border-color: var(--lp-primary);
+    transform: scale(1.02);
+}
+
+.es-lovepop-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* =====================================================
+   SIDEBAR COMPONENTS
+   ===================================================== */
+.es-lovepop-sidebar-card {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.es-lovepop-meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.es-lovepop-meta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 12px;
+    border-left: 3px solid var(--lp-primary);
+}
+
+/* Hide icon boxes */
+.es-lovepop-meta-icon-box {
+    display: none;
+}
+
+.es-lovepop-meta-content {
+    flex: 1;
+}
+
+.es-lovepop-meta-label {
+    font-size: var(--lp-xs-size);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--lp-text-secondary);
+}
+
+.es-lovepop-meta-value {
+    font-size: var(--lp-body-size);
+    font-weight: 600;
+}
+
+/* Ticket Area */
+.es-lovepop-ticket-area {
+    background: linear-gradient(135deg, rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2), rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.05));
+    border: 1px solid var(--lp-primary);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: 25px;
+    text-align: center;
+}
+
+.es-lovepop-ticket-price {
+    font-size: var(--lp-price-size);
+    font-weight: 800;
+    color: var(--lp-primary-light);
+    margin-bottom: 15px;
+}
+
+.es-lovepop-ticket-btn {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, var(--lp-primary), var(--lp-primary-dark));
+    color: var(--lp-text);
+    text-decoration: none;
+    padding: 16px 30px;
+    border-radius: var(--lp-btn-radius);
+    font-weight: var(--lp-heading-weight);
+    font-size: var(--lp-button-size);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3);
+}
+
+.es-lovepop-ticket-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.5);
+    color: var(--lp-text);
+}
+
+/* Addon Hook Placeholder */
+.es-lovepop-addon-hook {
+    background: var(--lp-card-bg);
+    border: 1px dashed var(--lp-card-border);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: 25px;
+    text-align: center;
+    color: var(--lp-text-secondary);
+}
+
+/* =====================================================
+   LOCATION SECTION
+   ===================================================== */
+.es-lovepop-location {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 12px;
+    border-left: 3px solid var(--lp-primary);
+}
+
+/* Hide location map box */
+.es-lovepop-location-map {
+    display: none;
+}
+
+.es-lovepop-location-info h3 {
+    font-size: var(--lp-section-title-size);
+    font-weight: var(--lp-heading-weight);
+    margin: 0 0 8px;
+}
+
+.es-lovepop-location-info h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.es-lovepop-location-info h3 a:hover {
+    color: var(--lp-primary);
+}
+
+.es-lovepop-location-address {
+    color: var(--lp-text-secondary);
+    font-size: var(--lp-meta-size);
+    margin: 0;
+}
+
+/* =====================================================
+   FOOTER SECTIONS
+   ===================================================== */
+.es-lovepop-footer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+}
+
+.es-lovepop-related {
+    margin-bottom: 40px;
+}
+
+.es-lovepop-footer-title {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-card-title-size);
+    font-weight: var(--lp-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.es-lovepop-footer-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--lp-card-border), transparent);
+}
+
+.es-lovepop-related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Social Share */
+.es-lovepop-social {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.es-lovepop-social-label {
+    font-size: var(--lp-meta-size);
+    color: var(--lp-text-secondary);
+}
+
+.es-lovepop-social-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.es-lovepop-social-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lp-text);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: var(--lp-meta-size);
+}
+
+.es-lovepop-social-btn:hover {
+    border-color: var(--lp-primary);
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.1);
+    color: var(--lp-primary);
+}
+
+/* =====================================================
+   ARTIST & LOCATION CARDS (for grids)
+   ===================================================== */
+.es-lovepop-entity-card {
+    background: var(--lp-card-bg);
+    border: 1px solid var(--lp-card-border);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.es-lovepop-entity-card:hover {
+    border-color: var(--lp-card-border-hover);
+    box-shadow: 0 0 30px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+.es-lovepop-entity-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.es-lovepop-entity-image {
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+.es-lovepop-entity-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.es-lovepop-entity-card:hover .es-lovepop-entity-image img {
+    transform: scale(1.05);
+}
+
+.es-lovepop-entity-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.es-lovepop-entity-content h3 {
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-section-title-size);
+    font-weight: var(--lp-heading-weight);
+    margin: 0 0 5px;
+}
+
+.es-lovepop-entity-content p {
+    font-size: var(--lp-meta-size);
+    color: var(--lp-text-secondary);
+    margin: 0;
+}
+
+/* =====================================================
+   ARTIST & LOCATION CARDS - Overlay Style
+   Same design as Event Cards
+   ===================================================== */
+
+/* Base Card Styles for Artist/Location - inherit border-radius */
+.es-lovepop-artist-card.es-lovepop-card--overlay,
+.es-lovepop-location-card.es-lovepop-card--overlay {
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.es-lovepop-artist-card .es-lovepop-card-link,
+.es-lovepop-location-card .es-lovepop-card-link {
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+/* Artist/Location Name - styled like Event Date */
+.es-lovepop-artist-name-wrap,
+.es-lovepop-location-name-wrap {
+    flex-direction: row !important;
+    margin-bottom: 0 !important;
+}
+
+.es-lovepop-artist-name,
+.es-lovepop-location-name {
+    font-size: var(--lp-xl-size, 20px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--lp-text);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Artist Genres / Location City - styled like Event Artists */
+.es-lovepop-artist-genres,
+.es-lovepop-location-city-wrap {
+    font-size: var(--lp-lg-size, 18px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lp-primary-light, #ff6b9d);
+}
+
+/* Artist Card Specifics */
+.es-lovepop-artist-card .es-lovepop-card-link {
+    aspect-ratio: 1/1;
+}
+
+/* Artist Card - Same hover effects as Event Card */
+.es-lovepop-artist-card.es-lovepop-card--overlay:hover {
+    border-color: transparent;
+    box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+.es-lovepop-artist-card .es-lovepop-card-bg img {
+    transition: transform 0.6s ease;
+}
+
+.es-lovepop-artist-card:hover .es-lovepop-card-bg img {
+    transform: scale(1.08);
+}
+
+.es-lovepop-artist-genre {
+    font-size: var(--lp-meta-size);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lp-primary-light);
+}
+
+/* Artist Card Title - XL Uppercase like Event Card */
+.es-lovepop-artist-card .es-lovepop-card-title {
+    font-size: var(--lp-xl-size, 20px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Location Card Specifics */
+.es-lovepop-location-card .es-lovepop-card-link {
+    aspect-ratio: 4/3;
+}
+
+/* Location Card - Same hover effects as Event Card */
+.es-lovepop-location-card.es-lovepop-card--overlay:hover {
+    border-color: transparent;
+    box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+.es-lovepop-location-card .es-lovepop-card-bg img {
+    transition: transform 0.6s ease;
+}
+
+.es-lovepop-location-card:hover .es-lovepop-card-bg img {
+    transform: scale(1.08);
+}
+
+.es-lovepop-location-city {
+    font-size: var(--lp-meta-size);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lp-primary-light);
+}
+
+/* Location Card Title - XL Uppercase like Event Card */
+.es-lovepop-location-card .es-lovepop-card-title {
+    font-size: var(--lp-xl-size, 20px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Card Meta (Genre/City) */
+.es-lovepop-card-meta {
+    margin-bottom: 8px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+/* Hover: Meta fades, title stays */
+.es-lovepop-artist-card:hover .es-lovepop-card-meta,
+.es-lovepop-location-card:hover .es-lovepop-card-meta {
+    opacity: 0;
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+/* Placeholder Backgrounds */
+.es-lovepop-placeholder-artist,
+.es-lovepop-placeholder-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--lp-card-bg);
+}
+
+.es-lovepop-placeholder-artist svg,
+.es-lovepop-placeholder-location svg {
+    width: 60px;
+    height: 60px;
+    color: var(--lp-card-border);
+    opacity: 0.5;
+}
+
+/* =====================================================
+   ARTIST/LOCATION SLIDERS
+   ===================================================== */
+
+/* Slider wrapper for artists/locations */
+.ensemble-slider-artists,
+.ensemble-slider-locations {
+    position: relative;
+}
+
+/* Slider Cards - fullscreen overlay style */
+.ensemble-slider-artists .es-lovepop-artist-card,
+.ensemble-slider-locations .es-lovepop-location-card {
+    height: 100%;
+}
+
+.ensemble-slider-artists .es-lovepop-card-link,
+.ensemble-slider-locations .es-lovepop-card-link {
+    height: 100%;
+    min-height: 350px;
+}
+
+/* Slider Navigation - Match Event Slider */
+.ensemble-slider-artists .es-slider-arrow,
+.ensemble-slider-locations .es-slider-arrow {
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
+    border: 1px solid var(--lp-card-border);
+    color: var(--lp-text);
+}
+
+.ensemble-slider-artists .es-slider-arrow:hover,
+.ensemble-slider-locations .es-slider-arrow:hover {
+    background: var(--lp-primary);
+    border-color: var(--lp-primary);
+    box-shadow: 0 0 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.5);
+}
+
+/* Slider Dots */
+.ensemble-slider-artists .es-slider-dots,
+.ensemble-slider-locations .es-slider-dots {
+    margin-top: 20px;
+}
+
+.ensemble-slider-artists .es-slider-dot,
+.ensemble-slider-locations .es-slider-dot {
+    background: var(--lp-card-border);
+}
+
+.ensemble-slider-artists .es-slider-dot.active,
+.ensemble-slider-locations .es-slider-dot.active {
+    background: var(--lp-primary);
+    box-shadow: 0 0 10px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.5);
+}
+
+/* =====================================================
+   ARTIST/LOCATION GRIDS - Match Event Grid
+   ===================================================== */
+
+.ensemble-artists-list.ensemble-layout-grid,
+.ensemble-locations-list.ensemble-layout-grid {
+    display: grid;
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+.ensemble-artists-list.ensemble-columns-2,
+.ensemble-locations-list.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.ensemble-artists-list.ensemble-columns-3,
+.ensemble-locations-list.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ensemble-artists-list.ensemble-columns-4,
+.ensemble-locations-list.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 768px) {
+    .ensemble-artists-list.ensemble-layout-grid,
+    .ensemble-locations-list.ensemble-layout-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-lovepop-artist-card .es-lovepop-card-link,
+    .es-lovepop-location-card .es-lovepop-card-link {
+        aspect-ratio: 1/1;
+    }
+    
+    .es-lovepop-artist-card .es-lovepop-card-title,
+    .es-lovepop-location-card .es-lovepop-card-title {
+        font-size: var(--lp-lg-size, 18px);
+    }
+    
+    .ensemble-slider-artists .es-lovepop-card-link,
+    .ensemble-slider-locations .es-lovepop-card-link {
+        min-height: 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ensemble-artists-list.ensemble-layout-grid,
+    .ensemble-locations-list.ensemble-layout-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================================
+   ARTIST CARD FULL - layout="cards"
+   Card with image, content section, bio and button
+   ===================================================== */
+
+.es-lovepop-artist-card-full {
+    background: var(--ensemble-card-bg, rgba(20, 20, 35, 0.8));
+    border: 1px solid var(--ensemble-card-border, rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3));
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.es-lovepop-artist-card-full:hover {
+    border-color: transparent;
+    box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    transform: var(--lp-card-hover-transform, translateY(-5px));
+}
+
+/* Image Section */
+.es-lovepop-artist-card-full .es-lovepop-card-image-link {
+    display: block;
+    overflow: hidden;
+}
+
+.es-lovepop-artist-card-full .es-lovepop-card-image {
+    position: relative;
+    aspect-ratio: 1/1;
+    overflow: hidden;
+}
+
+.es-lovepop-artist-card-full .es-lovepop-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.es-lovepop-artist-card-full:hover .es-lovepop-card-image img {
+    transform: scale(1.08);
+}
+
+/* Content Section */
+.es-lovepop-artist-card-full .es-lovepop-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Genre Badge */
+.es-lovepop-artist-card-full .es-lovepop-card-badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 4px 12px;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
+    border: 1px solid var(--lp-card-border);
+    border-radius: 20px;
+    font-size: var(--lp-sm-size, 12px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--lp-primary-light);
+}
+
+/* Title */
+.es-lovepop-artist-card-full .es-lovepop-card-title {
+    margin: 0;
+    font-size: var(--lp-xl-size, 20px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.es-lovepop-artist-card-full .es-lovepop-card-title a {
+    color: var(--lp-text);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.es-lovepop-artist-card-full .es-lovepop-card-title a:hover {
+    color: var(--lp-hover);
+}
+
+/* Bio/Excerpt */
+.es-lovepop-artist-card-full .es-lovepop-card-excerpt {
+    margin: 0;
+    font-family: var(--lp-font-body);
+    font-size: var(--lp-body-size);
+    line-height: var(--lp-line-height-body);
+    color: var(--lp-text-secondary);
+}
+
+/* Button */
+.es-lovepop-artist-card-full .es-lovepop-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    padding: var(--lp-btn-padding-v) var(--lp-btn-padding-h);
+    background: transparent;
+    border: var(--lp-btn-border-width) solid var(--lp-card-border);
+    border-radius: var(--lp-btn-radius);
+    color: var(--lp-text);
+    font-family: var(--lp-font-heading);
+    font-size: var(--lp-btn-font-size);
+    font-weight: var(--lp-btn-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.es-lovepop-artist-card-full .es-lovepop-btn-outline:hover {
+    background: var(--lp-btn-bg);
+    border-color: var(--lp-btn-bg);
+    color: var(--lp-btn-text);
+    box-shadow: 0 0 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.5);
+}
+
+/* Grid for layout="cards" */
+.ensemble-artists-list.ensemble-layout-cards {
+    display: grid;
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+.ensemble-artists-list.ensemble-layout-cards.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.ensemble-artists-list.ensemble-layout-cards.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ensemble-artists-list.ensemble-layout-cards.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 768px) {
+    .ensemble-artists-list.ensemble-layout-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-lovepop-artist-card-full .es-lovepop-card-content {
+        padding: 15px;
+    }
+    
+    .es-lovepop-artist-card-full .es-lovepop-card-title {
+        font-size: var(--lp-lg-size, 18px);
+    }
+}
+
+@media (max-width: 480px) {
+    .ensemble-artists-list.ensemble-layout-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =====================================================
+   RESPONSIVE - Layout adjustments
+   Typography is handled via variable adjustments at top
+   ===================================================== */
+@media (max-width: 1024px) {
+    .es-lovepop-content-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-lovepop-hero {
+        height: 450px;
+    }
+    
+    /* Hero title now uses --lp-hero-title-size which is responsive */
+    
+    .es-lovepop-hero-content {
+        padding: 40px;
+    }
+    
+    .es-lovepop-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .es-lovepop-hero {
+        height: 400px;
+    }
+    
+    /* Hero title uses responsive variable */
+    .es-lovepop-hero-title {
+        letter-spacing: -1px;
+    }
+    
+    .es-lovepop-hero-content {
+        padding: 25px;
+    }
+    
+    .es-lovepop-artists-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-lovepop-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-lovepop-related-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-lovepop-location {
+        flex-direction: column;
+    }
+    
+    .es-lovepop-location-map {
+        width: 100%;
+        height: 150px;
+    }
+    
+    /* Force max 2 columns for event grids on tablets */
+    .es-layout-lovepop .ensemble-events-grid,
+    .es-lovepop-layout .ensemble-events-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Force single column for event grids on mobile phones */
+    .es-layout-lovepop .ensemble-events-grid,
+    .es-lovepop-layout .ensemble-events-grid,
+    .es-layout-lovepop .ensemble-events-grid.ensemble-columns-2,
+    .es-layout-lovepop .ensemble-events-grid.ensemble-columns-3,
+    .es-layout-lovepop .ensemble-events-grid.ensemble-columns-4,
+    .es-lovepop-layout .ensemble-events-grid.ensemble-columns-2,
+    .es-lovepop-layout .ensemble-events-grid.ensemble-columns-3,
+    .es-lovepop-layout .ensemble-events-grid.ensemble-columns-4 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Lovepop artists grid - single column on small phones */
+    .es-lovepop-artists-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* =====================================================
+   OVERRIDE - Remove any container borders/shadows
+   ===================================================== */
+.es-lovepop-layout,
+.es-lovepop-layout.ensemble-container,
+.ensemble-container.es-lovepop-layout,
+body.single-es_event .es-lovepop-layout {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    outline: none !important;
+}
+
+/* Ensure body has the gradient */
+body.single-es_event:has(.es-lovepop-layout),
+body:has(.es-lovepop-layout) {
+    background: var(--ensemble-dark-bg, linear-gradient(180deg, #0a0a0f 0%, #12121c 50%, #0f0f18 100%)) !important;
+}
+
+/* Remove any wrapper borders */
+.es-lovepop-layout > *:first-child {
+    border: none !important;
+}
+
+/* =====================================================
+   MOBILE TICKET CARD REORDER
+   Show ticket card after description on mobile
+   ===================================================== */
+
+/* Mobile ticket card - hidden on desktop */
+.es-lovepop-ticket-mobile {
+    display: none;
+}
+
+/* Desktop ticket card - shown on desktop */
+.es-lovepop-ticket-desktop {
+    display: block;
+}
+
+/* Mobile: Show mobile ticket card, hide desktop one */
+@media (max-width: 991px) {
+    .es-lovepop-ticket-mobile {
+        display: block;
+        margin-top: 30px;
+    }
+    
+    .es-lovepop-ticket-desktop {
+        display: none !important;
+    }
+}
+
+/* =====================================================
+   LOVEPOP HERO SLIDER CUSTOMIZATIONS
+   Only show Date and Location in meta
+   ===================================================== */
+
+/* Hide time and price in Lovepop hero slider */
+.es-layout-lovepop .es-hero-slide__meta-item:has(svg circle[cx="12"][cy="12"][r="10"]),
+.es-layout-lovepop .es-hero-slide__meta-item:has(svg path[d*="M17 5H9.5"]) {
+    display: none;
+}
+
+/* Alternative: Hide by position if :has() not fully supported */
+.es-layout-lovepop .es-hero-slide__meta-item:nth-child(2),
+.es-layout-lovepop .es-hero-slide__meta-item:nth-child(4) {
+    display: none;
+}
+
+/* Style adjustments for Lovepop hero */
+.es-layout-lovepop .es-hero-slider {
+    border-radius: 0;
+}
+
+.es-layout-lovepop .es-hero-slider .es-slider__track {
+    gap: 0 !important;
+}
+
+.es-layout-lovepop .es-hero-slider .es-slider__slide {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+}
+
+/* Hero Title - same size as Single Event Hero */
+.es-layout-lovepop .es-hero-slide__title {
+    font-size: var(--lp-hero-title-size, 72px) !important;
+    font-family: var(--lp-font-heading, var(--ensemble-font-heading, inherit));
+    font-weight: var(--lp-heading-weight, 700);
+}
+
+.es-layout-lovepop .es-hero-slide__title a {
+    text-decoration: none !important;
+}
+
+.es-layout-lovepop .es-hero-slide__title a:hover {
+    text-decoration: none !important;
+    opacity: 0.9;
+}
+
+/* In Lovepop: Hide category completely, only show if it's a badge */
+.es-layout-lovepop .es-hero-slide__category {
+    display: none !important;
+}
+
+.es-layout-lovepop .es-hero-slide__category.es-hero-slide__badge {
+    display: inline-block !important;
+    background: var(--lp-primary, #e91e8c);
+}
+
+/* Lovepop Hero Content - more padding */
+.es-layout-lovepop .es-hero-slide__content {
+    padding: 60px 60px 120px 60px;
+}
+
+@media (min-width: 1400px) {
+    .es-layout-lovepop .es-hero-slide__content {
+        padding: 80px 100px 160px 100px;
+    }
+}
+
+@media (min-width: 1800px) {
+    .es-layout-lovepop .es-hero-slide__content {
+        padding: 100px 120px 200px 120px;
+    }
+}
+
+.es-layout-lovepop .es-hero-slide__btn--primary {
+    background: var(--lp-primary, #e91e8c);
+    border-color: var(--lp-primary, #e91e8c);
+}
+
+.es-layout-lovepop .es-hero-slide__btn--primary:hover {
+    background: var(--lp-primary-dark, #c4177a);
+    border-color: var(--lp-primary-dark, #c4177a);
+}
+
+.es-layout-lovepop .es-hero-slide__btn--secondary {
+    border-color: var(--lp-primary, #e91e8c);
+}
+
+.es-layout-lovepop .es-hero-slide__btn--secondary:hover {
+    background: var(--lp-primary, #e91e8c);
+    border-color: var(--lp-primary, #e91e8c);
+}
+
+/* Lovepop Hero Slider - Mobile responsive title */
+@media (max-width: 768px) {
+    .es-layout-lovepop .es-hero-slide__title {
+        /* Use the already-responsive variable */
+        font-size: var(--lp-hero-title-size, 32px) !important;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+    
+    .es-layout-lovepop .es-hero-slide__content {
+        padding: 30px 24px 60px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-layout-lovepop .es-hero-slide__title {
+        /* Use the already-responsive variable */
+        font-size: var(--lp-hero-title-size, 25px) !important;
+    }
+    
+    .es-layout-lovepop .es-hero-slide__content {
+        padding: 24px 16px 48px 16px;
+    }
+}
+
+/* =====================================================
+   LOVEPOP OVERRIDES FOR GLOBAL COMPONENTS
+   Ensures Lovepop styles override base shortcode styles
+   ===================================================== */
+
+/* Event Cards - No padding for edge-to-edge images */
+.es-lovepop-layout .ensemble-event-card,
+.es-lovepop-single .ensemble-event-card,
+.es-lovepop-event .ensemble-event-card,
+.es-layout-lovepop .ensemble-event-card {
+    padding: 0 !important;
+    background: var(--lp-card-bg) !important;
+    border-color: var(--lp-card-border) !important;
+}
+
+/* Reset image margins when card has no padding */
+.es-lovepop-layout .ensemble-event-image,
+.es-lovepop-single .ensemble-event-image,
+.es-lovepop-event .ensemble-event-image,
+.es-layout-lovepop .ensemble-event-image {
+    width: 100%;
+    margin: 0;
+    border-radius: var(--lp-radius) var(--lp-radius) 0 0;
+}
+
+/* Card content needs its own padding */
+.es-lovepop-layout .ensemble-event-content,
+.es-lovepop-single .ensemble-event-content,
+.es-lovepop-event .ensemble-event-content,
+.es-layout-lovepop .ensemble-event-content {
+    padding: var(--lp-card-padding, 25px);
+}
+
+/* Text colors for global components */
+.es-lovepop-layout .ensemble-event-card,
+.es-lovepop-single .ensemble-event-card,
+.es-layout-lovepop .ensemble-event-card {
+    color: var(--lp-text);
+}
+
+.es-lovepop-layout .ensemble-event-card p,
+.es-lovepop-layout .ensemble-event-card span,
+.es-lovepop-single .ensemble-event-card p,
+.es-lovepop-single .ensemble-event-card span,
+.es-layout-lovepop .ensemble-event-card p,
+.es-layout-lovepop .ensemble-event-card span {
+    color: var(--lp-text-secondary);
+}
+
+.es-lovepop-layout .ensemble-event-card a,
+.es-lovepop-single .ensemble-event-card a,
+.es-layout-lovepop .ensemble-event-card a {
+    color: var(--lp-primary);
+}
+
+.es-lovepop-layout .ensemble-event-card a:hover,
+.es-lovepop-single .ensemble-event-card a:hover,
+.es-layout-lovepop .ensemble-event-card a:hover {
+    color: var(--lp-hover);
+}
+
+/* =====================================================
+   HERO SLIDER - Lovepop Style
+   ===================================================== */
+
+.es-layout-lovepop .es-hero-slide::before {
+    background: linear-gradient(
+        0deg,
+        var(--lp-bg, #0d0d12) 0%,
+        rgba(13, 13, 18, 0.95) 25%,
+        rgba(13, 13, 18, 0.6) 55%,
+        transparent 100%
+    );
+}
+
+.es-layout-lovepop .es-hero-slide__content {
+    font-family: var(--lp-font-body, "Inter", sans-serif);
+}
+
+.es-layout-lovepop .es-hero-slide__category {
+    background: linear-gradient(135deg, var(--lp-primary, #e91e8c), var(--lp-secondary, #9b4dff));
+    color: #fff;
+    font-family: var(--lp-font-heading, "Figtree", sans-serif);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+
+.es-layout-lovepop .es-hero-slide__title {
+    font-family: var(--ensemble-font-heading, "Montserrat", sans-serif);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    text-transform: uppercase;
+}
+
+.es-layout-lovepop .es-hero-slide__title a {
+    color: var(--lp-text, #ffffff);
+}
+
+.es-layout-lovepop .es-hero-slide__title a:hover {
+    color: var(--lp-primary, #e91e8c);
+}
+
+.es-layout-lovepop .es-hero-slide__meta {
+    font-size: 14px;
+    color: var(--lp-text-secondary, #8a8a9a);
+}
+
+.es-layout-lovepop .es-hero-slide__btn--primary {
+    background: linear-gradient(135deg, var(--lp-primary, #e91e8c), var(--lp-secondary, #9b4dff));
+    color: #fff;
+    font-family: var(--lp-font-heading, "Montserrat", sans-serif);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: var(--lp-radius, 12px);
+    border: none;
+}
+
+.es-layout-lovepop .es-hero-slide__btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(233, 30, 140, 0.4);
+}
+
+.es-layout-lovepop .es-hero-slide__btn--secondary {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: var(--lp-text, #ffffff);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: var(--lp-font-heading, "Figtree", sans-serif);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: var(--lp-radius, 12px);
+}
+
+.es-layout-lovepop .es-hero-slide__btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--lp-primary, #e91e8c);
+}
+
+.es-layout-lovepop .es-slider__arrow {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: var(--lp-text, #ffffff);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+}
+
+.es-layout-lovepop .es-slider__arrow:hover {
+    background: var(--lp-primary, #e91e8c);
+    border-color: var(--lp-primary, #e91e8c);
+}
+
+.es-layout-lovepop .es-slider__dot {
+    border-radius: 50%;
+}
+
+.es-layout-lovepop .es-slider__dot.active {
+    background: var(--lp-primary, #e91e8c);
+}
+

@@ -1,0 +1,19 @@
+/**
+ * Ensemble Light Theme
+ * 
+ * @package Ensemble
+ */
+
+:root {
+    --es-primary: #2271b1;
+    --es-primary-hover: #135e96;
+    --es-background: #f0f0f1;
+    --es-surface: #ffffff;
+    --es-text: #1d2327;
+    --es-text-secondary: #50575e;
+    --es-border: #dcdcde;
+    --es-danger: #d63638;
+    --es-danger-hover: #aa2729;
+    --es-success: #00a32a;
+    --es-warning: #f0b849;
+}

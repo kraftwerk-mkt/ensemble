@@ -1,0 +1,354 @@
+/**
+ * Ensemble Quick-Add Modal - FINAL VERSION
+ * Optimiert für Dark Theme mit CSS Variables
+ * Version: 2.0
+ */
+
+/* ========================================
+   MODAL OVERLAY & CONTAINER
+======================================== */
+
+.es-quick-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 999999;
+    animation: es-fadeIn 0.2s ease-in-out;
+}
+
+.es-quick-modal-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-quick-modal {
+    background: var(--es-surface, #2c2c2c) !important;
+    color: var(--es-text, #e0e0e0) !important;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: es-slideDown 0.3s ease-out;
+    position: relative;
+}
+
+/* ========================================
+   MODAL HEADER
+======================================== */
+
+.es-quick-modal-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid var(--es-border, #404040);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.es-quick-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+.es-quick-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--es-text-secondary, #a0a0a0);
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.es-quick-modal-close:hover {
+    background: var(--es-surface-hover, #404040);
+    color: var(--es-text, #e0e0e0);
+}
+
+/* ========================================
+   MODAL BODY
+======================================== */
+
+.es-quick-modal-body {
+    padding: 24px;
+}
+
+.es-quick-form-group {
+    margin-bottom: 20px;
+}
+
+.es-quick-form-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-quick-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+.es-quick-form-group label .required {
+    color: var(--es-danger, #f66);
+    margin-left: 3px;
+}
+
+.es-quick-form-group input[type="text"],
+.es-quick-form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--es-border, #404040);
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s;
+    background: var(--es-surface, #2c2c2c) !important;
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+.es-quick-form-group input[type="text"]:focus,
+.es-quick-form-group textarea:focus {
+    outline: none;
+    border-color: var(--es-primary, #3582c4);
+    box-shadow: 0 0 0 1px var(--es-primary, #3582c4);
+}
+
+.es-quick-form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.es-quick-form-hint {
+    font-size: 12px;
+    color: var(--es-text-secondary, #a0a0a0);
+    margin-top: 6px;
+    font-style: italic;
+}
+
+/* ========================================
+   MODAL FOOTER
+======================================== */
+
+.es-quick-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--es-border, #404040);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.es-quick-modal-footer .button {
+    min-width: 100px;
+}
+
+.es-quick-modal-footer .button-primary {
+    background: var(--es-primary, #3582c4);
+    border-color: var(--es-primary, #3582c4);
+}
+
+.es-quick-modal-footer .button-primary:hover {
+    background: var(--es-primary-hover, #2271b1);
+    border-color: var(--es-primary-hover, #2271b1);
+}
+
+.es-quick-modal-footer .button-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   LOADING STATE
+======================================== */
+
+.es-quick-modal.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.es-quick-modal.loading .es-quick-modal-footer .button-primary::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: es-spin 0.6s linear infinite;
+    vertical-align: middle;
+}
+
+/* ========================================
+   ERROR MESSAGES
+======================================== */
+
+.es-quick-error {
+    background: rgba(214, 54, 56, 0.1);
+    border-left: 4px solid var(--es-danger, #f66);
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--es-danger, #f66);
+    display: none;
+}
+
+.es-quick-error.active {
+    display: block;
+    animation: es-shake 0.3s;
+}
+
+/* ========================================
+   ADD NEW LINK STYLING
+======================================== */
+
+.es-pill-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--es-primary, #3582c4) !important;
+    text-decoration: none !important;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    margin-top: 8px;
+}
+
+.es-pill-add:hover {
+    background: var(--es-surface-hover, #404040);
+    border-color: var(--es-border, #404040);
+}
+
+.es-pill-add .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Pills Header Layout */
+.es-pills-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.es-pills-header .es-pill-add {
+    margin-top: 0;
+}
+
+/* Alternative: Link unter den Pills */
+.es-form-row {
+    margin-bottom: 24px;
+}
+
+.es-form-row .es-pill-add {
+    display: inline-flex;
+    margin-top: 12px;
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+@keyframes es-fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes es-slideDown {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes es-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes es-shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-10px);
+    }
+    75% {
+        transform: translateX(10px);
+    }
+}
+
+@keyframes es-highlight {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(34, 113, 177, 0);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(34, 113, 177, 0.5);
+    }
+}
+
+@keyframes es-slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 600px) {
+    .es-quick-modal {
+        max-width: 95%;
+        max-height: 95vh;
+    }
+    
+    .es-quick-modal-header,
+    .es-quick-modal-body,
+    .es-quick-modal-footer {
+        padding: 16px;
+    }
+    
+    .es-quick-modal-footer {
+        flex-direction: column-reverse;
+    }
+    
+    .es-quick-modal-footer .button {
+        width: 100%;
+    }
+}

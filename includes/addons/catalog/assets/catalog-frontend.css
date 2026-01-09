@@ -1,0 +1,506 @@
+/**
+ * Catalog Frontend Styles
+ * 
+ * Uses Ensemble CSS Variables for consistent theming:
+ * --ensemble-primary, --ensemble-secondary, --ensemble-text, etc.
+ */
+
+.es-catalog {
+    /* Inherit from Ensemble Design Settings */
+    font-family: var(--ensemble-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+    font-size: var(--ensemble-body-size, 16px);
+    line-height: var(--ensemble-line-height-body, 1.6);
+    color: var(--ensemble-text, #1f2937);
+}
+
+/* Filter Bar */
+.es-catalog-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--ensemble-divider, rgba(0,0,0,0.08));
+}
+
+.es-filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--ensemble-card-border, #e5e7eb);
+    background: var(--ensemble-card-bg, #fff);
+    color: var(--ensemble-text, #1f2937);
+    border-radius: var(--ensemble-button-radius, 20px);
+    font-size: var(--ensemble-small-size, 14px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-filter-btn:hover {
+    border-color: var(--ensemble-primary, #3582c4);
+    color: var(--ensemble-primary, #3582c4);
+}
+
+.es-filter-btn.active {
+    background: var(--ensemble-primary, #3582c4);
+    border-color: var(--ensemble-primary, #3582c4);
+    color: var(--ensemble-button-text, #fff);
+}
+
+/* Catalog Header */
+.es-catalog-header {
+    margin-bottom: 24px;
+}
+
+.es-catalog-title {
+    margin: 0;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h2-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1f2937);
+}
+
+.es-catalog-subtitle {
+    margin: 8px 0 0;
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+/* Category */
+.es-catalog-category {
+    margin-bottom: 32px;
+}
+
+.es-category-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+}
+
+.es-category-title {
+    margin: 0;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: 600;
+    color: var(--ensemble-primary, #3582c4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.es-category-desc {
+    margin: 4px 0 0;
+    font-size: var(--ensemble-small-size, 13px);
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+/* Items Container */
+.es-catalog-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Single Item - List Layout (Default) */
+.es-catalog-item {
+    display: flex;
+    gap: 16px;
+    padding: var(--ensemble-card-padding, 16px);
+    background: var(--ensemble-card-bg, #fff);
+    border: 1px solid var(--ensemble-card-border, rgba(0,0,0,0.06));
+    border-radius: var(--ensemble-card-radius, 8px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.es-catalog-item:hover {
+    transform: var(--ensemble-card-hover-transform, translateY(-2px));
+    box-shadow: var(--ensemble-card-hover-shadow, 0 8px 25px rgba(0,0,0,0.1));
+    border-color: var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+}
+
+/* Hover state - text colors adapt */
+.es-catalog-item:hover .es-item-name {
+    color: var(--ensemble-primary, #3582c4);
+}
+
+.es-catalog-item:hover .es-item-price {
+    color: var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+}
+
+.es-item-image {
+    width: 80px;
+    height: 80px;
+    border-radius: calc(var(--ensemble-card-radius, 8px) / 2);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.es-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.es-catalog-item:hover .es-item-image img {
+    transform: scale(1.05);
+}
+
+.es-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 4px;
+}
+
+.es-item-name {
+    margin: 0;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1f2937);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    transition: color 0.3s ease;
+}
+
+.es-item-price {
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.es-item-price small {
+    font-size: var(--ensemble-small-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+.es-item-desc {
+    margin: 0 0 8px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #6b7280);
+    transition: color 0.3s ease;
+}
+
+.es-catalog-item:hover .es-item-desc {
+    color: var(--ensemble-text, #1f2937);
+}
+
+.es-item-details {
+    font-size: calc(var(--ensemble-small-size, 14px) - 1px);
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+.es-item-details .es-allergens {
+    color: var(--ensemble-text-muted, #9ca3af);
+    font-size: 12px;
+}
+
+/* Badges */
+.es-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.es-badge-new { 
+    background: var(--ensemble-secondary, #3582c4); 
+    color: #fff; 
+}
+.es-badge-highlight { 
+    background: var(--ensemble-primary, #1f2937); 
+    color: #fff; 
+}
+.es-badge-vegan { 
+    background: #16a34a; 
+    color: #fff; 
+}
+.es-badge-veg { 
+    background: #22c55e; 
+    color: #fff; 
+}
+.es-badge-sale { 
+    background: #dc2626; 
+    color: #fff; 
+}
+.es-badge-limited { 
+    background: #7c3aed; 
+    color: #fff; 
+}
+.es-badge-popular { 
+    background: #ea580c; 
+    color: #fff; 
+}
+
+/* Includes (Services) */
+.es-item-includes {
+    margin-top: 8px;
+    padding: 12px;
+    background: var(--ensemble-bg-light, #f9fafb);
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.es-item-includes strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--ensemble-text, #374151);
+}
+
+/* Amenities (Rooms) */
+.es-item-amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.es-amenity {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    padding: 4px 8px;
+    background: var(--ensemble-bg-light, #e5e7eb);
+    border-radius: 4px;
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+/* ========================================
+   LAYOUT VARIATIONS
+   ======================================== */
+
+/* Grid Layout */
+.es-catalog-layout-grid .es-catalog-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.es-catalog-layout-grid .es-catalog-item {
+    flex-direction: column;
+}
+
+.es-catalog-layout-grid .es-item-image {
+    width: 100%;
+    height: 160px;
+}
+
+/* Compact Layout */
+.es-catalog-layout-compact .es-catalog-item {
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ensemble-divider, rgba(0,0,0,0.08));
+    border-radius: 0;
+}
+
+.es-catalog-layout-compact .es-catalog-item:hover {
+    transform: none;
+    box-shadow: none;
+    background: var(--ensemble-bg-light, rgba(0,0,0,0.02));
+}
+
+.es-catalog-layout-compact .es-catalog-item:last-child {
+    border-bottom: none;
+}
+
+.es-catalog-layout-compact .es-item-header {
+    margin-bottom: 0;
+}
+
+.es-catalog-layout-compact .es-item-name {
+    font-size: 15px;
+}
+
+.es-catalog-layout-compact .es-item-desc {
+    display: none;
+}
+
+/* Multi-column */
+.es-catalog-cols-2 .es-catalog-items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.es-catalog-cols-3 .es-catalog-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+/* ========================================
+   TYPE-SPECIFIC STYLES
+   ======================================== */
+
+/* Menu / Drinks - Classic style with dotted line */
+.es-catalog[data-type="menu"] .es-item-header,
+.es-catalog[data-type="drinks"] .es-item-header {
+    position: relative;
+}
+
+.es-catalog[data-type="menu"] .es-item-name::after,
+.es-catalog[data-type="drinks"] .es-item-name::after {
+    content: '';
+    flex: 1;
+    min-width: 20px;
+    border-bottom: 1px dotted var(--ensemble-divider, #d1d5db);
+    margin: 0 12px 4px;
+}
+
+/* Merchandise - Card style */
+.es-catalog[data-type="merchandise"] .es-catalog-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.es-catalog[data-type="merchandise"] .es-catalog-item {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+}
+
+.es-catalog[data-type="merchandise"] .es-item-image {
+    width: 100%;
+    height: 180px;
+    margin-bottom: 12px;
+}
+
+.es-catalog[data-type="merchandise"] .es-item-header {
+    flex-direction: column;
+    align-items: center;
+}
+
+.es-catalog[data-type="merchandise"] .es-item-name::after {
+    display: none;
+}
+
+/* Rooms - Large cards */
+.es-catalog[data-type="rooms"] .es-catalog-item {
+    flex-direction: column;
+    padding: 24px;
+}
+
+.es-catalog[data-type="rooms"] .es-item-image {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 16px;
+}
+
+/* Sponsoring - Highlight style */
+.es-catalog[data-type="sponsoring"] .es-catalog-item {
+    padding: 24px;
+    border: 2px solid var(--ensemble-card-border, #e5e7eb);
+    border-radius: 12px;
+}
+
+.es-catalog[data-type="sponsoring"] .es-catalog-item:first-child {
+    border-color: var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+    background: linear-gradient(135deg, var(--ensemble-card-bg, #fff) 0%, rgba(53, 130, 196, 0.05) 100%);
+}
+
+/* ========================================
+   LAYOUT INTEGRATION
+   Uses Ensemble Designer variables only
+   ======================================== */
+
+/* These styles apply when catalog is embedded in any layout's tab */
+.es-kongress-catalog-content .es-catalog,
+.es-catalog-content .es-catalog {
+    padding: 0;
+}
+
+.es-kongress-catalog-content .es-catalog-category:first-child,
+.es-catalog-content .es-catalog-category:first-child {
+    margin-top: 0;
+}
+
+.es-kongress-catalog-content .es-category-header,
+.es-catalog-content .es-category-header {
+    border-bottom-color: var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+}
+
+.es-kongress-catalog-content .es-category-title,
+.es-catalog-content .es-category-title {
+    color: var(--ensemble-primary, #1f2937);
+}
+
+.es-kongress-catalog-content .es-catalog-item,
+.es-catalog-content .es-catalog-item {
+    background: var(--ensemble-card-bg, rgba(255,255,255,0.5));
+}
+
+.es-kongress-catalog-content .es-item-price,
+.es-catalog-content .es-item-price {
+    color: var(--ensemble-secondary, var(--ensemble-primary, #3582c4));
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .es-catalog-cols-2 .es-catalog-items,
+    .es-catalog-cols-3 .es-catalog-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-catalog-layout-grid .es-catalog-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-catalog[data-type="merchandise"] .es-catalog-items {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .es-item-name::after {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-catalog[data-type="merchandise"] .es-catalog-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-filter-btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+/* ========================================
+   THEME SUPPORT
+   Inherits from Ensemble Design System
+   ======================================== */
+
+/* All colors are controlled by Ensemble CSS variables:
+   --ensemble-text
+   --ensemble-text-secondary  
+   --ensemble-card-bg
+   --ensemble-card-border
+   --ensemble-primary
+   --ensemble-secondary
+   --ensemble-card-hover-transform
+   --ensemble-card-hover-shadow
+*/

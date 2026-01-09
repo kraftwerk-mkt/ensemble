@@ -1,0 +1,1579 @@
+/**
+ * Ensemble Media Folders Pro - Styles
+ * ====================================
+ * Uses CSS Variables from admin-unified.css (Single Source of Truth)
+ *
+ * @package Ensemble
+ * @subpackage Addons/MediaFolders
+ * @since 2.7.0
+ */
+
+/* ============================================
+   MEDIA LIBRARY - FOLDER SIDEBAR
+   ============================================ */
+
+/* Wrapper for sidebar integration */
+.es-media-folders-wrapper {
+    display: flex;
+    min-height: 100%;
+}
+
+/* Main sidebar */
+.es-folder-sidebar {
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
+    background: var(--es-surface, #2c2c2c);
+    border-right: 1px solid var(--es-border, #404040);
+    padding: var(--es-spacing-md, 16px) 0;
+    position: fixed;
+    left: 160px; /* After WP Admin menu */
+    top: 32px; /* After admin bar */
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: var(--es-transition, all 0.2s ease);
+}
+
+/* Collapsed admin menu adjustment */
+.folded .es-folder-sidebar {
+    left: 36px;
+}
+
+/* Sidebar header */
+.es-folder-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--es-spacing-md, 16px) var(--es-spacing-md, 16px);
+    border-bottom: 1px solid var(--es-border, #404040);
+    margin-bottom: var(--es-spacing-md, 16px);
+}
+
+.es-folder-sidebar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm, 8px);
+}
+
+.es-folder-sidebar-title .dashicons {
+    color: var(--es-primary, #3582c4);
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Add folder button */
+.es-add-folder-btn {
+    background: transparent;
+    border: none;
+    color: var(--es-text-secondary, #a0a0a0);
+    cursor: pointer;
+    padding: var(--es-spacing-xs, 4px);
+    border-radius: var(--es-radius-sm, 4px);
+    transition: var(--es-transition, all 0.2s ease);
+}
+
+.es-add-folder-btn:hover {
+    color: var(--es-primary, #3582c4);
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1));
+}
+
+/* ============================================
+   FOLDER LIST
+   ============================================ */
+
+.es-folder-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Special items: All Media, Uncategorized */
+.es-folder-item--special {
+    margin-bottom: var(--es-spacing-md, 16px);
+    padding-bottom: var(--es-spacing-md, 16px);
+    border-bottom: 1px solid var(--es-border, #404040);
+}
+
+/* Single folder item */
+.es-folder-item {
+    position: relative;
+    margin: 0;
+}
+
+.es-folder-link {
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm, 8px);
+    padding: 12px var(--es-spacing-md, 16px);
+    color: var(--es-text-secondary, #a0a0a0);
+    text-decoration: none;
+    font-size: 13px;
+    transition: var(--es-transition, all 0.2s ease);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.es-folder-link:hover {
+    background: var(--es-surface-hover, #404040);
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-folder-link.active,
+.es-folder-item--active > .es-folder-link {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1));
+    color: var(--es-primary, #3582c4);
+    border-left-color: var(--es-primary, #3582c4);
+}
+
+/* Folder icon */
+.es-folder-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.es-folder-icon .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Color indicator */
+.es-folder-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Folder name */
+.es-folder-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Folder count */
+.es-folder-count {
+    font-size: 11px;
+    color: var(--es-text-muted, #787878);
+    background: var(--es-surface-secondary, #383838);
+    padding: 2px 6px;
+    border-radius: var(--es-radius-pill, 20px);
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Folder actions (on hover) */
+.es-folder-actions {
+    position: absolute;
+    right: var(--es-spacing-sm, 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    transition: var(--es-transition, all 0.2s ease);
+    background: var(--es-surface, #2c2c2c);
+    border-radius: var(--es-radius-sm, 4px);
+    padding: 2px;
+}
+
+.es-folder-item:hover .es-folder-actions {
+    opacity: 1;
+}
+
+.es-folder-action-btn {
+    background: transparent;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    color: var(--es-text-muted, #787878);
+    border-radius: var(--es-radius-sm, 4px);
+    transition: var(--es-transition, all 0.2s ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    min-height: 28px;
+}
+
+.es-folder-action-btn:hover {
+    color: var(--es-text, #e0e0e0);
+    background: var(--es-surface-secondary, #383838);
+}
+
+.es-folder-action-btn .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.es-folder-action-btn.danger:hover {
+    color: var(--es-danger, #f66);
+    background: var(--es-danger-light, rgba(255, 102, 102, 0.15));
+}
+
+/* ============================================
+   NESTED FOLDERS (Children)
+   ============================================ */
+
+.es-folder-children {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+}
+
+.es-folder-item--expanded > .es-folder-children {
+    display: block;
+}
+
+.es-folder-children .es-folder-link {
+    padding-left: calc(var(--es-spacing-md, 16px) + 20px);
+}
+
+.es-folder-children .es-folder-children .es-folder-link {
+    padding-left: calc(var(--es-spacing-md, 16px) + 40px);
+}
+
+/* Expand/Collapse toggle */
+.es-folder-toggle {
+    background: transparent;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    color: var(--es-text-muted, #787878);
+    transition: transform 0.2s ease;
+}
+
+.es-folder-toggle .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.es-folder-item--expanded > .es-folder-link .es-folder-toggle {
+    transform: rotate(90deg);
+}
+
+/* ============================================
+   PARENT FOLDERS (Events, Artists, Locations)
+   ============================================ */
+
+.es-folder-item--parent {
+    margin-top: var(--es-spacing-sm, 8px);
+}
+
+.es-folder-item--parent > .es-folder-link {
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-folder-item--parent > .es-folder-link .es-folder-icon {
+    color: var(--folder-color, var(--es-primary, #3582c4));
+}
+
+/* Type-specific colors */
+.es-folder-item--events > .es-folder-link .es-folder-icon { color: var(--es-folder-events, #3582c4); }
+.es-folder-item--artists > .es-folder-link .es-folder-icon { color: var(--es-folder-artists, #9b59b6); }
+.es-folder-item--locations > .es-folder-link .es-folder-icon { color: var(--es-folder-locations, #27ae60); }
+
+/* Smart Folders */
+.es-folder-item--smart > .es-folder-link {
+    font-style: italic;
+}
+
+.es-folder-item--smart > .es-folder-link .es-folder-icon {
+    opacity: 0.9;
+}
+
+/* Folder Divider */
+.es-folder-divider {
+    padding: 12px var(--es-spacing-md, 16px) 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--es-text-muted, #787878);
+    border-top: 1px solid var(--es-border, #404040);
+    margin-top: var(--es-spacing-sm, 8px);
+}
+
+.es-folder-divider:first-of-type {
+    margin-top: 0;
+    border-top: none;
+}
+
+/* ============================================
+   DRAG & DROP
+   ============================================ */
+
+/* Dragging state */
+.es-folder-item--dragging {
+    opacity: 0.5;
+}
+
+/* Drop target */
+.es-folder-item--drop-target > .es-folder-link {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1));
+    box-shadow: inset 0 0 0 2px var(--es-primary, #3582c4);
+}
+
+/* Drag helper */
+.es-drag-helper {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    background: var(--es-surface, #2c2c2c);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius, 6px);
+    padding: var(--es-spacing-sm, 8px) var(--es-spacing-md, 16px);
+    box-shadow: var(--es-shadow-lg, 0 4px 16px rgba(0,0,0,0.3));
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm, 8px);
+    font-size: 13px;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-drag-count {
+    background: var(--es-primary, #3582c4);
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Attachment being dragged */
+.attachment.es-dragging {
+    opacity: 0.4;
+}
+
+/* ============================================
+   CONTEXT MENU
+   ============================================ */
+
+.es-folder-context-menu {
+    position: fixed;
+    background: var(--es-surface, #2c2c2c);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius, 6px);
+    box-shadow: var(--es-shadow-lg, 0 4px 16px rgba(0,0,0,0.3));
+    z-index: 10001;
+    min-width: 220px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.es-folder-context-menu-header {
+    padding: 12px 16px;
+    background: var(--es-surface-secondary, #383838);
+    border-bottom: 1px solid var(--es-border, #404040);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--es-text-secondary, #a0a0a0);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.es-folder-context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    color: var(--es-text, #e0e0e0);
+    font-size: 14px;
+    cursor: pointer;
+    transition: var(--es-transition, all 0.2s ease);
+    min-height: 48px;
+    box-sizing: border-box;
+}
+
+.es-folder-context-menu-item:hover {
+    background: var(--es-surface-hover, #404040);
+}
+
+.es-folder-context-menu-item .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.es-folder-context-menu-item.danger {
+    color: var(--es-danger, #f66);
+}
+
+.es-folder-context-menu-item.danger:hover {
+    background: var(--es-danger-light, rgba(255, 102, 102, 0.15));
+}
+
+.es-folder-context-menu-separator {
+    height: 1px;
+    background: var(--es-border, #404040);
+    margin: 8px 0;
+}
+
+/* ============================================
+   FOLDER DRAG & DROP STATES
+   ============================================ */
+
+.es-folder-item--dragging {
+    opacity: 0.5;
+}
+
+.es-folder-item--dragging > .es-folder-link {
+    background: var(--es-surface-secondary, #383838);
+}
+
+.es-folder-item--drop-target > .es-folder-link {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.15));
+    box-shadow: inset 0 0 0 2px var(--es-primary, #3582c4);
+}
+
+.es-folder-item--drop-above {
+    position: relative;
+}
+
+.es-folder-item--drop-above::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--es-spacing-md, 16px);
+    right: var(--es-spacing-md, 16px);
+    height: 2px;
+    background: var(--es-primary, #3582c4);
+    border-radius: 1px;
+}
+
+.es-folder-item--drop-below {
+    position: relative;
+}
+
+.es-folder-item--drop-below::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: var(--es-spacing-md, 16px);
+    right: var(--es-spacing-md, 16px);
+    height: 2px;
+    background: var(--es-primary, #3582c4);
+    border-radius: 1px;
+}
+
+/* Folder drag helper */
+.es-folder-drag-helper,
+.es-folder-drag-image {
+    position: fixed;
+    pointer-events: none;
+    z-index: 100000;
+    background: var(--es-surface, #2c2c2c);
+    border: 2px solid var(--es-primary, #3582c4);
+    border-radius: var(--es-radius, 6px);
+    padding: var(--es-spacing-sm, 8px) var(--es-spacing-md, 16px);
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm, 8px);
+    font-size: 13px;
+    color: var(--es-text, #e0e0e0);
+    box-shadow: var(--es-shadow-lg, 0 4px 16px rgba(0,0,0,0.3));
+    white-space: nowrap;
+}
+
+.es-folder-drag-helper .dashicons,
+.es-folder-drag-image .dashicons {
+    color: var(--es-primary, #3582c4);
+}
+
+/* ============================================
+   NEW FOLDER INPUT (Inline)
+   ============================================ */
+
+.es-new-folder-input-wrapper {
+    padding: var(--es-spacing-sm, 8px) var(--es-spacing-md, 16px);
+    display: flex;
+    gap: var(--es-spacing-sm, 8px);
+}
+
+.es-new-folder-input {
+    flex: 1;
+    background: var(--es-surface-secondary, #383838);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius-sm, 4px);
+    padding: 6px 10px;
+    color: var(--es-text, #e0e0e0);
+    font-size: 13px;
+}
+
+.es-new-folder-input:focus {
+    outline: none;
+    border-color: var(--es-primary, #3582c4);
+    box-shadow: 0 0 0 2px var(--es-primary-light, rgba(53, 130, 196, 0.1));
+}
+
+.es-new-folder-save,
+.es-new-folder-cancel {
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: var(--es-radius-sm, 4px);
+    transition: var(--es-transition, all 0.2s ease);
+}
+
+.es-new-folder-save {
+    color: var(--es-success, #4caf50);
+}
+
+.es-new-folder-save:hover {
+    background: var(--es-success-light, rgba(76, 175, 80, 0.15));
+}
+
+.es-new-folder-cancel {
+    color: var(--es-text-muted, #787878);
+}
+
+.es-new-folder-cancel:hover {
+    color: var(--es-danger, #f66);
+}
+
+/* ============================================
+   MEDIA LIBRARY GRID ADJUSTMENT
+   ============================================ */
+
+/* Shift content to make room for sidebar - ONLY on main page, not in modals */
+body.upload-php .wp-list-table {
+    margin-left: 240px;
+}
+
+/* Grid view needs the wrapper padding, not media-frame-content (that's also in modals) */
+body.upload-php.upload-grid #wpbody-content > .wrap {
+    margin-left: 240px;
+}
+
+/* Override for modal - reset any margin */
+.media-modal .media-frame-content {
+    margin-left: 0 !important;
+}
+
+/* ============================================
+   FILTER DROPDOWN STYLING
+   ============================================ */
+
+.es-folder-filter {
+    min-width: 180px;
+}
+
+/* ============================================
+   SETTINGS PAGE (in Add-ons Modal)
+   ============================================ */
+
+.es-media-folders-settings {
+    padding: var(--es-spacing-md, 16px);
+}
+
+.es-settings-section {
+    margin-bottom: var(--es-spacing-lg, 24px);
+}
+
+.es-settings-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm, 8px);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+    margin: 0 0 var(--es-spacing-md, 16px) 0;
+    padding-bottom: var(--es-spacing-sm, 8px);
+    border-bottom: 1px solid var(--es-border, #404040);
+}
+
+.es-settings-section-title .dashicons {
+    color: var(--es-primary, #3582c4);
+}
+
+/* Toggle settings row */
+.es-settings-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--es-spacing-md, 16px);
+    padding: var(--es-spacing-sm, 8px) 0;
+}
+
+.es-settings-row + .es-settings-row {
+    border-top: 1px solid var(--es-border-light, #505050);
+}
+
+.es-settings-label {
+    flex: 1;
+}
+
+.es-settings-label-text {
+    display: block;
+    font-size: 13px;
+    color: var(--es-text, #e0e0e0);
+    margin-bottom: 2px;
+}
+
+.es-settings-label-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--es-text-muted, #787878);
+}
+
+/* Color picker row */
+.es-color-row {
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-md, 16px);
+    padding: var(--es-spacing-sm, 8px) 0;
+}
+
+.es-color-label {
+    min-width: 80px;
+    font-size: 13px;
+    color: var(--es-text-secondary, #a0a0a0);
+}
+
+.es-color-input {
+    width: 60px;
+    height: 32px;
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius-sm, 4px);
+    cursor: pointer;
+    padding: 2px;
+}
+
+.es-color-input::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.es-color-input::-webkit-color-swatch {
+    border: none;
+    border-radius: 2px;
+}
+
+/* Bulk organize section */
+.es-bulk-organize {
+    background: var(--es-surface-secondary, #383838);
+    border-radius: var(--es-radius, 6px);
+    padding: var(--es-spacing-md, 16px);
+    margin-top: var(--es-spacing-md, 16px);
+}
+
+.es-bulk-organize-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+    margin: 0 0 var(--es-spacing-sm, 8px) 0;
+}
+
+.es-bulk-organize-desc {
+    font-size: 12px;
+    color: var(--es-text-muted, #787878);
+    margin: 0 0 var(--es-spacing-md, 16px) 0;
+}
+
+.es-bulk-organize-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--es-spacing-sm, 8px);
+}
+
+.es-bulk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--es-spacing-xs, 4px);
+    padding: var(--es-spacing-sm, 8px) var(--es-spacing-md, 16px);
+    background: var(--es-surface, #2c2c2c);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius, 6px);
+    color: var(--es-text-secondary, #a0a0a0);
+    font-size: 12px;
+    cursor: pointer;
+    transition: var(--es-transition, all 0.2s ease);
+}
+
+.es-bulk-btn:hover {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1));
+    border-color: var(--es-primary, #3582c4);
+    color: var(--es-primary, #3582c4);
+}
+
+.es-bulk-btn .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.es-bulk-btn--events .dashicons { color: var(--es-folder-events, #3582c4); }
+.es-bulk-btn--artists .dashicons { color: var(--es-folder-artists, #9b59b6); }
+.es-bulk-btn--locations .dashicons { color: var(--es-folder-locations, #27ae60); }
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+
+.es-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--es-surface, #2c2c2c);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius, 6px);
+    padding: var(--es-spacing-md, 16px);
+    box-shadow: var(--es-shadow-lg, 0 4px 16px rgba(0,0,0,0.3));
+    z-index: 10002;
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm, 8px);
+    font-size: 13px;
+    color: var(--es-text, #e0e0e0);
+    animation: esSlideIn 0.3s ease;
+}
+
+.es-toast--success {
+    border-left: 3px solid var(--es-success, #4caf50);
+}
+
+.es-toast--error {
+    border-left: 3px solid var(--es-danger, #f66);
+}
+
+.es-toast--success .dashicons {
+    color: var(--es-success, #4caf50);
+}
+
+.es-toast--error .dashicons {
+    color: var(--es-danger, #f66);
+}
+
+@keyframes esSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media screen and (max-width: 1280px) {
+    .es-folder-sidebar {
+        width: 180px;
+        min-width: 180px;
+    }
+    
+    body.upload-php .wp-list-table,
+    body.upload-php.upload-grid #wpbody-content > .wrap {
+        margin-left: 200px;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .es-folder-sidebar {
+        display: none;
+    }
+    
+    body.upload-php .wp-list-table,
+    body.upload-php.upload-grid #wpbody-content > .wrap {
+        margin-left: 0;
+    }
+}
+
+/* ============================================
+   CSS CUSTOM PROPERTIES FOR FOLDER COLORS
+   ============================================ */
+
+:root {
+    --es-folder-events: #3582c4;
+    --es-folder-artists: #9b59b6;
+    --es-folder-locations: #27ae60;
+}
+
+/* ============================================
+   MEDIA MODAL INTEGRATION
+   ============================================ */
+
+/* 
+ * Dark Theme for Media Modal
+ * Only color changes, no layout modifications
+ */
+
+/* Modal background */
+.media-modal .media-modal-content {
+    background: #1e1e1e;
+}
+
+/* Title bar */
+.media-modal .media-frame-title {
+    background: #2c2c2c;
+    border-bottom-color: #404040;
+}
+
+.media-modal .media-frame-title h1 {
+    color: #e0e0e0;
+}
+
+/* Left menu */
+.media-modal .media-frame-menu {
+    background: #2c2c2c;
+    border-right-color: #404040;
+}
+
+.media-modal .media-menu-item {
+    color: #a0a0a0;
+}
+
+.media-modal .media-menu-item:hover {
+    background: #383838;
+    color: #e0e0e0;
+}
+
+.media-modal .media-menu-item.active {
+    background: rgba(53, 130, 196, 0.15);
+    color: #3582c4;
+}
+
+/* Router tabs */
+.media-modal .media-frame-router {
+    background: #2c2c2c;
+    border-bottom-color: #404040;
+}
+
+.media-modal .media-router .media-menu-item {
+    color: #a0a0a0;
+}
+
+.media-modal .media-router .media-menu-item:hover {
+    color: #e0e0e0;
+    background: #383838;
+}
+
+.media-modal .media-router .media-menu-item.active {
+    color: #3582c4;
+}
+
+/* Content area */
+.media-modal .media-frame-content {
+    background: #1a1a1a;
+}
+
+.media-modal .attachments-browser {
+    background: #1a1a1a;
+}
+
+/* Attachments grid */
+.media-modal .attachment {
+    background: #2c2c2c;
+    border-color: #404040;
+}
+
+.media-modal .attachment:hover {
+    border-color: #3582c4;
+}
+
+.media-modal .attachment.selected {
+    border-color: #3582c4;
+    box-shadow: 0 0 0 3px rgba(53, 130, 196, 0.3);
+}
+
+.media-modal .attachment .thumbnail {
+    background: #383838;
+}
+
+.media-modal .attachment .filename {
+    background: #383838;
+    color: #a0a0a0;
+}
+
+/* Toolbar */
+.media-modal .media-toolbar {
+    background: #2c2c2c;
+    border-top-color: #404040;
+}
+
+/* Form elements */
+.media-modal select,
+.media-modal .attachment-filters {
+    background: #383838;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.media-modal input[type="search"],
+.media-modal .search {
+    background: #383838;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+/* Sidebar (attachment details) */
+.media-modal .media-sidebar {
+    background: #2c2c2c;
+    border-left-color: #404040;
+}
+
+.media-modal .attachment-info {
+    background: #383838;
+    border-bottom-color: #404040;
+}
+
+.media-modal .attachment-info .filename {
+    color: #e0e0e0;
+}
+
+.media-modal .attachment-info .details {
+    color: #a0a0a0;
+}
+
+.media-modal .attachment-details label,
+.media-modal .setting span {
+    color: #a0a0a0;
+}
+
+.media-modal .attachment-details input[type="text"],
+.media-modal .attachment-details textarea {
+    background: #383838;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+/* Uploader */
+.media-modal .uploader-inline {
+    background: #2c2c2c;
+    border-color: #505050;
+}
+
+.media-modal .uploader-inline h2 {
+    color: #e0e0e0;
+}
+
+.media-modal .upload-instructions {
+    color: #a0a0a0;
+}
+
+/* Buttons */
+.media-modal .button {
+    background: #383838;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+.media-modal .button:hover {
+    background: #484848;
+    border-color: #505050;
+}
+
+.media-modal .button-primary {
+    background: #3582c4;
+    border-color: #3582c4;
+    color: #fff;
+}
+
+.media-modal .button-primary:hover {
+    background: #4a9ae1;
+    border-color: #4a9ae1;
+}
+
+/* Close button */
+.media-modal .media-modal-close {
+    color: #a0a0a0;
+}
+
+.media-modal .media-modal-close:hover {
+    color: #e0e0e0;
+}
+
+/* Spinner */
+.media-modal .spinner {
+    filter: brightness(2);
+}
+
+/* 
+ * Folder sidebar styles
+ * Sidebar is injected into media-frame-content for stability
+ */
+
+/* Frame content with sidebar - use flex */
+.media-modal .media-frame-content.es-has-folder-sidebar {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+/* Sidebar container - fixed width on left */
+.media-modal .es-modal-folder-sidebar {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    background: #2c2c2c;
+    border-right: 1px solid #404040;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    order: -1;
+    z-index: 50;
+}
+
+/* All other content in frame-content should flex */
+.media-modal .media-frame-content.es-has-folder-sidebar > .attachments-browser,
+.media-modal .media-frame-content.es-has-folder-sidebar > .uploader-inline,
+.media-modal .media-frame-content.es-has-folder-sidebar > .media-frame-uploader {
+    flex: 1;
+    min-width: 0;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+}
+
+/* Uploader needs to fill space */
+.media-modal .media-frame-content.es-has-folder-sidebar > .uploader-inline {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Sidebar header */
+.es-modal-folder-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #404040;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e0e0e0;
+    background: #383838;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.es-modal-folder-header .dashicons {
+    color: #3582c4;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Folder list */
+.es-modal-folder-list {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0;
+}
+
+/* Folder item */
+.es-modal-folder-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--es-text-secondary, #a0a0a0);
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+    min-height: 44px;
+    box-sizing: border-box;
+}
+
+.es-modal-folder-item:hover {
+    background: var(--es-surface-hover, #404040);
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-modal-folder-item--active {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1)) !important;
+    color: var(--es-primary, #3582c4) !important;
+    border-left-color: var(--es-primary, #3582c4) !important;
+}
+
+.es-modal-folder-item .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+/* Child folders indent */
+.es-modal-folder-item--child {
+    padding-left: 36px;
+    font-size: 12px;
+}
+
+.es-modal-folder-item--child .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    opacity: 0.8;
+}
+
+.es-modal-folder-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.es-modal-folder-count {
+    font-size: 10px;
+    color: var(--es-text-muted, #787878);
+    background: var(--es-surface-secondary, #383838);
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+/* Parent folders */
+.es-modal-folder-item--parent {
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--es-border, #404040);
+}
+
+.es-modal-folder-item--parent:first-child {
+    margin-top: 0;
+    padding-top: 8px;
+    border-top: none;
+}
+
+/* Smart folders */
+.es-modal-folder-item--smart {
+    font-style: italic;
+}
+
+.es-modal-folder-item--smart .dashicons {
+    opacity: 0.9;
+}
+
+/* Divider */
+.es-modal-folder-divider {
+    padding: 12px 15px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--es-text-muted, #787878);
+    border-top: 1px solid var(--es-border, #404040);
+    margin-top: 8px;
+}
+
+.es-modal-folder-divider:first-of-type {
+    margin-top: 0;
+    border-top: none;
+}
+
+/* 
+ * REMOVED - This was breaking the modal by pushing content to the right
+ * even when sidebar wasn't present
+ *
+ * .media-modal .attachments-browser .uploader-inline {
+ *     left: 200px;
+ * }
+ */
+
+/* ============================================
+   UPLOAD CONTEXT INDICATOR
+   ============================================ */
+
+.es-upload-folder-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: var(--es-info-light, rgba(53, 130, 196, 0.15));
+    border-left: 3px solid var(--es-primary, #3582c4);
+    margin: 10px 0;
+    font-size: 12px;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-upload-folder-indicator .dashicons {
+    color: var(--es-primary, #3582c4);
+}
+
+.es-upload-folder-indicator strong {
+    color: var(--es-primary, #3582c4);
+}
+
+/* ============================================
+   ENSEMBLE-STYLED MEDIA LIBRARY
+   ============================================ */
+
+/* Apply dark theme to upload.php */
+body.upload-php.es-media-folders-active {
+    background: var(--es-background, #1a1a1a) !important;
+}
+
+body.upload-php.es-media-folders-active #wpcontent {
+    background: var(--es-background, #1a1a1a);
+}
+
+body.upload-php.es-media-folders-active .wrap {
+    margin-left: 240px; /* Account for folder sidebar */
+}
+
+body.upload-php.es-media-folders-active .wrap h1 {
+    color: var(--es-text, #e0e0e0);
+    font-weight: 600;
+}
+
+/* Header area */
+body.upload-php.es-media-folders-active .page-title-action {
+    background: var(--es-primary, #3582c4) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--es-radius, 6px) !important;
+    padding: 6px 16px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+}
+
+body.upload-php.es-media-folders-active .page-title-action:hover {
+    background: var(--es-primary-hover, #4a9ae1) !important;
+    transform: translateY(-1px);
+}
+
+/* Filter bar */
+body.upload-php.es-media-folders-active .wp-filter {
+    background: var(--es-surface, #2c2c2c) !important;
+    border-color: var(--es-border, #404040) !important;
+    border-radius: var(--es-radius, 6px);
+    margin-bottom: 20px;
+}
+
+body.upload-php.es-media-folders-active .media-toolbar-secondary {
+    background: transparent;
+}
+
+body.upload-php.es-media-folders-active .attachment-filters {
+    background: var(--es-surface-secondary, #383838) !important;
+    border-color: var(--es-border, #404040) !important;
+    color: var(--es-text, #e0e0e0) !important;
+    border-radius: var(--es-radius-sm, 4px) !important;
+}
+
+body.upload-php.es-media-folders-active .search-form input[type="search"] {
+    background: var(--es-surface-secondary, #383838) !important;
+    border-color: var(--es-border, #404040) !important;
+    color: var(--es-text, #e0e0e0) !important;
+    border-radius: var(--es-radius-sm, 4px) !important;
+}
+
+body.upload-php.es-media-folders-active .search-form input[type="search"]::placeholder {
+    color: var(--es-text-muted, #787878);
+}
+
+/* View switcher */
+body.upload-php.es-media-folders-active .view-switch a {
+    background: var(--es-surface-secondary, #383838) !important;
+    border-color: var(--es-border, #404040) !important;
+}
+
+body.upload-php.es-media-folders-active .view-switch a.current,
+body.upload-php.es-media-folders-active .view-switch a:hover {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1)) !important;
+    border-color: var(--es-primary, #3582c4) !important;
+    color: var(--es-primary, #3582c4) !important;
+}
+
+/* Media grid */
+body.upload-php.es-media-folders-active .attachments-browser .attachments {
+    background: transparent;
+}
+
+body.upload-php.es-media-folders-active .attachment {
+    background: var(--es-surface, #2c2c2c) !important;
+    border: 1px solid var(--es-border, #404040) !important;
+    border-radius: var(--es-radius, 6px) !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+body.upload-php.es-media-folders-active .attachment:hover {
+    border-color: var(--es-primary, #3582c4) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--es-shadow, 0 4px 12px rgba(0,0,0,0.2)) !important;
+}
+
+body.upload-php.es-media-folders-active .attachment.selected {
+    border-color: var(--es-primary, #3582c4) !important;
+    box-shadow: 0 0 0 3px var(--es-primary-light, rgba(53, 130, 196, 0.3)) !important;
+}
+
+body.upload-php.es-media-folders-active .attachment .thumbnail {
+    background: var(--es-surface-secondary, #383838);
+}
+
+body.upload-php.es-media-folders-active .attachment .filename {
+    color: var(--es-text-secondary, #a0a0a0) !important;
+    background: var(--es-surface-secondary, #383838) !important;
+    font-size: 11px;
+}
+
+body.upload-php.es-media-folders-active .attachment .attachment-preview .thumbnail::after {
+    box-shadow: none !important;
+}
+
+/* Selection check */
+body.upload-php.es-media-folders-active .attachment .check {
+    background: var(--es-primary, #3582c4) !important;
+    box-shadow: none !important;
+}
+
+body.upload-php.es-media-folders-active .attachment .check .media-modal-icon {
+    background-color: #fff !important;
+}
+
+/* Uploader */
+body.upload-php.es-media-folders-active .uploader-inline {
+    background: var(--es-surface, #2c2c2c) !important;
+    border: 2px dashed var(--es-border, #404040) !important;
+    border-radius: var(--es-radius-lg, 12px) !important;
+}
+
+body.upload-php.es-media-folders-active .uploader-inline:hover {
+    border-color: var(--es-primary, #3582c4) !important;
+}
+
+body.upload-php.es-media-folders-active .uploader-inline h2 {
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+body.upload-php.es-media-folders-active .uploader-inline .upload-instructions {
+    color: var(--es-text-secondary, #a0a0a0) !important;
+}
+
+/* No results */
+body.upload-php.es-media-folders-active .no-media {
+    color: var(--es-text-secondary, #a0a0a0) !important;
+}
+
+/* Attachment details sidebar */
+body.upload-php.es-media-folders-active .attachment-details {
+    background: var(--es-surface, #2c2c2c) !important;
+    border-color: var(--es-border, #404040) !important;
+}
+
+body.upload-php.es-media-folders-active .attachment-info {
+    background: var(--es-surface-secondary, #383838) !important;
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+body.upload-php.es-media-folders-active .attachment-info .details {
+    color: var(--es-text-secondary, #a0a0a0) !important;
+}
+
+body.upload-php.es-media-folders-active .attachment-details label {
+    color: var(--es-text-secondary, #a0a0a0) !important;
+}
+
+body.upload-php.es-media-folders-active .attachment-details input[type="text"],
+body.upload-php.es-media-folders-active .attachment-details textarea {
+    background: var(--es-surface-secondary, #383838) !important;
+    border-color: var(--es-border, #404040) !important;
+    color: var(--es-text, #e0e0e0) !important;
+    border-radius: var(--es-radius-sm, 4px) !important;
+}
+
+/* Bulk select toolbar */
+body.upload-php.es-media-folders-active .media-toolbar.media-toolbar-mode-select {
+    background: var(--es-surface, #2c2c2c) !important;
+}
+
+body.upload-php.es-media-folders-active .media-toolbar .select-mode-toggle-button {
+    background: var(--es-surface-secondary, #383838) !important;
+    border-color: var(--es-border, #404040) !important;
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+body.upload-php.es-media-folders-active .media-toolbar .delete-selected-button {
+    background: var(--es-danger, #f66) !important;
+    border-color: var(--es-danger, #f66) !important;
+    color: #fff !important;
+}
+
+/* Pagination */
+body.upload-php.es-media-folders-active .tablenav-pages {
+    color: var(--es-text-secondary, #a0a0a0) !important;
+}
+
+body.upload-php.es-media-folders-active .tablenav-pages a {
+    background: var(--es-surface-secondary, #383838) !important;
+    border-color: var(--es-border, #404040) !important;
+    color: var(--es-text, #e0e0e0) !important;
+}
+
+body.upload-php.es-media-folders-active .tablenav-pages a:hover {
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1)) !important;
+    border-color: var(--es-primary, #3582c4) !important;
+    color: var(--es-primary, #3582c4) !important;
+}
+
+/* Breadcrumb navigation */
+.es-folder-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--es-surface, #2c2c2c);
+    border-bottom: 1px solid var(--es-border, #404040);
+    margin-bottom: 20px;
+    border-radius: var(--es-radius, 6px);
+}
+
+.es-folder-breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--es-text-secondary, #a0a0a0);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.es-folder-breadcrumb-item:hover {
+    color: var(--es-primary, #3582c4);
+}
+
+.es-folder-breadcrumb-item.current {
+    color: var(--es-text, #e0e0e0);
+    font-weight: 600;
+}
+
+.es-folder-breadcrumb-separator {
+    color: var(--es-text-muted, #787878);
+}
+
+/* Subfolder grid in main area */
+.es-subfolder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    padding: 20px;
+    background: var(--es-surface, #2c2c2c);
+    border-radius: var(--es-radius, 6px);
+    margin-bottom: 20px;
+}
+
+.es-subfolder-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+    background: var(--es-surface-secondary, #383838);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius, 6px);
+    text-decoration: none;
+    color: var(--es-text, #e0e0e0);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.es-subfolder-card:hover {
+    border-color: var(--es-primary, #3582c4);
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.1));
+    transform: translateY(-2px);
+}
+
+.es-subfolder-card-icon {
+    font-size: 32px;
+    color: var(--es-primary, #3582c4);
+}
+
+.es-subfolder-card-icon .dashicons {
+    width: 32px;
+    height: 32px;
+    font-size: 32px;
+}
+
+.es-subfolder-card-name {
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    word-break: break-word;
+}
+
+.es-subfolder-card-count {
+    font-size: 11px;
+    color: var(--es-text-muted, #787878);
+    background: var(--es-surface, #2c2c2c);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* Cursor for draggable folders */
+.es-folder-item:not(.es-folder-item--special) > .es-folder-link {
+    cursor: grab;
+}
+
+.es-folder-item:not(.es-folder-item--special) > .es-folder-link:active {
+    cursor: grabbing;
+}
+
+/* Prevent text selection while dragging */
+.es-folder-item--dragging,
+.es-folder-item--dragging * {
+    user-select: none !important;
+}
+
+/* 
+ * MODAL LAYOUT FIXES REMOVED FOR DEBUGGING
+ * These styles only apply when .es-has-folder-sidebar class is present,
+ * but the media-frame-content rule was breaking things.
+ */
+
+/* Scrollbar styling for sidebar - safe to keep */
+.es-modal-folder-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.es-modal-folder-sidebar::-webkit-scrollbar-track {
+    background: #2c2c2c;
+}
+
+.es-modal-folder-sidebar::-webkit-scrollbar-thumb {
+    background: #404040;
+    border-radius: 3px;
+}
+
+.es-modal-folder-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #606060;
+}

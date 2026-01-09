@@ -1,0 +1,139 @@
+<?php
+/**
+ * Single Location Template - LOVEPOP LAYOUT
+ * 
+ * @package Ensemble
+ * @version 1.0.0
+ */
+
+if (!defined('ABSPATH')) exit;
+
+get_header();
+
+// Load styles
+wp_enqueue_style('ensemble-base', ENSEMBLE_PLUGIN_URL . 'assets/css/layouts/ensemble-base.css', array(), ENSEMBLE_VERSION);
+wp_enqueue_style('ensemble-layout-lovepop', ENSEMBLE_PLUGIN_URL . 'templates/layouts/lovepop/style.css', array('ensemble-base'), ENSEMBLE_VERSION);
+wp_enqueue_style('ensemble-lovepop-font', 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap', array(), ENSEMBLE_VERSION);
+
+$location_id = get_the_ID();
+$location = function_exists('es_load_location_data') ? es_load_location_data($location_id) : array();
+?>
+
+<div class="ensemble-container es-lovepop-layout">
+    
+    <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
+    
+    <article class="es-location-lovepop">
+        
+        <!-- HERO -->
+        <header class="es-lovepop-hero" style="height: 400px;">
+            <?php if (has_post_thumbnail()): ?>
+            <div class="es-lovepop-hero-image">
+                <?php the_post_thumbnail('full'); ?>
+            </div>
+            <?php endif; ?>
+            
+            <div class="es-lovepop-hero-content">
+                <h1 class="es-lovepop-hero-title"><?php the_title(); ?></h1>
+                <?php if (!empty($location['city'])): ?>
+                <div class="es-lovepop-hero-date">
+                    
+                    <span><?php echo esc_html($location['city']); ?></span>
+                </div>
+                <?php endif; ?>
+            </div>
+        </header>
+        
+        <!-- CONTENT -->
+        <div class="es-lovepop-content-wrapper">
+            <div class="es-lovepop-main">
+                
+                <?php if (get_the_content()): ?>
+                <section class="es-lovepop-section">
+                    <div class="es-lovepop-section-header">
+                        
+                        <h2><?php _e('About', 'ensemble'); ?></h2>
+                    </div>
+                    <div class="es-lovepop-description">
+                        <?php the_content(); ?>
+                    </div>
+                </section>
+                <?php endif; ?>
+                
+                <?php if (!empty($location['upcoming_events'])): ?>
+                <section class="es-lovepop-section">
+                    <div class="es-lovepop-section-header">
+                        
+                        <h2><?php _e('Upcoming Events', 'ensemble'); ?></h2>
+                    </div>
+                    <div class="es-lovepop-related-grid">
+                        <?php foreach ($location['upcoming_events'] as $event): ?>
+                        <div class="es-lovepop-card">
+                            <a href="<?php echo esc_url($event['permalink']); ?>" class="es-lovepop-card-inner">
+                                <div class="es-lovepop-card-content">
+                                    <time class="es-lovepop-date">
+                                        
+                                        <span><?php echo esc_html($event['date_formatted']); ?></span>
+                                    </time>
+                                    <h3 class="es-lovepop-title"><?php echo esc_html($event['title']); ?></h3>
+                                </div>
+                            </a>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+                <?php endif; ?>
+                
+            </div>
+            
+            <!-- SIDEBAR -->
+            <aside class="es-lovepop-sidebar">
+                <div class="es-lovepop-sidebar-card">
+                    <div class="es-lovepop-meta-list">
+                        <?php if (!empty($location['address'])): ?>
+                        <div class="es-lovepop-meta-row">
+                            
+                            <div class="es-lovepop-meta-content">
+                                <div class="es-lovepop-meta-label"><?php _e('Address', 'ensemble'); ?></div>
+                                <div class="es-lovepop-meta-value"><?php echo esc_html($location['address']); ?></div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($location['city'])): ?>
+                        <div class="es-lovepop-meta-row">
+                            
+                            <div class="es-lovepop-meta-content">
+                                <div class="es-lovepop-meta-label"><?php _e('City', 'ensemble'); ?></div>
+                                <div class="es-lovepop-meta-value">
+                                    <?php echo esc_html($location['zip_code'] ?? ''); ?> <?php echo esc_html($location['city']); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        
+                        <?php if (!empty($location['website'])): ?>
+                        <div class="es-lovepop-meta-row">
+                            
+                            <div class="es-lovepop-meta-content">
+                                <div class="es-lovepop-meta-label"><?php _e('Website', 'ensemble'); ?></div>
+                                <div class="es-lovepop-meta-value">
+                                    <a href="<?php echo esc_url($location['website']); ?>" target="_blank" rel="noopener" style="color: var(--lp-primary);">
+                                        <?php echo esc_html(preg_replace('#^https?://#', '', $location['website'])); ?>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+    </article>
+    
+    <?php endwhile; endif; ?>
+    
+</div>
+
+<?php get_footer(); ?>

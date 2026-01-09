@@ -1,0 +1,672 @@
+/**
+ * Ensemble Reservations Pro - Frontend Styles
+ * 
+ * Uses CSS variables from Ensemble Design System for consistency
+ * 
+ * @package Ensemble
+ * @subpackage Addons/Reservations Pro
+ */
+
+/* =========================================
+   CSS Variables - Inherit from Ensemble Design System
+   ========================================= */
+.es-reservation-section,
+.es-reservation-wrapper {
+    /* Use Ensemble Design Variables with fallbacks */
+    --es-res-primary: var(--ensemble-primary, var(--es-primary, #3b82f6));
+    --es-res-primary-hover: var(--ensemble-button-hover-bg, var(--es-primary-hover, #2563eb));
+    --es-res-success: #10b981;
+    --es-res-warning: #f59e0b;
+    --es-res-danger: #ef4444;
+    --es-res-bg: var(--ensemble-card-bg, var(--es-card-bg, transparent));
+    --es-res-bg-secondary: var(--ensemble-hover, var(--es-bg-secondary, rgba(255,255,255,0.05)));
+    --es-res-border: var(--ensemble-card-border, var(--es-card-border, rgba(255,255,255,0.1)));
+    --es-res-text: var(--ensemble-text, var(--es-text, #f1f5f9));
+    --es-res-text-muted: var(--ensemble-text-secondary, var(--es-text-muted, #94a3b8));
+    --es-res-radius: var(--ensemble-card-radius, var(--es-radius, 8px));
+    --es-res-shadow: var(--ensemble-card-shadow, none);
+}
+
+/* =========================================
+   Reservation Section
+   ========================================= */
+.es-reservation-section {
+    margin-top: 30px;
+    padding: 25px;
+    background: var(--es-res-bg);
+    border-radius: var(--es-res-radius);
+    box-shadow: var(--es-res-shadow);
+}
+
+.es-reservation-section .es-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--es-res-text);
+}
+
+.es-reservation-section .es-section-title .dashicons {
+    color: var(--es-res-primary);
+}
+
+/* Availability Badge */
+.es-reservation-availability {
+    margin-bottom: 20px;
+}
+
+.es-availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: #ecfdf5;
+    color: var(--es-res-success);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.es-availability-badge.es-availability-low {
+    background: #fef3c7;
+    color: var(--es-res-warning);
+}
+
+/* =========================================
+   Reservation Form
+   ========================================= */
+.es-reservation-form {
+    max-width: 600px;
+}
+
+.es-form-group {
+    margin-bottom: 20px;
+}
+
+.es-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--es-res-text);
+}
+
+.es-form-group label .required {
+    color: var(--es-res-danger);
+}
+
+.es-form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.es-form-half {
+    flex: 1;
+}
+
+/* Inputs */
+.es-reservation-form input[type="text"],
+.es-reservation-form input[type="email"],
+.es-reservation-form input[type="tel"],
+.es-reservation-form input[type="number"],
+.es-reservation-form select,
+.es-reservation-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--es-res-border);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--es-res-text);
+    background: var(--es-res-bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.es-reservation-form input:focus,
+.es-reservation-form select:focus,
+.es-reservation-form textarea:focus {
+    outline: none;
+    border-color: var(--es-res-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.es-reservation-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Type Selector */
+.es-reservation-types {
+    margin-bottom: 25px;
+}
+
+.es-type-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.es-type-button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 15px;
+    border: 2px solid var(--es-res-border);
+    border-radius: var(--es-res-radius);
+    background: var(--es-res-bg);
+    cursor: pointer;
+    transition: all 0.2s;
+    max-width: 150px;
+}
+
+.es-type-button:hover {
+    border-color: var(--es-res-primary);
+    background: #eff6ff;
+}
+
+.es-type-button.active {
+    border-color: var(--es-res-primary);
+    background: #eff6ff;
+}
+
+.es-type-button input {
+    display: none;
+}
+
+.es-type-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+    color: var(--es-res-text-muted);
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-type-button.active .es-type-icon {
+    color: var(--es-res-primary);
+}
+
+.es-type-icon svg {
+    width: 40px !important;
+    height: 40px !important;
+    max-width: 40px !important;
+    max-height: 40px !important;
+    display: block;
+    flex-shrink: 0;
+}
+
+.es-type-label {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Guest Selector */
+.es-guests-selector {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    max-width: 150px;
+}
+
+.es-guests-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--es-res-border);
+    background: var(--es-res-bg-secondary);
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.es-guests-btn:hover {
+    background: var(--es-res-border);
+}
+
+.es-guests-minus {
+    border-radius: 6px 0 0 6px;
+}
+
+.es-guests-plus {
+    border-radius: 0 6px 6px 0;
+}
+
+.es-guests-selector input {
+    width: 60px;
+    text-align: center;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    -moz-appearance: textfield;
+}
+
+.es-guests-selector input::-webkit-outer-spin-button,
+.es-guests-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Privacy Notice */
+.es-privacy-notice {
+    padding: 15px;
+    background: var(--es-res-bg-secondary);
+    border-radius: 6px;
+}
+
+.es-privacy-notice label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.es-privacy-notice input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.es-privacy-notice a {
+    color: var(--es-res-primary);
+}
+
+/* Submit Button */
+.es-form-actions {
+    margin-top: 25px;
+}
+
+.es-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-btn-primary {
+    background: var(--es-res-primary);
+    color: #fff;
+}
+
+.es-btn-primary:hover {
+    background: var(--es-res-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.es-btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.es-btn-reserve {
+    min-width: 200px;
+}
+
+/* Spinner */
+.es-spinner {
+    width: 18px;
+    height: 18px;
+    animation: es-spin 1s linear infinite;
+}
+
+@keyframes es-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Messages */
+.es-reservation-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.es-message-success {
+    background: #ecfdf5;
+    color: var(--es-res-success);
+    border: 1px solid #a7f3d0;
+}
+
+.es-message-error {
+    background: #fef2f2;
+    color: var(--es-res-danger);
+    border: 1px solid #fecaca;
+}
+
+.es-confirmation-code {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.es-confirmation-code strong {
+    font-family: monospace;
+    font-size: 16px;
+    letter-spacing: 2px;
+}
+
+/* =========================================
+   Closed / Full States
+   ========================================= */
+.es-reservation-closed,
+.es-reservation-full {
+    padding: 30px;
+    text-align: center;
+    background: var(--es-res-bg-secondary);
+    border-radius: var(--es-res-radius);
+    color: var(--es-res-text-muted);
+}
+
+.es-reservation-full {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+/* =========================================
+   Public Guestlist
+   ========================================= */
+.es-public-guestlist {
+    padding: 20px;
+    background: var(--es-res-bg);
+    border-radius: var(--es-res-radius);
+    box-shadow: var(--es-res-shadow);
+}
+
+.es-guestlist-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+
+.es-guestlist-count-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--es-res-primary);
+}
+
+.es-guestlist-names {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.es-guestlist-name {
+    padding: 6px 12px;
+    background: var(--es-res-bg-secondary);
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* =========================================
+   Responsive
+   ========================================= */
+@media (max-width: 640px) {
+    .es-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .es-type-buttons {
+        flex-direction: column;
+    }
+    
+    .es-btn-reserve {
+        width: 100%;
+    }
+}
+
+/* =========================================
+   Theme Support - Inherits from Ensemble Design System
+   No manual dark/light mode needed - uses template variables
+   ========================================= */
+
+/* Form inputs inherit from template */
+.es-reservation-form input,
+.es-reservation-form select,
+.es-reservation-form textarea {
+    background: var(--es-res-bg-secondary);
+    color: var(--es-res-text);
+    border-color: var(--es-res-border);
+}
+
+/* =========================================
+   Reservation Header (Title + Badge)
+   ========================================= */ */
+.es-reservation-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.es-reservation-header .es-section-title {
+    margin: 0;
+}
+
+.es-reservation-header .es-availability-badge {
+    margin: 0;
+}
+
+/* =========================================
+   Toggle Button - Action Button Style
+   ========================================= */
+.es-reservation-toggle {
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 16px;
+}
+
+/* When used as inline action button (next to ticket button) */
+.es-reservation-toggle.es-action-btn {
+    width: auto;
+    padding: 14px 24px;
+    font-size: 15px;
+    border-radius: var(--ensemble-button-radius, 8px);
+    white-space: nowrap;
+}
+
+.es-reservation-toggle.es-action-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* =========================================
+   Universal Action Button
+   Uses CSS variables from Ensemble Designer for consistency
+   Works across ALL layouts (Club, Lovepop, Modern, etc.)
+   ========================================= */
+.es-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--ensemble-button-radius, 8px);
+    background: var(--ensemble-primary, var(--es-res-primary, #3b82f6));
+    color: var(--ensemble-button-text, #fff);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.es-action-btn:hover {
+    background: var(--ensemble-button-hover-bg, var(--ensemble-hover, var(--es-res-primary-hover, #2563eb)));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: var(--ensemble-button-text, #fff);
+    text-decoration: none;
+}
+
+.es-action-btn svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Secondary/Outline variant */
+.es-action-btn.es-action-btn-outline {
+    background: transparent;
+    border: 2px solid var(--ensemble-primary, var(--es-res-primary, #3b82f6));
+    color: var(--ensemble-primary, var(--es-res-primary, #3b82f6));
+}
+
+.es-action-btn.es-action-btn-outline:hover {
+    background: var(--ensemble-primary, var(--es-res-primary, #3b82f6));
+    color: #fff;
+}
+
+/* =========================================
+   Button Styling using Designer Variables
+   These will auto-adapt to layout colors
+   ========================================= */
+.es-btn.es-btn-primary,
+.es-btn-primary {
+    background: var(--ensemble-primary, var(--es-res-primary, #3b82f6));
+    color: var(--ensemble-button-text, #fff);
+    border-radius: var(--ensemble-button-radius, 6px);
+}
+
+.es-btn.es-btn-primary:hover,
+.es-btn-primary:hover {
+    background: var(--ensemble-button-hover-bg, var(--ensemble-hover, var(--es-res-primary-hover, #2563eb)));
+}
+
+.es-reservation-toggle .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+/* =========================================
+   Form Container (Collapsible)
+   ========================================= */
+.es-reservation-form-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--es-res-bg-secondary);
+    border-radius: var(--es-res-radius);
+}
+
+/* Form Actions with Cancel Button */
+.es-reservation-form .es-form-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.es-btn-secondary {
+    background: transparent;
+    color: var(--es-res-text-muted);
+    border: 1px solid var(--es-res-border);
+}
+
+.es-btn-secondary:hover {
+    background: var(--es-res-bg-secondary);
+    color: var(--es-res-text);
+}
+
+/* =========================================
+   Success State
+   ========================================= */
+.es-reservation-success {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--es-res-bg-secondary);
+    border-radius: var(--es-res-radius);
+    margin-top: 20px;
+}
+
+.es-success-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    color: var(--es-res-success);
+}
+
+.es-success-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.es-reservation-success h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--es-res-success);
+}
+
+.es-reservation-success .es-success-message {
+    margin: 0 0 15px;
+    color: var(--es-res-text-muted);
+}
+
+.es-reservation-success .es-confirmation-code {
+    display: inline-block;
+    margin: 0 0 20px;
+    padding: 12px 20px;
+    background: var(--es-res-bg);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.es-reservation-success .es-confirmation-code strong {
+    display: block;
+    margin-top: 5px;
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: var(--es-res-primary);
+}
+
+.es-reservation-another {
+    margin-top: 10px;
+}
+
+/* =========================================
+   Responsive Adjustments
+   ========================================= */
+@media (max-width: 640px) {
+    .es-reservation-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .es-reservation-form .es-form-actions {
+        flex-direction: column;
+    }
+    
+    .es-reservation-form .es-form-actions .es-btn {
+        width: 100%;
+    }
+}

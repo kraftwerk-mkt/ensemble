@@ -1,0 +1,1211 @@
+/**
+ * Kinky Layout Styles
+ * 
+ * Dark, fiery, sensual design
+ * Fire-red/orange on near-black background
+ * Inspired by "Kinky Pleasures" event flyer
+ * 
+ * @package Ensemble
+ * @version 2.1.0
+ */
+
+/* ============================================================
+   CSS VARIABLES - Kinky Fire Palette
+   ============================================================ */
+:root {
+    /* Core Colors - Fire on Darkness */
+    --kinky-bg: #0a0a0f;
+    --kinky-bg-gradient: linear-gradient(180deg, #0a0a0f 0%, #0d0d18 50%, #0a0a0f 100%);
+    --kinky-card-bg: #0f0f14;
+    --kinky-card-border: #1a1a22;
+    --kinky-text: #ffffff;
+    --kinky-text-muted: #ffffff;
+    --kinky-primary: #cc2222;
+    --kinky-secondary: #ff6633;
+    --kinky-hover: #ff4444;
+    
+    /* Fire Glow Effects */
+    --kinky-glow: 0 0 30px rgba(204, 34, 34, 0.3);
+    --kinky-glow-strong: 0 0 60px rgba(255, 102, 51, 0.4);
+    
+    /* Gradients */
+    --kinky-gradient-overlay: linear-gradient(
+        180deg,
+        rgba(10, 10, 15, 0.3) 0%,
+        rgba(10, 10, 15, 0.5) 40%,
+        rgba(10, 10, 15, 0.95) 100%
+    );
+    
+    --kinky-fire-gradient: linear-gradient(
+        180deg,
+        #ff6633 0%,
+        #cc2222 100%
+    );
+    
+    /* Typography - Cinzel for elegant headlines, Lato for body */
+    --kinky-font-heading: 'Cinzel', Georgia, serif;
+    --kinky-font-body: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* Spacing */
+    --kinky-card-padding: 24px;
+    --kinky-card-gap: 16px;
+    --kinky-section-spacing: 64px;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+.es-kinky-single,
+.es-kinky-wrapper {
+    background: var(--kinky-bg);
+    background-image: var(--kinky-bg-gradient);
+    color: var(--kinky-text);
+    min-height: 100vh;
+}
+
+/* ============================================================
+   EVENT CARD - Kinky Fire Style
+   ============================================================ */
+.es-kinky-card {
+    position: relative;
+    background: var(--kinky-card-bg);
+    border: 1px solid var(--kinky-card-border);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.es-kinky-card:hover {
+    border-color: var(--kinky-primary);
+    box-shadow: var(--kinky-glow);
+    transform: translateY(-4px);
+}
+
+.es-kinky-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Image Container */
+.es-kinky-image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+}
+
+.es-kinky-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.es-kinky-card:hover .es-kinky-image img {
+    transform: scale(1.05);
+}
+
+.es-kinky-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--kinky-card-bg) 0%, #15151f 100%);
+}
+
+/* Gradient Overlay */
+.es-kinky-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--kinky-gradient-overlay);
+    pointer-events: none;
+}
+
+/* Date Badge - Fire style */
+.es-kinky-date-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 14px;
+    background: rgba(10, 10, 15, 0.9);
+    border: 1px solid var(--kinky-primary);
+    backdrop-filter: blur(8px);
+    z-index: 2;
+}
+
+.es-kinky-date-day {
+    font-family: var(--kinky-font-body);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--kinky-text);
+}
+
+.es-kinky-date-divider {
+    width: 20px;
+    height: 2px;
+    background: var(--kinky-fire-gradient);
+    margin: 6px 0;
+}
+
+.es-kinky-date-month {
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--kinky-primary);
+}
+
+/* Status Badge */
+.es-kinky-status {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: var(--kinky-font-body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    background: var(--kinky-primary);
+    color: var(--kinky-text);
+    z-index: 2;
+}
+
+.es-kinky-status-soldout {
+    background: #1a1a22;
+    border: 1px solid var(--kinky-text-muted);
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-status-cancelled {
+    background: transparent;
+    border: 1px solid var(--kinky-text-muted);
+    color: var(--kinky-text-muted);
+    text-decoration: line-through;
+}
+
+.es-kinky-status-postponed {
+    background: #332200;
+    border: none;
+    color: #ffaa33;
+}
+
+/* Content Area */
+.es-kinky-content {
+    padding: var(--kinky-card-padding);
+    background: var(--kinky-card-bg);
+}
+
+/* Genre Tag - Fire colored */
+.es-kinky-genre {
+    display: inline-block;
+    font-family: var(--kinky-font-body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--kinky-primary);
+    margin-bottom: 8px;
+}
+
+/* Title - Elegant */
+.es-kinky-title {
+    font-family: var(--kinky-font-heading);
+    font-size: 22px;
+    font-weight: 400;
+    
+    line-height: 1.3;
+    color: var(--kinky-text);
+    margin: 0 0 12px;
+    transition: color 0.3s ease;
+}
+
+.es-kinky-card:hover .es-kinky-title {
+    color: var(--kinky-secondary);
+}
+
+/* Meta Info */
+.es-kinky-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--kinky-font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-separator {
+    color: var(--kinky-primary);
+}
+
+.es-kinky-time {
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-location {
+    color: var(--kinky-text-muted);
+}
+
+/* Price */
+.es-kinky-price {
+    display: inline-block;
+    font-family: var(--kinky-font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--kinky-secondary);
+    margin-top: 12px;
+    padding: 6px 0;
+    border-top: 1px solid var(--kinky-card-border);
+}
+
+/* ============================================================
+   ARTIST CARD - Kinky Style
+   ============================================================ */
+.es-kinky-artist-card {
+    position: relative;
+    background: var(--kinky-card-bg);
+    border: 1px solid var(--kinky-card-border);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.es-kinky-artist-card:hover {
+    border-color: var(--kinky-primary);
+    box-shadow: var(--kinky-glow);
+}
+
+.es-kinky-artist-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.es-kinky-artist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.es-kinky-artist-card:hover .es-kinky-artist-image img {
+    transform: scale(1.05);
+}
+
+.es-kinky-artist-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.es-kinky-artist-name {
+    font-family: var(--kinky-font-heading);
+    font-size: 20px;
+    font-weight: 400;
+    
+    color: var(--kinky-text);
+    margin: 0 0 6px;
+}
+
+.es-kinky-artist-role {
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+}
+
+/* ============================================================
+   LOCATION CARD - Kinky Style
+   ============================================================ */
+.es-kinky-location-card {
+    position: relative;
+    background: var(--kinky-card-bg);
+    border: 1px solid var(--kinky-card-border);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.es-kinky-location-card:hover {
+    border-color: var(--kinky-primary);
+}
+
+.es-kinky-location-image {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.es-kinky-location-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-kinky-location-content {
+    padding: 20px;
+}
+
+.es-kinky-location-name {
+    font-family: var(--kinky-font-heading);
+    font-size: 20px;
+    font-weight: 400;
+    
+    color: var(--kinky-text);
+    margin: 0 0 8px;
+}
+
+.es-kinky-location-address {
+    font-family: var(--kinky-font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--kinky-text-muted);
+}
+
+/* ============================================================
+   SINGLE EVENT PAGE - Kinky Fire Style
+   ============================================================ */
+.es-kinky-single {
+    background: var(--kinky-bg);
+    background-image: var(--kinky-bg-gradient);
+    color: var(--kinky-text);
+    min-height: 100vh;
+}
+
+.es-kinky-hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 0 60px;
+}
+
+.es-kinky-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.es-kinky-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-kinky-hero-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 10, 15, 0.4) 0%,
+        rgba(10, 10, 15, 0.6) 50%,
+        rgba(10, 10, 15, 0.98) 100%
+    );
+}
+
+.es-kinky-hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+}
+
+.es-kinky-hero-date {
+    font-family: var(--kinky-font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--kinky-primary);
+    margin-bottom: 16px;
+}
+
+.es-kinky-hero-title {
+    font-family: var(--kinky-font-heading);
+    font-size: clamp(36px, 7vw, 64px);
+    font-weight: 400;
+    
+    line-height: 1.1;
+    color: var(--kinky-text);
+    margin: 0 0 20px;
+    text-shadow: 0 0 60px rgba(204, 34, 34, 0.3);
+}
+
+.es-kinky-hero-location {
+    font-family: var(--kinky-font-body);
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+    margin-bottom: 32px;
+}
+
+/* Buttons - Fire style */
+.es-kinky-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--kinky-font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 36px;
+    background: var(--kinky-primary);
+    color: var(--kinky-text);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.es-kinky-button:hover {
+    background: var(--kinky-hover);
+    color: var(--kinky-text);
+    box-shadow: var(--kinky-glow);
+}
+
+.es-kinky-button-ghost {
+    background: transparent;
+    border: 1px solid var(--kinky-primary);
+    color: var(--kinky-text);
+}
+
+.es-kinky-button-ghost:hover {
+    background: var(--kinky-primary);
+}
+
+/* ============================================================
+   HOMEPAGE EVENTS - Kinky Override
+   ============================================================ */
+.es-homepage-events {
+    --hp-bg: var(--kinky-bg);
+    --hp-text: var(--kinky-text);
+    --hp-text-muted: var(--kinky-text-muted);
+    --hp-primary: var(--kinky-primary);
+    --hp-border: var(--kinky-card-border);
+    --hp-font-heading: var(--kinky-font-heading);
+    --hp-font-body: var(--kinky-font-body);
+}
+
+/* Title with italic style */
+.es-homepage-events__title {
+    
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+/* Date in fire red */
+.es-homepage-events--minimal .es-homepage-events__date {
+    color: var(--kinky-primary);
+    font-weight: 700;
+}
+
+/* Event names with subtle hover glow */
+.es-homepage-events--minimal .es-homepage-events__name:hover {
+    color: var(--kinky-secondary);
+    text-shadow: 0 0 20px rgba(204, 34, 34, 0.3);
+}
+
+/* ============================================================
+   HERO SHORTCODE - Kinky Override
+   ============================================================ */
+.es-hero {
+    --hero-text: var(--kinky-text);
+    --hero-font-heading: var(--kinky-font-heading);
+}
+
+.es-hero__title {
+    
+    font-weight: 400;
+    text-shadow: 0 0 60px rgba(204, 34, 34, 0.4);
+}
+
+/* ============================================================
+   KINKY SPECIFIC ELEMENTS
+   ============================================================ */
+
+/* Fire divider line */
+.es-kinky-divider {
+    width: 60px;
+    height: 2px;
+    background: var(--kinky-fire-gradient);
+    margin: 24px auto;
+}
+
+/* Subtitle style (like "FREEDOM OF LUST") */
+.es-kinky-subtitle {
+    font-family: var(--kinky-font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+}
+
+/* Floor/Area labels (like "MAINFLOOR", "BASEMENT") */
+.es-kinky-floor-label {
+    font-family: var(--kinky-font-body);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--kinky-primary);
+    margin: 0 0 4px;
+}
+
+.es-kinky-floor-desc {
+    font-family: var(--kinky-font-body);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+}
+
+/* Info pills (like "18+ | Admission Reserved | No Photo") */
+.es-kinky-info-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 16px;
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-info-pills span::after {
+    content: '|';
+    margin-left: 16px;
+    color: var(--kinky-card-border);
+}
+
+.es-kinky-info-pills span:last-child::after {
+    display: none;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+    .es-kinky-date-badge {
+        padding: 10px 12px;
+    }
+    
+    .es-kinky-date-day {
+        font-size: 24px;
+    }
+    
+    .es-kinky-title {
+        font-size: 18px;
+    }
+    
+    .es-kinky-content {
+        padding: 16px;
+    }
+    
+    .es-kinky-hero-title {
+        font-size: clamp(24px, 7vw, 48px);
+    }
+}
+
+@media (max-width: 480px) {
+    .es-kinky-image {
+        aspect-ratio: 4 / 5;
+    }
+    
+    .es-kinky-info-pills {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .es-kinky-info-pills span::after {
+        display: none;
+    }
+}
+
+/* ============================================================
+   SINGLE EVENT - SIDEBAR LAYOUT (Modern Structure)
+   ============================================================ */
+
+/* Hero Updates - Larger Date */
+.es-kinky-hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 0 80px;
+}
+
+.es-kinky-hero-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.es-kinky-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-kinky-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 10, 15, 0.3) 0%,
+        rgba(10, 10, 15, 0.5) 50%,
+        rgba(10, 10, 15, 0.98) 100%
+    );
+}
+
+.es-kinky-hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+}
+
+.es-kinky-hero-status {
+    display: inline-block;
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+    margin-bottom: 16px;
+    background: var(--kinky-primary);
+    color: var(--kinky-text);
+}
+
+.es-kinky-hero-badge {
+    display: inline-block;
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    margin-bottom: 16px;
+    /*background: var(--kinky-secondary);*/
+    color: var(--kinky-text);
+}
+
+/* LARGER DATE */
+.es-kinky-hero-date {
+    display: block;
+    font-family: var(--kinky-font-heading);
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 400;
+    
+    letter-spacing: 0.05em;
+    color: var(--kinky-primary);
+    margin-bottom: 20px;
+}
+
+.es-kinky-hero-time {
+    display: inline-block;
+    margin-left: 16px;
+    padding-left: 16px;
+    border-left: 1px solid var(--kinky-primary);
+}
+
+/* Body & Container */
+.es-kinky-body {
+    background: var(--kinky-bg);
+    padding: 60px 0 80px;
+}
+
+.es-kinky-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Sidebar Layout */
+.es-kinky-layout {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 48px;
+    align-items: start;
+}
+
+.es-kinky-main {
+    min-width: 0;
+}
+
+.es-kinky-aside {
+    position: sticky;
+    top: 100px;
+}
+
+/* Sections */
+.es-kinky-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--kinky-card-border);
+}
+
+.es-kinky-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.es-kinky-section-title {
+    font-family: var(--kinky-font-heading);
+    font-size: 28px;
+    font-weight: 400;
+    
+    color: var(--kinky-text);
+    margin: 0 0 24px;
+}
+
+.es-kinky-prose {
+    font-family: var(--kinky-font-body);
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-prose p {
+    margin: 0 0 1.5em;
+}
+
+.es-kinky-prose a {
+    color: var(--kinky-secondary);
+    text-decoration: none;
+}
+
+.es-kinky-prose a:hover {
+    color: var(--kinky-hover);
+}
+
+/* Sidebar Info Card */
+.es-kinky-info-card {
+    background: var(--kinky-card-bg);
+    border: 1px solid var(--kinky-card-border);
+    padding: 28px;
+}
+
+.es-kinky-ticket-section {
+    padding-bottom: 24px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--kinky-card-border);
+}
+
+.es-kinky-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--kinky-card-border);
+}
+
+.es-kinky-info-row:last-child {
+    border-bottom: none;
+}
+
+.es-kinky-info-label {
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-info-value {
+    font-family: var(--kinky-font-heading);
+    font-size: 18px;
+    font-weight: 400;
+    
+    color: var(--kinky-text);
+}
+
+.es-kinky-info-price {
+    font-size: 24px;
+    color: var(--kinky-secondary);
+}
+
+.es-kinky-info-link {
+    color: var(--kinky-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.es-kinky-info-link:hover {
+    color: var(--kinky-secondary);
+}
+
+.es-kinky-info-sub {
+    font-family: var(--kinky-font-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-info-hint {
+    font-family: var(--kinky-font-body);
+    font-size: 13px;
+    font-weight: 300;
+    
+    color: var(--kinky-text-muted);
+    opacity: 0.7;
+}
+
+/* Buttons */
+.es-kinky-btn {
+    display: block;
+    width: 100%;
+    font-family: var(--kinky-font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    padding: 16px 24px;
+    background: var(--kinky-primary);
+    color: var(--kinky-text);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.es-kinky-btn:hover {
+    background: var(--kinky-hover);
+    box-shadow: var(--kinky-glow);
+    color: var(--kinky-text);
+}
+
+.es-kinky-btn-secondary {
+    background: transparent;
+    border: 1px solid var(--kinky-primary);
+}
+
+.es-kinky-btn-secondary:hover {
+    background: var(--kinky-primary);
+}
+
+/* Mobile Ticket Card */
+.es-kinky-ticket-mobile {
+    display: none;
+    background: var(--kinky-card-bg);
+    border: 1px solid var(--kinky-card-border);
+    padding: 24px;
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.es-kinky-ticket-price {
+    display: block;
+    font-family: var(--kinky-font-heading);
+    font-size: 28px;
+    
+    color: var(--kinky-secondary);
+    margin-bottom: 8px;
+}
+
+.es-kinky-ticket-note {
+    display: block;
+    font-size: 13px;
+    color: var(--kinky-text-muted);
+    margin-bottom: 16px;
+}
+
+/* Artists Grid */
+.es-kinky-artists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.es-kinky-artist-card {
+    background: var(--kinky-card-bg);
+    border: 1px solid var(--kinky-card-border);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.es-kinky-artist-card:hover {
+    border-color: var(--kinky-primary);
+    box-shadow: var(--kinky-glow);
+}
+
+.es-kinky-artist-card .es-kinky-artist-image {
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+.es-kinky-artist-card .es-kinky-artist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.es-kinky-artist-card:hover .es-kinky-artist-image img {
+    transform: scale(1.05);
+}
+
+.es-kinky-artist-card .es-kinky-artist-info {
+    padding: 16px;
+    text-align: center;
+}
+
+.es-kinky-artist-card .es-kinky-artist-name {
+    display: block;
+    font-family: var(--kinky-font-heading);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--kinky-text);
+    text-decoration: none;
+    margin-bottom: 4px;
+}
+
+.es-kinky-artist-card .es-kinky-artist-name:hover {
+    color: var(--kinky-secondary);
+}
+
+.es-kinky-artist-card .es-kinky-artist-role {
+    display: block;
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-artist-card .es-kinky-artist-time {
+    display: block;
+    font-family: var(--kinky-font-body);
+    font-size: 12px;
+    color: var(--kinky-primary);
+    margin-top: 4px;
+}
+
+.es-kinky-artist-card .es-kinky-artist-references {
+    display: block;
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    color: var(--kinky-text-muted);
+    margin-top: 2px;
+}
+
+.es-kinky-artist-card .es-kinky-artist-genre {
+    display: block;
+    font-family: var(--kinky-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--kinky-secondary);
+    margin-top: 4px;
+}
+
+/* Venue Groups */
+.es-kinky-venue-group {
+    margin-bottom: 36px;
+}
+
+.es-kinky-venue-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-kinky-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--kinky-card-border);
+}
+
+.es-kinky-venue-title {
+    font-family: var(--kinky-font-heading);
+    font-size: 20px;
+    font-weight: 400;
+    
+    color: var(--kinky-secondary);
+    margin: 0;
+}
+
+.es-kinky-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Genre Tags */
+.es-kinky-genre-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.es-kinky-genre-tag {
+    font-family: var(--kinky-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    background: rgba(204, 34, 34, 0.15);
+    border: 1px solid var(--kinky-primary);
+    color: var(--kinky-primary);
+}
+
+.es-kinky-venue-description {
+    margin-bottom: 24px;
+    padding: 16px 20px;
+    background: rgba(204, 34, 34, 0.08);
+    border-left: 3px solid var(--kinky-primary);
+    font-family: var(--kinky-font-body);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--kinky-text-muted);
+}
+
+.es-kinky-venue-description p {
+    margin: 0;
+}
+
+.es-kinky-venue-description p + p {
+    margin-top: 10px;
+}
+
+/* ============================================================
+   RESPONSIVE - Sidebar Layout
+   ============================================================ */
+@media (max-width: 1024px) {
+    .es-kinky-layout {
+        grid-template-columns: 1fr 300px;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 900px) {
+    .es-kinky-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-kinky-aside {
+        position: static;
+    }
+    
+    .es-kinky-ticket-mobile {
+        display: block;
+    }
+    
+    .es-kinky-ticket-desktop {
+        display: none;
+    }
+    
+    .es-kinky-info-card {
+        margin-bottom: 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .es-kinky-hero {
+        min-height: 60vh;
+        padding-bottom: 0px;
+    }
+    
+    .es-kinky-hero-date {
+        font-size: 20px;
+        line-height: 1;
+    }
+    
+    .es-kinky-hero-time {
+        display: block;
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+        margin-top: 8px;
+    }
+    
+    .es-kinky-body {
+        padding: 40px 0 60px;
+    }
+    
+    .es-kinky-container {
+        padding: 0 16px;
+    }
+    
+    .es-kinky-section-title {
+        font-size: 24px;
+    }
+    
+    .es-kinky-artists-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .es-kinky-venue-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 400px) {
+    .es-kinky-artists-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .es-kinky-artist-card .es-kinky-artist-name {
+        font-size: 12px;
+    }
+    
+    .es-kinky-artist-card .es-kinky-artist-time {
+        font-size: 10px;
+    }
+    
+    .es-kinky-artist-card .es-kinky-artist-info {
+        padding: 8px;
+    }
+}

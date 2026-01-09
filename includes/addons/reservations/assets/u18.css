@@ -1,0 +1,1015 @@
+/**
+ * Ensemble U18 Authorization Styles
+ * 
+ * Modal-based form for parental authorization (Muttizettel)
+ * Uses design variables from active layout
+ */
+
+/* =================================================================
+   CSS Variables - Inherit from layout
+   ================================================================= */
+
+.es-u18-wrapper,
+.es-u18-modal {
+    /* Primary colors - cascade from layout */
+    --es-u18-primary: var(--ensemble-primary, var(--es-primary, var(--es-accent, #667eea)));
+    --es-u18-primary-hover: var(--ensemble-button-hover-bg, var(--es-primary-hover, #5a6fd6));
+    --es-u18-primary-rgb: var(--ensemble-primary-rgb, 102, 126, 234);
+    
+    /* Background & Surface */
+    --es-u18-bg: var(--ensemble-card-bg, var(--es-card-bg, var(--es-bg, #ffffff)));
+    --es-u18-bg-secondary: var(--ensemble-hover, var(--es-bg-secondary, rgba(0,0,0,0.03)));
+    --es-u18-surface: var(--ensemble-surface, var(--es-surface, #f8f9fa));
+    
+    /* Text colors */
+    --es-u18-text: var(--ensemble-text, var(--es-text, #1a1a1a));
+    --es-u18-text-secondary: var(--ensemble-text-secondary, var(--es-text-muted, #666666));
+    --es-u18-heading: var(--ensemble-heading, var(--es-heading-color, #1a1a1a));
+    
+    /* Borders */
+    --es-u18-border: var(--ensemble-card-border, var(--es-card-border, var(--es-border, rgba(0,0,0,0.1))));
+    --es-u18-border-strong: var(--ensemble-border-strong, rgba(0,0,0,0.15));
+    
+    /* Border radius */
+    --es-u18-radius: var(--ensemble-card-radius, var(--es-radius, 12px));
+    --es-u18-radius-sm: var(--ensemble-radius-sm, 8px);
+    
+    /* Shadows */
+    --es-u18-shadow: var(--ensemble-shadow, var(--es-shadow, 0 4px 20px rgba(0,0,0,0.15)));
+    --es-u18-shadow-lg: 0 10px 40px rgba(0,0,0,0.2);
+    
+    /* Status colors */
+    --es-u18-success: #28a745;
+    --es-u18-error: #dc3545;
+    --es-u18-warning: #ffc107;
+    --es-u18-info: #17a2b8;
+}
+
+/* =================================================================
+   U18 Button (in single event)
+   ================================================================= */
+
+.es-u18-wrapper {
+    margin-top: 15px;
+}
+
+.es-u18-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    font-size: 1em;
+    font-weight: 600;
+    background: var(--es-u18-primary);
+    border: none;
+    border-radius: var(--es-u18-radius-sm);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    justify-content: center;
+}
+
+.es-u18-toggle:hover {
+    background: var(--es-u18-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(var(--es-u18-primary-rgb), 0.3);
+}
+
+.es-u18-toggle svg {
+    flex-shrink: 0;
+}
+
+/* =================================================================
+   Layout-Specific Overrides
+   ================================================================= */
+
+/* Pure Layout */
+.es-layout-pure .es-u18-wrapper {
+    margin: 0;
+    background: var(--pure-card-bg, transparent);
+    border: var(--pure-card-border-width, 1px) solid var(--pure-card-border, var(--pure-border, rgba(0,0,0,0.1)));
+    border-radius: var(--pure-card-radius, 0);
+    padding: var(--pure-space-md, 20px);
+}
+
+.es-layout-pure .es-u18-toggle {
+    background: transparent;
+    color: var(--pure-btn-text, var(--pure-text, currentColor));
+    border: var(--pure-btn-border-width, 1px) solid var(--pure-btn-border, currentColor);
+    padding: var(--pure-btn-padding-v, 12px) var(--pure-btn-padding-h, 20px);
+    font-family: var(--pure-font, inherit);
+    font-size: var(--pure-btn-size, 0.9em);
+    font-weight: var(--pure-weight-medium, 500);
+    border-radius: var(--pure-btn-radius, 4px);
+    box-shadow: none;
+    transform: none;
+}
+
+.es-layout-pure .es-u18-toggle:hover {
+    background: var(--pure-btn-hover-bg, var(--pure-text, #000));
+    color: var(--pure-btn-hover-text, var(--pure-bg, #fff));
+    border-color: var(--pure-btn-hover-bg, var(--pure-text, #000));
+    transform: none;
+    box-shadow: none;
+}
+
+/* Modern Layout */
+.es-layout-modern .es-u18-toggle {
+    background: var(--modern-accent, var(--es-u18-primary));
+    border-radius: var(--modern-radius, 8px);
+}
+
+/* Club Layout */
+.es-layout-club .es-u18-toggle {
+    background: var(--club-accent, var(--es-u18-primary));
+    border-radius: var(--club-radius, 4px);
+}
+
+/* Stage Layout */
+.es-layout-stage .es-u18-toggle {
+    background: var(--stage-accent, var(--es-u18-primary));
+}
+
+/* Lovepop Layout */
+.es-layout-lovepop .es-u18-toggle {
+    background: var(--lovepop-accent, var(--es-u18-primary));
+    border-radius: var(--lovepop-radius, 12px);
+}
+
+/* =================================================================
+   Pure Layout Modal Overrides
+   ================================================================= */
+
+.es-layout-pure .es-u18-modal-container {
+    border-radius: var(--pure-card-radius, 0);
+    font-family: var(--pure-font, inherit);
+}
+
+.es-layout-pure .es-u18-modal-header {
+    border-radius: 0;
+}
+
+.es-layout-pure .es-u18-modal .es-btn-primary {
+    background: var(--pure-text, #000);
+    color: var(--pure-bg, #fff);
+    border-radius: var(--pure-btn-radius, 4px);
+}
+
+.es-layout-pure .es-u18-modal .es-btn-primary:hover {
+    background: var(--pure-text-secondary, #333);
+}
+
+.es-layout-pure .es-u18-modal .es-btn-secondary {
+    background: transparent;
+    color: var(--pure-text, #000);
+    border: 1px solid var(--pure-border, rgba(0,0,0,0.2));
+    border-radius: var(--pure-btn-radius, 4px);
+}
+
+.es-layout-pure .es-u18-step.active .es-step-number,
+.es-layout-pure .es-u18-step.completed .es-step-number {
+    background: var(--pure-text, #000);
+}
+
+.es-layout-pure .es-u18-info-box {
+    background: var(--pure-bg-secondary, #f5f5f5);
+    border-color: var(--pure-border, rgba(0,0,0,0.1));
+}
+
+.es-layout-pure .es-u18-form input:focus {
+    border-color: var(--pure-text, #000);
+    box-shadow: none;
+}
+
+/* =================================================================
+   Modal Overlay & Container
+   ================================================================= */
+
+.es-u18-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.es-u18-modal[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+}
+
+.es-u18-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.es-u18-modal-container {
+    position: relative;
+    width: 95%;
+    max-width: 640px;
+    max-height: 90vh;
+    background: var(--es-u18-bg);
+    border-radius: var(--es-u18-radius);
+    box-shadow: var(--es-u18-shadow-lg);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.3s ease;
+    overflow: hidden;
+}
+
+.es-u18-modal[aria-hidden="false"] .es-u18-modal-container {
+    transform: scale(1) translateY(0);
+}
+
+/* =================================================================
+   Modal Header
+   ================================================================= */
+
+.es-u18-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--es-u18-border);
+    background: var(--es-u18-surface);
+}
+
+.es-u18-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--es-u18-heading);
+}
+
+.es-u18-modal-title svg {
+    color: var(--es-u18-primary);
+}
+
+.es-u18-modal-close {
+    padding: 8px;
+    background: transparent;
+    border: none;
+    border-radius: var(--es-u18-radius-sm);
+    color: var(--es-u18-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-u18-modal-close:hover {
+    background: var(--es-u18-bg-secondary);
+    color: var(--es-u18-text);
+}
+
+/* =================================================================
+   Modal Body
+   ================================================================= */
+
+.es-u18-modal-body {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+/* Event Info */
+.es-u18-event-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--es-u18-surface);
+    border-radius: var(--es-u18-radius-sm);
+    margin-bottom: 20px;
+    color: var(--es-u18-text);
+}
+
+.es-u18-event-date {
+    color: var(--es-u18-text-secondary);
+    font-size: 0.9em;
+}
+
+/* Info Box */
+.es-u18-info-box {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(var(--es-u18-primary-rgb), 0.1);
+    border: 1px solid rgba(var(--es-u18-primary-rgb), 0.2);
+    border-radius: var(--es-u18-radius-sm);
+    margin-bottom: 24px;
+    color: var(--es-u18-text);
+}
+
+.es-u18-info-box svg {
+    flex-shrink: 0;
+    color: var(--es-u18-primary);
+}
+
+.es-u18-info-box p {
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* =================================================================
+   Progress Steps
+   ================================================================= */
+
+.es-u18-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    position: relative;
+}
+
+.es-u18-progress::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 30px;
+    right: 30px;
+    height: 2px;
+    background: var(--es-u18-border);
+}
+
+.es-u18-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 1;
+}
+
+.es-step-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--es-u18-surface);
+    border: 2px solid var(--es-u18-border);
+    color: var(--es-u18-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.es-u18-step.active .es-step-number,
+.es-u18-step.completed .es-step-number {
+    background: var(--es-u18-primary);
+    border-color: var(--es-u18-primary);
+    color: #fff;
+}
+
+.es-step-label {
+    font-size: 0.75em;
+    color: var(--es-u18-text-secondary);
+    text-align: center;
+}
+
+.es-u18-step.active .es-step-label {
+    color: var(--es-u18-text);
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .es-step-label {
+        display: none;
+    }
+}
+
+/* =================================================================
+   Form Steps
+   ================================================================= */
+
+.es-u18-step-content {
+    display: none;
+}
+
+.es-u18-step-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.es-step-title {
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--es-u18-heading);
+    margin: 0 0 20px 0;
+}
+
+/* =================================================================
+   Form Fields
+   ================================================================= */
+
+.es-u18-form .es-form-group {
+    margin-bottom: 16px;
+}
+
+.es-u18-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 0.9em;
+    color: var(--es-u18-text);
+}
+
+.es-u18-form label .required {
+    color: var(--es-u18-error);
+}
+
+.es-u18-form input[type="text"],
+.es-u18-form input[type="email"],
+.es-u18-form input[type="tel"],
+.es-u18-form input[type="date"],
+.es-u18-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--es-u18-border);
+    border-radius: var(--es-u18-radius-sm);
+    font-size: 1em;
+    color: var(--es-u18-text);
+    background: var(--es-u18-bg);
+    transition: all 0.2s ease;
+}
+
+.es-u18-form input:focus,
+.es-u18-form textarea:focus {
+    outline: none;
+    border-color: var(--es-u18-primary);
+    box-shadow: 0 0 0 3px rgba(var(--es-u18-primary-rgb), 0.15);
+}
+
+.es-u18-form input.error {
+    border-color: var(--es-u18-error);
+}
+
+/* Form Row Layout */
+.es-form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.es-form-half { flex: 1; }
+.es-form-third { flex: 0 0 100px; }
+.es-form-twothirds { flex: 1; }
+
+@media (max-width: 480px) {
+    .es-form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+.es-field-hint {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8em;
+    color: var(--es-u18-text-secondary);
+}
+
+/* Age Display Badge */
+.es-age-display {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.es-age-display.valid {
+    background: rgba(40, 167, 69, 0.15);
+    color: var(--es-u18-success);
+}
+
+.es-age-display.invalid {
+    background: rgba(220, 53, 69, 0.15);
+    color: var(--es-u18-error);
+}
+
+/* Copy Address Button */
+.es-copy-address {
+    margin-top: 8px;
+    font-size: 0.85em;
+}
+
+/* =================================================================
+   File Upload
+   ================================================================= */
+
+.es-file-upload {
+    position: relative;
+    border: 2px dashed var(--es-u18-border);
+    border-radius: var(--es-u18-radius-sm);
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.es-file-upload:hover {
+    border-color: var(--es-u18-primary);
+    background: var(--es-u18-bg-secondary);
+}
+
+.es-file-upload input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.es-file-upload-text {
+    color: var(--es-u18-text-secondary);
+    font-size: 0.9em;
+}
+
+.es-file-name {
+    display: block;
+    margin-top: 8px;
+    color: var(--es-u18-primary);
+    font-weight: 500;
+    font-size: 0.9em;
+}
+
+/* =================================================================
+   Summary Section
+   ================================================================= */
+
+.es-u18-summary {
+    background: var(--es-u18-surface);
+    border-radius: var(--es-u18-radius-sm);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.es-summary-section {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--es-u18-border);
+}
+
+.es-summary-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.es-summary-section:first-child {
+    padding-top: 0;
+}
+
+.es-summary-section h4 {
+    margin: 0 0 6px 0;
+    font-size: 0.8em;
+    color: var(--es-u18-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.es-summary-section p {
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: var(--es-u18-text);
+}
+
+/* =================================================================
+   Legal Text & Consents
+   ================================================================= */
+
+.es-u18-legal-text {
+    background: var(--es-u18-bg);
+    border: 1px solid var(--es-u18-border);
+    border-radius: var(--es-u18-radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 0.85em;
+    line-height: 1.6;
+    color: var(--es-u18-text-secondary);
+}
+
+.es-u18-legal-text p {
+    margin: 0;
+}
+
+.es-u18-consents {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.es-checkbox-label {
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: var(--es-u18-text);
+}
+
+.es-checkbox-label input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--es-u18-primary);
+}
+
+.es-checkbox-label a {
+    color: var(--es-u18-primary);
+}
+
+/* =================================================================
+   Modal Footer
+   ================================================================= */
+
+.es-u18-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--es-u18-border);
+    background: var(--es-u18-surface);
+}
+
+.es-u18-modal-footer .es-u18-prev {
+    margin-right: auto;
+}
+
+/* Buttons */
+.es-u18-modal .es-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 0.95em;
+    font-weight: 600;
+    border-radius: var(--es-u18-radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.es-u18-modal .es-btn-primary {
+    background: var(--es-u18-primary);
+    color: #fff;
+}
+
+.es-u18-modal .es-btn-primary:hover {
+    background: var(--es-u18-primary-hover);
+}
+
+.es-u18-modal .es-btn-secondary {
+    background: var(--es-u18-bg);
+    border: 1px solid var(--es-u18-border);
+    color: var(--es-u18-text);
+}
+
+.es-u18-modal .es-btn-secondary:hover {
+    background: var(--es-u18-bg-secondary);
+}
+
+.es-u18-modal .es-btn-sm {
+    padding: 8px 14px;
+    font-size: 0.85em;
+}
+
+/* Submit button green */
+.es-u18-submit {
+    background: var(--es-u18-success) !important;
+}
+
+.es-u18-submit:hover {
+    background: #218838 !important;
+}
+
+/* =================================================================
+   Messages
+   ================================================================= */
+
+.es-u18-message {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: var(--es-u18-radius-sm);
+    font-size: 0.9em;
+}
+
+.es-u18-message.es-message-error {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: var(--es-u18-error);
+}
+
+.es-u18-message.es-message-success {
+    background: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    color: var(--es-u18-success);
+}
+
+/* =================================================================
+   Success State
+   ================================================================= */
+
+.es-u18-success {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.es-u18-success .es-success-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    background: var(--es-u18-success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-u18-success .es-success-icon svg {
+    width: 36px;
+    height: 36px;
+    stroke: #fff;
+}
+
+.es-u18-success h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.3em;
+    color: var(--es-u18-success);
+}
+
+.es-success-code {
+    background: var(--es-u18-surface);
+    border-radius: var(--es-u18-radius-sm);
+    padding: 16px 24px;
+    margin: 20px 0;
+    display: inline-block;
+}
+
+.es-code-label {
+    display: block;
+    font-size: 0.8em;
+    color: var(--es-u18-text-secondary);
+    margin-bottom: 6px;
+}
+
+.es-code-value {
+    font-family: 'Courier New', monospace;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--es-u18-text);
+    letter-spacing: 2px;
+}
+
+.es-success-info {
+    background: rgba(255, 193, 7, 0.1);
+    border-radius: var(--es-u18-radius-sm);
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: var(--es-u18-text);
+}
+
+.es-success-info p {
+    margin: 0;
+}
+
+/* =================================================================
+   Spinner
+   ================================================================= */
+
+.es-spinner {
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* =================================================================
+   Body scroll lock when modal open
+   ================================================================= */
+
+body.es-u18-modal-open {
+    overflow: hidden;
+}
+
+/* =================================================================
+   Admin Tab Styles (unchanged from original)
+   ================================================================= */
+
+.es-u18-admin-tab {
+    padding: 20px;
+}
+
+.es-u18-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.es-u18-stat {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.es-u18-stat-value {
+    font-size: 2em;
+    font-weight: 700;
+    color: #333;
+}
+
+.es-u18-stat-label {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.es-u18-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.es-u18-table th,
+.es-u18-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.es-u18-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #555;
+}
+
+.es-u18-table tr:hover {
+    background: #f8f9ff;
+}
+
+.es-u18-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.es-u18-status-submitted { background: #e9ecef; color: #495057; }
+.es-u18-status-reviewed { background: #fff3cd; color: #856404; }
+.es-u18-status-approved { background: #d4edda; color: #155724; }
+.es-u18-status-rejected { background: #f8d7da; color: #721c24; }
+.es-u18-status-used { background: #cce5ff; color: #004085; }
+
+.es-u18-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.es-u18-actions button {
+    padding: 5px 10px;
+    font-size: 0.85em;
+}
+
+/* =================================================================
+   Digital Signature Pads
+   ================================================================= */
+
+.es-u18-signatures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 25px 0;
+}
+
+@media (max-width: 600px) {
+    .es-u18-signatures {
+        grid-template-columns: 1fr;
+    }
+}
+
+.es-signature-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.es-signature-box > label {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--es-u18-text);
+    margin-bottom: 8px;
+}
+
+.es-signature-pad-wrapper {
+    position: relative;
+    background: #fff;
+    border: 2px solid var(--es-u18-border);
+    border-radius: var(--es-u18-radius-sm);
+    overflow: hidden;
+}
+
+.es-signature-pad-wrapper:focus-within {
+    border-color: var(--es-u18-primary);
+}
+
+.es-signature-pad {
+    width: 100%;
+    height: 120px;
+    cursor: crosshair;
+    touch-action: none;
+    background: 
+        linear-gradient(to bottom, transparent 119px, #ddd 119px),
+        repeating-linear-gradient(transparent, transparent 5px, rgba(0,0,0,0.02) 5px, rgba(0,0,0,0.02) 6px);
+}
+
+.es-signature-clear {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--es-u18-border);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.es-signature-clear:hover {
+    opacity: 1;
+    background: #fff;
+}
+
+.es-signature-clear svg {
+    color: #666;
+}
+
+.es-signature-box .es-field-hint {
+    margin-top: 5px;
+    font-size: 0.8em;
+    color: var(--es-u18-text-secondary);
+}
+
+/* Signature required error state */
+.es-signature-box.es-error .es-signature-pad-wrapper {
+    border-color: var(--es-u18-error);
+}
+
+.es-signature-box.es-error .es-field-hint {
+    color: var(--es-u18-error);
+}
+
+/* Pure Layout signature overrides */
+.es-layout-pure .es-signature-pad-wrapper {
+    border-radius: var(--pure-card-radius, 0);
+}
+
+.es-layout-pure .es-signature-clear {
+    border-radius: 0;
+}

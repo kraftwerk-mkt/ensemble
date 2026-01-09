@@ -1,0 +1,946 @@
+/**
+ * Header Styles - All Variants
+ * 
+ * Variants: Classic, Minimal, Centered, Split
+ * Behaviors: Sticky, Shrink, Transparent
+ *
+ * @package Ensemble_Theme
+ * @version 2.4.0
+ */
+
+/* ============================================
+   CSS VARIABLES - Inherits from Ensemble Designer
+   ============================================ */
+
+:root {
+    --et-header-height: 80px;
+    --et-header-height-shrink: 60px;
+    --et-header-bg: var(--ensemble-bg, #ffffff);
+    --et-header-text: var(--ensemble-text, #1a1a1a);
+    --et-header-border: var(--ensemble-card-border, #e8e8e8);
+    --et-header-padding: 0 24px;
+    --et-logo-max-height: 50px;
+    --et-logo-max-height-shrink: 36px;
+    --et-nav-gap: 32px;
+    --et-nav-font-size: 15px;
+    --et-transition: 0.3s ease;
+    
+    /* Font inheritance from Ensemble Designer */
+    --et-header-font: var(--ensemble-font-body, var(--pure-font, system-ui, -apple-system, sans-serif));
+    --et-header-font-heading: var(--ensemble-font-heading, var(--pure-font-heading, var(--et-header-font)));
+    --et-header-font-weight: var(--ensemble-heading-weight, var(--pure-weight-medium, 500));
+}
+
+/* ============================================
+   BASE HEADER STYLES
+   ============================================ */
+
+.et-header {
+    position: relative;
+    width: 100%;
+    background: var(--et-header-bg);
+    border-bottom: 1px solid var(--et-header-border);
+    z-index: 1000;
+    transition: all var(--et-transition);
+    font-family: var(--et-header-font);
+}
+
+.et-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--et-header-height);
+    padding: var(--et-header-padding);
+    transition: min-height var(--et-transition);
+}
+
+/* ============================================
+   LOGO
+   ============================================ */
+
+.et-header__brand {
+    flex-shrink: 0;
+}
+
+.et-header__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.et-header__logo .et-logo-svg,
+.et-header__logo .et-logo-img {
+    max-height: var(--et-logo-max-height);
+    width: auto;
+    transition: max-height var(--et-transition);
+}
+
+/* SVG Logo Color Inheritance - Uses Ensemble Designer primary color */
+.et-header__logo .et-logo-svg {
+    color: var(--ensemble-primary, var(--et-header-text));
+}
+
+.et-header__logo .et-logo-svg path,
+.et-header__logo .et-logo-svg polygon,
+.et-header__logo .et-logo-svg circle,
+.et-header__logo .et-logo-svg rect,
+.et-header__logo .et-logo-svg g {
+    fill: currentColor;
+}
+
+/* Allow SVG elements with explicit fill="none" to remain transparent */
+.et-header__logo .et-logo-svg [fill="none"] {
+    fill: none;
+}
+
+/* Support for stroke-based SVGs */
+.et-header__logo .et-logo-svg [stroke]:not([stroke="none"]) {
+    stroke: currentColor;
+}
+
+.et-header__logo .et-logo-text {
+    font-family: var(--et-header-font-heading);
+    font-size: 1.5rem;
+    font-weight: var(--et-header-font-weight);
+    color: var(--et-header-text);
+    transition: font-size var(--et-transition);
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.et-header__nav {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .et-header__nav {
+        display: block;
+    }
+}
+
+.et-nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--et-nav-gap);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-nav__list > li {
+    position: relative;
+}
+
+.et-nav__list > li > a {
+    display: block;
+    padding: 8px 0;
+    font-family: var(--et-header-font);
+    font-size: var(--et-nav-font-size);
+    font-weight: var(--et-header-font-weight);
+    color: var(--et-header-text);
+    text-decoration: none;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.et-nav__list > li > a:hover,
+.et-nav__list > li.current-menu-item > a {
+    opacity: 0.6;
+}
+
+/* Dropdown */
+.et-nav__list .sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: var(--et-header-bg);
+    border: 1px solid var(--et-header-border);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 8px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.2s ease;
+    list-style: none;
+    z-index: 100;
+}
+
+.et-nav__list > li:hover > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.et-nav__list .sub-menu li a {
+    display: block;
+    padding: 10px 20px;
+    font-family: var(--et-header-font);
+    font-size: 14px;
+    color: var(--et-header-text);
+    text-decoration: none;
+}
+
+.et-nav__list .sub-menu li a:hover {
+    background: rgba(0,0,0,0.03);
+}
+
+/* Centered nav list */
+.et-nav__list--centered {
+    justify-content: center;
+}
+
+/* ============================================
+   HEADER ACTIONS
+   ============================================ */
+
+.et-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.et-header__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: var(--et-header-text);
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.et-header__action:hover {
+    opacity: 0.6;
+}
+
+/* ============================================
+   HAMBURGER / TOGGLE - Standard
+   ============================================ */
+
+.et-header__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+@media (min-width: 1024px) {
+    .et-header__toggle {
+        display: none;
+    }
+    
+    /* Always visible in minimal header */
+    .et-header--minimal .et-header__toggle--always {
+        display: flex;
+    }
+}
+
+.et-hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    gap: 5px;
+}
+
+.et-hamburger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--et-header-text);
+    transition: all 0.3s ease;
+}
+
+/* Hamburger active state */
+.et-header__toggle[aria-expanded="true"] .et-hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.et-header__toggle[aria-expanded="true"] .et-hamburger span:nth-child(2) {
+    opacity: 0;
+}
+
+.et-header__toggle[aria-expanded="true"] .et-hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ============================================
+   SEARCH OVERLAY
+   ============================================ */
+
+.et-search-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--et-header-bg);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.et-search-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.et-search-overlay__inner {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 24px;
+}
+
+.et-search-form {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid var(--et-header-text);
+}
+
+.et-search-form__input {
+    flex: 1;
+    padding: 16px 0;
+    font-family: var(--et-header-font);
+    font-size: 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--et-header-text);
+    outline: none;
+}
+
+.et-search-form__input::placeholder {
+    color: rgba(0,0,0,0.4);
+}
+
+.et-search-form__submit {
+    padding: 16px;
+    background: transparent;
+    border: none;
+    color: var(--et-header-text);
+    cursor: pointer;
+}
+
+.et-search-overlay__close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    background: transparent;
+    border: none;
+    color: var(--et-header-text);
+    cursor: pointer;
+}
+
+/* ============================================
+   MOBILE MENU - Standard (slide down)
+   ============================================ */
+
+.et-mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--et-header-bg);
+    z-index: 9998;
+    overflow-y: auto;
+    transform: translateY(-100%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.4s;
+}
+
+.et-mobile-menu.is-active {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0s;
+}
+
+.et-mobile-menu__inner {
+    padding: 100px 24px 40px;
+}
+
+.et-mobile-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-mobile-nav__list li {
+    border-bottom: 1px solid var(--et-header-border);
+}
+
+.et-mobile-nav__list li a {
+    display: block;
+    padding: 16px 0;
+    font-family: var(--et-header-font);
+    font-size: 1.125rem;
+    font-weight: var(--et-header-font-weight);
+    color: var(--et-header-text);
+    text-decoration: none;
+}
+
+.et-mobile-nav__list .sub-menu {
+    list-style: none;
+    padding: 0 0 0 20px;
+    margin: 0;
+}
+
+.et-mobile-nav__list .sub-menu li {
+    border-bottom: none;
+}
+
+.et-mobile-nav__list .sub-menu a {
+    padding: 10px 0;
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+/* ============================================
+   HEADER VARIANT: CLASSIC
+   Logo links, Navigation rechts
+   ============================================ */
+
+.et-header--classic .et-header__inner {
+    gap: 40px;
+}
+
+.et-header--classic .et-header__nav {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media (max-width: 1023px) {
+    .et-header--classic .et-header__nav {
+        display: none;
+    }
+}
+
+/* ============================================
+   HEADER VARIANT: MINIMAL
+   Logo links, Fancy Burger rechts
+   Fullscreen Overlay Menü
+   ============================================ */
+
+.et-header--minimal {
+    border-bottom: none;
+}
+
+.et-header--minimal .et-header__inner {
+    justify-content: space-between;
+}
+
+.et-header--minimal .et-header__nav {
+    display: none;
+}
+
+/* Fancy Burger Button - stays in normal flow */
+.et-header--minimal .et-header__toggle--always {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--et-header-text, #1a1a1a);
+    color: var(--et-header-bg, #ffffff);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.et-header--minimal .et-header__toggle--always:hover {
+    transform: scale(1.05);
+}
+
+.et-header--minimal .et-header__toggle--always .et-hamburger span {
+    background: var(--et-header-bg, #ffffff);
+    width: 22px;
+}
+
+/* Fullscreen Menu for Minimal */
+.et-mobile-menu--fullscreen {
+    background: var(--et-header-text);
+    color: var(--et-header-bg);
+    transform: scale(0.95);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.et-mobile-menu--fullscreen.is-active {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    min-height: var(--et-header-height);
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__logo .et-logo-svg,
+.et-mobile-menu--fullscreen .et-mobile-menu__logo .et-logo-img {
+    max-height: var(--et-logo-max-height);
+    filter: brightness(0) invert(1);
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__logo .et-logo-text {
+    color: var(--et-header-bg);
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__close {
+    width: 56px;
+    height: 56px;
+    background: var(--et-header-bg);
+    color: var(--et-header-text);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__close:hover {
+    transform: scale(1.05);
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 120px 24px 60px;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-menu__nav {
+    text-align: center;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__list li {
+    border: none;
+    overflow: hidden;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__list li a {
+    display: inline-block;
+    padding: 12px 0;
+    font-family: var(--et-header-font-heading);
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: var(--et-header-font-weight);
+    color: var(--et-header-bg);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li a {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Staggered animation */
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(1) a { transition-delay: 0.1s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(2) a { transition-delay: 0.15s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(3) a { transition-delay: 0.2s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(4) a { transition-delay: 0.25s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(5) a { transition-delay: 0.3s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(6) a { transition-delay: 0.35s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(7) a { transition-delay: 0.4s; }
+.et-mobile-menu--fullscreen.is-active .et-mobile-nav__list li:nth-child(8) a { transition-delay: 0.45s; }
+
+.et-mobile-menu--fullscreen .et-mobile-nav__list li a:hover {
+    opacity: 0.5;
+    transform: translateX(10px);
+}
+
+/* Submenu in fullscreen */
+.et-mobile-menu--fullscreen .et-mobile-nav__list .sub-menu {
+    padding: 0;
+    margin-top: 8px;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__list .sub-menu a {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    opacity: 0.6;
+    padding: 8px 0;
+}
+
+/* Secondary nav at bottom */
+.et-mobile-menu--fullscreen .et-mobile-menu__secondary {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__secondary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__secondary a {
+    font-size: 14px;
+    color: var(--et-header-bg);
+    opacity: 0.6;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.et-mobile-menu--fullscreen .et-mobile-nav__secondary a:hover {
+    opacity: 1;
+}
+
+/* ============================================
+   HEADER VARIANT: CENTERED
+   Logo zentriert, Navigation darunter
+   ============================================ */
+
+.et-header--centered {
+    border-bottom: none;
+}
+
+.et-header--centered .et-header__top {
+    border-bottom: 1px solid var(--et-header-border);
+}
+
+.et-header--centered .et-header__top-inner {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+}
+
+.et-header--centered .et-header__main {
+    padding: 24px 0;
+    text-align: center;
+}
+
+.et-header--centered .et-header__brand {
+    display: inline-block;
+}
+
+.et-header--centered .et-header__nav-bar {
+    border-top: 1px solid var(--et-header-border);
+    border-bottom: 1px solid var(--et-header-border);
+    padding: 12px 0;
+}
+
+@media (max-width: 1023px) {
+    .et-header--centered .et-header__nav-bar {
+        display: none;
+    }
+}
+
+/* ============================================
+   HEADER VARIANT: SPLIT
+   Navigation links, Logo Mitte, Actions rechts
+   ============================================ */
+
+.et-header--split .et-header__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 40px;
+}
+
+.et-header--split .et-header__nav--left {
+    justify-self: start;
+}
+
+.et-header--split .et-header__brand {
+    justify-self: center;
+}
+
+.et-header--split .et-header__right {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+@media (max-width: 1023px) {
+    .et-header--split .et-header__inner {
+        display: flex;
+    }
+    
+    .et-header--split .et-header__nav--left,
+    .et-header--split .et-header__nav--right {
+        display: none;
+    }
+}
+
+/* ============================================
+   BEHAVIOR: STICKY
+   ============================================ */
+
+.et-header--sticky {
+    position: sticky;
+    top: 0;
+}
+
+/* ============================================
+   BEHAVIOR: AUTO-HIDE ON SCROLL DOWN
+   ============================================ */
+
+.et-header--sticky.et-header--auto-hide {
+    transition: transform 0.3s ease, background-color var(--et-transition), box-shadow var(--et-transition);
+}
+
+.et-header--sticky.et-header--auto-hide.is-hidden {
+    transform: translateY(-100%);
+}
+
+/* ============================================
+   BEHAVIOR: SHRINK ON SCROLL
+   ============================================ */
+
+.et-header--shrink.is-scrolled .et-header__inner {
+    min-height: var(--et-header-height-shrink);
+}
+
+.et-header--shrink.is-scrolled .et-header__logo .et-logo-svg,
+.et-header--shrink.is-scrolled .et-header__logo .et-logo-img {
+    max-height: var(--et-logo-max-height-shrink);
+}
+
+.et-header--shrink.is-scrolled .et-header__logo .et-logo-text {
+    font-size: 1.25rem;
+}
+
+/* Centered variant shrink */
+.et-header--centered.et-header--shrink.is-scrolled .et-header__main {
+    padding: 12px 0;
+}
+
+/* ============================================
+   BEHAVIOR: TRANSPARENT (on Front Page)
+   ============================================ */
+
+.et-header--transparent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+    border-bottom: none;
+}
+
+.et-header--transparent .et-header__logo .et-logo-svg,
+.et-header--transparent .et-header__logo .et-logo-text,
+.et-header--transparent .et-nav__list > li > a,
+.et-header--transparent .et-header__action,
+.et-header--transparent .et-hamburger span {
+    color: #ffffff;
+}
+
+.et-header--transparent .et-hamburger span {
+    background: #ffffff;
+}
+
+/* Minimal transparent - burger button inverted */
+.et-header--transparent.et-header--minimal .et-header__toggle--always {
+    background: #ffffff;
+    color: var(--et-header-text);
+}
+
+
+
+/* Transparent + Sticky: solid when scrolled */
+.et-header--transparent.et-header--sticky.is-scrolled {
+    background: var(--et-header-bg);
+    border-bottom: 1px solid var(--et-header-border);
+}
+
+.et-header--transparent.et-header--sticky.is-scrolled .et-header__logo .et-logo-svg,
+.et-header--transparent.et-header--sticky.is-scrolled .et-header__logo .et-logo-text,
+.et-header--transparent.et-header--sticky.is-scrolled .et-nav__list > li > a,
+.et-header--transparent.et-header--sticky.is-scrolled .et-header__action {
+    color: var(--et-header-text);
+}
+
+.et-header--transparent.et-header--sticky.is-scrolled .et-hamburger span {
+    background: var(--et-header-text);
+}
+
+/* Minimal transparent scrolled */
+.et-header--transparent.et-header--minimal.is-scrolled .et-header__toggle--always {
+    background: var(--et-header-text);
+    color: var(--et-header-bg);
+}
+
+.et-header--transparent.et-header--minimal.is-scrolled .et-header__toggle--always .et-hamburger span {
+    background: var(--et-header-bg);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+.es-mode-dark .et-header,
+.et-mode-dark .et-header {
+    --et-header-bg: var(--ensemble-bg-dark, #0a0a0a);
+    --et-header-text: var(--ensemble-text-dark, #f5f5f5);
+    --et-header-border: var(--ensemble-card-border-dark, #222222);
+}
+
+.es-mode-dark .et-search-form__input::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+.es-mode-dark .et-mobile-menu--fullscreen {
+    background: var(--ensemble-text-dark, #f5f5f5);
+    color: var(--ensemble-bg-dark, #0a0a0a);
+}
+
+.es-mode-dark .et-mobile-menu--fullscreen .et-mobile-menu__logo .et-logo-svg,
+.es-mode-dark .et-mobile-menu--fullscreen .et-mobile-menu__logo .et-logo-img {
+    filter: none;
+}
+
+.es-mode-dark .et-mobile-menu--fullscreen .et-mobile-menu__close {
+    background: var(--ensemble-bg-dark, #0a0a0a);
+    color: var(--ensemble-text-dark, #f5f5f5);
+}
+
+.es-mode-dark .et-mobile-menu--fullscreen .et-mobile-nav__list li a,
+.es-mode-dark .et-mobile-menu--fullscreen .et-mobile-menu__logo .et-logo-text {
+    color: var(--ensemble-bg-dark, #0a0a0a);
+}
+
+/* ============================================
+   LIGHT LAYOUT - Header stays normal on front page
+   For layouts like Modern, Lovepop, Classic, Pure (light mode)
+   ============================================ */
+
+/* Light layouts: Keep header normal even with transparent setting */
+.et-light-layout .et-header--transparent {
+    position: relative; /* Override absolute positioning */
+    background: var(--et-header-bg);
+    border-bottom: 1px solid var(--et-header-border);
+}
+
+/* Reset text colors for light layouts */
+.et-light-layout .et-header--transparent .et-header__logo .et-logo-svg,
+.et-light-layout .et-header--transparent .et-header__logo .et-logo-text,
+.et-light-layout .et-header--transparent .et-nav__list > li > a,
+.et-light-layout .et-header--transparent .et-header__action {
+    color: var(--et-header-text);
+}
+
+.et-light-layout .et-header--transparent .et-hamburger span {
+    background: var(--et-header-text);
+}
+
+/* Minimal header in light layout */
+.et-light-layout .et-header--transparent.et-header--minimal .et-header__toggle--always {
+    background: var(--et-header-text);
+    color: var(--et-header-bg);
+}
+
+.et-light-layout .et-header--transparent.et-header--minimal .et-header__toggle--always .et-hamburger span {
+    background: var(--et-header-bg);
+}
+
+/* ============================================
+   DARK LAYOUT - Transparent header with white text
+   For layouts like Club, Stage, Pure (dark mode)
+   ============================================ */
+
+/* Dark layouts: Keep transparent header behavior */
+.et-dark-layout .et-header--transparent {
+    position: absolute;
+    background: transparent;
+    border-bottom: none;
+}
+
+.et-dark-layout .et-header--transparent .et-header__logo .et-logo-svg,
+.et-dark-layout .et-header--transparent .et-header__logo .et-logo-text,
+.et-dark-layout .et-header--transparent .et-nav__list > li > a,
+.et-dark-layout .et-header--transparent .et-header__action {
+    color: #ffffff;
+}
+
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    :root {
+        --et-header-height: 70px;
+        --et-header-height-shrink: 56px;
+        --et-logo-max-height: 40px;
+        --et-logo-max-height-shrink: 32px;
+    }
+    
+    .et-header__inner {
+        padding: 0 16px;
+    }
+    
+    .et-header__action {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .et-header__toggle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .et-header--centered .et-header__main {
+        padding: 16px 0;
+    }
+    
+    /* Minimal burger slightly smaller on mobile */
+    .et-header--minimal .et-header__toggle--always {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .et-header--minimal .et-header__toggle--always .et-hamburger span {
+        width: 20px;
+    }
+}

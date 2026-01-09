@@ -1,0 +1,625 @@
+/**
+ * Ensemble Unified Toggle Component
+ * ================================
+ * Einheitliches Toggle-Design für alle Checkboxen im Backend
+ * 
+ * Verwendung:
+ * <label class="es-toggle">
+ *     <input type="checkbox" name="..." value="1">
+ *     <span class="es-toggle-track"></span>
+ *     <span class="es-toggle-label">Label Text</span>
+ * </label>
+ * 
+ * Varianten:
+ * - .es-toggle--small (kompakter Toggle)
+ * - .es-toggle--inline (für Flow-Layout)
+ * - .es-toggle--reverse (Label links, Toggle rechts)
+ */
+
+/* ============================================
+   BASE TOGGLE COMPONENT
+   ============================================ */
+
+.es-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+/* Hide checkbox - HIGH SPECIFICITY */
+.es-toggle > input[type="checkbox"],
+label.es-toggle input[type="checkbox"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Toggle Track (Background) - HIGH SPECIFICITY */
+.es-toggle > .es-toggle-track,
+label.es-toggle .es-toggle-track,
+.es-toggle .es-toggle-track {
+    position: relative;
+    display: inline-block;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 24px !important;
+    min-height: 24px !important;
+    background: #52525b;
+    border: 1px solid #71717a;
+    border-radius: 12px;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+    order: 1;
+}
+
+/* Toggle Knob (Thumb) - HIGH SPECIFICITY */
+.es-toggle > .es-toggle-track::before,
+label.es-toggle .es-toggle-track::before,
+.es-toggle .es-toggle-track::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background: #fff;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Toggle Label (text inside .es-toggle) - HIGH SPECIFICITY */
+.es-toggle > .es-toggle-label,
+label.es-toggle > .es-toggle-label,
+.es-toggle .es-toggle-label:not(label),
+.es-genre-info .es-toggle .es-toggle-label,
+.es-addon-toggle-wrapper .es-toggle .es-toggle-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--es-text, #e4e4e7);
+    line-height: 1.4;
+    order: 2;
+    display: flex !important;
+    flex-direction: column;
+    gap: 2px;
+    /* Override any conflicting styles */
+    margin: 0 !important;
+    cursor: inherit;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.es-toggle > .es-toggle-label small,
+label.es-toggle > .es-toggle-label small,
+.es-toggle .es-toggle-label .es-toggle-description {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--es-text-secondary, #a1a1aa);
+    margin-top: 2px;
+}
+
+/* ============================================
+   CHECKED STATE - HIGH SPECIFICITY
+   ============================================ */
+
+.es-toggle input[type="checkbox"]:checked + .es-toggle-track,
+label.es-toggle input[type="checkbox"]:checked + .es-toggle-track {
+    background: #22c55e !important;
+    border-color: #22c55e !important;
+}
+
+.es-toggle input[type="checkbox"]:checked + .es-toggle-track::before,
+label.es-toggle input[type="checkbox"]:checked + .es-toggle-track::before {
+    transform: translateX(20px);
+}
+
+/* ============================================
+   FOCUS STATE - HIGH SPECIFICITY
+   ============================================ */
+
+.es-toggle input[type="checkbox"]:focus-visible + .es-toggle-track,
+label.es-toggle input[type="checkbox"]:focus-visible + .es-toggle-track {
+    outline: 2px solid #3582c4;
+    outline-offset: 2px;
+}
+
+/* ============================================
+   DISABLED STATE - HIGH SPECIFICITY
+   ============================================ */
+
+.es-toggle input[type="checkbox"]:disabled + .es-toggle-track,
+label.es-toggle input[type="checkbox"]:disabled + .es-toggle-track {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.es-toggle input[type="checkbox"]:disabled ~ .es-toggle-label,
+label.es-toggle input[type="checkbox"]:disabled ~ .es-toggle-label {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.es-toggle:has(input[type="checkbox"]:disabled) {
+    cursor: not-allowed;
+}
+
+/* ============================================
+   SIZE VARIANTS
+   ============================================ */
+
+/* Small Toggle */
+.es-toggle--small .es-toggle-track {
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+}
+
+.es-toggle--small .es-toggle-track::before {
+    width: 14px;
+    height: 14px;
+    top: 2px;
+    left: 2px;
+}
+
+.es-toggle--small input[type="checkbox"]:checked + .es-toggle-track::before {
+    transform: translateX(16px);
+}
+
+.es-toggle--small .es-toggle-label {
+    font-size: 13px;
+}
+
+/* Large Toggle */
+.es-toggle--large .es-toggle-track {
+    width: 52px;
+    height: 28px;
+    border-radius: 14px;
+}
+
+.es-toggle--large .es-toggle-track::before {
+    width: 22px;
+    height: 22px;
+    top: 2px;
+    left: 2px;
+}
+
+.es-toggle--large input[type="checkbox"]:checked + .es-toggle-track::before {
+    transform: translateX(24px);
+}
+
+/* ============================================
+   LAYOUT VARIANTS
+   ============================================ */
+
+/* Reverse Layout (Label links, Toggle rechts) */
+.es-toggle--reverse {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.es-toggle--reverse .es-toggle-track {
+    order: 2;
+}
+
+.es-toggle--reverse .es-toggle-label {
+    order: 1;
+}
+
+/* Inline (für horizontale Listen) */
+.es-toggle--inline {
+    display: inline-flex;
+}
+
+/* Block Layout (volle Breite) */
+.es-toggle--block {
+    display: flex;
+    width: 100%;
+}
+
+/* ============================================
+   TOGGLE ROW (für Formulare)
+   ============================================ */
+
+.es-toggle-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+}
+
+.es-toggle-row + .es-toggle-row {
+    border-top: 1px solid var(--es-border, #3f3f46);
+}
+
+/* ============================================
+   TOGGLE GROUP (mehrere Toggles)
+   ============================================ */
+
+.es-toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-toggle-group--horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+/* ============================================
+   TOGGLE CARD (für Settings-Seiten)
+   ============================================ */
+
+.es-toggle-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px;
+    background: var(--es-surface-secondary, #27272a);
+    border: 1px solid var(--es-border, #3f3f46);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.es-toggle-card:hover {
+    border-color: var(--es-primary, #3582c4);
+}
+
+.es-toggle-card.es-toggle-card--active {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: var(--es-success, #22c55e);
+}
+
+.es-toggle-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-toggle-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--es-text, #e4e4e7);
+    margin: 0 0 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-toggle-card-description {
+    font-size: 13px;
+    color: var(--es-text-secondary, #a1a1aa);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.es-toggle-card-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--es-surface, #18181b);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.es-toggle-card-icon .dashicons {
+    color: var(--es-text-secondary, #a1a1aa);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* ============================================
+   COMPATIBILITY: Legacy Classes
+   Diese Klassen werden deprecated, bleiben aber
+   für Backward Compatibility
+   ============================================ */
+
+/* .es-toggle-switch Kompatibilität */
+.es-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.es-toggle-switch input,
+.es-toggle-switch input[type="checkbox"] {
+    opacity: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.es-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #52525b;
+    border: 1px solid #71717a;
+    transition: 0.25s ease;
+    border-radius: 12px;
+    z-index: 1;
+}
+
+.es-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.25s ease;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.es-toggle-switch input:checked + .es-toggle-slider {
+    background-color: var(--es-success, #22c55e);
+    border-color: var(--es-success, #22c55e);
+}
+
+.es-toggle-switch input:checked + .es-toggle-slider:before {
+    transform: translateX(20px);
+}
+
+.es-toggle-switch input:focus-visible + .es-toggle-slider {
+    outline: 2px solid var(--es-primary, #3582c4);
+    outline-offset: 2px;
+}
+
+/* .es-addon-toggle-input Kompatibilität - DEAKTIVIERT wenn in .es-toggle */
+/* Standalone addon toggle (wird nicht mehr verwendet) */
+.es-addon-toggle-input:not(.es-toggle .es-addon-toggle-input) {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #52525b;
+    border: 1px solid #71717a;
+    border-radius: 12px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    margin: 0;
+}
+
+.es-addon-toggle-input:not(.es-toggle .es-addon-toggle-input):disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.es-addon-toggle-input:not(.es-toggle .es-addon-toggle-input):checked {
+    background: var(--es-success, #22c55e);
+    border-color: var(--es-success, #22c55e);
+}
+
+.es-addon-toggle-input:not(.es-toggle .es-addon-toggle-input)::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    background: #fff;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.es-addon-toggle-input:not(.es-toggle .es-addon-toggle-input):checked::before {
+    left: 22px;
+}
+
+.es-addon-toggle-input:not(.es-toggle .es-addon-toggle-input):focus-visible {
+    outline: 2px solid var(--es-primary, #3582c4);
+    outline-offset: 2px;
+}
+
+/* Addon toggle inside .es-toggle - reset appearance so .es-toggle-track takes over */
+.es-toggle .es-addon-toggle-input {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+}
+
+/* ============================================
+   STYLED CHECKBOX (für Multi-Select wie Genres)
+   HIGH SPECIFICITY VERSION
+   ============================================ */
+
+.es-checkbox,
+label.es-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    padding: 12px 16px;
+    background: var(--es-surface-secondary, #27272a);
+    border: 1px solid var(--es-border, #3f3f46);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    margin: 4px 0;
+}
+
+.es-checkbox:hover,
+label.es-checkbox:hover {
+    border-color: var(--es-primary, #3582c4);
+    background: var(--es-surface-hover, #3f3f46);
+}
+
+.es-checkbox input[type="checkbox"],
+label.es-checkbox input[type="checkbox"] {
+    position: absolute !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.es-checkbox .es-checkbox-box,
+label.es-checkbox .es-checkbox-box,
+.es-checkbox-box {
+    width: 22px !important;
+    min-width: 22px !important;
+    height: 22px !important;
+    min-height: 22px !important;
+    border: 2px solid #71717a !important;
+    border-radius: 4px;
+    background: transparent;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.es-checkbox .es-checkbox-box::after,
+label.es-checkbox .es-checkbox-box::after,
+.es-checkbox-box::after {
+    content: '✓';
+    font-size: 14px;
+    font-weight: bold;
+    color: #22c55e;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.15s ease;
+}
+
+.es-checkbox input[type="checkbox"]:checked + .es-checkbox-box,
+.es-checkbox input[type="checkbox"]:checked ~ .es-checkbox-box,
+label.es-checkbox input[type="checkbox"]:checked + .es-checkbox-box,
+label.es-checkbox input[type="checkbox"]:checked ~ .es-checkbox-box {
+    border-color: #22c55e !important;
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.es-checkbox input[type="checkbox"]:checked + .es-checkbox-box::after,
+.es-checkbox input[type="checkbox"]:checked ~ .es-checkbox-box::after,
+label.es-checkbox input[type="checkbox"]:checked + .es-checkbox-box::after,
+label.es-checkbox input[type="checkbox"]:checked ~ .es-checkbox-box::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.es-checkbox-label {
+    font-size: 14px;
+    color: var(--es-text, #e4e4e7);
+    font-weight: 500;
+}
+
+/* Checkbox Group */
+.es-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* ============================================
+   WEEKDAY SELECTOR (spezielle Komponente)
+   ============================================ */
+
+.es-weekday-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.es-weekday-selector label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background: var(--es-surface-secondary, #27272a);
+    border: 1px solid var(--es-border, #3f3f46);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--es-text-secondary, #a1a1aa);
+    min-width: 48px;
+}
+
+.es-weekday-selector label:hover {
+    border-color: var(--es-primary, #3582c4);
+    color: var(--es-text, #e4e4e7);
+}
+
+.es-weekday-selector input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.es-weekday-selector label:has(input[type="checkbox"]:checked) {
+    background: var(--es-primary, #3582c4);
+    border-color: var(--es-primary, #3582c4);
+    color: #fff;
+}
+
+/* ============================================
+   DARK MODE ADJUSTMENTS
+   ============================================ */
+
+@media (prefers-color-scheme: light) {
+    .es-toggle-track {
+        background: #d4d4d8;
+        border-color: #a1a1aa;
+    }
+    
+    .es-toggle-label {
+        color: #18181b;
+    }
+    
+    .es-toggle-label small,
+    .es-toggle-label .es-toggle-description {
+        color: #71717a;
+    }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .es-toggle-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .es-toggle-card .es-toggle {
+        align-self: flex-end;
+    }
+    
+    .es-toggle-group--horizontal {
+        flex-direction: column;
+    }
+}

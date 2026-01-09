@@ -1,0 +1,1497 @@
+/**
+ * Stage Layout Styles
+ * 
+ * Clean, minimal design with light background
+ * Sharp edges, bold typography
+ * 
+ * @package Ensemble
+ * @version 2.0.0
+ */
+
+/* =====================================================
+   CSS VARIABLES
+   ===================================================== */
+
+.es-layout-stage,
+.es-stage-single,
+.es-stage-event,
+.es-stage-card,
+.ensemble-single-event-wrapper.es-layout-stage,
+.ensemble-single-artist-wrapper.es-layout-stage,
+.ensemble-single-location-wrapper.es-layout-stage {
+    /* Colors - Light Mode */
+    --stage-bg: var(--ensemble-bg, #f5f5f5);
+    --stage-surface: var(--ensemble-card-bg, #ffffff);
+    --stage-border: var(--ensemble-card-border, #e0e0e0);
+    --stage-text: var(--ensemble-text, #1a1a1a);
+    --stage-text-secondary: var(--ensemble-text-secondary, #666666);
+    --stage-text-muted: var(--ensemble-text-muted, #999999);
+    --stage-primary: var(--ensemble-primary, #1a1a1a);
+    --stage-hover: var(--ensemble-hover, #333333);
+    --stage-link: var(--ensemble-link, #1a1a1a);
+    
+    /* Overlay Colors (für Cards und Hero) */
+    --stage-overlay-bg: var(--ensemble-overlay-bg, #1a1a1a);
+    --stage-overlay-text: var(--ensemble-overlay-text, #ffffff);
+    --stage-overlay-text-secondary: var(--ensemble-overlay-text-secondary, rgba(255, 255, 255, 0.8));
+    --stage-overlay-text-muted: var(--ensemble-overlay-text-muted, rgba(255, 255, 255, 0.6));
+    --stage-overlay-border: var(--ensemble-overlay-border, rgba(255, 255, 255, 0.3));
+    --stage-gradient-start: var(--ensemble-gradient-start, rgba(0, 0, 0, 0.85));
+    --stage-gradient-mid: var(--ensemble-gradient-mid, rgba(0, 0, 0, 0.4));
+    --stage-gradient-end: var(--ensemble-gradient-end, transparent);
+    
+    /* Placeholder */
+    --stage-placeholder-bg: var(--ensemble-placeholder-bg, #e5e5e5);
+    --stage-placeholder-bg-dark: var(--ensemble-placeholder-bg-dark, #2a2a2a);
+    --stage-placeholder-icon: var(--ensemble-placeholder-icon, #999999);
+    --stage-placeholder-icon-dark: var(--ensemble-placeholder-icon-dark, rgba(255, 255, 255, 0.3));
+    
+    /* Status Colors */
+    --stage-status-cancelled: var(--ensemble-status-cancelled, #dc2626);
+    --stage-status-soldout: var(--ensemble-status-soldout, #1a1a1a);
+    --stage-status-postponed: var(--ensemble-status-postponed, #d97706);
+    
+    /* Social Colors */
+    --stage-facebook-color: var(--ensemble-facebook-color, #1877f2);
+    
+    /* Typography */
+    --stage-font-heading: var(--ensemble-font-heading, 'Oswald', sans-serif);
+    --stage-font-body: var(--ensemble-font-body, 'Inter', sans-serif);
+    --stage-heading-weight: var(--ensemble-heading-weight, 700);
+    --stage-body-weight: var(--ensemble-body-weight, 400);
+    --stage-line-height: var(--ensemble-line-height-body, 1.6);
+    
+    /* Spacing & Radius */
+    --stage-radius: var(--ensemble-card-radius, 0px);
+    --stage-card-padding: var(--ensemble-card-padding, 0px);
+    --stage-card-gap: var(--ensemble-card-gap, 4px);
+    --stage-section-spacing: var(--ensemble-section-spacing, 48px);
+    
+    /* Card Effects */
+    --stage-card-shadow: var(--ensemble-card-shadow, none);
+    --stage-card-hover-transform: var(--ensemble-card-hover-transform, translateY(-5px));
+    --stage-card-hover-shadow: var(--ensemble-card-hover-shadow, 0 10px 40px rgba(0, 0, 0, 0.15));
+    
+    /* Buttons */
+    --stage-btn-bg: var(--ensemble-button-bg, #1a1a1a);
+    --stage-btn-text: var(--ensemble-button-text, #ffffff);
+    --stage-btn-hover-bg: var(--ensemble-button-hover-bg, #333333);
+    --stage-btn-hover-text: var(--ensemble-button-hover-text, #ffffff);
+    --stage-btn-radius: var(--ensemble-button-radius, 0px);
+    --stage-btn-padding-v: var(--ensemble-button-padding-v, 14px);
+    --stage-btn-padding-h: var(--ensemble-button-padding-h, 28px);
+    --stage-btn-weight: var(--ensemble-button-weight, 600);
+    --stage-btn-font-size: var(--ensemble-button-font-size, 13px);
+    
+    /* Typography Sizes */
+    --stage-h1-size: var(--ensemble-h1-size, 48px);
+    --stage-h2-size: var(--ensemble-h2-size, 28px);
+    --stage-h3-size: var(--ensemble-h3-size, 20px);
+    --stage-body-size: var(--ensemble-body-size, 16px);
+    --stage-small-size: var(--ensemble-small-size, 14px);
+}
+
+
+/* =====================================================
+   BASE LAYOUT
+   ===================================================== */
+
+.es-layout-stage {
+    background: var(--stage-bg);
+    color: var(--stage-text);
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-body-size);
+    line-height: var(--stage-line-height);
+}
+
+
+/* =====================================================
+   GRID LAYOUTS
+   ===================================================== */
+
+.ensemble-events-grid-wrapper.es-layout-stage,
+.ensemble-artists-wrapper.es-layout-stage,
+.ensemble-locations-wrapper.es-layout-stage {
+    max-width: var(--ensemble-container-width, 1400px);
+    margin: 0 auto;
+    padding: var(--stage-section-spacing) 20px;
+}
+
+.ensemble-events-grid-wrapper.es-layout-stage .ensemble-events-grid,
+.es-layout-stage .ensemble-artists-list,
+.es-layout-stage .ensemble-locations-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--stage-card-gap);
+}
+
+@media (max-width: 900px) {
+    .ensemble-events-grid-wrapper.es-layout-stage .ensemble-events-grid,
+    .es-layout-stage .ensemble-artists-list,
+    .es-layout-stage .ensemble-locations-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .ensemble-events-grid-wrapper.es-layout-stage .ensemble-events-grid,
+    .es-layout-stage .ensemble-artists-list,
+    .es-layout-stage .ensemble-locations-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =====================================================
+   CARD BASE STYLES
+   ===================================================== */
+
+.es-stage-card {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--stage-overlay-bg);
+    border-radius: var(--stage-radius);
+    box-shadow: var(--stage-card-shadow);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.es-stage-card:hover {
+    transform: var(--stage-card-hover-transform);
+    box-shadow: var(--stage-card-hover-shadow);
+    z-index: 10;
+}
+
+.es-stage-card-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =====================================================
+   CARD BACKGROUND IMAGE
+   ===================================================== */
+
+.es-stage-card-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.es-stage-card-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.es-stage-card:hover .es-stage-card-bg img {
+    transform: scale(1.08);
+}
+
+/* Gradient overlay */
+.es-stage-card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, var(--stage-gradient-start) 0%, var(--stage-gradient-mid) 40%, var(--stage-gradient-end) 100%);
+    pointer-events: none;
+}
+
+/* Gradient that appears on hover */
+.es-stage-gradient-hover {
+    opacity: 0;
+    background: linear-gradient(0deg, var(--stage-gradient-start) 0%, var(--stage-gradient-mid) 50%, rgba(0, 0, 0, 0.2) 100%);
+    transition: opacity 0.3s ease;
+}
+
+.es-stage-card:hover .es-stage-gradient-hover {
+    opacity: 1;
+}
+
+
+/* =====================================================
+   CARD PLACEHOLDER
+   ===================================================== */
+
+.es-stage-placeholder-bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--stage-placeholder-bg-dark) 0%, var(--stage-overlay-bg) 100%);
+}
+
+.es-stage-placeholder-bg svg {
+    width: 48px;
+    height: 48px;
+    color: var(--stage-placeholder-icon-dark);
+}
+
+
+/* =====================================================
+   MINIMAL CARD (Artist/Location Grid & Slider)
+   Nur Bild, Name + Next Event erscheint bei Hover
+   ===================================================== */
+
+.es-stage-card--minimal .es-stage-card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 2;
+    text-align: center;
+}
+
+.es-stage-overlay-hover {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.es-stage-card--minimal:hover .es-stage-overlay-hover {
+    opacity: 1;
+}
+
+.es-stage-card-name {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-overlay-text);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Next Event Info */
+.es-stage-card-next-event {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--stage-overlay-border);
+}
+
+.es-stage-next-date {
+    font-family: var(--stage-font-body);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-overlay-text);
+}
+
+.es-stage-next-title {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-small-size);
+    color: var(--stage-overlay-text-secondary);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =====================================================
+   FULL CARD (Artist/Location Cards mit Button)
+   Bild, Name, Meta, Button - Zentriert
+   ===================================================== */
+
+.es-stage-card--full {
+    aspect-ratio: auto;
+    background: var(--stage-surface);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--stage-border);
+}
+
+.es-stage-card--full:hover {
+    transform: none;
+}
+
+.es-stage-card-image-link {
+    display: block;
+}
+
+.es-stage-card-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.es-stage-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.es-stage-card--full:hover .es-stage-card-image img {
+    transform: scale(1.05);
+}
+
+.es-stage-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.es-stage-card--full .es-stage-card-title {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: var(--stage-h3-size);
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-text);
+    line-height: 1.2;
+}
+
+.es-stage-card--full .es-stage-card-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.es-stage-card--full .es-stage-card-title a:hover {
+    color: var(--stage-hover);
+}
+
+.es-stage-card-meta {
+    font-family: var(--stage-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-text-secondary);
+}
+
+.es-stage-card--full .es-stage-btn {
+    margin-top: auto;
+}
+
+
+/* =====================================================
+   EVENT CARD
+   Fullbleed wie Hero + Titel, Artists bei Hover
+   ===================================================== */
+
+.es-stage-card--event .es-stage-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Date Badge */
+.es-stage-card-date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.es-stage-card-day {
+    font-family: var(--stage-font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--stage-overlay-text);
+}
+
+.es-stage-card-month {
+    font-family: var(--stage-font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-overlay-text-secondary);
+}
+
+/* Event Title */
+.es-stage-card--event .es-stage-card-title {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: var(--stage-heading-weight);
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-overlay-text);
+}
+
+/* Artists (hidden by default) */
+.es-stage-card-artists {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-small-size);
+    color: var(--stage-overlay-text-secondary);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.es-stage-card--event:hover .es-stage-card-artists {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.es-stage-more {
+    color: var(--stage-overlay-text-muted);
+}
+
+/* Status Badge */
+.es-stage-card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 6px 12px;
+    font-family: var(--stage-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--stage-primary);
+    color: var(--stage-overlay-text);
+    z-index: 3;
+}
+
+.es-stage-badge-status {
+    background: var(--stage-status-cancelled);
+}
+
+.es-status-cancelled .es-stage-card-bg img {
+    filter: grayscale(100%);
+}
+
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+.es-stage-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: var(--stage-btn-padding-v) var(--stage-btn-padding-h);
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-btn-font-size);
+    font-weight: var(--stage-btn-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    border-radius: var(--stage-btn-radius);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.es-stage-btn-primary {
+    background: var(--stage-btn-bg);
+    color: var(--stage-btn-text);
+}
+
+.es-stage-btn-primary:hover {
+    background: var(--stage-btn-hover-bg);
+    color: var(--stage-btn-hover-text);
+}
+
+.es-stage-btn-outline {
+    background: transparent;
+    color: var(--stage-text);
+    border: 2px solid var(--stage-text);
+    padding: calc(var(--stage-btn-padding-v) - 2px) calc(var(--stage-btn-padding-h) - 2px);
+}
+
+.es-stage-btn-outline:hover {
+    background: var(--stage-text);
+    color: var(--stage-surface);
+}
+
+.es-stage-btn-secondary {
+    background: transparent;
+    color: var(--stage-text-secondary);
+    border: 1px solid var(--stage-border);
+}
+
+.es-stage-btn-secondary:hover {
+    background: var(--stage-bg);
+    border-color: var(--stage-text-secondary);
+}
+
+
+/* =====================================================
+   SINGLE EVENT - BASE
+   ===================================================== */
+
+.ensemble-single-event-wrapper.es-layout-stage {
+    background: var(--stage-bg);
+    color: var(--stage-text);
+    font-family: var(--stage-font-body);
+}
+
+
+/* =====================================================
+   SINGLE EVENT - HERO
+   Fullbleed Image, Datum links, Badge rechts
+   ===================================================== */
+
+.es-stage-hero {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    min-height: 350px;
+    max-height: 500px;
+    overflow: hidden;
+}
+
+.es-stage-hero-bg {
+    position: absolute;
+    inset: 0;
+}
+
+.es-stage-hero-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-stage-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, var(--stage-gradient-mid) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+/* Hero Inner - Positions date left, badges right */
+.es-stage-hero-inner {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px;
+    max-width: var(--ensemble-container-width, 1400px);
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}
+
+/* Date Badge (links oben) */
+.es-stage-hero-date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--stage-surface);
+    color: var(--stage-text);
+    text-align: center;
+    min-width: 80px;
+}
+
+.es-stage-date-day {
+    font-family: var(--stage-font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.es-stage-date-month {
+    font-family: var(--stage-font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-text-secondary);
+    margin-top: 4px;
+}
+
+.es-stage-date-year {
+    font-family: var(--stage-font-body);
+    font-size: 0.75rem;
+    color: var(--stage-text-muted);
+    margin-top: 2px;
+}
+
+/* Badges (rechts oben) */
+.es-stage-hero-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.es-stage-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    font-family: var(--stage-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.es-stage-badge-status {
+    background: var(--stage-status-cancelled);
+    color: var(--stage-overlay-text);
+}
+
+.es-stage-badge-status.es-status-soldout {
+    background: var(--stage-status-soldout);
+}
+
+.es-stage-badge-status.es-status-postponed {
+    background: var(--stage-status-postponed);
+}
+
+.es-stage-badge-custom {
+    background: var(--stage-surface);
+    color: var(--stage-text);
+}
+
+
+/* =====================================================
+   SINGLE EVENT - TITLE ROW
+   Titel links, Tickets-Button rechts
+   ===================================================== */
+
+.es-stage-title-row {
+    background: var(--stage-surface);
+    border-bottom: 1px solid var(--stage-border);
+    padding: 32px 0;
+}
+
+.es-stage-title-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.es-stage-title-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-stage-event-title {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: clamp(1.75rem, 4vw, var(--stage-h1-size));
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    color: var(--stage-text);
+}
+
+.es-stage-title-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: var(--stage-body-size);
+    color: var(--stage-text-secondary);
+}
+
+.es-stage-meta-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.es-stage-meta-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.es-stage-meta-city {
+    color: var(--stage-text-muted);
+}
+
+.es-stage-meta-city::before {
+    content: '·';
+    margin-right: 6px;
+}
+
+/* Title Right - Ticket */
+.es-stage-title-right {
+    flex-shrink: 0;
+}
+
+.es-stage-title-ticket {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.es-stage-title-ticket .es-stage-ticket-price {
+    font-family: var(--stage-font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--stage-text);
+}
+
+@media (max-width: 768px) {
+    .es-stage-title-inner {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .es-stage-title-right {
+        width: 100%;
+    }
+    
+    .es-stage-title-ticket {
+        justify-content: space-between;
+    }
+    
+    .es-stage-title-ticket .es-stage-btn {
+        flex: 1;
+    }
+}
+
+
+/* =====================================================
+   SINGLE EVENT - CONTENT
+   Single Column Layout
+   ===================================================== */
+
+.es-stage-content {
+    padding: var(--stage-section-spacing) 0;
+}
+
+.es-stage-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.es-stage-section {
+    margin-bottom: var(--stage-section-spacing);
+}
+
+.es-stage-section:last-child {
+    margin-bottom: 0;
+}
+
+.es-stage-section-title {
+    font-family: var(--stage-font-heading);
+    font-size: var(--stage-h2-size);
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-text);
+    margin: 0 0 24px 0;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--stage-text);
+}
+
+.es-stage-prose {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-body-size);
+    line-height: var(--stage-line-height);
+    color: var(--stage-text);
+}
+
+.es-stage-prose p {
+    margin: 0 0 1.5em 0;
+}
+
+.es-stage-prose p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =====================================================
+   SINGLE EVENT - GENRES
+   ===================================================== */
+
+.es-stage-genre-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.es-stage-genre-pill {
+    display: inline-block;
+    padding: 8px 16px;
+    font-family: var(--stage-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-text);
+    background: transparent;
+    border: 1px solid var(--stage-border);
+}
+
+
+/* =====================================================
+   SINGLE EVENT - LINE-UP
+   Horizontale Items: Eckiges Bild links, Info rechts
+   ===================================================== */
+
+.es-stage-lineup-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-stage-lineup-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    background: var(--stage-surface);
+    border: 1px solid var(--stage-border);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+a.es-stage-lineup-item:hover {
+    border-color: var(--stage-text);
+    background: var(--stage-bg);
+}
+
+/* Artist Image - Eckig */
+.es-stage-lineup-img {
+    width: 72px;
+    height: 72px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: var(--stage-placeholder-bg);
+}
+
+.es-stage-lineup-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-stage-lineup-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--stage-placeholder-bg) 0%, var(--stage-border) 100%);
+}
+
+.es-stage-lineup-placeholder svg {
+    width: 32px;
+    height: 32px;
+    color: var(--stage-placeholder-icon);
+}
+
+/* Artist Info */
+.es-stage-lineup-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-stage-lineup-name {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: var(--stage-h3-size);
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-text);
+    line-height: 1.2;
+}
+
+.es-stage-lineup-meta {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-small-size);
+    color: var(--stage-text-secondary);
+}
+
+/* Venue Groups */
+.es-stage-venue-group {
+    margin-bottom: 32px;
+}
+
+.es-stage-venue-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-stage-venue-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--stage-border);
+}
+
+.es-stage-venue-name {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-text);
+}
+
+.es-stage-venue-genres {
+    display: flex;
+    gap: 8px;
+}
+
+.es-stage-venue-genre {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-text-secondary);
+    padding: 4px 8px;
+    border: 1px solid var(--stage-border);
+}
+
+
+/* =====================================================
+   SINGLE EVENT - LOCATION INFO
+   ===================================================== */
+
+.es-stage-location-card {
+    background: var(--stage-surface);
+    border: 1px solid var(--stage-border);
+    padding: 24px;
+}
+
+.es-stage-location-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.es-stage-location-name {
+    margin: 0;
+    font-family: var(--stage-font-heading);
+    font-size: var(--stage-h3-size);
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-text);
+}
+
+.es-stage-location-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.es-stage-location-name a:hover {
+    text-decoration: underline;
+}
+
+.es-stage-location-address {
+    margin: 0;
+    font-size: var(--stage-body-size);
+    color: var(--stage-text-secondary);
+}
+
+.es-stage-location-hint {
+    margin: 0;
+    font-size: var(--stage-small-size);
+    color: var(--stage-text-muted);
+    font-style: italic;
+}
+
+
+/* =====================================================
+   SINGLE EVENT - FACEBOOK & EXTERNAL
+   ===================================================== */
+
+.es-stage-facebook-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-body-size);
+    font-weight: 500;
+    color: var(--stage-text);
+    text-decoration: none;
+    padding: 12px 20px;
+    background: var(--stage-surface);
+    border: 1px solid var(--stage-border);
+    transition: border-color 0.2s ease;
+}
+
+.es-stage-facebook-link:hover {
+    border-color: var(--stage-text);
+}
+
+.es-stage-facebook-link svg {
+    color: var(--stage-facebook-color);
+}
+
+
+/* =====================================================
+   SOCIAL SHARING
+   ===================================================== */
+
+.es-layout-stage .es-stage-share,
+.es-layout-stage .ensemble-social-share {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: var(--stage-section-spacing);
+    padding-top: 24px;
+    border-top: 1px solid var(--stage-border);
+}
+
+.es-layout-stage .es-stage-share-label {
+    font-size: var(--stage-small-size);
+    color: var(--stage-text-secondary);
+}
+
+.es-layout-stage .es-stage-share-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.es-layout-stage .es-stage-share-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--stage-text);
+    background: transparent;
+    border: none;
+    transition: opacity 0.2s ease;
+}
+
+.es-layout-stage .es-stage-share-icons a:hover {
+    opacity: 0.6;
+}
+
+.es-layout-stage .es-stage-share-icons svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+
+/* =====================================================
+   SINGLE ARTIST PAGE
+   ===================================================== */
+
+.ensemble-single-artist-wrapper.es-layout-stage {
+    background: var(--stage-bg);
+    color: var(--stage-text);
+    font-family: var(--stage-font-body);
+    padding-bottom: var(--stage-section-spacing);
+}
+
+.es-layout-stage .es-stage-hero-image {
+    position: absolute;
+    inset: 0;
+}
+
+.es-layout-stage .es-stage-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-layout-stage .es-stage-content-wrapper {
+    max-width: var(--ensemble-container-width, 1400px);
+    margin: 0 auto;
+    padding: var(--stage-section-spacing) 20px;
+}
+
+.es-layout-stage .es-stage-section-header h2 {
+    font-family: var(--stage-font-heading);
+    font-size: var(--stage-h2-size);
+    font-weight: var(--stage-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--stage-text);
+    margin: 0 0 24px 0;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--stage-text);
+}
+
+.es-layout-stage .es-stage-description {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-body-size);
+    line-height: var(--stage-line-height);
+}
+
+
+/* =====================================================
+   SINGLE LOCATION PAGE
+   ===================================================== */
+
+.ensemble-single-location-wrapper.es-layout-stage {
+    background: var(--stage-bg);
+    color: var(--stage-text);
+    font-family: var(--stage-font-body);
+    padding-bottom: var(--stage-section-spacing);
+}
+
+.es-layout-stage .es-stage-sidebar {
+    position: sticky;
+    top: 24px;
+}
+
+.es-layout-stage .es-stage-sidebar-card {
+    background: var(--stage-surface);
+    border: 1px solid var(--stage-border);
+    padding: 24px;
+}
+
+.es-layout-stage .es-stage-meta-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.es-layout-stage .es-stage-meta-row {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--stage-border);
+}
+
+.es-layout-stage .es-stage-meta-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.es-layout-stage .es-stage-meta-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--stage-text-muted);
+    margin-bottom: 4px;
+}
+
+.es-layout-stage .es-stage-meta-value {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-body-size);
+    color: var(--stage-text);
+}
+
+
+/* =====================================================
+   SOCIAL SHARING
+   ===================================================== */
+
+.es-layout-stage .es-stage-share {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: var(--stage-section-spacing);
+    padding-top: 24px;
+    border-top: 1px solid var(--stage-border);
+}
+
+.es-layout-stage .es-stage-share-label {
+    font-size: var(--stage-small-size);
+    color: var(--stage-text-secondary);
+}
+
+.es-layout-stage .es-stage-share-icons {
+    display: flex;
+    gap: 12px;
+}
+
+.es-layout-stage .es-stage-share-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--stage-text);
+    background: transparent;
+    border: none;
+    transition: opacity 0.2s ease;
+}
+
+.es-layout-stage .es-stage-share-icons a:hover {
+    opacity: 0.6;
+}
+
+.es-layout-stage .es-stage-share-icons svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+}
+
+
+/* =====================================================
+   SLIDER STYLES
+   ===================================================== */
+
+.es-layout-stage .ensemble-slider .es-stage-card {
+    aspect-ratio: 3 / 4;
+}
+
+.es-layout-stage .ensemble-slider .es-stage-card--full {
+    aspect-ratio: auto;
+}
+
+
+/* =====================================================
+   HERO SLIDER - STAGE LAYOUT
+   Dezenter Rahmen rundherum
+   ===================================================== */
+
+/* WICHTIG: Wrapper max-width für Hero aufheben */
+/* Variante 1: Mit :has() für moderne Browser */
+.ensemble-events-grid-wrapper.es-layout-stage:has(.es-hero-slider),
+.ensemble-events-grid-wrapper.es-layout-stage.es-is-slider:has(.es-hero-slider) {
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Variante 2: Fallback - Hero-Slider selbst aus dem Container ausbrechen */
+.es-layout-stage .es-hero-slider,
+.es-layout-stage.ensemble-events-grid-wrapper .es-hero-slider,
+body.es-layout-stage .es-hero-slider {
+    /* Aus dem Container ausbrechen */
+    width: 94vw !important;
+    max-width: 94vw !important;
+    margin-left: calc(-47vw + 50%) !important;
+    margin-right: calc(-47vw + 50%) !important;
+    margin-top: 24px !important;
+    margin-bottom: 24px !important;
+    min-height: 500px;
+    max-height: 75vh;
+    border-radius: var(--stage-radius, 0);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Track muss volle Höhe haben */
+.es-layout-stage .es-hero-slider .es-slider__track {
+    height: 100%;
+    min-height: 500px;
+}
+
+/* Stage Hero Slide */
+.es-layout-stage .es-hero-slider .es-slider__slide {
+    min-height: 500px;
+    height: 100%;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide {
+    min-height: 500px;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+/* Gradient Overlay - angepasst für Stage */
+.es-layout-stage .es-hero-slider .es-hero-slide::before {
+    background: linear-gradient(
+        to top,
+        var(--stage-gradient-start, rgba(0,0,0,0.85)) 0%,
+        var(--stage-gradient-mid, rgba(0,0,0,0.4)) 50%,
+        var(--stage-gradient-end, transparent) 100%
+    ) !important;
+}
+
+/* Hero Content - KRITISCH: Position und Sichtbarkeit fixieren */
+.es-layout-stage .es-hero-slider .es-hero-slide__content {
+    position: relative !important;
+    z-index: 5 !important;
+    padding: 48px !important;
+    max-width: 700px;
+    width: 100%;
+    color: var(--stage-overlay-text, #ffffff) !important;
+    pointer-events: auto;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__category {
+    display: inline-block;
+    background: var(--stage-surface, #ffffff) !important;
+    color: var(--stage-text, #1a1a1a) !important;
+    border-radius: var(--stage-btn-radius, 0);
+    font-family: var(--stage-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 8px 16px;
+    margin-bottom: 16px;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__title {
+    font-family: var(--stage-font-heading, 'Oswald', sans-serif) !important;
+    font-size: clamp(2rem, 5vw, var(--stage-h1-size, 48px)) !important;
+    font-weight: var(--stage-heading-weight, 700) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    color: var(--stage-overlay-text, #ffffff) !important;
+    margin: 0 0 16px 0;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__title a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__meta {
+    display: flex;
+    flex-wrap: wrap;
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-small-size, 14px);
+    color: var(--stage-overlay-text-secondary, rgba(255,255,255,0.8)) !important;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__excerpt {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-body-size, 16px);
+    color: var(--stage-overlay-text-secondary, rgba(255,255,255,0.8));
+    line-height: var(--stage-line-height, 1.6);
+    margin-bottom: 24px;
+}
+
+/* Hero Buttons - Stage Style */
+.es-layout-stage .es-hero-slider .es-hero-slide__btn {
+    font-family: var(--stage-font-body);
+    font-size: var(--stage-btn-font-size, 13px);
+    font-weight: var(--stage-btn-weight, 600);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--stage-btn-padding-v, 14px) var(--stage-btn-padding-h, 28px);
+    border-radius: var(--stage-btn-radius, 0);
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__btn--primary {
+    background: var(--stage-btn-bg, #1a1a1a) !important;
+    color: var(--stage-btn-text, #ffffff) !important;
+    border-color: var(--stage-btn-bg, #1a1a1a) !important;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__btn--primary:hover {
+    background: var(--stage-btn-hover-bg, #333) !important;
+    border-color: var(--stage-btn-hover-bg, #333) !important;
+    color: var(--stage-btn-hover-text, #ffffff) !important;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__btn--secondary {
+    background: transparent !important;
+    color: var(--stage-overlay-text, #ffffff) !important;
+    border: 2px solid var(--stage-overlay-text, #ffffff) !important;
+}
+
+.es-layout-stage .es-hero-slider .es-hero-slide__btn--secondary:hover {
+    background: var(--stage-overlay-text, #ffffff) !important;
+    color: var(--stage-overlay-bg, #1a1a1a) !important;
+}
+
+/* Hero Arrows - Stage Style */
+.es-layout-stage .es-hero-slider .es-slider__arrow {
+    background: var(--stage-surface, #ffffff) !important;
+    color: var(--stage-text, #1a1a1a) !important;
+    border: none !important;
+    border-radius: var(--stage-radius, 0) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.es-layout-stage .es-hero-slider .es-slider__arrow:hover {
+    background: var(--stage-text, #1a1a1a) !important;
+    color: var(--stage-surface, #ffffff) !important;
+}
+
+/* Hero Dots - Stage Style */
+.es-layout-stage .es-hero-slider .es-slider__dots {
+    background: var(--stage-surface, #ffffff);
+    border-radius: var(--stage-btn-radius, 0);
+}
+
+.es-layout-stage .es-hero-slider .es-slider__dot {
+    background: var(--stage-border, #e0e0e0);
+}
+
+.es-layout-stage .es-hero-slider .es-slider__dot--active {
+    background: var(--stage-text, #1a1a1a);
+}
+
+/* Hero Responsive - Stage */
+@media (max-width: 1024px) {
+    .es-layout-stage .es-hero-slider,
+    .es-layout-stage.ensemble-events-grid-wrapper .es-hero-slider {
+        width: 96% !important;
+        max-width: 96% !important;
+        margin: 16px 2% !important;
+    }
+    
+    .es-layout-stage .es-hero-slider .es-hero-slide__content {
+        padding: 32px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .es-layout-stage .es-hero-slider,
+    .es-layout-stage.ensemble-events-grid-wrapper .es-hero-slider {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        min-height: 400px;
+        max-height: 70vh;
+    }
+    
+    .es-layout-stage .es-hero-slider .es-hero-slide,
+    .es-layout-stage .es-hero-slider .es-slider__slide,
+    .es-layout-stage .es-hero-slider .es-slider__track {
+        min-height: 400px;
+    }
+    
+    .es-layout-stage .es-hero-slider .es-hero-slide__content {
+        padding: 24px !important;
+    }
+    
+    .es-layout-stage .es-hero-slider .es-hero-slide__title {
+        font-size: clamp(1.5rem, 4vw, 2rem) !important;
+    }
+    
+    .es-layout-stage .es-hero-slider .es-hero-slide__excerpt {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-layout-stage .es-hero-slider .es-hero-slide__content {
+        padding: 20px !important;
+    }
+    
+    .es-layout-stage .es-hero-slider .es-hero-slide__title {
+        font-size: 1.5rem !important;
+    }
+}

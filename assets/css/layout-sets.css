@@ -1,0 +1,477 @@
+/**
+ * Layout Sets Tab Styles
+ * Uses Ensemble Dark Theme Variables
+ * 
+ * @package Ensemble
+ */
+
+/* ============================================
+   LAYOUT SETS SECTION
+   ============================================ */
+
+.es-layout-sets-section {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.es-layout-sets-section h2 {
+    color: var(--es-text);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.es-layout-sets-section > p {
+    color: var(--es-text-secondary);
+    font-size: 15px;
+    margin-bottom: 30px;
+}
+
+/* ============================================
+   SETS GRID
+   ============================================ */
+
+.es-sets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.es-set-card {
+    background: var(--es-surface);
+    border: 2px solid var(--es-border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.es-set-card:hover {
+    border-color: var(--es-primary);
+    box-shadow: 0 4px 12px rgba(53, 130, 196, 0.2);
+}
+
+.es-set-card.active {
+    border-color: var(--es-success);
+    background: var(--es-surface-secondary);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.es-set-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--es-text);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.es-set-card p {
+    color: var(--es-text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.es-active-badge {
+    display: inline-block;
+    background: var(--es-success);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+/* ============================================
+   CUSTOM TEMPLATES TABLE
+   ============================================ */
+
+.es-layout-sets-section .wp-list-table {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.es-layout-sets-section .wp-list-table thead th {
+    background: var(--es-surface-secondary);
+    color: var(--es-text);
+    font-weight: 600;
+    padding: 15px;
+    border-bottom: 2px solid var(--es-border);
+}
+
+.es-layout-sets-section .wp-list-table tbody tr {
+    background: var(--es-surface);
+    border-bottom: 1px solid var(--es-border);
+}
+
+.es-layout-sets-section .wp-list-table tbody tr:hover {
+    background: var(--es-surface-hover);
+}
+
+.es-layout-sets-section .wp-list-table tbody td {
+    color: var(--es-text-secondary);
+    padding: 15px;
+}
+
+.es-layout-sets-section .wp-list-table tbody td strong {
+    color: var(--es-text);
+}
+
+/* ============================================
+   MODAL EDITOR
+   ============================================ */
+
+#editorModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 999999;
+    backdrop-filter: blur(4px);
+}
+
+#editorModal > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px;
+}
+
+.es-modal-content {
+    position: relative;
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 1400px;
+    width: 95%;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.es-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--es-danger);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    z-index: 10;
+    transition: all 0.2s ease;
+}
+
+.es-modal-close:hover {
+    background: var(--es-danger-hover);
+    box-shadow: 0 2px 8px rgba(255, 102, 102, 0.3);
+}
+
+.es-modal-content h2 {
+    color: var(--es-text);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 25px 0;
+}
+
+/* ============================================
+   MODAL FORM ELEMENTS
+   ============================================ */
+
+.es-modal-content label {
+    color: var(--es-text);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.es-modal-content input[type="text"] {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    color: var(--es-text);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.es-modal-content input[type="text"]:focus {
+    border-color: var(--es-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(53, 130, 196, 0.15);
+}
+
+/* ============================================
+   EDITOR TABS
+   ============================================ */
+
+.es-editor-tabs {
+    margin: 20px 0;
+    border-bottom: 2px solid var(--es-border);
+}
+
+.es-editor-tab {
+    padding: 12px 24px;
+    margin-right: 5px;
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-bottom: none;
+    color: var(--es-text-secondary);
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.es-editor-tab:hover {
+    background: var(--es-surface-hover);
+    color: var(--es-text);
+}
+
+.es-editor-tab.active {
+    background: var(--es-primary);
+    border-color: var(--es-primary);
+    color: #fff;
+}
+
+/* ============================================
+   EDITOR CONTAINER WITH PREVIEW
+   ============================================ */
+
+.es-editor-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.es-editor-side {
+    min-width: 0;
+}
+
+.es-editor-panel {
+    margin: 20px 0;
+}
+
+.es-preview-side {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.es-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--es-border);
+}
+
+.es-preview-header h3 {
+    color: var(--es-text);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.es-preview-container {
+    flex: 1;
+    background: #fff;
+    border: 1px solid var(--es-border);
+    border-radius: 4px;
+    overflow: hidden;
+    min-height: 450px;
+}
+
+.es-preview-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    min-height: 450px;
+}
+
+/* ============================================
+   REFERENCE PANEL
+   ============================================ */
+
+.es-reference-panel {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    padding: 25px;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+.es-reference-content h3 {
+    color: var(--es-text);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 25px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--es-border);
+}
+
+.es-reference-content h3:first-child {
+    margin-top: 0;
+}
+
+.es-reference-content h4 {
+    color: var(--es-text);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 15px 0 10px 0;
+}
+
+.es-reference-section {
+    margin-bottom: 20px;
+}
+
+.es-variable-list,
+.es-class-list,
+.es-function-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.es-variable-list li,
+.es-class-list li,
+.es-function-list li {
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 4px;
+    color: var(--es-text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.es-variable-list li code,
+.es-class-list li code,
+.es-function-list li code {
+    background: var(--es-background);
+    color: var(--es-primary);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+    font-size: 12px;
+}
+
+.es-color-preview {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid var(--es-border);
+    margin: 0 8px;
+    vertical-align: middle;
+}
+
+/* ============================================
+   CODEMIRROR STYLING
+   ============================================ */
+
+.CodeMirror {
+    height: 450px !important;
+    border: 1px solid var(--es-border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+}
+
+.CodeMirror-gutters {
+    background: var(--es-surface-secondary);
+    border-right: 1px solid var(--es-border);
+}
+
+.CodeMirror-linenumber {
+    color: var(--es-text-secondary);
+}
+
+/* ============================================
+   FORM ACTIONS IN MODAL
+   ============================================ */
+
+.es-modal-content .es-form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-top: 25px;
+    margin-top: 25px;
+    border-top: 1px solid var(--es-border);
+}
+
+/* ============================================
+   SECTION DIVIDER
+   ============================================ */
+
+.es-layout-sets-section > div[style*="border-top"] {
+    border-top: 2px solid var(--es-border) !important;
+}
+
+.es-layout-sets-section h3 {
+    color: var(--es-text);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .es-editor-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-preview-side {
+        order: -1;
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 782px) {
+    .es-sets-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-modal-content {
+        padding: 20px;
+    }
+    
+    .es-modal-close {
+        top: 10px;
+        right: 10px;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .CodeMirror {
+        height: 300px !important;
+    }
+    
+    .es-preview-container {
+        min-height: 250px;
+    }
+    
+    .es-preview-iframe {
+        min-height: 250px;
+    }
+}

@@ -1,0 +1,204 @@
+/**
+ * Blog Style - Stage
+ * Portrait cards with text overlay, theater aesthetic
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap');
+
+/* Grid */
+.et-blog-stage .et-posts-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.et-blog-stage .et-posts-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.et-blog-stage .et-posts-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.et-blog-stage .et-posts-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Post Card - Stage */
+.et-post-card--stage {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 0;
+    background: #1a1a1a;
+}
+
+/* Image - Full Cover */
+.et-post-card--stage .et-post-card__image {
+    position: absolute;
+    inset: 0;
+}
+
+.et-post-card--stage .et-post-card__image a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.et-post-card--stage .et-post-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--et-transition-slow), filter var(--et-transition-normal);
+}
+
+.et-post-card--stage:hover .et-post-card__image img {
+    transform: scale(1.08);
+    filter: brightness(0.6);
+}
+
+/* Gradient Overlay */
+.et-post-card--stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.9) 0%,
+        rgba(0,0,0,0.4) 40%,
+        rgba(0,0,0,0.1) 70%,
+        transparent 100%
+    );
+    pointer-events: none;
+    transition: opacity var(--et-transition-normal);
+}
+
+.et-post-card--stage:hover::after {
+    opacity: 0.8;
+}
+
+/* Content - Overlay */
+.et-post-card--stage .et-post-card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 1.5rem;
+    z-index: 2;
+    color: #ffffff;
+}
+
+/* Category */
+.et-post-card--stage .et-post-card__category {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(255,255,255,0.1);
+}
+
+.et-post-card--stage .et-post-card__category:hover {
+    background: rgba(255,255,255,0.2);
+    color: #ffffff;
+}
+
+/* Title */
+.et-post-card--stage .et-post-card__title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.et-post-card--stage .et-post-card__title a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Hide excerpt and footer on stage cards */
+.et-post-card--stage .et-post-card__excerpt,
+.et-post-card--stage .et-post-card__footer {
+    display: none;
+}
+
+/* Date shows on hover */
+.et-post-card--stage .et-post-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.et-post-card--stage .et-post-card__date {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.7);
+}
+
+/* Archive Header - Stage Style */
+.et-blog-stage .et-archive-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #1a1a1a;
+}
+
+.et-blog-stage .et-archive-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* Pagination - Stage Style */
+.et-blog-stage .nav-links a,
+.et-blog-stage .nav-links span {
+    border-radius: 0;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .et-blog-stage .et-posts-grid--4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .et-post-card--stage .et-post-card__title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .et-blog-stage .et-posts-grid--3,
+    .et-blog-stage .et-posts-grid--4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .et-post-card--stage {
+        aspect-ratio: 2 / 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .et-blog-stage .et-posts-grid--2,
+    .et-blog-stage .et-posts-grid--3,
+    .et-blog-stage .et-posts-grid--4 {
+        grid-template-columns: 1fr;
+    }
+    
+    .et-post-card--stage {
+        aspect-ratio: 4 / 5;
+    }
+}

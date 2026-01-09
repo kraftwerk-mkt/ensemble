@@ -1,0 +1,122 @@
+/**
+ * Footer Style - Stage
+ * Theater/Cultural: Centered, elegant, minimal
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap');
+
+.et-footer--stage {
+    background: #0a0a0a;
+    color: #ffffff;
+    font-family: 'Oswald', var(--ensemble-font-body, sans-serif);
+    text-align: center;
+    padding: 4rem 0 2rem;
+}
+
+.et-footer--stage .et-footer__inner {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Logo */
+.et-footer--stage .et-footer__logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.et-footer--stage .et-footer__logo .et-logo-img {
+    max-height: 60px;
+    width: auto;
+    filter: brightness(0) invert(1);
+}
+
+.et-footer--stage .et-footer__logo .et-site-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #ffffff;
+}
+
+/* Tagline */
+.et-footer--stage .et-footer__tagline {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 2rem;
+    font-family: var(--ensemble-font-body, sans-serif);
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+/* Navigation */
+.et-footer--stage .et-footer__nav-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+}
+
+.et-footer--stage .et-footer__nav-list a {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    transition: color var(--et-transition-fast);
+}
+
+.et-footer--stage .et-footer__nav-list a:hover {
+    color: #ffffff;
+}
+
+/* Social */
+.et-footer--stage .et-footer__social {
+    margin-bottom: 2rem;
+}
+
+.et-footer--stage .et-footer__social .et-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-footer--stage .et-footer__social a {
+    color: rgba(255,255,255,0.6);
+    transition: color var(--et-transition-fast);
+}
+
+.et-footer--stage .et-footer__social a:hover {
+    color: #ffffff;
+}
+
+/* Divider */
+.et-footer--stage .et-footer__divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin: 2rem 0;
+}
+
+/* Copyright */
+.et-footer--stage .et-footer__copyright {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    font-family: var(--ensemble-font-body, sans-serif);
+    letter-spacing: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .et-footer--stage {
+        padding: 3rem 0 1.5rem;
+    }
+    
+    .et-footer--stage .et-footer__nav-list {
+        gap: 1rem 1.5rem;
+    }
+}

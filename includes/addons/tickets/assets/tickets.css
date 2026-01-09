@@ -1,0 +1,363 @@
+/**
+ * Ensemble Tickets Add-on - Frontend Styles
+ * 
+ * Clean, professional design
+ * Uses CSS variables from Ensemble Design System for consistency
+ * Supports light/dark mode via --es-addon-* variables
+ *
+ * @package Ensemble
+ * @subpackage Addons/Tickets
+ * @version 1.1.0
+ */
+
+/* =========================================
+   CSS Variables - Inherit from Ensemble Design System
+   Uses mode-aware variables with fallbacks
+   ========================================= */
+.es-tickets-widget {
+    /* Use Mode Variables > Ensemble Variables > Hardcoded fallbacks */
+    --es-ticket-primary: var(--ensemble-primary, var(--es-primary, #3b82f6));
+    --es-ticket-primary-hover: var(--ensemble-button-hover-bg, var(--es-primary-hover, #2563eb));
+    --es-ticket-bg: var(--es-addon-surface, var(--ensemble-card-bg, var(--es-card-bg, transparent)));
+    --es-ticket-bg-secondary: var(--es-addon-bg, var(--ensemble-hover, var(--es-bg-secondary, rgba(255,255,255,0.05))));
+    --es-ticket-border: var(--es-addon-border, var(--ensemble-card-border, var(--es-card-border, rgba(255,255,255,0.1))));
+    --es-ticket-text: var(--es-addon-text, var(--ensemble-text, var(--es-text, #f1f5f9)));
+    --es-ticket-text-muted: var(--es-addon-text-secondary, var(--ensemble-text-secondary, var(--es-text-muted, #94a3b8)));
+    --es-ticket-radius: var(--ensemble-card-radius, var(--es-radius, 8px));
+    --es-ticket-shadow: var(--ensemble-card-shadow, none);
+    --es-ticket-transition: 0.2s ease;
+    
+    /* Status colors */
+    --es-status-available: #22c55e;
+    --es-status-limited: #f59e0b;
+    --es-status-presale: var(--es-ticket-primary);
+    --es-status-sold-out: #ef4444;
+    --es-status-cancelled: #6b7280;
+}
+
+/* Mode-specific overrides */
+body.es-mode-light .es-tickets-widget {
+    --es-ticket-bg: var(--es-mode-surface, #ffffff);
+    --es-ticket-bg-secondary: var(--es-mode-bg, #f8f9fa);
+    --es-ticket-border: var(--es-mode-border, #e0e0e0);
+    --es-ticket-text: var(--es-mode-text, #1a1a1a);
+    --es-ticket-text-muted: var(--es-mode-text-secondary, #555555);
+}
+
+body.es-mode-dark .es-tickets-widget {
+    --es-ticket-bg: var(--es-mode-surface, #1a1a1a);
+    --es-ticket-bg-secondary: var(--es-mode-bg, #0a0a0a);
+    --es-ticket-border: var(--es-mode-border, #333333);
+    --es-ticket-text: var(--es-mode-text, #fafafa);
+    --es-ticket-text-muted: var(--es-mode-text-secondary, #aaaaaa);
+}
+
+/* =========================================
+   Ticket Widget Container
+   ========================================= */
+.es-tickets-widget {
+    margin: 24px 0;
+    background: var(--es-ticket-bg);
+    border: 1px solid var(--es-ticket-border);
+    border-radius: var(--es-ticket-radius);
+    overflow: hidden;
+    box-shadow: var(--es-ticket-shadow);
+}
+
+.es-tickets-header {
+    padding: 16px 20px;
+    background: var(--es-ticket-bg-secondary);
+    border-bottom: 1px solid var(--es-ticket-border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.es-tickets-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--es-ticket-primary);
+}
+
+.es-tickets-header-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.es-tickets-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--es-ticket-text);
+}
+
+/* =========================================
+   Ticket List
+   ========================================= */
+.es-tickets-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.es-ticket-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--es-ticket-border);
+    transition: background var(--es-ticket-transition);
+}
+
+.es-ticket-item:last-child {
+    border-bottom: none;
+}
+
+.es-ticket-item:hover {
+    background: var(--es-ticket-bg-secondary);
+}
+
+/* Ticket Info */
+.es-ticket-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-ticket-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--es-ticket-text);
+    margin: 0 0 4px 0;
+}
+
+.es-ticket-provider {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--es-ticket-text-muted);
+}
+
+/* Custom Text */
+.es-ticket-custom-text {
+    display: block;
+    font-size: 12px;
+    font-style: italic;
+    color: var(--es-ticket-text-muted);
+    margin-bottom: 4px;
+}
+
+/* Description (for global tickets shortcode) */
+.es-ticket-description {
+    display: block;
+    font-size: 13px;
+    color: var(--es-ticket-text-muted);
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+/* Global Ticket Badge */
+.es-ticket-global-badge {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--es-ticket-primary);
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* Ticket Price */
+.es-ticket-price {
+    flex-shrink: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.es-ticket-price-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--es-ticket-text);
+}
+
+.es-ticket-price-free {
+    color: var(--es-status-available);
+}
+
+/* Availability Status */
+.es-ticket-availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.es-ticket-availability--available {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--es-status-available);
+}
+
+.es-ticket-availability--limited {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--es-status-limited);
+}
+
+.es-ticket-availability--few_left {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+}
+
+.es-ticket-availability--presale {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--es-status-presale);
+}
+
+.es-ticket-availability--sold_out {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--es-status-sold-out);
+}
+
+.es-ticket-availability--cancelled {
+    background: rgba(107, 114, 128, 0.1);
+    color: var(--es-status-cancelled);
+}
+
+/* Status classes for item */
+.es-ticket-item.es-status-sold-out,
+.es-ticket-item.es-status-cancelled {
+    opacity: 0.7;
+}
+
+/* Ticket Action Button */
+.es-ticket-action {
+    flex-shrink: 0;
+}
+
+.es-ticket-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: var(--es-ticket-primary);
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all var(--es-ticket-transition);
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.es-ticket-button svg {
+    width: 16px;
+    height: 16px;
+}
+
+.es-ticket-button:hover {
+    background: var(--es-ticket-primary-hover);
+    color: #fff !important;
+    transform: translateY(-1px);
+    box-shadow: var(--es-ticket-shadow-hover);
+    text-decoration: none !important;
+}
+
+.es-ticket-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+.es-ticket-button--disabled {
+    background: var(--es-status-cancelled) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.es-ticket-button--disabled:hover {
+    background: var(--es-status-cancelled) !important;
+    transform: none;
+    box-shadow: none;
+}
+
+/* =========================================
+   Responsive Design
+   ========================================= */
+@media (max-width: 768px) {
+    .es-ticket-item {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .es-ticket-info {
+        flex: 1 1 60%;
+    }
+    
+    .es-ticket-price {
+        flex: 0 0 auto;
+        align-items: flex-start;
+    }
+    
+    .es-ticket-action {
+        flex: 1 1 100%;
+    }
+    
+    .es-ticket-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-tickets-header {
+        padding: 12px 16px;
+    }
+    
+    .es-ticket-item {
+        padding: 12px 16px;
+    }
+    
+    .es-ticket-price-value {
+        font-size: 16px;
+    }
+    
+    .es-ticket-button {
+        padding: 12px 16px;
+    }
+}
+
+/* =========================================
+   Theme Support - Inherits from Ensemble Design System
+   No manual dark/light mode needed - uses template variables
+   ========================================= */
+
+/* =========================================
+   Print Styles
+   ========================================= */
+@media print {
+    .es-tickets-widget {
+        border: 1px solid #ccc;
+        box-shadow: none;
+        background: #fff;
+    }
+    
+    .es-ticket-button {
+        background: #fff;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    
+    .es-ticket-availability {
+        border: 1px solid currentColor;
+    }
+}

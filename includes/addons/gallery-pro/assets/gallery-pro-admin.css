@@ -1,0 +1,33 @@
+/**
+ * Ensemble Gallery Pro - Admin Styles
+ * 
+ * @package Ensemble
+ * @subpackage Addons/Gallery Pro
+ */
+
+/* Settings page specific styles are in the template */
+
+/* Admin preview */
+.es-gallery-admin-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 15px;
+    background: #f6f7f7;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.es-gallery-admin-preview-item {
+    aspect-ratio: 4/3;
+    background: #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.es-gallery-admin-preview-item.masonry:nth-child(odd) {
+    aspect-ratio: 3/4;
+}

@@ -1,0 +1,320 @@
+/**
+ * Ensemble FAQ Manager Admin Styles
+ * 
+ * Uses unified admin CSS variables
+ * 
+ * @package Ensemble
+ * @subpackage Addons/FAQ
+ * @version 1.0.0
+ */
+
+/* ============================================
+   FAQ TABLE
+   ============================================ */
+
+.es-faq-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--es-surface, #2c2c2c);
+    border-radius: var(--es-radius, 6px);
+    overflow: hidden;
+}
+
+.es-faq-table thead {
+    background: var(--es-surface-secondary, #383838);
+}
+
+.es-faq-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--es-text-secondary, #a0a0a0);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--es-border, #404040);
+}
+
+.es-faq-table td {
+    padding: 16px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--es-border, #404040);
+}
+
+.es-faq-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.es-faq-table tbody tr:hover {
+    background: var(--es-surface-hover, #404040);
+}
+
+/* Column widths */
+.es-faq-table .es-col-check {
+    width: 40px;
+    text-align: center;
+}
+
+.es-faq-table .es-col-order {
+    width: 60px;
+    text-align: center;
+}
+
+.es-faq-table .es-col-category {
+    width: 180px;
+}
+
+.es-faq-table .es-col-actions {
+    width: 100px;
+    text-align: right;
+}
+
+/* Question cell */
+.es-faq-question-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-faq-title {
+    color: var(--es-text, #e0e0e0);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.es-faq-answer-preview {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--es-text-muted, #787878);
+    line-height: 1.4;
+}
+
+/* Expanded icon */
+.es-expanded-icon {
+    color: var(--es-success, #4caf50);
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* Order badge */
+.es-order-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 24px;
+    padding: 0 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--es-text-secondary, #a0a0a0);
+    background: var(--es-surface-secondary, #383838);
+    border-radius: 4px;
+}
+
+/* Category badges */
+.es-category-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--es-text, #e0e0e0);
+    background: var(--es-primary-light, rgba(53, 130, 196, 0.15));
+    border-radius: 20px;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+
+.es-no-category {
+    color: var(--es-text-muted, #787878);
+}
+
+/* Action buttons */
+.es-faq-table .es-faq-edit,
+.es-faq-table .es-faq-delete {
+    padding: 6px 10px;
+    margin-left: 4px;
+}
+
+.es-faq-table .es-faq-delete:hover {
+    color: var(--es-danger, #f66);
+    border-color: var(--es-danger, #f66);
+}
+
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.es-empty-state {
+    text-align: center;
+    padding: 80px 40px;
+    background: var(--es-surface, #2c2c2c);
+    border-radius: var(--es-radius, 6px);
+}
+
+.es-empty-state .dashicons {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--es-text-muted, #787878);
+    margin-bottom: 20px;
+}
+
+.es-empty-state h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-empty-state p {
+    margin: 0 0 24px;
+    color: var(--es-text-secondary, #a0a0a0);
+}
+
+
+/* ============================================
+   LOADING & ERROR
+   ============================================ */
+
+.es-faq-list .es-loading {
+    text-align: center;
+    padding: 60px;
+    color: var(--es-text-secondary, #a0a0a0);
+}
+
+.es-faq-list .es-loading .spinner {
+    float: none;
+    margin-right: 8px;
+}
+
+.es-faq-list .es-error {
+    text-align: center;
+    padding: 40px;
+    color: var(--es-danger, #f66);
+    background: var(--es-danger-light, rgba(255, 102, 102, 0.15));
+    border-radius: var(--es-radius, 6px);
+}
+
+
+/* ============================================
+   MODAL ENHANCEMENTS
+   ============================================ */
+
+.es-faq-manager-wrap .es-modal-medium .es-modal-content {
+    max-width: 600px;
+}
+
+.es-faq-manager-wrap .es-form-group {
+    margin-bottom: 20px;
+}
+
+.es-faq-manager-wrap .es-form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-faq-manager-wrap .es-form-label .required {
+    color: var(--es-danger, #f66);
+}
+
+.es-faq-manager-wrap .es-form-input,
+.es-faq-manager-wrap .es-form-select,
+.es-faq-manager-wrap .es-form-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--es-text, #e0e0e0);
+    background: var(--es-background, #1e1e1e);
+    border: 1px solid var(--es-border, #404040);
+    border-radius: var(--es-radius-sm, 4px);
+    transition: border-color 0.2s;
+}
+
+.es-faq-manager-wrap .es-form-input:focus,
+.es-faq-manager-wrap .es-form-select:focus,
+.es-faq-manager-wrap .es-form-textarea:focus {
+    border-color: var(--es-primary, #3582c4);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(53, 130, 196, 0.2);
+}
+
+.es-faq-manager-wrap .es-form-help {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--es-text-muted, #787878);
+}
+
+.es-faq-manager-wrap .es-form-group-inline {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.es-faq-manager-wrap .es-form-field {
+    flex: 0 0 auto;
+}
+
+.es-faq-manager-wrap .es-add-category-btn {
+    margin-top: 8px;
+}
+
+.es-faq-manager-wrap .es-add-category-btn .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+/* Danger modal */
+.es-modal-danger .es-modal-header {
+    background: var(--es-danger-light, rgba(255, 102, 102, 0.15));
+}
+
+.es-modal-danger .es-modal-header h2 {
+    color: var(--es-danger, #f66);
+}
+
+.button-danger {
+    background: var(--es-danger, #f66) !important;
+    border-color: var(--es-danger, #f66) !important;
+    color: #fff !important;
+}
+
+.button-danger:hover {
+    background: var(--es-danger-hover, #d44) !important;
+    border-color: var(--es-danger-hover, #d44) !important;
+}
+
+
+/* ============================================
+   TOOLBAR ENHANCEMENTS
+   ============================================ */
+
+.es-faq-toolbar .es-filter-select {
+    min-width: 180px;
+}
+
+
+/* ============================================
+   CHECKBOX STYLING
+   ============================================ */
+
+.es-faq-table input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+
+/* ============================================
+   NOTICES
+   ============================================ */
+
+.es-faq-notice {
+    margin: 15px 0 !important;
+}

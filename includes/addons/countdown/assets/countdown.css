@@ -1,0 +1,359 @@
+/**
+ * Countdown Addon - Styles
+ * 
+ * Uses Ensemble CSS Variables for consistent theming
+ * 
+ * @package Ensemble
+ * @subpackage Addons/Countdown
+ * @updated Designer Integration
+ */
+
+/* ==========================================================================
+   Wrapper
+   ========================================================================== */
+
+.es-countdown-wrapper {
+    margin: var(--ensemble-card-gap, 1.5rem) 0;
+}
+
+/* ==========================================================================
+   Timer Container
+   ========================================================================== */
+
+.es-countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--ensemble-card-gap, 0.75rem);
+    flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   Unit (Day, Hour, Minute, Second)
+   ========================================================================== */
+
+.es-countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.es-countdown-value {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-weight: var(--ensemble-heading-weight, 700);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+}
+
+.es-countdown-label {
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: 0.7em;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    margin-top: 0.25em;
+}
+
+/* ==========================================================================
+   Style: Boxes (Default)
+   ========================================================================== */
+
+.es-countdown-style-boxes .es-countdown-unit {
+    background: var(--ensemble-muted-bg, rgba(255,255,255,0.1));
+    border-radius: var(--ensemble-card-radius, 8px);
+    padding: var(--ensemble-card-padding, 1rem) calc(var(--ensemble-card-padding, 1rem) + 0.25rem);
+    min-width: 70px;
+}
+
+.es-countdown-style-boxes .es-countdown-value {
+    font-size: var(--ensemble-h2-size, 2rem);
+    color: var(--ensemble-primary, #6366f1);
+}
+
+.es-countdown-style-boxes .es-countdown-label {
+    color: var(--ensemble-text-secondary, rgba(255,255,255,0.6));
+}
+
+/* Separator between boxes */
+.es-countdown-style-boxes .es-countdown-unit:not(:last-child)::after {
+    content: ':';
+    position: absolute;
+    right: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ensemble-text-secondary, rgba(255,255,255,0.4));
+}
+
+.es-countdown-style-boxes .es-countdown-timer {
+    gap: 1rem;
+}
+
+.es-countdown-style-boxes .es-countdown-unit {
+    position: relative;
+}
+
+/* ==========================================================================
+   Style: Minimal
+   ========================================================================== */
+
+.es-countdown-style-minimal .es-countdown-timer {
+    gap: 0.5rem;
+}
+
+.es-countdown-style-minimal .es-countdown-unit {
+    flex-direction: row;
+    gap: 0.25rem;
+    background: none;
+    padding: 0;
+}
+
+.es-countdown-style-minimal .es-countdown-value {
+    font-size: var(--ensemble-h2-size, 1.75rem);
+    color: var(--ensemble-text, #fff);
+}
+
+.es-countdown-style-minimal .es-countdown-label {
+    font-size: var(--ensemble-small-size, 0.875rem);
+    margin-top: 0;
+    align-self: flex-end;
+    padding-bottom: 0.25rem;
+}
+
+.es-countdown-style-minimal .es-countdown-unit:not(:last-child)::after {
+    content: ':';
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--ensemble-text-secondary, rgba(255,255,255,0.4));
+    margin-left: 0.5rem;
+}
+
+/* ==========================================================================
+   Style: Flip Cards
+   ========================================================================== */
+
+.es-countdown-style-flip .es-countdown-unit {
+    perspective: 400px;
+}
+
+.es-countdown-style-flip .es-countdown-value {
+    background: linear-gradient(180deg, 
+        var(--ensemble-card-bg, #2a2a3e) 0%, 
+        var(--ensemble-muted-bg, #1a1a2e) 50%, 
+        var(--ensemble-card-bg, #2a2a3e) 50%, 
+        var(--ensemble-muted-bg, #1a1a2e) 100%);
+    color: var(--ensemble-text, #fff);
+    padding: 0.75rem 1rem;
+    border-radius: var(--ensemble-card-radius, 8px);
+    font-size: var(--ensemble-h2-size, 2rem);
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    position: relative;
+}
+
+.es-countdown-style-flip .es-countdown-value::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    background: rgba(0,0,0,0.4);
+}
+
+.es-countdown-style-flip .es-countdown-label {
+    margin-top: 0.5rem;
+    color: var(--ensemble-text-secondary, rgba(255,255,255,0.6));
+}
+
+/* ==========================================================================
+   Style: Circles
+   ========================================================================== */
+
+.es-countdown-style-circle .es-countdown-unit {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: conic-gradient(
+        var(--ensemble-primary, #6366f1) calc(var(--progress, 0) * 1%),
+        var(--ensemble-muted-bg, rgba(255,255,255,0.1)) calc(var(--progress, 0) * 1%)
+    );
+    position: relative;
+    justify-content: center;
+}
+
+.es-countdown-style-circle .es-countdown-unit::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    background: var(--ensemble-bg, #1a1a2e);
+}
+
+.es-countdown-style-circle .es-countdown-value {
+    position: relative;
+    z-index: 1;
+    font-size: var(--ensemble-h3-size, 1.5rem);
+    color: var(--ensemble-text, #fff);
+}
+
+.es-countdown-style-circle .es-countdown-label {
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 0.7rem;
+}
+
+.es-countdown-style-circle .es-countdown-timer {
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+/* ==========================================================================
+   Sizes
+   ========================================================================== */
+
+/* Small */
+.es-countdown-size-small .es-countdown-value {
+    font-size: var(--ensemble-body-size, 1.25rem);
+}
+
+.es-countdown-size-small .es-countdown-label {
+    font-size: 0.6rem;
+}
+
+.es-countdown-size-small.es-countdown-style-boxes .es-countdown-unit {
+    padding: 0.5rem 0.75rem;
+    min-width: 50px;
+}
+
+.es-countdown-size-small.es-countdown-style-circle .es-countdown-unit {
+    width: 60px;
+    height: 60px;
+}
+
+/* Large */
+.es-countdown-size-large .es-countdown-value {
+    font-size: var(--ensemble-h1-size, 3rem);
+}
+
+.es-countdown-size-large .es-countdown-label {
+    font-size: var(--ensemble-small-size, 0.85rem);
+}
+
+.es-countdown-size-large.es-countdown-style-boxes .es-countdown-unit {
+    padding: 1.5rem 2rem;
+    min-width: 100px;
+}
+
+.es-countdown-size-large.es-countdown-style-circle .es-countdown-unit {
+    width: 120px;
+    height: 120px;
+}
+
+/* ==========================================================================
+   Status Messages
+   ========================================================================== */
+
+.es-countdown-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: var(--ensemble-card-padding, 1rem) calc(var(--ensemble-card-padding, 1rem) + 0.5rem);
+    border-radius: var(--ensemble-card-radius, 8px);
+    font-family: var(--ensemble-font-body, inherit);
+    font-weight: var(--ensemble-heading-weight, 600);
+    font-size: var(--ensemble-body-size, 1.1rem);
+}
+
+/* Running Status */
+.es-countdown-status-running {
+    background: var(--ensemble-success-bg, rgba(16, 185, 129, 0.2));
+    color: var(--ensemble-success, #10b981);
+    border: 1px solid var(--ensemble-success-border, rgba(16, 185, 129, 0.3));
+}
+
+/* Pulse Animation */
+.es-countdown-pulse {
+    width: 12px;
+    height: 12px;
+    background: var(--ensemble-success, #10b981);
+    border-radius: 50%;
+    animation: countdownPulse 2s ease-in-out infinite;
+}
+
+@keyframes countdownPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+/* Passed Status */
+.es-countdown-status-passed {
+    background: var(--ensemble-muted-bg, rgba(255,255,255,0.05));
+    color: var(--ensemble-text-secondary, rgba(255,255,255,0.5));
+}
+
+/* ==========================================================================
+   Animation for value changes
+   ========================================================================== */
+
+.es-countdown-value.es-countdown-flip {
+    animation: countdownFlip 0.3s ease-out;
+}
+
+@keyframes countdownFlip {
+    0% {
+        transform: rotateX(0);
+    }
+    50% {
+        transform: rotateX(-90deg);
+    }
+    100% {
+        transform: rotateX(0);
+    }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    .es-countdown-timer {
+        gap: 0.5rem;
+    }
+    
+    .es-countdown-style-boxes .es-countdown-unit {
+        padding: 0.75rem 1rem;
+        min-width: 60px;
+    }
+    
+    .es-countdown-value {
+        font-size: var(--ensemble-h3-size, 1.5rem) !important;
+    }
+    
+    .es-countdown-style-circle .es-countdown-unit {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .es-countdown-style-boxes .es-countdown-unit:not(:last-child)::after {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   Theme Support - Uses Ensemble Design System Variables
+   Dark/Light mode automatically handled by Designer settings
+   ========================================================================== */

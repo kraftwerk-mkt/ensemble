@@ -1,0 +1,372 @@
+/**
+ * Ensemble Gallery Styles
+ * 
+ * Uses existing Designer CSS variables only
+ * NO new variables - single source of truth
+ *
+ * @package Ensemble
+ * @version 2.6.0
+ */
+
+/* ============================================
+   GALLERY BASE
+   ============================================ */
+
+.es-gallery {
+    margin: var(--ensemble-section-spacing, 40px) 0;
+}
+
+.es-gallery__title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1a1a1a);
+    margin: 0 0 24px;
+}
+
+/* ============================================
+   GALLERY GRID
+   ============================================ */
+
+.es-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--es-gallery-columns, 3), 1fr);
+    gap: var(--ensemble-grid-gap, 24px);
+}
+
+/* Column variants */
+.es-gallery--cols-2 .es-gallery__grid {
+    --es-gallery-columns: 2;
+}
+
+.es-gallery--cols-3 .es-gallery__grid {
+    --es-gallery-columns: 3;
+}
+
+.es-gallery--cols-4 .es-gallery__grid {
+    --es-gallery-columns: 4;
+}
+
+.es-gallery--cols-5 .es-gallery__grid {
+    --es-gallery-columns: 5;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .es-gallery--cols-5 .es-gallery__grid,
+    .es-gallery--cols-4 .es-gallery__grid {
+        --es-gallery-columns: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .es-gallery--cols-5 .es-gallery__grid,
+    .es-gallery--cols-4 .es-gallery__grid,
+    .es-gallery--cols-3 .es-gallery__grid {
+        --es-gallery-columns: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-gallery__grid {
+        --es-gallery-columns: 1 !important;
+    }
+}
+
+/* ============================================
+   GALLERY ITEM
+   ============================================ */
+
+.es-gallery__item {
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--ensemble-card-radius, 8px);
+    background: var(--ensemble-card-bg, #ffffff);
+}
+
+.es-gallery__link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+}
+
+.es-gallery__image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Grid layout - square images */
+.es-gallery--grid .es-gallery__image {
+    aspect-ratio: 1;
+}
+
+/* Hover effect */
+.es-gallery__item:hover .es-gallery__image {
+    transform: scale(1.05);
+}
+
+/* Zoom icon */
+.es-gallery__zoom {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.es-gallery__link:hover .es-gallery__zoom {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Caption */
+.es-gallery__caption {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #666666);
+    padding: 12px;
+    margin: 0;
+    background: var(--ensemble-card-bg, #ffffff);
+    border-top: 1px solid var(--ensemble-card-border, #e8e8e8);
+}
+
+/* ============================================
+   MASONRY LAYOUT
+   ============================================ */
+
+.es-gallery--masonry .es-gallery__grid {
+    display: block;
+    column-count: var(--es-gallery-columns, 3);
+    column-gap: var(--ensemble-grid-gap, 24px);
+}
+
+.es-gallery--masonry .es-gallery__item {
+    break-inside: avoid;
+    margin-bottom: var(--ensemble-grid-gap, 24px);
+}
+
+.es-gallery--masonry .es-gallery__image {
+    aspect-ratio: unset;
+    height: auto;
+}
+
+/* ============================================
+   SLIDER LAYOUT
+   ============================================ */
+
+.es-gallery--slider .es-gallery__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    gap: var(--ensemble-grid-gap, 24px);
+    padding-bottom: 16px;
+}
+
+.es-gallery--slider .es-gallery__item {
+    flex: 0 0 calc((100% - var(--ensemble-grid-gap, 24px) * 2) / 3);
+    scroll-snap-align: start;
+}
+
+.es-gallery--slider .es-gallery__image {
+    aspect-ratio: 16/10;
+}
+
+/* Slider scrollbar styling */
+.es-gallery--slider .es-gallery__grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.es-gallery--slider .es-gallery__grid::-webkit-scrollbar-track {
+    background: var(--ensemble-card-border, #e8e8e8);
+    border-radius: 4px;
+}
+
+.es-gallery--slider .es-gallery__grid::-webkit-scrollbar-thumb {
+    background: var(--ensemble-primary, #0066cc);
+    border-radius: 4px;
+}
+
+/* ============================================
+   LIGHTBOX
+   ============================================ */
+
+.es-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-lightbox.is-active {
+    display: flex;
+}
+
+.es-lightbox__content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.es-lightbox__image {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: var(--ensemble-card-radius, 8px);
+}
+
+.es-lightbox__caption {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #ffffff;
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+.es-lightbox__close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    transition: background 0.2s;
+}
+
+.es-lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.es-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.es-lightbox__nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.es-lightbox__nav--prev {
+    left: 20px;
+}
+
+.es-lightbox__nav--next {
+    right: 20px;
+}
+
+.es-lightbox__counter {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+/* Uses Ensemble's dark mode variables automatically */
+.es-mode-dark .es-gallery__title {
+    color: var(--ensemble-text, #f5f5f5);
+}
+
+.es-mode-dark .es-gallery__caption {
+    color: var(--ensemble-text-secondary, #aaaaaa);
+    background: var(--ensemble-card-bg, #1a1a1a);
+    border-color: var(--ensemble-card-border, #333333);
+}
+
+/* ============================================
+   GALLERY IN SINGLE PAGES
+   ============================================ */
+
+/* Event gallery section */
+.es-event-gallery {
+    margin-top: var(--ensemble-section-spacing, 40px);
+    padding-top: var(--ensemble-section-spacing, 40px);
+    border-top: 1px solid var(--ensemble-card-border, #e8e8e8);
+}
+
+.es-event-gallery__title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1a1a1a);
+    margin: 0 0 24px;
+}
+
+/* Artist/Location gallery section - same styles */
+.es-artist-gallery,
+.es-location-gallery {
+    margin-top: var(--ensemble-section-spacing, 40px);
+    padding-top: var(--ensemble-section-spacing, 40px);
+    border-top: 1px solid var(--ensemble-card-border, #e8e8e8);
+}
+
+/* ============================================
+   ADMIN PREVIEW STYLES
+   ============================================ */
+
+.es-gallery-admin-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    max-width: 400px;
+}
+
+.es-gallery-admin-preview__item {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.es-gallery-admin-preview__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

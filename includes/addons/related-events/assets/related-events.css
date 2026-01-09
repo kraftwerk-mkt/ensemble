@@ -1,0 +1,385 @@
+/**
+ * Ensemble Related Events Add-on - Frontend Styles
+ * 
+ * Uses Ensemble CSS Variables for consistent theming
+ * 
+ * @package Ensemble
+ * @subpackage Addons/RelatedEvents
+ * @updated Designer Integration
+ */
+
+/* Section */
+.es-related-events-section {
+    margin-top: var(--ensemble-section-spacing, 40px);
+    padding-top: var(--ensemble-card-padding, 30px);
+    border-top: 1px solid var(--ensemble-card-border, #e5e7eb);
+}
+
+.es-related-events-section .es-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: var(--ensemble-card-gap, 24px);
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h2-size, 1.5rem);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1f2937);
+}
+
+.es-related-events-section .es-section-title .dashicons {
+    color: var(--ensemble-primary, #6366f1);
+}
+
+/* Grid Layout */
+.es-related-events {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+.es-related-layout-grid.es-related-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.es-related-layout-grid.es-related-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.es-related-layout-grid.es-related-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* List Layout */
+.es-related-layout-list {
+    grid-template-columns: 1fr;
+}
+
+.es-related-layout-list .es-related-event-card {
+    display: flex;
+    gap: 20px;
+}
+
+.es-related-layout-list .es-related-event-image {
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.es-related-layout-list .es-related-event-content {
+    padding: 0;
+}
+
+/* Event Card */
+.es-related-event-card {
+    background: var(--ensemble-card-bg, #fff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, transparent);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    box-shadow: var(--ensemble-card-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+    transition: all 0.3s ease;
+}
+
+.es-related-event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ensemble-card-hover-shadow, 0 8px 24px rgba(0, 0, 0, 0.12));
+}
+
+.es-related-event-card a {
+    display: block;
+    text-decoration: none;
+}
+
+/* Event Image - Full Card */
+.es-related-event-image {
+    display: block;
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+}
+
+.es-related-event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--ensemble-card-image-fit, cover);
+    transition: transform 0.3s ease;
+}
+
+.es-related-event-card:hover .es-related-event-image img {
+    transform: scale(1.05);
+}
+
+/* Category Badge */
+.es-related-event-category {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 4px 10px;
+    background: var(--ensemble-primary, #6366f1);
+    color: var(--ensemble-button-text, #fff);
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: calc(var(--ensemble-small-size, 14px) - 3px);
+    font-weight: var(--ensemble-button-weight, 600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: calc(var(--ensemble-button-radius, 8px) / 2);
+    z-index: 2;
+}
+
+/* Hover Overlay */
+.es-related-event-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.es-related-event-card:hover .es-related-event-overlay {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.es-related-event-overlay .es-related-event-title {
+    margin: 0 0 8px;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-body-size, 1rem);
+    font-weight: var(--ensemble-heading-weight, 600);
+    line-height: var(--ensemble-line-height-heading, 1.4);
+    color: #fff;
+}
+
+.es-related-event-overlay .es-related-event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: var(--ensemble-small-size, 0.85rem);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.es-related-event-overlay .es-related-event-date,
+.es-related-event-overlay .es-related-event-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Fallback Content (no image) */
+.es-related-event-content {
+    padding: var(--ensemble-card-padding, 16px);
+}
+
+.es-related-event-title {
+    margin: 0 0 10px;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-body-size, 1rem);
+    font-weight: var(--ensemble-heading-weight, 600);
+    line-height: var(--ensemble-line-height-heading, 1.4);
+}
+
+.es-related-event-title a {
+    color: var(--ensemble-text, #1f2937);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.es-related-event-title a:hover {
+    color: var(--ensemble-primary, #6366f1);
+}
+
+/* Event Meta */
+.es-related-event-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: var(--ensemble-small-size, 0.85rem);
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+.es-related-event-date,
+.es-related-event-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.es-related-event-meta .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: var(--ensemble-text-secondary, #9ca3af);
+}
+
+.es-related-event-time {
+    margin-left: 4px;
+    color: var(--ensemble-text-secondary, #9ca3af);
+}
+
+.es-related-event-time::before {
+    content: '·';
+    margin-right: 4px;
+}
+
+/* Empty Message */
+.es-related-empty {
+    padding: var(--ensemble-card-padding, 30px);
+    text-align: center;
+    color: var(--ensemble-text-secondary, #6b7280);
+    background: var(--ensemble-muted-bg, #f9fafb);
+    border-radius: var(--ensemble-card-radius, 8px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .es-related-layout-grid.es-related-cols-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .es-related-layout-grid.es-related-cols-4,
+    .es-related-layout-grid.es-related-cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-related-layout-list .es-related-event-card {
+        flex-direction: column;
+    }
+    
+    .es-related-layout-list .es-related-event-image {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-related-layout-grid.es-related-cols-4,
+    .es-related-layout-grid.es-related-cols-3,
+    .es-related-layout-grid.es-related-cols-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-related-events {
+        gap: calc(var(--ensemble-card-gap, 24px) - 8px);
+    }
+}
+
+/* ==========================================================================
+   Theme Support - Uses Ensemble Design System Variables
+   Dark/Light mode automatically handled by Designer settings
+   ========================================================================== */
+
+/* ==========================================================================
+   HOVER MODE VARIANTS
+   ========================================================================== */
+
+/* Inverted: Always Visible, Hide on Hover */
+.es-related-events.es-related-hover-inverted .es-related-event-overlay {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.es-related-events.es-related-hover-inverted .es-related-event-card:hover .es-related-event-overlay {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+/* ==========================================================================
+   SLIDER LAYOUT - Pure CSS Horizontal Scroll
+   ========================================================================== */
+
+.es-related-layout-slider {
+    display: flex;
+    gap: var(--ensemble-card-gap, 24px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 16px; /* Space for scrollbar */
+}
+
+.es-related-layout-slider .es-related-event-card {
+    flex: 0 0 calc((100% - 2 * var(--ensemble-card-gap, 24px)) / 3);
+    min-width: 250px;
+    scroll-snap-align: start;
+}
+
+.es-related-layout-slider .es-related-event-image {
+    aspect-ratio: 4/3;
+}
+
+.es-related-layout-slider .es-related-event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Slides visible variants */
+.es-related-layout-slider.es-related-slides-2 .es-related-event-card {
+    flex: 0 0 calc((100% - 1 * var(--ensemble-card-gap, 24px)) / 2);
+}
+
+.es-related-layout-slider.es-related-slides-3 .es-related-event-card {
+    flex: 0 0 calc((100% - 2 * var(--ensemble-card-gap, 24px)) / 3);
+}
+
+.es-related-layout-slider.es-related-slides-4 .es-related-event-card {
+    flex: 0 0 calc((100% - 3 * var(--ensemble-card-gap, 24px)) / 4);
+}
+
+.es-related-layout-slider.es-related-slides-5 .es-related-event-card {
+    flex: 0 0 calc((100% - 4 * var(--ensemble-card-gap, 24px)) / 5);
+}
+
+/* Hide scrollbar but keep functionality */
+.es-related-layout-slider::-webkit-scrollbar {
+    height: 6px;
+}
+
+.es-related-layout-slider::-webkit-scrollbar-track {
+    background: var(--ensemble-muted-bg, #f1f1f1);
+    border-radius: 3px;
+}
+
+.es-related-layout-slider::-webkit-scrollbar-thumb {
+    background: var(--ensemble-text-secondary, #888);
+    border-radius: 3px;
+}
+
+.es-related-layout-slider::-webkit-scrollbar-thumb:hover {
+    background: var(--ensemble-text-primary, #555);
+}
+
+/* Firefox scrollbar */
+.es-related-layout-slider {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ensemble-text-secondary, #888) var(--ensemble-muted-bg, #f1f1f1);
+}
+
+/* Responsive slider - reduce visible slides on smaller screens */
+@media (max-width: 1024px) {
+    .es-related-layout-slider.es-related-slides-5 .es-related-event-card,
+    .es-related-layout-slider.es-related-slides-4 .es-related-event-card {
+        flex: 0 0 calc((100% - 2 * var(--ensemble-card-gap, 24px)) / 3);
+    }
+}
+
+@media (max-width: 768px) {
+    .es-related-layout-slider.es-related-slides-5 .es-related-event-card,
+    .es-related-layout-slider.es-related-slides-4 .es-related-event-card,
+    .es-related-layout-slider.es-related-slides-3 .es-related-event-card {
+        flex: 0 0 calc((100% - 1 * var(--ensemble-card-gap, 24px)) / 2);
+    }
+}
+
+@media (max-width: 480px) {
+    .es-related-layout-slider .es-related-event-card {
+        flex: 0 0 85%;
+        min-width: 200px;
+    }
+}

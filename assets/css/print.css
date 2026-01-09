@@ -1,0 +1,363 @@
+/**
+ * Print Styles
+ * 
+ * Optimized printing for Ensemble Theme
+ *
+ * @package Ensemble_Theme
+ * @version 2.5.0
+ */
+
+@media print {
+    /* ============================================
+       RESET & BASE
+       ============================================ */
+    
+    *,
+    *::before,
+    *::after {
+        background: transparent !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    html {
+        font-size: 12pt;
+    }
+    
+    body {
+        font-family: Georgia, 'Times New Roman', serif;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* ============================================
+       HIDE NON-ESSENTIAL ELEMENTS
+       ============================================ */
+    
+    /* Navigation & Header */
+    .et-header,
+    .et-header__nav,
+    .et-header__menu-toggle,
+    .et-header__search,
+    .et-search-toggle,
+    .et-search-overlay,
+    .et-mobile-menu,
+    .et-nav,
+    .et-hamburger,
+    
+    /* Footer */
+    .et-footer,
+    .et-footer-widget,
+    .et-footer-nav,
+    .et-social-links,
+    
+    /* Sidebar */
+    .et-sidebar,
+    .widget-area,
+    
+    /* Navigation */
+    .et-pagination,
+    .et-post-navigation,
+    .post-navigation,
+    .nav-links,
+    .breadcrumbs,
+    .et-breadcrumbs,
+    
+    /* Interactive elements */
+    .et-comments,
+    .comments-area,
+    .comment-form,
+    .respond,
+    .reply,
+    .et-share-buttons,
+    .et-related-posts,
+    .et-back-to-top,
+    
+    /* Forms */
+    form,
+    button,
+    input,
+    select,
+    textarea,
+    
+    /* Media */
+    video,
+    audio,
+    iframe:not([src*="youtube"]):not([src*="vimeo"]),
+    
+    /* Ads & promos */
+    .advertisement,
+    .ad,
+    .promo,
+    
+    /* WordPress admin */
+    #wpadminbar,
+    .edit-link,
+    .post-edit-link,
+    
+    /* Misc */
+    .screen-reader-text,
+    .skip-link,
+    .no-print {
+        display: none !important;
+    }
+    
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-weight: bold;
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+    
+    h1 { font-size: 24pt; margin-top: 0; }
+    h2 { font-size: 18pt; margin-top: 24pt; }
+    h3 { font-size: 14pt; margin-top: 18pt; }
+    h4 { font-size: 12pt; margin-top: 14pt; }
+    h5, h6 { font-size: 11pt; margin-top: 12pt; }
+    
+    p, ul, ol, dl {
+        orphans: 3;
+        widows: 3;
+    }
+    
+    /* ============================================
+       LINKS
+       ============================================ */
+    
+    a {
+        text-decoration: underline;
+        word-wrap: break-word;
+    }
+    
+    /* Show URL after links in content */
+    .et-single-content a[href]::after,
+    .et-content a[href]::after,
+    .entry-content a[href]::after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        font-weight: normal;
+        word-wrap: break-word;
+    }
+    
+    /* Don't show URL for internal links */
+    a[href^="#"]::after,
+    a[href^="javascript:"]::after,
+    .et-post-categories a::after,
+    .et-tag::after {
+        content: "";
+    }
+    
+    /* ============================================
+       IMAGES & MEDIA
+       ============================================ */
+    
+    img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+    }
+    
+    figure {
+        page-break-inside: avoid;
+    }
+    
+    figcaption {
+        font-size: 9pt;
+        font-style: italic;
+    }
+    
+    /* ============================================
+       LAYOUT
+       ============================================ */
+    
+    .et-container,
+    .et-content,
+    .et-content--narrow,
+    .et-single,
+    .et-single-content {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    main {
+        width: 100%;
+    }
+    
+    /* ============================================
+       SINGLE POST
+       ============================================ */
+    
+    .et-single-hero {
+        max-height: 300pt;
+        margin-bottom: 18pt;
+    }
+    
+    .et-single-header {
+        text-align: left;
+        margin-bottom: 18pt;
+        padding-bottom: 12pt;
+        border-bottom: 1pt solid #ccc;
+    }
+    
+    .et-single-title {
+        font-size: 24pt;
+        margin-bottom: 6pt;
+    }
+    
+    .et-single-meta,
+    .et-post-meta {
+        font-size: 10pt;
+        color: #666 !important;
+    }
+    
+    .et-single-tags {
+        margin-top: 18pt;
+        padding-top: 12pt;
+        border-top: 1pt solid #ccc;
+    }
+    
+    .et-tag {
+        display: inline;
+        padding: 0;
+        margin-right: 8pt;
+        border: none;
+    }
+    
+    /* ============================================
+       TABLES
+       ============================================ */
+    
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    
+    th, td {
+        border: 1pt solid #ccc;
+        padding: 6pt 8pt;
+        text-align: left;
+    }
+    
+    th {
+        background: #f5f5f5 !important;
+        font-weight: bold;
+    }
+    
+    thead {
+        display: table-header-group;
+    }
+    
+    tr {
+        page-break-inside: avoid;
+    }
+    
+    /* ============================================
+       BLOCKQUOTES & CODE
+       ============================================ */
+    
+    blockquote {
+        margin: 12pt 0;
+        padding-left: 18pt;
+        border-left: 3pt solid #ccc;
+        font-style: italic;
+    }
+    
+    pre, code {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 9pt;
+    }
+    
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        padding: 12pt;
+        border: 1pt solid #ccc;
+        page-break-inside: avoid;
+    }
+    
+    code {
+        background: #f5f5f5 !important;
+        padding: 1pt 3pt;
+    }
+    
+    /* ============================================
+       PAGE BREAKS
+       ============================================ */
+    
+    article {
+        page-break-before: always;
+    }
+    
+    article:first-of-type {
+        page-break-before: auto;
+    }
+    
+    .page-break {
+        page-break-before: always;
+    }
+    
+    /* ============================================
+       HEADER & FOOTER
+       ============================================ */
+    
+    @page {
+        margin: 2cm;
+    }
+    
+    /* Print header/footer (browser dependent) */
+    @page :first {
+        margin-top: 3cm;
+    }
+    
+    /* ============================================
+       WORDPRESS BLOCKS
+       ============================================ */
+    
+    .wp-block-image {
+        page-break-inside: avoid;
+    }
+    
+    .wp-block-gallery {
+        display: block;
+    }
+    
+    .wp-block-gallery .blocks-gallery-item {
+        page-break-inside: avoid;
+    }
+    
+    .wp-block-cover {
+        background: #f5f5f5 !important;
+        padding: 24pt !important;
+    }
+    
+    .wp-block-columns {
+        display: block;
+    }
+    
+    .wp-block-column {
+        width: 100% !important;
+        margin-bottom: 12pt;
+    }
+    
+    /* ============================================
+       URL DISPLAY FOR REFERENCE
+       ============================================ */
+    
+    /* Show site URL at top */
+    body::before {
+        content: "Printed from: " attr(data-url);
+        display: block;
+        font-size: 9pt;
+        color: #666 !important;
+        margin-bottom: 12pt;
+        padding-bottom: 6pt;
+        border-bottom: 1pt solid #ccc;
+    }
+}

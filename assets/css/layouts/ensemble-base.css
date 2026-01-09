@@ -1,0 +1,592 @@
+/**
+ * Ensemble Base CSS
+ * Shared CSS Variables & Utility Classes
+ * Used by all Layout Sets & Custom Templates
+ *
+ * @package Ensemble
+ * @version 2.0.0
+ */
+
+:root {
+    /* ============================================
+       COLOR SYSTEM
+       ============================================ */
+    --es-primary: #3582c4;
+    --es-secondary: #2c3338;
+    --es-accent: #f0c14b;
+    
+    --es-success: #46b450;
+    --es-warning: #f0c14b;
+    --es-error: #dc3232;
+    --es-info: #00a0d2;
+    
+    /* Text Colors */
+    --es-text: #1a1a1a;
+    --es-text-secondary: #757575;
+    --es-text-muted: #999999;
+    --es-text-inverse: #ffffff;
+    
+    /* Background Colors */
+    --es-background: #ffffff;
+    --es-surface: #ffffff;
+    --es-surface-secondary: #f8f9fa;
+    --es-surface-hover: #f0f0f0;
+    
+    /* Border Colors */
+    --es-border: #e0e0e0;
+    --es-border-light: #f0f0f0;
+    --es-border-dark: #cccccc;
+    
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    --es-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --es-font-family-mono: "Monaco", "Menlo", "Consolas", monospace;
+    
+    /* Font Sizes */
+    --es-font-xs: 12px;
+    --es-font-sm: 14px;
+    --es-font-base: 16px;
+    --es-font-lg: 18px;
+    --es-font-xl: 20px;
+    --es-font-2xl: 24px;
+    --es-font-3xl: 30px;
+    --es-font-4xl: 36px;
+    --es-font-5xl: 48px;
+    
+    /* Font Weights */
+    --es-font-normal: 400;
+    --es-font-medium: 500;
+    --es-font-semibold: 600;
+    --es-font-bold: 700;
+    
+    /* Line Heights */
+    --es-line-tight: 1.2;
+    --es-line-normal: 1.5;
+    --es-line-relaxed: 1.8;
+    
+    /* ============================================
+       SPACING SYSTEM
+       ============================================ */
+    --es-spacing-xs: 4px;
+    --es-spacing-sm: 8px;
+    --es-spacing-md: 16px;
+    --es-spacing-lg: 24px;
+    --es-spacing-xl: 32px;
+    --es-spacing-2xl: 40px;
+    --es-spacing-3xl: 48px;
+    --es-spacing-4xl: 64px;
+    
+    /* ============================================
+       BORDERS & RADIUS
+       ============================================ */
+    --es-border-width: 1px;
+    --es-border-width-thick: 2px;
+    
+    --es-radius-sm: 4px;
+    --es-radius-md: 8px;
+    --es-radius-lg: 12px;
+    --es-radius-xl: 16px;
+    --es-radius-full: 9999px;
+    
+    /* ============================================
+       SHADOWS
+       ============================================ */
+    --es-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --es-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --es-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+    --es-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.2);
+    
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    --es-transition-fast: 0.15s ease;
+    --es-transition-base: 0.25s ease;
+    --es-transition-slow: 0.4s ease;
+    
+    /* ============================================
+       Z-INDEX LAYERS
+       ============================================ */
+    --es-z-base: 1;
+    --es-z-dropdown: 100;
+    --es-z-sticky: 200;
+    --es-z-modal: 1000;
+    --es-z-tooltip: 2000;
+}
+
+/* ============================================
+   BASE LAYOUT CLASSES
+   ============================================ */
+
+.es-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--es-spacing-lg);
+}
+
+.es-container-narrow {
+    max-width: 800px;
+}
+
+.es-container-wide {
+    max-width: 1400px;
+}
+
+/* ============================================
+   EVENT COMPONENTS
+   ============================================ */
+
+/* Event Container */
+.es-event-single {
+    background: var(--es-background);
+}
+
+.es-event-card {
+    background: var(--es-surface);
+    border: var(--es-border-width) solid var(--es-border);
+    border-radius: var(--es-radius-lg);
+    overflow: hidden;
+    transition: all var(--es-transition-base);
+}
+
+.es-event-card:hover {
+    box-shadow: var(--es-shadow-md);
+    transform: translateY(-4px);
+}
+
+/* Event Header */
+.es-event-header {
+    padding: var(--es-spacing-3xl) 0;
+    text-align: center;
+}
+
+.es-event-title {
+    font-size: var(--es-font-4xl);
+    font-weight: var(--es-font-bold);
+    color: var(--es-text);
+    margin: 0 0 var(--es-spacing-lg) 0;
+    line-height: var(--es-line-tight);
+}
+
+.es-event-subtitle {
+    font-size: var(--es-font-xl);
+    color: var(--es-text-secondary);
+    margin: 0;
+}
+
+/* Event Meta */
+.es-event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--es-spacing-lg);
+    padding: var(--es-spacing-xl) 0;
+}
+
+.es-meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--es-spacing-sm);
+    color: var(--es-text-secondary);
+}
+
+.es-meta-label {
+    font-weight: var(--es-font-semibold);
+    color: var(--es-text);
+}
+
+.es-meta-value {
+    color: var(--es-text-secondary);
+}
+
+/* Event Content */
+.es-event-content {
+    padding: var(--es-spacing-2xl) 0;
+    line-height: var(--es-line-relaxed);
+}
+
+.es-event-content p {
+    margin-bottom: var(--es-spacing-md);
+}
+
+/* Event Image */
+.es-event-image {
+    border-radius: var(--es-radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--es-spacing-2xl);
+}
+
+.es-event-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Genre Tags */
+.es-genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--es-spacing-sm);
+    justify-content: center;
+    margin: var(--es-spacing-lg) 0;
+}
+
+.es-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--es-spacing-xs) var(--es-spacing-md);
+    background: var(--es-primary);
+    color: var(--es-text-inverse);
+    border-radius: var(--es-radius-full);
+    font-size: var(--es-font-sm);
+    font-weight: var(--es-font-medium);
+}
+
+.es-tag-outline {
+    background: transparent;
+    border: var(--es-border-width) solid var(--es-primary);
+    color: var(--es-primary);
+}
+
+/* Info Box */
+.es-info-box {
+    background: var(--es-surface-secondary);
+    padding: var(--es-spacing-xl);
+    border-radius: var(--es-radius-md);
+    border-left: 4px solid var(--es-primary);
+}
+
+.es-info-box-warning {
+    border-left-color: var(--es-warning);
+}
+
+.es-info-box-error {
+    border-left-color: var(--es-error);
+}
+
+.es-info-box-success {
+    border-left-color: var(--es-success);
+}
+
+/* Artists List */
+.es-artists-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--es-spacing-md);
+    margin: var(--es-spacing-lg) 0;
+}
+
+.es-artist-link {
+    color: var(--es-primary);
+    text-decoration: none;
+    font-weight: var(--es-font-medium);
+    transition: color var(--es-transition-fast);
+}
+
+.es-artist-link:hover {
+    color: var(--es-secondary);
+    text-decoration: underline;
+}
+
+/* Location Info */
+.es-location-info {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--es-spacing-md);
+    padding: var(--es-spacing-lg);
+    background: var(--es-surface-secondary);
+    border-radius: var(--es-radius-md);
+}
+
+.es-location-name {
+    font-weight: var(--es-font-semibold);
+    color: var(--es-text);
+    margin-bottom: var(--es-spacing-xs);
+}
+
+.es-location-address {
+    color: var(--es-text-secondary);
+    font-size: var(--es-font-sm);
+}
+
+/* Buttons */
+.es-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--es-spacing-sm);
+    padding: var(--es-spacing-md) var(--es-spacing-xl);
+    background: var(--es-primary);
+    color: var(--es-text-inverse);
+    border: none;
+    border-radius: var(--es-radius-md);
+    font-size: var(--es-font-base);
+    font-weight: var(--es-font-semibold);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--es-transition-base);
+}
+
+.es-btn:hover {
+    background: var(--es-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--es-shadow-md);
+}
+
+.es-btn-outline {
+    background: transparent;
+    border: var(--es-border-width-thick) solid var(--es-primary);
+    color: var(--es-primary);
+}
+
+.es-btn-outline:hover {
+    background: var(--es-primary);
+    color: var(--es-text-inverse);
+}
+
+.es-btn-large {
+    padding: var(--es-spacing-lg) var(--es-spacing-3xl);
+    font-size: var(--es-font-lg);
+}
+
+.es-btn-small {
+    padding: var(--es-spacing-sm) var(--es-spacing-md);
+    font-size: var(--es-font-sm);
+}
+
+/* Price Display */
+.es-price {
+    font-size: var(--es-font-2xl);
+    font-weight: var(--es-font-bold);
+    color: var(--es-primary);
+}
+
+.es-price-label {
+    font-size: var(--es-font-sm);
+    color: var(--es-text-secondary);
+    font-weight: var(--es-font-normal);
+}
+
+/* Icons */
+.es-icon {
+    font-size: var(--es-font-2xl);
+    line-height: 1;
+}
+
+.es-icon-sm {
+    font-size: var(--es-font-base);
+}
+
+.es-icon-lg {
+    font-size: var(--es-font-3xl);
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Spacing Utilities */
+.es-mt-0 { margin-top: 0; }
+.es-mt-sm { margin-top: var(--es-spacing-sm); }
+.es-mt-md { margin-top: var(--es-spacing-md); }
+.es-mt-lg { margin-top: var(--es-spacing-lg); }
+.es-mt-xl { margin-top: var(--es-spacing-xl); }
+
+.es-mb-0 { margin-bottom: 0; }
+.es-mb-sm { margin-bottom: var(--es-spacing-sm); }
+.es-mb-md { margin-bottom: var(--es-spacing-md); }
+.es-mb-lg { margin-bottom: var(--es-spacing-lg); }
+.es-mb-xl { margin-bottom: var(--es-spacing-xl); }
+
+.es-p-sm { padding: var(--es-spacing-sm); }
+.es-p-md { padding: var(--es-spacing-md); }
+.es-p-lg { padding: var(--es-spacing-lg); }
+.es-p-xl { padding: var(--es-spacing-xl); }
+
+/* Text Utilities */
+.es-text-center { text-align: center; }
+.es-text-left { text-align: left; }
+.es-text-right { text-align: right; }
+
+.es-text-muted { color: var(--es-text-muted); }
+.es-text-secondary { color: var(--es-text-secondary); }
+
+.es-font-bold { font-weight: var(--es-font-bold); }
+.es-font-semibold { font-weight: var(--es-font-semibold); }
+.es-font-normal { font-weight: var(--es-font-normal); }
+
+/* Display Utilities */
+.es-flex { display: flex; }
+.es-flex-col { flex-direction: column; }
+.es-flex-wrap { flex-wrap: wrap; }
+.es-items-center { align-items: center; }
+.es-justify-center { justify-content: center; }
+.es-justify-between { justify-content: space-between; }
+.es-gap-sm { gap: var(--es-spacing-sm); }
+.es-gap-md { gap: var(--es-spacing-md); }
+.es-gap-lg { gap: var(--es-spacing-lg); }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    :root {
+        --es-font-4xl: 28px;
+        --es-font-3xl: 24px;
+        --es-spacing-3xl: 32px;
+        --es-spacing-4xl: 48px;
+    }
+    
+    .es-event-header {
+        padding: var(--es-spacing-2xl) 0;
+    }
+    
+    .es-event-meta {
+        flex-direction: column;
+        gap: var(--es-spacing-md);
+    }
+    
+    .es-container {
+        padding: 0 var(--es-spacing-md);
+    }
+}
+
+/* ============================================
+   SINGLE PAGE TEXT RESET
+   Ensures readable text on detail pages
+   regardless of dark/light layout theme
+   ============================================ */
+
+/* Content area should always be readable */
+body.single-ensemble_event .entry-content,
+body.single-ensemble_artist .entry-content,
+body.single-ensemble_location .entry-content,
+body.single-ensemble_event .site-main > article,
+body.single-ensemble_artist .site-main > article,
+body.single-ensemble_location .site-main > article,
+body.single-ensemble_event .es-single-content,
+body.single-ensemble_artist .es-single-content,
+body.single-ensemble_location .es-single-content {
+    color: var(--es-text, #1a1a1a);
+}
+
+/* All text elements in content */
+body.single-ensemble_event .entry-content h1,
+body.single-ensemble_event .entry-content h2,
+body.single-ensemble_event .entry-content h3,
+body.single-ensemble_event .entry-content h4,
+body.single-ensemble_event .entry-content h5,
+body.single-ensemble_event .entry-content h6,
+body.single-ensemble_event .entry-content p,
+body.single-ensemble_event .entry-content li,
+body.single-ensemble_event .entry-content td,
+body.single-ensemble_event .entry-content th,
+body.single-ensemble_event .entry-content dt,
+body.single-ensemble_event .entry-content dd,
+body.single-ensemble_event .entry-content label,
+body.single-ensemble_event .entry-content blockquote,
+body.single-ensemble_artist .entry-content h1,
+body.single-ensemble_artist .entry-content h2,
+body.single-ensemble_artist .entry-content h3,
+body.single-ensemble_artist .entry-content h4,
+body.single-ensemble_artist .entry-content h5,
+body.single-ensemble_artist .entry-content h6,
+body.single-ensemble_artist .entry-content p,
+body.single-ensemble_artist .entry-content li,
+body.single-ensemble_artist .entry-content td,
+body.single-ensemble_artist .entry-content th,
+body.single-ensemble_artist .entry-content dt,
+body.single-ensemble_artist .entry-content dd,
+body.single-ensemble_artist .entry-content label,
+body.single-ensemble_artist .entry-content blockquote,
+body.single-ensemble_location .entry-content h1,
+body.single-ensemble_location .entry-content h2,
+body.single-ensemble_location .entry-content h3,
+body.single-ensemble_location .entry-content h4,
+body.single-ensemble_location .entry-content h5,
+body.single-ensemble_location .entry-content h6,
+body.single-ensemble_location .entry-content p,
+body.single-ensemble_location .entry-content li,
+body.single-ensemble_location .entry-content td,
+body.single-ensemble_location .entry-content th,
+body.single-ensemble_location .entry-content dt,
+body.single-ensemble_location .entry-content dd,
+body.single-ensemble_location .entry-content label,
+body.single-ensemble_location .entry-content blockquote {
+    color: var(--es-text, #1a1a1a);
+}
+
+/* Links in content */
+body.single-ensemble_event .entry-content a,
+body.single-ensemble_artist .entry-content a,
+body.single-ensemble_location .entry-content a {
+    color: var(--es-primary, #3582c4);
+}
+
+body.single-ensemble_event .entry-content a:hover,
+body.single-ensemble_artist .entry-content a:hover,
+body.single-ensemble_location .entry-content a:hover {
+    color: var(--es-secondary, #2c3338);
+}
+
+/* Secondary text */
+body.single-ensemble_event .entry-content .es-meta,
+body.single-ensemble_event .entry-content .ensemble-meta,
+body.single-ensemble_event .entry-content .text-muted,
+body.single-ensemble_artist .entry-content .es-meta,
+body.single-ensemble_artist .entry-content .ensemble-meta,
+body.single-ensemble_artist .entry-content .text-muted,
+body.single-ensemble_location .entry-content .es-meta,
+body.single-ensemble_location .entry-content .ensemble-meta,
+body.single-ensemble_location .entry-content .text-muted {
+    color: var(--es-text-secondary, #757575);
+}
+
+/* ========================================
+   VENUE GROUPS (Artist Grouping by Room)
+   ======================================== */
+
+.es-venue-group {
+    margin-bottom: 2rem;
+}
+
+.es-venue-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-venue-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    padding: 0.75rem 1rem;
+    background: rgba(0,0,0,0.03);
+    border-left: 3px solid var(--es-accent, #2563eb);
+}
+
+.es-venue-title .es-venue-icon {
+    font-size: 1.2rem;
+}
+
+.es-venue-title .es-venue-count {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-left: auto;
+}
+
+/* Dark theme adjustments */
+.es-theme-dark .es-venue-title {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Artist References */
+.es-artist-references {
+    display: block;
+    font-size: 0.85rem;
+    font-style: italic;
+    opacity: 0.7;
+}

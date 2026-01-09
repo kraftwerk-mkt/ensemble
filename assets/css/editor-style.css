@@ -1,0 +1,346 @@
+/**
+ * Editor Styles
+ * 
+ * Block Editor styling to match frontend
+ * Inherits colors/fonts from Ensemble Designer CSS Variables
+ *
+ * @package Ensemble_Theme
+ * @version 2.5.0
+ */
+
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+
+:root {
+    --et-editor-bg: var(--ensemble-bg, #ffffff);
+    --et-editor-text: var(--ensemble-text, #1a1a1a);
+    --et-editor-muted: var(--ensemble-text-muted, #666666);
+    --et-editor-border: var(--ensemble-card-border, #e8e8e8);
+    --et-editor-primary: var(--ensemble-primary, #0066cc);
+    --et-editor-font: var(--ensemble-font-body, system-ui, -apple-system, sans-serif);
+    --et-editor-font-heading: var(--ensemble-font-heading, var(--et-editor-font));
+    --et-editor-radius: var(--ensemble-radius, 8px);
+}
+
+/* ============================================
+   EDITOR BODY
+   ============================================ */
+
+.editor-styles-wrapper {
+    font-family: var(--et-editor-font);
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--et-editor-text);
+    background: var(--et-editor-bg);
+}
+
+.editor-styles-wrapper .wp-block {
+    max-width: 720px;
+}
+
+.editor-styles-wrapper .wp-block[data-align="wide"] {
+    max-width: 1000px;
+}
+
+.editor-styles-wrapper .wp-block[data-align="full"] {
+    max-width: none;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4,
+.editor-styles-wrapper h5,
+.editor-styles-wrapper h6 {
+    font-family: var(--et-editor-font-heading);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--et-editor-text);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.editor-styles-wrapper h1 {
+    font-size: 2.5rem;
+}
+
+.editor-styles-wrapper h2 {
+    font-size: 2rem;
+}
+
+.editor-styles-wrapper h3 {
+    font-size: 1.5rem;
+}
+
+.editor-styles-wrapper h4 {
+    font-size: 1.25rem;
+}
+
+.editor-styles-wrapper h5 {
+    font-size: 1rem;
+}
+
+.editor-styles-wrapper h6 {
+    font-size: 0.875rem;
+}
+
+.editor-styles-wrapper p {
+    margin-bottom: 1.5em;
+}
+
+.editor-styles-wrapper a {
+    color: var(--et-editor-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.editor-styles-wrapper a:hover {
+    opacity: 0.8;
+}
+
+/* ============================================
+   POST TITLE
+   ============================================ */
+
+.editor-post-title__input {
+    font-family: var(--et-editor-font-heading);
+    font-size: 2.5rem !important;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--et-editor-text);
+}
+
+/* ============================================
+   LISTS
+   ============================================ */
+
+.editor-styles-wrapper ul,
+.editor-styles-wrapper ol {
+    padding-left: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.editor-styles-wrapper li {
+    margin-bottom: 0.5em;
+}
+
+.editor-styles-wrapper li:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   QUOTE
+   ============================================ */
+
+.editor-styles-wrapper blockquote,
+.editor-styles-wrapper .wp-block-quote {
+    border-left: 4px solid var(--et-editor-primary);
+    padding-left: 1.5em;
+    margin: 2em 0;
+    font-style: italic;
+    color: var(--et-editor-muted);
+}
+
+.editor-styles-wrapper blockquote cite,
+.editor-styles-wrapper .wp-block-quote cite {
+    display: block;
+    margin-top: 1em;
+    font-size: 0.875rem;
+    font-style: normal;
+}
+
+/* ============================================
+   CODE
+   ============================================ */
+
+.editor-styles-wrapper code {
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.875em;
+    background: rgba(0,0,0,0.05);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+}
+
+.editor-styles-wrapper pre,
+.editor-styles-wrapper .wp-block-code {
+    font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    background: #1a1a1a;
+    color: #f5f5f5;
+    padding: 1.5em;
+    border-radius: var(--et-editor-radius);
+    overflow-x: auto;
+}
+
+.editor-styles-wrapper pre code,
+.editor-styles-wrapper .wp-block-code code {
+    background: transparent;
+    padding: 0;
+}
+
+/* ============================================
+   IMAGES & MEDIA
+   ============================================ */
+
+.editor-styles-wrapper img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--et-editor-radius);
+}
+
+.editor-styles-wrapper figure {
+    margin: 2em 0;
+}
+
+.editor-styles-wrapper figcaption {
+    font-size: 0.875rem;
+    color: var(--et-editor-muted);
+    text-align: center;
+    margin-top: 0.75em;
+}
+
+/* ============================================
+   TABLE
+   ============================================ */
+
+.editor-styles-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0;
+}
+
+.editor-styles-wrapper th,
+.editor-styles-wrapper td {
+    padding: 12px 16px;
+    border: 1px solid var(--et-editor-border);
+    text-align: left;
+}
+
+.editor-styles-wrapper th {
+    background: rgba(0,0,0,0.03);
+    font-weight: 600;
+}
+
+/* ============================================
+   SEPARATOR
+   ============================================ */
+
+.editor-styles-wrapper hr,
+.editor-styles-wrapper .wp-block-separator {
+    border: none;
+    border-top: 1px solid var(--et-editor-border);
+    margin: 3em 0;
+}
+
+.editor-styles-wrapper .wp-block-separator.is-style-wide {
+    max-width: 100%;
+}
+
+.editor-styles-wrapper .wp-block-separator.is-style-dots {
+    border: none;
+    text-align: center;
+}
+
+.editor-styles-wrapper .wp-block-separator.is-style-dots::before {
+    content: '···';
+    letter-spacing: 0.5em;
+    color: var(--et-editor-muted);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.editor-styles-wrapper .wp-block-button__link {
+    font-family: var(--et-editor-font);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: var(--et-editor-radius);
+    transition: all 0.2s ease;
+}
+
+/* ============================================
+   COVER
+   ============================================ */
+
+.editor-styles-wrapper .wp-block-cover {
+    border-radius: var(--et-editor-radius);
+    overflow: hidden;
+}
+
+/* ============================================
+   GALLERY
+   ============================================ */
+
+.editor-styles-wrapper .wp-block-gallery {
+    margin: 2em 0;
+}
+
+.editor-styles-wrapper .wp-block-gallery img {
+    border-radius: var(--et-editor-radius);
+}
+
+/* ============================================
+   COLUMNS
+   ============================================ */
+
+.editor-styles-wrapper .wp-block-columns {
+    gap: 2em;
+    margin: 2em 0;
+}
+
+/* ============================================
+   GROUP
+   ============================================ */
+
+.editor-styles-wrapper .wp-block-group {
+    margin: 2em 0;
+}
+
+.editor-styles-wrapper .wp-block-group.has-background {
+    padding: 2em;
+    border-radius: var(--et-editor-radius);
+}
+
+/* ============================================
+   PULLQUOTE
+   ============================================ */
+
+.editor-styles-wrapper .wp-block-pullquote {
+    border: none;
+    padding: 2em 0;
+    text-align: center;
+}
+
+.editor-styles-wrapper .wp-block-pullquote blockquote {
+    border: none;
+    padding: 0;
+    font-size: 1.5rem;
+    font-style: normal;
+    color: var(--et-editor-text);
+}
+
+.editor-styles-wrapper .wp-block-pullquote cite {
+    margin-top: 1em;
+    font-size: 1rem;
+    color: var(--et-editor-muted);
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+
+.is-dark-theme .editor-styles-wrapper,
+body.is-dark-theme .editor-styles-wrapper {
+    --et-editor-bg: #0a0a0a;
+    --et-editor-text: #f5f5f5;
+    --et-editor-muted: #888888;
+    --et-editor-border: #222222;
+}

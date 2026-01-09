@@ -1,0 +1,221 @@
+/**
+ * Ensemble Sponsors Admin Styles
+ * Extends base manager.css styles
+ * 
+ * @package Ensemble
+ * @subpackage Addons/Sponsors
+ */
+
+/* Uses manager.css for base grid/list/card styles */
+
+/* Upload Zone - Drag & Drop */
+.es-upload-zone {
+    border: 2px dashed var(--es-border, #ddd);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: pointer;
+    background: var(--es-background, #f9f9f9);
+}
+
+.es-upload-zone:hover,
+.es-upload-zone.es-drag-over {
+    border-color: var(--es-primary, #0073aa);
+    background: rgba(0, 115, 170, 0.05);
+}
+
+.es-upload-placeholder {
+    color: var(--es-text-secondary, #666);
+}
+
+.es-upload-placeholder .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--es-border, #ccc);
+    margin-bottom: 10px;
+}
+
+.es-upload-placeholder p {
+    margin: 10px 0 5px;
+    font-size: 14px;
+}
+
+.es-upload-placeholder small {
+    color: var(--es-text-secondary, #999);
+    font-size: 12px;
+}
+
+/* Upload Preview */
+.es-upload-preview {
+    position: relative;
+    display: inline-block;
+}
+
+.es-upload-preview img {
+    max-width: 200px;
+    max-height: 120px;
+    border-radius: 4px;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.es-upload-preview .es-remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-upload-preview .es-remove-image:hover {
+    background: #c82333;
+}
+
+/* Checkbox block style */
+.es-checkbox-block {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--es-background, #f9f9f9);
+    border: 1px solid var(--es-border, #ddd);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-checkbox-block:hover {
+    background: var(--es-surface, #f0f0f0);
+}
+
+.es-checkbox-block input {
+    margin-top: 4px;
+}
+
+.es-checkbox-block small {
+    color: var(--es-text-secondary, #666);
+}
+
+/* Inline form row */
+.es-form-row-inline {
+    display: flex;
+    gap: 16px;
+}
+
+.es-form-row-inline > div {
+    flex: 1;
+}
+
+/* Badge styles */
+.es-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.es-badge--success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.es-badge--info {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Item badges */
+.es-item-badges {
+    margin-top: 8px;
+}
+
+/* Shortcode box in modal */
+.es-shortcode-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: var(--es-background, #f5f5f5);
+    border: 1px solid var(--es-border, #ddd);
+    border-radius: 4px;
+}
+
+.es-shortcode-box code {
+    flex: 1;
+    font-family: monospace;
+    font-size: 13px;
+    word-break: break-all;
+}
+
+.es-shortcode-box .es-copy-btn {
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--es-text-secondary, #666);
+}
+
+.es-shortcode-box .es-copy-btn:hover {
+    color: var(--es-primary, #0073aa);
+}
+
+/* Empty state icon */
+.es-empty-state-icon svg {
+    width: 64px;
+    height: 64px;
+    stroke: var(--es-border, #ccc);
+}
+
+/* Settings page specific styles are in admin-unified.css */
+
+/* Main Sponsor Badge */
+.es-badge--warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Main sponsor card highlight */
+.es-item-card--main {
+    border: 2px solid #ffc107;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+}
+
+.es-item-card--main::before {
+    content: '★';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    background: #ffc107;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 10;
+}
+
+/* Checkbox highlight for main sponsor */
+.es-checkbox-highlight {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+    border-color: #ffc107;
+}
+
+.es-checkbox-highlight:hover {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffecb5 100%);
+}

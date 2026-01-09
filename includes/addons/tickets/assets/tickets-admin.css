@@ -1,0 +1,780 @@
+/**
+ * Ensemble Tickets Add-on - Admin Styles
+ * 
+ * Consistent with Ensemble admin dark theme
+ *
+ * @package Ensemble
+ * @subpackage Addons/Tickets
+ */
+
+/* =========================================
+   Metabox Styles
+   ========================================= */
+.es-tickets-metabox {
+    padding: 15px;
+}
+
+.es-tickets-list {
+    margin-bottom: 15px;
+}
+
+.es-ticket-row {
+    background: var(--es-surface, #1e1e1e);
+    border: 1px solid var(--es-border, #3c3c3c);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.es-ticket-row:last-child {
+    margin-bottom: 0;
+}
+
+.es-ticket-row-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: var(--es-surface-secondary, #2d2d2d);
+    border-bottom: 1px solid var(--es-border, #3c3c3c);
+    cursor: move;
+}
+
+.es-ticket-row-drag {
+    color: var(--es-text-secondary, #999);
+    cursor: move;
+}
+
+.es-ticket-row-drag .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.es-ticket-row-title {
+    flex: 1;
+    font-weight: 500;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-ticket-row-provider {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    background: var(--es-surface-hover, #383838);
+    color: var(--es-text-secondary, #999);
+}
+
+.es-ticket-row-toggle {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--es-text-secondary, #999);
+    transition: transform 0.2s;
+}
+
+.es-ticket-row-toggle:hover {
+    color: var(--es-primary, #3b82f6);
+}
+
+.es-ticket-row.collapsed .es-ticket-row-toggle {
+    transform: rotate(-90deg);
+}
+
+.es-ticket-row-remove {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--es-text-secondary, #999);
+}
+
+.es-ticket-row-remove:hover {
+    color: var(--es-danger, #ef4444);
+}
+
+.es-ticket-row-body {
+    padding: 15px;
+}
+
+.es-ticket-row.collapsed .es-ticket-row-body {
+    display: none;
+}
+
+/* Form Grid */
+.es-ticket-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.es-ticket-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.es-ticket-form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.es-ticket-form-group label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--es-text-secondary, #999);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.es-ticket-form-group input,
+.es-ticket-form-group select,
+.es-ticket-form-group textarea {
+    padding: 8px 12px;
+    background: var(--es-surface-hover, #383838);
+    border: 1px solid var(--es-border, #3c3c3c);
+    border-radius: 4px;
+    color: var(--es-text, #e0e0e0);
+    font-size: 14px;
+}
+
+.es-ticket-form-group input:focus,
+.es-ticket-form-group select:focus,
+.es-ticket-form-group textarea:focus {
+    outline: none;
+    border-color: var(--es-primary, #3b82f6);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.es-ticket-form-group input::placeholder {
+    color: var(--es-text-secondary, #666);
+}
+
+.es-ticket-form-group textarea {
+    min-height: 60px;
+    resize: vertical;
+}
+
+/* Price Row */
+.es-ticket-price-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px;
+    gap: 10px;
+}
+
+/* Provider Select with Color Preview */
+.es-provider-select-wrapper {
+    position: relative;
+}
+
+.es-provider-color-preview {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.es-provider-select-wrapper select {
+    padding-left: 30px;
+}
+
+/* Add Ticket Button */
+.es-add-ticket-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--es-primary, #3b82f6);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.es-add-ticket-btn:hover {
+    background: var(--es-primary-hover, #2563eb);
+}
+
+.es-add-ticket-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Empty State */
+.es-tickets-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--es-text-secondary, #999);
+    background: var(--es-surface, #1e1e1e);
+    border: 2px dashed var(--es-border, #3c3c3c);
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.es-tickets-empty .dashicons {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+    margin-bottom: 10px;
+}
+
+.es-tickets-empty p {
+    margin: 0;
+}
+
+/* =========================================
+   Settings Page Styles
+   ========================================= */
+.es-tickets-settings {
+    max-width: 800px;
+}
+
+.es-tickets-settings h3 {
+    margin: 25px 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--es-border, #3c3c3c);
+    color: var(--es-text, #e0e0e0);
+    font-size: 16px;
+}
+
+.es-tickets-settings h3:first-child {
+    margin-top: 0;
+}
+
+.es-form-group {
+    margin-bottom: 20px;
+}
+
+.es-form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-form-group .description {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--es-text-secondary, #999);
+}
+
+.es-input-text,
+.es-input-select {
+    width: 100%;
+    max-width: 400px;
+    padding: 8px 12px;
+    background: var(--es-surface-hover, #383838);
+    border: 1px solid var(--es-border, #3c3c3c);
+    border-radius: 4px;
+    color: var(--es-text, #e0e0e0);
+    font-size: 14px;
+}
+
+.es-input-text:focus,
+.es-input-select:focus {
+    outline: none;
+    border-color: var(--es-primary, #3b82f6);
+}
+
+/* Checkbox Group */
+.es-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.es-checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.es-checkbox-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--es-primary, #3b82f6);
+}
+
+/* Radio Group */
+.es-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.es-radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.es-radio-group input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--es-primary, #3b82f6);
+}
+
+/* Currency Selector Grid */
+.es-currency-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    max-width: 400px;
+}
+
+.es-currency-option {
+    padding: 10px;
+    background: var(--es-surface, #1e1e1e);
+    border: 2px solid var(--es-border, #3c3c3c);
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-currency-option:hover {
+    border-color: var(--es-primary, #3b82f6);
+}
+
+.es-currency-option.active {
+    border-color: var(--es-primary, #3b82f6);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.es-currency-option input {
+    display: none;
+}
+
+.es-currency-symbol {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--es-text, #e0e0e0);
+}
+
+.es-currency-code {
+    font-size: 11px;
+    color: var(--es-text-secondary, #999);
+    margin-top: 4px;
+}
+
+/* UTM Parameters Section */
+.es-utm-fields {
+    background: var(--es-surface, #1e1e1e);
+    border: 1px solid var(--es-border, #3c3c3c);
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.es-utm-fields .es-form-group {
+    margin-bottom: 15px;
+}
+
+.es-utm-fields .es-form-group:last-child {
+    margin-bottom: 0;
+}
+
+/* Provider Settings */
+.es-provider-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 600px;
+}
+
+.es-provider-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--es-surface, #1e1e1e);
+    border: 1px solid var(--es-border, #3c3c3c);
+    border-radius: 4px;
+}
+
+.es-provider-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.es-provider-name {
+    flex: 1;
+    font-size: 13px;
+    color: var(--es-text, #e0e0e0);
+}
+
+/* =========================================
+   Responsive
+   ========================================= */
+@media (max-width: 768px) {
+    .es-ticket-form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-ticket-price-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .es-ticket-price-row > *:last-child {
+        grid-column: 1 / -1;
+    }
+    
+    .es-currency-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .es-provider-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================
+   Sortable Placeholder
+   ========================================= */
+.es-ticket-row.ui-sortable-placeholder {
+    visibility: visible !important;
+    background: var(--es-surface-hover, #383838);
+    border: 2px dashed var(--es-primary, #3b82f6);
+}
+
+.es-tickets-list.ui-sortable-helper {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   Wizard Integration Styles
+   ======================================== */
+
+.es-tickets-wizard-section {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--es-surface-secondary, #1e1e1e);
+    border: 1px solid var(--es-border, #333);
+    border-radius: var(--es-radius, 8px);
+}
+
+.es-tickets-wizard-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px 0;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.es-tickets-wizard-section h3 svg {
+    width: 18px;
+    height: 18px;
+    color: var(--es-primary, #3b82f6);
+}
+
+.es-tickets-wizard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.es-tickets-wizard-list:empty {
+    display: none;
+}
+
+.es-tickets-wizard-list:empty + .es-tickets-wizard-empty {
+    display: flex;
+}
+
+.es-ticket-wizard-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--es-surface, #121212);
+    border: 1px solid var(--es-border, #333);
+    border-radius: var(--es-radius-sm, 6px);
+    transition: border-color 0.2s;
+}
+
+.es-ticket-wizard-item:hover {
+    border-color: var(--es-primary, #3b82f6);
+}
+
+.es-ticket-wizard-item .es-ticket-provider-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--es-surface-secondary, #1e1e1e);
+    border-radius: var(--es-radius-sm, 6px);
+}
+
+.es-ticket-wizard-item .es-ticket-provider-icon svg {
+    width: 18px;
+    height: 18px;
+    color: var(--es-text-secondary, #888);
+}
+
+.es-ticket-wizard-info {
+    min-width: 0;
+}
+
+.es-ticket-wizard-info h4 {
+    margin: 0 0 2px 0;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.es-ticket-wizard-info .es-ticket-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--es-text-secondary, #888);
+}
+
+.es-ticket-wizard-price {
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.es-ticket-wizard-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.es-ticket-wizard-actions button {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: var(--es-text-secondary, #888);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-ticket-wizard-actions button:hover {
+    background: var(--es-surface-secondary, #1e1e1e);
+    color: var(--es-text, #fff);
+}
+
+.es-ticket-wizard-actions button.es-delete:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.es-ticket-wizard-actions button svg {
+    width: 14px;
+    height: 14px;
+}
+
+.es-tickets-wizard-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.es-tickets-wizard-empty .es-empty-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--es-surface, #121212);
+    border-radius: 50%;
+    margin-bottom: 12px;
+}
+
+.es-tickets-wizard-empty .es-empty-icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--es-text-muted, #555);
+}
+
+.es-tickets-wizard-empty p {
+    margin: 0;
+    color: var(--es-text-secondary, #888);
+}
+
+.es-tickets-wizard-empty p.description {
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.es-add-ticket-wizard-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px !important;
+}
+
+.es-add-ticket-wizard-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Wizard Ticket Modal */
+.es-ticket-wizard-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.es-ticket-wizard-modal.is-active {
+    display: flex;
+}
+
+.es-ticket-wizard-modal-content {
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--es-surface, #121212);
+    border: 1px solid var(--es-border, #333);
+    border-radius: var(--es-radius, 8px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.es-ticket-wizard-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--es-border, #333);
+}
+
+.es-ticket-wizard-modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.es-ticket-wizard-modal-close {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: var(--es-text-secondary, #888);
+    cursor: pointer;
+}
+
+.es-ticket-wizard-modal-close:hover {
+    background: var(--es-surface-secondary, #1e1e1e);
+    color: var(--es-text, #fff);
+}
+
+.es-ticket-wizard-modal-body {
+    padding: 20px;
+}
+
+.es-ticket-wizard-modal-body .es-form-row {
+    margin-bottom: 16px;
+}
+
+.es-ticket-wizard-modal-body label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.es-ticket-wizard-modal-body input,
+.es-ticket-wizard-modal-body select {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--es-surface-secondary, #1e1e1e);
+    border: 1px solid var(--es-border, #333);
+    border-radius: var(--es-radius-sm, 6px);
+    color: var(--es-text, #fff);
+    font-size: 14px;
+}
+
+.es-ticket-wizard-modal-body input:focus,
+.es-ticket-wizard-modal-body select:focus {
+    border-color: var(--es-primary, #3b82f6);
+    outline: none;
+}
+
+.es-ticket-wizard-modal-body .es-form-row-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.es-ticket-wizard-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--es-border, #333);
+}
+
+/* =========================================
+   Global Tickets Styles
+   ========================================= */
+
+/* Global ticket badge */
+.es-ticket-global-badge {
+    display: inline-block;
+    color: var(--es-primary, #3b82f6);
+    font-size: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* Global ticket item styling */
+.es-ticket-wizard-item--global {
+    background: rgba(59, 130, 246, 0.05);
+    border-left: 3px solid var(--es-primary, #3b82f6);
+}
+
+/* Custom text in wizard */
+.es-ticket-wizard-info .es-ticket-custom-text {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--es-text-secondary, #888);
+    margin-bottom: 4px;
+}
+
+/* Wider modal for custom text field */
+.es-ticket-wizard-modal-content {
+    max-width: 600px;
+}

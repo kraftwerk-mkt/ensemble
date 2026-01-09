@@ -1,0 +1,190 @@
+/**
+ * Ensemble Frontend Base CSS
+ * Core styles loaded for all layout sets
+ * 
+ * @package Ensemble
+ */
+
+/* ========================================
+   CSS VARIABLES (Design System)
+   Can be overridden by inline CSS
+   ======================================== */
+
+:root {
+    /* Primary Colors */
+    --es-primary: #667eea;
+    --es-secondary: #764ba2;
+    --es-accent: #f093fb;
+    
+    /* Text Colors */
+    --es-text: #1a1a1a;
+    --es-text-secondary: #666666;
+    --es-text-light: #999999;
+    
+    /* Surface Colors */
+    --es-surface: #ffffff;
+    --es-surface-alt: #f8f9fa;
+    --es-border: #e0e0e0;
+    
+    /* Status Colors */
+    --es-success: #4caf50;
+    --es-error: #f44336;
+    --es-warning: #ff9800;
+    --es-info: #2196f3;
+    
+    /* Spacing */
+    --es-space-xs: 0.5rem;
+    --es-space-sm: 1rem;
+    --es-space-md: 1.5rem;
+    --es-space-lg: 2rem;
+    --es-space-xl: 3rem;
+}
+
+/* ========================================
+   GRID CONTAINERS
+   ======================================== */
+
+.es-events-grid,
+.es-artists-grid,
+.es-locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin: 30px 0;
+}
+
+@media (max-width: 768px) {
+    .es-events-grid,
+    .es-artists-grid,
+    .es-locations-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.es-no-events,
+.es-no-artists,
+.es-no-locations {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--es-text-secondary);
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+/* ========================================
+   BUTTONS (Global)
+   ======================================== */
+
+.es-button,
+.es-button-primary,
+.es-button-secondary {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.es-button-primary {
+    background: var(--es-primary, #667eea);
+    color: #ffffff;
+}
+
+.es-button-primary:hover {
+    background: var(--es-secondary, #764ba2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.es-button-secondary {
+    background: transparent;
+    color: var(--es-primary, #667eea);
+    border: 2px solid var(--es-primary, #667eea);
+}
+
+.es-button-secondary:hover {
+    background: var(--es-primary, #667eea);
+    color: #ffffff;
+}
+
+.es-button-block {
+    display: block;
+    width: 100%;
+}
+
+/* ========================================
+   DASHICONS SUPPORT
+   ======================================== */
+
+.dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: var(--ensemble-xl-size, 20px);
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+
+.es-loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.es-loading::after {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--es-border, #e0e0e0);
+    border-top-color: var(--es-primary, #667eea);
+    border-radius: 50%;
+    animation: es-spin 1s linear infinite;
+}
+
+@keyframes es-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   FALLBACK CARD STYLES
+   For when templates are missing
+   ======================================== */
+
+.es-event-card.es-fallback,
+.es-artist-card.es-fallback,
+.es-location-card.es-fallback {
+    padding: 20px;
+    background: var(--es-surface, #ffffff);
+    border: 1px solid var(--es-border, #e0e0e0);
+    border-radius: 8px;
+}
+
+.es-fallback h3 {
+    margin: 0 0 12px 0;
+    font-size: var(--ensemble-lg-size, 18px);
+}
+
+.es-fallback h3 a {
+    color: var(--es-text, #1a1a1a);
+    text-decoration: none;
+}
+
+.es-fallback h3 a:hover {
+    color: var(--es-primary, #667eea);
+}
+
+.es-fallback p {
+    margin: 0;
+    color: var(--es-text-secondary, #666666);
+    font-size: var(--ensemble-small-size, 14px);
+}

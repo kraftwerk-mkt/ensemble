@@ -1,0 +1,1621 @@
+/**
+ * Simple Club Layout Styles
+ * 
+ * Clean club-style layout with prominent location display
+ * Based on Lovepop but with specific modifications
+ * 
+ * @package Ensemble
+ * @version 1.0.0
+ */
+
+/* =====================================================
+   CSS VARIABLES - All styles controlled via Designer
+   Layout only defines structure, not colors/fonts
+   ===================================================== */
+
+.es-simpleclub-layout,
+.es-simpleclub-single,
+.es-simpleclub-event,
+.es-simpleclub-card,
+.es-simpleclub-artist-card,
+.es-simpleclub-location-card {
+    /* Colors - prefer Dark Mode settings, fallback to Light Mode, then defaults */
+    --sc-bg: var(--ensemble-dark-bg, var(--ensemble-bg, #0a0a0f));
+    --sc-card-bg: var(--ensemble-dark-card-bg, var(--ensemble-card-bg, rgba(20, 20, 35, 0.8)));
+    --sc-card-border: var(--ensemble-dark-card-border, var(--ensemble-card-border, rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3)));
+    --sc-text: var(--ensemble-dark-text, var(--ensemble-text, #ffffff));
+    --sc-text-secondary: var(--ensemble-dark-text-secondary, var(--ensemble-text-secondary, #e0e0e0));
+    --sc-primary: var(--ensemble-dark-primary, var(--ensemble-primary, #e91e8c));
+    --sc-hover: var(--ensemble-dark-hover, var(--ensemble-hover, #ff4da6));
+    --sc-link: var(--ensemble-dark-link, var(--ensemble-link, var(--sc-primary)));
+    
+    /* Spacing & Radius - from Designer */
+    --sc-radius: var(--ensemble-card-radius, 12px);
+    --sc-card-padding: var(--ensemble-card-padding, 25px);
+    --sc-card-gap: var(--ensemble-card-gap, 24px);
+    --sc-section-spacing: var(--ensemble-section-spacing, 48px);
+    --sc-card-border-width: var(--ensemble-card-border-width, 1px);
+    
+    /* Card Effects - from Designer */
+    --sc-card-shadow: var(--ensemble-card-shadow, 0 4px 6px rgba(0, 0, 0, 0.1));
+    --sc-card-hover-transform: var(--ensemble-card-hover-transform, translateY(-5px));
+    --sc-card-hover-shadow: var(--ensemble-card-hover-shadow, 0 10px 40px rgba(0, 0, 0, 0.2));
+    
+    /* Typography - Fonts from Designer */
+    --sc-font-heading: var(--ensemble-font-heading, 'Montserrat', sans-serif);
+    --sc-font-body: var(--ensemble-font-body, 'Montserrat', sans-serif);
+    
+    /* Typography - Sizes from Designer */
+    --sc-h1-size: var(--ensemble-h1-size, 36px);
+    --sc-h2-size: var(--ensemble-h2-size, 28px);
+    --sc-h3-size: var(--ensemble-h3-size, 24px);
+    --sc-body-size: var(--ensemble-body-size, 16px);
+    --sc-small-size: var(--ensemble-small-size, 14px);
+    --sc-xs-size: var(--ensemble-xs-size, 12px);
+    --sc-meta-size: var(--ensemble-meta-size, 14px);
+    --sc-lg-size: var(--ensemble-lg-size, 18px);
+    --sc-xl-size: var(--ensemble-xl-size, 20px);
+    --sc-price-size: var(--ensemble-price-size, 32px);
+    --sc-hero-title-size: var(--ensemble-hero-size, 72px);
+    
+    /* Typography - Weights from Designer */
+    --sc-heading-weight: var(--ensemble-heading-weight, 700);
+    --sc-body-weight: var(--ensemble-body-weight, 400);
+    
+    /* Typography - Line Heights from Designer */
+    --sc-line-height-heading: var(--ensemble-line-height-heading, 1.2);
+    --sc-line-height-body: var(--ensemble-line-height-body, 1.6);
+    
+    /* Buttons - prefer Dark Mode settings */
+    --sc-btn-bg: var(--ensemble-dark-button-bg, var(--ensemble-button-bg, var(--sc-primary)));
+    --sc-btn-text: var(--ensemble-dark-button-text, var(--ensemble-button-text, #ffffff));
+    --sc-btn-hover-bg: var(--ensemble-dark-button-hover-bg, var(--ensemble-button-hover-bg, var(--sc-hover)));
+    --sc-btn-hover-text: var(--ensemble-dark-button-hover-text, var(--ensemble-button-hover-text, #ffffff));
+    --sc-btn-radius: var(--ensemble-button-radius, 8px);
+    --sc-btn-padding-v: var(--ensemble-button-padding-v, 14px);
+    --sc-btn-padding-h: var(--ensemble-button-padding-h, 24px);
+    --sc-btn-weight: var(--ensemble-button-weight, 600);
+    --sc-btn-font-size: var(--ensemble-button-font-size, 16px);
+    --sc-btn-border-width: var(--ensemble-button-border-width, 2px);
+    
+    /* Grid - from Designer (Desktop only) */
+    --sc-grid-columns: var(--ensemble-grid-columns, 3);
+}
+
+/* =====================================================
+   RESPONSIVE TYPOGRAPHY
+   ===================================================== */
+@media (max-width: 1024px) {
+    .es-simpleclub-layout,
+    .es-simpleclub-single,
+    .es-simpleclub-event {
+        --sc-h1-size: calc(var(--ensemble-h1-size, 36px) * 0.9);
+        --sc-h2-size: calc(var(--ensemble-h2-size, 28px) * 0.9);
+        --sc-h3-size: calc(var(--ensemble-h3-size, 24px) * 0.9);
+        --sc-hero-title-size: calc(var(--ensemble-hero-size, 72px) * 0.8);
+    }
+}
+
+@media (max-width: 768px) {
+    .es-simpleclub-layout,
+    .es-simpleclub-single,
+    .es-simpleclub-event {
+        --sc-h1-size: calc(var(--ensemble-h1-size, 36px) * 0.75);
+        --sc-h2-size: calc(var(--ensemble-h2-size, 28px) * 0.8);
+        --sc-h3-size: calc(var(--ensemble-h3-size, 24px) * 0.85);
+        --sc-body-size: calc(var(--ensemble-body-size, 16px) * 0.95);
+        --sc-hero-title-size: calc(var(--ensemble-hero-size, 72px) * 0.45);
+        --sc-price-size: calc(var(--ensemble-price-size, 32px) * 0.85);
+    }
+}
+
+@media (max-width: 480px) {
+    .es-simpleclub-layout,
+    .es-simpleclub-single,
+    .es-simpleclub-event {
+        --sc-h1-size: calc(var(--ensemble-h1-size, 36px) * 0.65);
+        --sc-h2-size: calc(var(--ensemble-h2-size, 28px) * 0.7);
+        --sc-h3-size: calc(var(--ensemble-h3-size, 24px) * 0.75);
+        --sc-body-size: calc(var(--ensemble-body-size, 16px) * 0.9);
+        --sc-small-size: calc(var(--ensemble-small-size, 14px) * 0.9);
+        --sc-hero-title-size: calc(var(--ensemble-hero-size, 72px) * 0.35);
+        --sc-price-size: calc(var(--ensemble-price-size, 32px) * 0.75);
+    }
+}
+
+/* =====================================================
+   BODY BACKGROUND
+   ===================================================== */
+body:has(.es-simpleclub-layout),
+body:has(.es-simpleclub-single),
+body:has(.es-simpleclub-event) {
+    background: var(--ensemble-dark-bg, linear-gradient(180deg, #0a0a0f 0%, #12121c 50%, #0f0f18 100%)) !important;
+    min-height: 100vh;
+}
+
+/* =====================================================
+   BASE CONTAINER
+   ===================================================== */
+.es-simpleclub-layout,
+.es-simpleclub-single,
+.es-simpleclub-event {
+    background: transparent;
+    min-height: 100vh;
+    color: var(--sc-text);
+    font-family: var(--sc-font-body);
+    line-height: var(--sc-line-height-body);
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Global Typography */
+.es-simpleclub-layout h1,
+.es-simpleclub-layout h2,
+.es-simpleclub-layout h3,
+.es-simpleclub-layout h4,
+.es-simpleclub-layout h5,
+.es-simpleclub-layout h6,
+.es-simpleclub-single h1,
+.es-simpleclub-single h2,
+.es-simpleclub-single h3,
+.es-simpleclub-single h4,
+.es-simpleclub-single h5,
+.es-simpleclub-single h6,
+.es-simpleclub-event h1,
+.es-simpleclub-event h2,
+.es-simpleclub-event h3,
+.es-simpleclub-event h4,
+.es-simpleclub-event h5,
+.es-simpleclub-event h6,
+.es-simpleclub-card h1,
+.es-simpleclub-card h2,
+.es-simpleclub-card h3,
+.es-simpleclub-card h4,
+.es-simpleclub-card h5,
+.es-simpleclub-card h6 {
+    font-family: var(--sc-font-heading) !important;
+    font-weight: var(--sc-heading-weight) !important;
+    line-height: var(--sc-line-height-heading);
+    color: var(--sc-text) !important;
+}
+
+.es-simpleclub-layout p,
+.es-simpleclub-layout span,
+.es-simpleclub-layout strong,
+.es-simpleclub-layout em,
+.es-simpleclub-single p,
+.es-simpleclub-single span,
+.es-simpleclub-event p,
+.es-simpleclub-event span {
+    font-family: var(--sc-font-body);
+    color: var(--sc-text);
+}
+
+/* =====================================================
+   EVENT CARD STYLES - OVERLAY VERSION
+   ===================================================== */
+
+/* Reset padding from base styles */
+.ensemble-event-card.es-simpleclub-card,
+.es-simpleclub-card--overlay {
+    padding: 0 !important;
+    background: transparent;
+    border: var(--ensemble-card-border-width, 0) solid var(--sc-card-border);
+    backdrop-filter: none;
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.es-simpleclub-card--overlay:hover {
+    border-color: transparent;
+    box-shadow: var(--sc-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    transform: var(--sc-card-hover-transform, translateY(-5px));
+}
+
+.es-simpleclub-card-link {
+    display: block;
+    position: relative;
+    aspect-ratio: 4/5;
+    text-decoration: none;
+    color: var(--sc-text);
+    overflow: hidden;
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+/* Background Image */
+.es-simpleclub-card-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.es-simpleclub-card-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.es-simpleclub-card--overlay:hover .es-simpleclub-card-bg img {
+    transform: scale(1.08);
+}
+
+.es-simpleclub-placeholder-bg {
+    width: 100%;
+    height: 100%;
+    background: var(--sc-card-bg);
+}
+
+/* Gradient Overlay */
+.es-simpleclub-card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(10, 10, 15, 0.95) 0%,
+        rgba(10, 10, 15, 0.7) 40%,
+        rgba(10, 10, 15, 0.2) 70%,
+        rgba(10, 10, 15, 0) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Status Badge */
+.es-simpleclub-card-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--sc-primary);
+    color: var(--sc-text);
+    padding: 6px 14px;
+    font-size: var(--sc-xs-size);
+    font-weight: var(--sc-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    z-index: 5;
+    box-shadow: 0 4px 15px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+/* Content Overlay */
+.es-simpleclub-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--sc-card-padding, 25px);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+/* Date Display */
+.es-simpleclub-card-date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-card-day {
+    font-size: var(--sc-h1-size);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--sc-text);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.es-simpleclub-card-month {
+    font-size: var(--sc-meta-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--sc-primary);
+}
+
+/* Artists Display - LARGER (hidden by default) */
+.es-simpleclub-card-artists {
+    font-size: var(--sc-lg-size); /* LARGER than Lovepop */
+    font-weight: 600;
+    color: var(--sc-primary);
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    max-height: 0;
+    overflow: hidden;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.es-simpleclub-card-artists .es-more {
+    opacity: 0.7;
+}
+
+/* Title - LARGER */
+.es-simpleclub-card-title {
+    margin: 0 0 2px 0;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--sc-h2-size); /* LARGER than Lovepop */
+    font-weight: var(--ensemble-heading-weight, 700);
+    line-height: var(--ensemble-line-height-heading, 1.2);
+    color: var(--sc-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Location - SAME SIZE as title */
+.es-simpleclub-card-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--sc-h2-size); /* SAME size as title */
+    font-weight: var(--ensemble-heading-weight, 700);
+    line-height: 1.2;
+    color: var(--sc-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+}
+
+.es-simpleclub-card-location-icon {
+    display: none; /* Hide icon for cleaner look */
+}
+
+.es-simpleclub-card-location-name {
+    color: var(--sc-primary);
+}
+
+/* Hover Effect - Swap Date with Artists */
+.es-simpleclub-card--overlay:hover .es-simpleclub-card-date {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+}
+
+.es-simpleclub-card--overlay:hover .es-simpleclub-card-artists {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 80px;
+    margin-bottom: 12px;
+}
+
+/* Mobile - Always show date, hide artists swap */
+@media (max-width: 768px) {
+    .es-simpleclub-card-link {
+        aspect-ratio: 3/4;
+    }
+    
+    .es-simpleclub-card-day {
+        font-size: calc(var(--sc-h1-size) * 0.75);
+    }
+    
+    .es-simpleclub-card-title {
+        font-size: var(--sc-xl-size);
+    }
+    
+    .es-simpleclub-card-location {
+        font-size: var(--sc-xl-size);
+    }
+    
+    /* On touch devices, show both date and artists */
+    .es-simpleclub-card--overlay .es-simpleclub-card-artists {
+        opacity: 0.8;
+        transform: translateY(0);
+        max-height: 50px;
+        font-size: var(--sc-body-size);
+    }
+    
+    .es-simpleclub-card--overlay .es-simpleclub-card-date {
+        flex-direction: row;
+        align-items: baseline;
+        gap: 8px;
+    }
+    
+    .es-simpleclub-card--overlay .es-simpleclub-card-day {
+        font-size: var(--sc-h3-size);
+    }
+}
+
+/* =====================================================
+   HERO SECTION
+   ===================================================== */
+.es-simpleclub-hero {
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: flex-end;
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.es-simpleclub-hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.es-simpleclub-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-simpleclub-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(10, 10, 15, 0.98) 0%,
+        rgba(10, 10, 15, 0.8) 40%,
+        rgba(10, 10, 15, 0.4) 70%,
+        rgba(10, 10, 15, 0.2) 100%
+    );
+}
+
+.es-simpleclub-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+}
+
+.es-simpleclub-hero-status,
+.es-simpleclub-hero-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: var(--sc-xs-size);
+    font-weight: var(--sc-heading-weight);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    margin-right: 8px;
+}
+
+.es-simpleclub-hero-status {
+    background: var(--sc-primary);
+    color: var(--sc-text);
+}
+
+.es-simpleclub-hero-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--sc-text);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.es-simpleclub-hero-date {
+    display: block;
+    font-size: var(--sc-lg-size);
+    font-weight: 500;
+    color: var(--sc-text-secondary);
+    margin-bottom: 16px;
+}
+
+.es-simpleclub-hero-time {
+    margin-left: 16px;
+    color: var(--sc-primary);
+}
+
+.es-simpleclub-hero-title {
+    font-size: var(--sc-hero-title-size);
+    font-weight: 800;
+    color: var(--sc-text);
+    margin: 0 0 4px 0;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Location in Hero - SAME SIZE & STYLE as title */
+.es-simpleclub-hero-location {
+    font-size: var(--sc-hero-title-size);
+    font-weight: 800;
+    color: var(--sc-primary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+    .es-simpleclub-hero {
+        min-height: 400px;
+        padding: 40px 0;
+    }
+    
+    .es-simpleclub-hero-title,
+    .es-simpleclub-hero-location {
+        font-size: var(--sc-hero-title-size);
+    }
+}
+
+/* =====================================================
+   BODY & LAYOUT GRID
+   ===================================================== */
+.es-simpleclub-body {
+    padding: var(--sc-section-spacing) 0;
+}
+
+.es-simpleclub-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.es-simpleclub-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 48px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .es-simpleclub-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+    
+    .es-simpleclub-main {
+        order: 1;
+    }
+    
+    .es-simpleclub-aside,
+    .es-simpleclub-sidebar {
+        order: 2;
+    }
+}
+
+/* Ensure sidebar comes after main on mobile */
+@media (max-width: 768px) {
+    .es-simpleclub-layout-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .es-simpleclub-main {
+        order: 1;
+        width: 100%;
+    }
+    
+    .es-simpleclub-aside,
+    .es-simpleclub-sidebar {
+        order: 2;
+        width: 100%;
+    }
+}
+
+/* =====================================================
+   MAIN CONTENT
+   ===================================================== */
+.es-simpleclub-main {
+    min-width: 0;
+}
+
+.es-simpleclub-section {
+    margin-bottom: var(--sc-section-spacing);
+    padding: 24px;
+    background: var(--sc-card-bg);
+    border: 1px solid var(--sc-card-border);
+    border-radius: var(--sc-radius);
+}
+
+.es-simpleclub-section-title {
+    font-size: var(--sc-h2-size);
+    font-weight: var(--sc-heading-weight);
+    color: var(--sc-text);
+    margin: 0 0 24px 0;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--sc-primary);
+}
+
+.es-simpleclub-prose {
+    font-size: var(--sc-body-size);
+    line-height: var(--sc-line-height-body);
+    color: var(--sc-text-secondary);
+}
+
+.es-simpleclub-prose p {
+    margin-bottom: 1em;
+}
+
+.es-simpleclub-prose p:last-child {
+    margin-bottom: 0;
+}
+
+/* =====================================================
+   GENRES SECTION
+   ===================================================== */
+.es-simpleclub-genre-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.es-simpleclub-genre-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
+    border: 1px solid var(--sc-primary);
+    border-radius: 20px;
+    font-size: var(--sc-small-size);
+    font-weight: 500;
+    color: var(--sc-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =====================================================
+   ARTISTS SECTION
+   ===================================================== */
+.es-simpleclub-artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.es-simpleclub-artist-item {
+    display: flex;
+    gap: 16px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    text-decoration: none;
+    color: var(--sc-text);
+    transition: all 0.3s ease;
+}
+
+a.es-simpleclub-artist-item:hover {
+    transform: translateY(-2px);
+}
+
+.es-simpleclub-artist-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.es-simpleclub-artist-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-simpleclub-artist-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-simpleclub-artist-info h4 {
+    margin: 0 0 4px 0;
+    font-size: var(--sc-body-size);
+    font-weight: 600;
+    color: var(--sc-text);
+}
+
+.es-simpleclub-artist-genre,
+.es-simpleclub-artist-references,
+.es-simpleclub-artist-time {
+    display: block;
+    font-size: var(--sc-xs-size);
+    color: var(--sc-text-secondary);
+    margin-top: 2px;
+}
+
+.es-simpleclub-artist-time {
+    color: var(--sc-primary);
+}
+
+/* =====================================================
+   VENUE GROUPS (für Multi-Floor Events)
+   ===================================================== */
+.es-simpleclub-venue-group {
+    margin-bottom: 32px;
+}
+
+.es-simpleclub-venue-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-simpleclub-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3);
+}
+
+.es-simpleclub-venue-title {
+    font-size: var(--sc-lg-size);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sc-primary);
+    margin: 0;
+}
+
+.es-simpleclub-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.es-simpleclub-venue-genre {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.1);
+    border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.25);
+    border-radius: 12px;
+    font-size: var(--sc-xs-size);
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Genre Meta (when no venues) */
+.es-simpleclub-genre-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+/* =====================================================
+   ACTION BUTTONS ROW
+   ===================================================== */
+.es-simpleclub-action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.es-simpleclub-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: var(--sc-btn-padding-v) var(--sc-btn-padding-h);
+    font-family: var(--sc-font-body);
+    font-size: var(--sc-btn-font-size);
+    font-weight: var(--sc-btn-weight);
+    text-decoration: none;
+    border-radius: var(--sc-btn-radius);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: var(--sc-btn-border-width) solid transparent;
+}
+
+.es-simpleclub-btn svg {
+    flex-shrink: 0;
+}
+
+.es-simpleclub-btn-primary {
+    background: var(--sc-btn-bg);
+    color: var(--sc-btn-text);
+    border-color: var(--sc-btn-bg);
+}
+
+.es-simpleclub-btn-primary:hover {
+    background: var(--sc-btn-hover-bg);
+    border-color: var(--sc-btn-hover-bg);
+    color: var(--sc-btn-hover-text);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
+}
+
+.es-simpleclub-btn-price {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: var(--sc-small-size);
+}
+
+.es-simpleclub-btn-secondary {
+    background: transparent;
+    color: var(--sc-text);
+    border-color: var(--sc-card-border);
+}
+
+.es-simpleclub-btn-secondary:hover {
+    background: var(--sc-card-bg);
+    border-color: var(--sc-primary);
+    color: var(--sc-primary);
+}
+
+@media (max-width: 600px) {
+    .es-simpleclub-action-buttons {
+        flex-direction: column;
+    }
+    
+    .es-simpleclub-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =====================================================
+   SIDEBAR
+   ===================================================== */
+.es-simpleclub-aside {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .es-simpleclub-aside {
+        order: 2;
+    }
+}
+
+/* =====================================================
+   FADING GALLERY WITH LIGHTBOX
+   ===================================================== */
+.es-simpleclub-gallery-card {
+    border-radius: var(--sc-radius);
+    overflow: hidden;
+    background: var(--sc-card-bg);
+    border: 1px solid var(--sc-card-border);
+}
+
+.es-simpleclub-gallery-fader {
+    position: relative;
+    width: 100%;
+    /* Height auto based on image */
+}
+
+.es-simpleclub-gallery-slide {
+    display: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+.es-simpleclub-gallery-slide.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.es-simpleclub-gallery-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.es-simpleclub-gallery-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+}
+
+.es-simpleclub-gallery-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-gallery-dot:hover {
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.es-simpleclub-gallery-dot.active {
+    background: var(--sc-primary);
+    transform: scale(1.2);
+}
+
+/* =====================================================
+   LIGHTBOX
+   ===================================================== */
+.es-simpleclub-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.es-simpleclub-lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+}
+
+.es-simpleclub-lightbox-content img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.es-simpleclub-lightbox-close,
+.es-simpleclub-lightbox-prev,
+.es-simpleclub-lightbox-next {
+    position: absolute;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+    padding: 20px;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-lightbox-close:hover,
+.es-simpleclub-lightbox-prev:hover,
+.es-simpleclub-lightbox-next:hover {
+    color: var(--sc-primary);
+}
+
+.es-simpleclub-lightbox-close {
+    top: 20px;
+    right: 20px;
+}
+
+.es-simpleclub-lightbox-prev {
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.es-simpleclub-lightbox-next {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* =====================================================
+   INFO CARD
+   ===================================================== */
+.es-simpleclub-info-card,
+.es-simpleclub-reservation-card {
+    background: var(--sc-card-bg);
+    border: 1px solid var(--sc-card-border);
+    border-radius: var(--sc-radius);
+    padding: var(--sc-card-padding);
+}
+
+.es-simpleclub-info-row {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.es-simpleclub-info-row:last-child {
+    border-bottom: none;
+}
+
+.es-simpleclub-info-label {
+    display: block;
+    font-size: var(--sc-xs-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sc-text-secondary);
+    margin-bottom: 6px;
+}
+
+.es-simpleclub-info-value {
+    display: block;
+    font-size: var(--sc-body-size);
+    font-weight: 500;
+    color: var(--sc-text);
+}
+
+.es-simpleclub-info-link {
+    color: var(--sc-primary);
+    text-decoration: none;
+}
+
+.es-simpleclub-info-link:hover {
+    text-decoration: underline;
+}
+
+.es-simpleclub-info-sub {
+    display: block;
+    font-size: var(--sc-small-size);
+    color: var(--sc-text-secondary);
+    margin-top: 4px;
+}
+
+.es-simpleclub-info-price {
+    font-size: var(--sc-price-size);
+    font-weight: 700;
+    color: var(--sc-primary);
+}
+
+.es-simpleclub-facebook-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--sc-text);
+    text-decoration: none;
+    font-size: var(--sc-body-size);
+    font-weight: 500;
+}
+
+.es-simpleclub-facebook-link:hover {
+    color: var(--sc-primary);
+}
+
+.es-simpleclub-facebook-link .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* =====================================================
+   STATUS BADGES IN CARDS
+   ===================================================== */
+.es-simpleclub-card.es-status-cancelled .es-simpleclub-card-title,
+.es-simpleclub-card.es-status-postponed .es-simpleclub-card-title {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.es-simpleclub-card.es-status-soldout .es-simpleclub-card-status {
+    background: #ff4444;
+}
+
+.es-simpleclub-card.es-status-cancelled .es-simpleclub-card-status {
+    background: #888;
+}
+
+.es-simpleclub-card.es-status-postponed .es-simpleclub-card-status {
+    background: #ff9900;
+}
+
+/* =====================================================
+   ARTIST & LOCATION CARDS
+   ===================================================== */
+.es-simpleclub-artist-card,
+.es-simpleclub-location-card {
+    /* Slightly different aspect ratio */
+}
+
+.es-simpleclub-artist-card .es-simpleclub-card-link,
+.es-simpleclub-location-card .es-simpleclub-card-link {
+    aspect-ratio: 1/1;
+}
+
+/* Name styling */
+.es-simpleclub-artist-name,
+.es-simpleclub-location-name {
+    font-size: var(--sc-h3-size);
+    font-weight: var(--sc-heading-weight);
+    color: var(--sc-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Overlay adjustments */
+.es-simpleclub-artist-overlay,
+.es-simpleclub-location-overlay {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/* Artist genres */
+.es-simpleclub-artist-genres {
+    font-size: var(--sc-body-size);
+    color: var(--sc-primary);
+}
+
+/* Location city */
+.es-simpleclub-location-city-wrap {
+    font-size: var(--sc-body-size);
+    color: var(--sc-primary);
+}
+
+/* Placeholder styles */
+.es-simpleclub-placeholder-artist,
+.es-simpleclub-placeholder-location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-simpleclub-placeholder-artist svg,
+.es-simpleclub-placeholder-location svg {
+    width: 60px;
+    height: 60px;
+    stroke: var(--sc-text-secondary);
+    opacity: 0.3;
+}
+
+/* =====================================================
+   HERO SLIDE STYLES
+   ===================================================== */
+.es-hero-slide--simpleclub {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__image--placeholder {
+    background: var(--sc-card-bg);
+}
+
+.es-hero-slide--simpleclub::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(10, 10, 15, 0.95) 0%,
+        rgba(10, 10, 15, 0.6) 40%,
+        rgba(10, 10, 15, 0.2) 70%,
+        transparent 100%
+    );
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    z-index: 2;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__date {
+    font-size: var(--sc-lg-size);
+    font-weight: 500;
+    color: var(--sc-text-secondary);
+    margin-bottom: 12px;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__title {
+    font-size: var(--sc-hero-title-size);
+    font-weight: 800;
+    margin: 0 0 16px 0;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__title a {
+    color: var(--sc-text);
+    text-decoration: none;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__title a:hover {
+    color: var(--sc-primary);
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__location {
+    font-size: var(--sc-hero-title-size);
+    font-weight: 800;
+    color: var(--sc-primary);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: var(--sc-btn-padding-v) var(--sc-btn-padding-h);
+    font-size: var(--sc-btn-font-size);
+    font-weight: var(--sc-btn-weight);
+    text-decoration: none;
+    border-radius: var(--sc-btn-radius);
+    transition: all 0.3s ease;
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__btn--primary {
+    background: var(--sc-btn-bg);
+    color: var(--sc-btn-text);
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__btn--primary:hover {
+    background: var(--sc-btn-hover-bg);
+    transform: translateY(-2px);
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__btn--secondary {
+    background: transparent;
+    color: var(--sc-text);
+    border: 2px solid var(--sc-card-border);
+}
+
+.es-hero-slide--simpleclub .es-hero-slide__btn--secondary:hover {
+    border-color: var(--sc-primary);
+    color: var(--sc-primary);
+}
+
+@media (max-width: 768px) {
+    .es-hero-slide--simpleclub .es-hero-slide__content {
+        padding: 24px;
+    }
+    
+    .es-hero-slide--simpleclub .es-hero-slide__title,
+    .es-hero-slide--simpleclub .es-hero-slide__location {
+        font-size: calc(var(--sc-hero-title-size) * 0.6);
+    }
+    
+    .es-hero-slide--simpleclub .es-hero-slide__actions {
+        flex-direction: column;
+    }
+}
+
+/* =====================================================
+   ARTIST & LOCATION SINGLE PAGES
+   ===================================================== */
+
+/* Hero Social Links */
+.es-simpleclub-hero-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.es-simpleclub-social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--sc-text);
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-social-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.es-simpleclub-social-btn:hover {
+    background: var(--sc-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Artist Type Badge */
+.es-simpleclub-artist-type {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(233, 30, 140, 0.1);
+    border: 1px solid var(--sc-primary);
+    border-radius: 20px;
+    font-size: var(--sc-small-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sc-primary);
+    margin-bottom: 24px;
+}
+
+/* Quote Section */
+.es-simpleclub-quote {
+    font-size: var(--sc-xl-size);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--sc-text);
+    padding: 32px;
+    margin: 0;
+    background: var(--sc-card-bg);
+    border-left: 4px solid var(--sc-primary);
+    border-radius: var(--sc-radius);
+}
+
+/* Sidebar Cards */
+.es-simpleclub-sidebar-card {
+    background: var(--sc-card-bg);
+    border: 1px solid var(--sc-card-border);
+    border-radius: var(--sc-radius);
+    padding: var(--sc-card-padding);
+    margin-bottom: 24px;
+}
+
+.es-simpleclub-card-label {
+    font-size: var(--sc-xs-size);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--sc-text-secondary);
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Event List in Sidebar */
+.es-simpleclub-event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-simpleclub-event-item {
+    display: flex;
+    gap: 16px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-event-item:hover {
+    background: rgba(233, 30, 140, 0.1);
+}
+
+.es-simpleclub-event-date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+    padding: 8px;
+    background: var(--sc-primary);
+    border-radius: 6px;
+}
+
+.es-simpleclub-date-day {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+}
+
+.es-simpleclub-date-month {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 2px;
+}
+
+.es-simpleclub-event-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.es-simpleclub-event-name {
+    font-size: var(--sc-body-size);
+    font-weight: 600;
+    color: var(--sc-text);
+    margin-bottom: 4px;
+}
+
+.es-simpleclub-event-venue {
+    font-size: var(--sc-small-size);
+    color: var(--sc-text-secondary);
+}
+
+/* Location Single - Info Rows with Icons */
+.es-simpleclub-info-row .es-simpleclub-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(233, 30, 140, 0.1);
+    border-radius: 8px;
+    color: var(--sc-primary);
+    margin-bottom: 8px;
+}
+
+.es-simpleclub-info-content {
+    flex: 1;
+}
+
+/* Action Buttons */
+.es-simpleclub-action-row {
+    padding-top: 16px;
+    margin-top: 8px;
+}
+
+.es-simpleclub-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: var(--sc-btn-padding-v) var(--sc-btn-padding-h);
+    background: var(--sc-btn-bg);
+    color: var(--sc-btn-text);
+    border: none;
+    border-radius: var(--sc-btn-radius);
+    font-size: var(--sc-btn-font-size);
+    font-weight: var(--sc-btn-weight);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-action-btn:hover {
+    background: var(--sc-btn-hover-bg);
+    color: var(--sc-btn-hover-text);
+    transform: translateY(-2px);
+}
+
+.es-simpleclub-route-btn {
+    background: transparent;
+    border: 2px solid var(--sc-primary);
+    color: var(--sc-primary);
+}
+
+.es-simpleclub-route-btn:hover {
+    background: var(--sc-primary);
+    color: #fff;
+}
+
+/* Social Links Card */
+.es-simpleclub-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Events Grid for Location Page */
+.es-simpleclub-events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.es-simpleclub-event-card-mini {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--sc-card-bg);
+    border: 1px solid var(--sc-card-border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-event-card-mini:hover {
+    border-color: var(--sc-primary);
+    transform: translateY(-2px);
+}
+
+.es-simpleclub-event-thumb {
+    flex: 0 0 60px;
+    height: 60px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.es-simpleclub-event-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-simpleclub-event-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.es-simpleclub-event-date-inline {
+    font-size: var(--sc-xs-size);
+    font-weight: 600;
+    color: var(--sc-primary);
+    margin-bottom: 4px;
+}
+
+.es-simpleclub-event-title-mini {
+    font-size: var(--sc-small-size);
+    font-weight: 600;
+    color: var(--sc-text);
+    line-height: 1.3;
+}
+
+/* Map Section */
+.es-simpleclub-map-placeholder {
+    padding: 40px;
+    background: var(--sc-card-bg);
+    border: 1px solid var(--sc-card-border);
+    border-radius: var(--sc-radius);
+    text-align: center;
+}
+
+.es-simpleclub-map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: var(--sc-btn-padding-v) var(--sc-btn-padding-h);
+    background: var(--sc-btn-bg);
+    color: var(--sc-btn-text);
+    border-radius: var(--sc-btn-radius);
+    font-weight: var(--sc-btn-weight);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.es-simpleclub-map-link:hover {
+    background: var(--sc-btn-hover-bg);
+    transform: translateY(-2px);
+}
+
+/* Hero Country */
+.es-simpleclub-hero-country {
+    opacity: 0.7;
+}
+
+.es-simpleclub-hero-country::before {
+    content: '·';
+    margin: 0 8px;
+}
+
+/* Responsive Adjustments for Singles */
+@media (max-width: 768px) {
+    .es-simpleclub-hero-social {
+        justify-content: center;
+    }
+    
+    .es-simpleclub-events-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-simpleclub-social-links {
+        justify-content: center;
+    }
+}

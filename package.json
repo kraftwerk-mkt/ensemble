@@ -1,0 +1,30 @@
+{
+  "name": "ensemble",
+  "version": "2.9.0",
+  "description": "Professional Event Management Plugin for WordPress",
+  "author": "Fabian <info@kraftwerk-mkt.com>",
+  "license": "GPL-2.0-or-later",
+  "private": true,
+  "scripts": {
+    "build:css": "node scripts/build-css.js",
+    "build:js": "node scripts/build-js.js",
+    "build": "npm run build:css && npm run build:js",
+    "watch:css": "npm run build:css -- --watch",
+    "watch:js": "npm run build:js -- --watch",
+    "watch": "npm run build && echo 'Watching for changes...' && npm-run-all --parallel watch:*",
+    "lint:js": "eslint assets/js/**/*.js --ignore-pattern '*.min.js' --ignore-pattern 'dist/**'",
+    "lint:js:fix": "eslint assets/js/**/*.js --fix --ignore-pattern '*.min.js' --ignore-pattern 'dist/**'",
+    "clean": "node scripts/clean.js",
+    "prebuild": "npm run clean"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.3",
+    "eslint": "^8.57.0",
+    "glob": "^10.3.10",
+    "npm-run-all": "^4.1.5",
+    "terser": "^5.27.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

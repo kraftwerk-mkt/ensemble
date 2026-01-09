@@ -1,0 +1,391 @@
+/**
+ * Ensemble Settings - Dark Theme
+ * Uses existing Ensemble theme variables
+ * 
+ * @package Ensemble
+ */
+
+/* ============================================
+   SETTINGS PAGE DARK THEME
+   ============================================ */
+
+.es-settings-wrap {
+    background: var(--es-background);
+    min-height: 100vh;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 20px;
+}
+
+/* Page Title */
+.es-settings-wrap h1 {
+    color: var(--es-text);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* Tab Navigation */
+.es-settings-wrap .nav-tab-wrapper {
+    margin-bottom: 30px;
+    background: transparent;
+}
+
+.es-settings-wrap .nav-tab {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    color: var(--es-text-secondary);
+    font-weight: 500;
+    padding: 12px 20px;
+    margin-right: 8px;
+    border-bottom: none;
+    transition: all 0.2s ease;
+}
+
+.es-settings-wrap .nav-tab:hover {
+    background: var(--es-surface-hover);
+    color: var(--es-text);
+}
+
+.es-settings-wrap .nav-tab-active {
+    background: var(--es-primary);
+    color: white;
+    border-color: var(--es-primary);
+}
+
+.es-settings-wrap .nav-tab-active:hover {
+    background: var(--es-primary-hover);
+}
+
+/* Form Tables */
+.es-settings-wrap .form-table {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.es-settings-wrap .form-table th {
+    color: var(--es-text);
+    font-weight: 600;
+    padding: 15px;
+    width: 250px;
+}
+
+.es-settings-wrap .form-table td {
+    color: var(--es-text-secondary);
+    padding: 15px;
+}
+
+/* Section Headings */
+.es-settings-wrap h2 {
+    color: var(--es-text);
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.es-settings-wrap form > h2:first-of-type {
+    margin-top: 0;
+}
+
+/* Form Inputs */
+.es-settings-wrap select,
+.es-settings-wrap input[type="text"],
+.es-settings-wrap textarea {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    color: var(--es-text);
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.es-settings-wrap select:focus,
+.es-settings-wrap input[type="text"]:focus,
+.es-settings-wrap textarea:focus {
+    border-color: var(--es-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(53, 130, 196, 0.1);
+}
+
+.es-settings-wrap select:hover,
+.es-settings-wrap input[type="text"]:hover,
+.es-settings-wrap textarea:hover {
+    border-color: var(--es-primary);
+}
+
+/* Description Text */
+.es-settings-wrap .description {
+    color: var(--es-text-secondary);
+    font-size: 13px;
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+/* Buttons */
+.es-settings-wrap .button {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    color: var(--es-text);
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-settings-wrap .button:hover {
+    background: var(--es-surface-hover);
+    border-color: var(--es-primary);
+    color: white;
+}
+
+.es-settings-wrap .button-primary {
+    background: var(--es-primary);
+    border-color: var(--es-primary);
+    color: white;
+}
+
+.es-settings-wrap .button-primary:hover {
+    background: var(--es-primary-hover);
+    border-color: var(--es-primary-hover);
+}
+
+/* Submit Button Container */
+.es-settings-wrap .submit {
+    padding: 0;
+    margin-top: 25px;
+}
+
+/* Status Indicators */
+.es-status-ok {
+    color: var(--es-success);
+    font-weight: 600;
+}
+
+.es-status-warning {
+    color: var(--es-warning);
+    font-weight: 600;
+}
+
+/* Notices */
+.es-settings-wrap .notice {
+    background: var(--es-surface);
+    border-left: 4px solid var(--es-primary);
+    color: var(--es-text);
+    padding: 12px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.es-settings-wrap .notice-success {
+    border-left-color: var(--es-success);
+}
+
+.es-settings-wrap .notice-warning {
+    border-left-color: var(--es-warning);
+    background: rgba(240, 184, 73, 0.1);
+}
+
+.es-settings-wrap .notice-info {
+    border-left-color: var(--es-primary);
+    background: rgba(53, 130, 196, 0.1);
+}
+
+.es-settings-wrap .notice p {
+    margin: 0.5em 0;
+    color: var(--es-text);
+}
+
+/* Wizard Steps Config */
+.es-wizard-steps-config {
+    margin-top: 20px;
+}
+
+.es-wizard-config-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.es-category-config-card {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.es-category-config-card:hover {
+    border-color: var(--es-primary);
+    box-shadow: 0 4px 12px rgba(53, 130, 196, 0.1);
+}
+
+.es-category-title {
+    color: var(--es-text);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--es-border);
+}
+
+/* Pills */
+.es-settings-wrap .es-field-groups-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Wizard Step Pills - like Artist Pills */
+.es-settings-wrap .es-pill.es-sortable-pill {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    user-select: none;
+    background: var(--es-surface-secondary, #27272a);
+    border: 2px solid var(--es-border, #3f3f46);
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    padding: 8px 4px 8px 12px;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill:hover {
+    border-color: var(--es-primary);
+    background: var(--es-surface-hover, #3f3f46);
+}
+
+/* Hide checkbox */
+.es-settings-wrap .es-pill.es-sortable-pill input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Drag Handle */
+.es-settings-wrap .es-pill.es-sortable-pill .es-drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--es-text-secondary);
+    opacity: 0.4;
+    transition: all 0.2s;
+    cursor: grab;
+    padding: 0 4px;
+    flex-shrink: 0;
+    z-index: 10;
+    position: relative;
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill .es-drag-handle:active {
+    cursor: grabbing;
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill:hover .es-drag-handle {
+    opacity: 0.8;
+}
+
+/* Label Text */
+.es-settings-wrap .es-pill.es-sortable-pill > span:last-child {
+    display: inline-block;
+    padding: 0 12px 0 4px;
+    color: var(--es-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    flex: 1;
+}
+
+/* Checked/Selected State */
+.es-settings-wrap .es-pill.es-sortable-pill:has(input:checked),
+.es-settings-wrap .es-pill.es-sortable-pill.checked {
+    background: var(--es-primary);
+    border-color: var(--es-primary);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill:has(input:checked) > span:last-child,
+.es-settings-wrap .es-pill.es-sortable-pill.checked > span:last-child {
+    color: #fff;
+    padding-left: 8px;
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill:has(input:checked) > span:last-child::before,
+.es-settings-wrap .es-pill.es-sortable-pill.checked > span:last-child::before {
+    content: "✓ ";
+    margin-right: 4px;
+    font-weight: bold;
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill:has(input:checked) .es-drag-handle,
+.es-settings-wrap .es-pill.es-sortable-pill.checked .es-drag-handle {
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0.6;
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill:has(input:checked):hover .es-drag-handle,
+.es-settings-wrap .es-pill.es-sortable-pill.checked:hover .es-drag-handle {
+    opacity: 1;
+}
+
+/* Sortable States */
+.es-settings-wrap .es-pill.es-sortable-pill.ui-sortable-helper {
+    opacity: 0.9;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.es-settings-wrap .es-pill.es-sortable-pill.ui-sortable-placeholder {
+    visibility: visible !important;
+    background: var(--es-surface-hover);
+    border: 2px dashed var(--es-border);
+}
+
+/* Links */
+.es-settings-wrap a {
+    color: var(--es-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.es-settings-wrap a:hover {
+    color: var(--es-primary-hover);
+    text-decoration: underline;
+}
+
+/* Override WordPress defaults */
+.es-settings-wrap .wrap {
+    background: transparent;
+}
+
+.es-settings-wrap table.form-table {
+    margin-top: 0;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .es-wizard-config-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-settings-wrap .form-table th,
+    .es-settings-wrap .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px;
+    }
+    
+    .es-settings-wrap .form-table th {
+        padding-bottom: 5px;
+    }
+}

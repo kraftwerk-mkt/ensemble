@@ -1,0 +1,713 @@
+/* ============================================
+   ENSEMBLE IMPORT TAB STYLES
+   Dark Theme - Matches Ensemble Design System
+   ============================================ */
+
+/* Use Ensemble CSS variables */
+:root {
+    --es-primary: #3582c4;
+    --es-primary-hover: #2271b1;
+    --es-background: #1e1e1e;
+    --es-surface: #2c2c2c;
+    --es-surface-secondary: #383838;
+    --es-surface-hover: #404040;
+    --es-text: #e0e0e0;
+    --es-text-secondary: #a0a0a0;
+    --es-border: #404040;
+    --es-danger: #f66;
+    --es-danger-hover: #d44;
+    --es-success: #4caf50;
+    --es-warning: #f0b849;
+}
+
+.es-import-tab {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.es-import-header {
+    margin-bottom: 32px;
+}
+
+.es-import-header h2 {
+    color: var(--es-text);
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.es-import-header p {
+    color: var(--es-text-secondary);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Source Selection */
+.es-import-source {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.es-source-toggle {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.es-btn--toggle {
+    flex: 1;
+    padding: 12px 24px;
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    color: var(--es-text-secondary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.es-btn--toggle:hover:not(:disabled) {
+    background: var(--es-surface-hover);
+    border-color: #505050;
+}
+
+.es-btn--toggle.es-btn--active {
+    background: var(--es-primary);
+    border-color: var(--es-primary);
+    color: #ffffff;
+}
+
+.es-btn--toggle:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Input Groups */
+.es-input-group {
+    margin-bottom: 20px;
+}
+
+.es-input-group label {
+    display: block;
+    color: var(--es-text);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.es-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: 6px;
+    color: var(--es-text);
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.es-input:focus {
+    outline: none;
+    border-color: var(--es-primary);
+    background: var(--es-surface-hover);
+}
+
+.es-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.es-input-group small {
+    display: block;
+    color: var(--es-text-secondary);
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+/* File Upload */
+.es-file-upload {
+    position: relative;
+}
+
+.es-file-upload input[type="file"] {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--es-surface-secondary);
+    border: 2px dashed var(--es-border);
+    border-radius: 6px;
+    color: var(--es-text);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-file-upload input[type="file"]:hover:not(:disabled) {
+    border-color: var(--es-primary);
+    background: var(--es-surface-hover);
+}
+
+.es-file-name {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: 4px;
+    color: var(--es-text);
+    font-size: 13px;
+}
+
+/* Import Actions */
+.es-import-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.es-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-btn--primary {
+    background: var(--es-primary);
+    color: #ffffff;
+}
+
+.es-btn--primary:hover:not(:disabled) {
+    background: var(--es-primary-hover);
+}
+
+.es-btn--secondary {
+    background: var(--es-surface-secondary);
+    color: var(--es-text);
+    border: 1px solid var(--es-border);
+}
+
+.es-btn--secondary:hover:not(:disabled) {
+    background: var(--es-surface-hover);
+}
+
+.es-btn--large {
+    padding: 12px 24px;
+    font-size: 15px;
+}
+
+.es-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Alerts */
+.es-alert {
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+}
+
+.es-alert--error {
+    background: rgba(255, 102, 102, 0.1);
+    border: 1px solid var(--es-danger);
+    color: var(--es-danger);
+}
+
+.es-alert--success {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid var(--es-success);
+    color: var(--es-success);
+}
+
+.es-alert h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.es-alert strong {
+    font-weight: 600;
+}
+
+/* Import Stats */
+.es-import-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+}
+
+.es-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.es-stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--es-success);
+}
+
+.es-stat--error .es-stat-value {
+    color: var(--es-danger);
+}
+
+.es-stat-label {
+    font-size: 12px;
+    color: var(--es-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.es-import-errors {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--es-danger);
+}
+
+.es-import-errors h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--es-danger);
+}
+
+.es-import-errors ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.es-import-errors li {
+    color: var(--es-danger);
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+/* Preview Section */
+.es-preview-section {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.es-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.es-preview-header h3 {
+    color: var(--es-text);
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Preview Table */
+.es-preview-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid var(--es-border);
+    border-radius: 6px;
+}
+
+.es-preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.es-preview-table thead {
+    background: var(--es-surface-secondary);
+}
+
+.es-preview-table th {
+    padding: 12px 16px;
+    text-align: left;
+    color: var(--es-text-secondary);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--es-border);
+}
+
+.es-preview-table tbody tr {
+    border-bottom: 1px solid var(--es-surface-secondary);
+    transition: background 0.15s;
+}
+
+.es-preview-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.es-preview-table td {
+    padding: 12px 16px;
+    color: var(--es-text);
+}
+
+.es-preview-table td strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.es-event-desc {
+    color: var(--es-text-secondary);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.es-event-date {
+    line-height: 1.4;
+}
+
+.es-event-date small {
+    color: var(--es-text-secondary);
+}
+
+.es-location-raw {
+    margin-top: 4px;
+}
+
+.es-location-raw small {
+    color: var(--es-text-secondary);
+}
+
+/* Badges - Match Ensemble style */
+.es-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.es-badge--success {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--es-success);
+    border: 1px solid var(--es-success);
+}
+
+.es-badge--warning {
+    background: rgba(240, 184, 73, 0.1);
+    color: var(--es-warning);
+    border: 1px solid var(--es-warning);
+}
+
+.es-badge--error {
+    background: rgba(255, 102, 102, 0.1);
+    color: var(--es-danger);
+    border: 1px solid var(--es-danger);
+}
+
+.es-badge--gray {
+    background: var(--es-surface-secondary);
+    color: var(--es-text-secondary);
+    border: 1px solid var(--es-border);
+}
+
+.es-badge--purple {
+    background: rgba(167, 139, 250, 0.1);
+    color: #a78bfa;
+    border: 1px solid #a78bfa;
+}
+
+/**
+ * Import Update Mode Styles
+ * Additional styles for the Update Existing Events feature
+ */
+
+/* Update Mode Section */
+.es-update-mode-section {
+    background: var(--es-bg-secondary, #2a2a3a);
+    border: 1px solid var(--es-border, #3a3a4a);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.es-update-mode-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.es-update-mode-section p {
+    margin: 0 0 15px 0;
+    color: var(--es-text-secondary, #a0a0b0);
+}
+
+/* Update Mode Options */
+.es-update-mode-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.es-update-mode-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px;
+    background: var(--es-bg-tertiary, #1a1a2a);
+    border: 2px solid var(--es-border, #3a3a4a);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-update-mode-option:hover {
+    border-color: var(--es-primary, #6366f1);
+    background: var(--es-bg-hover, #2a2a3a);
+}
+
+.es-update-mode-option--active {
+    border-color: var(--es-primary, #6366f1);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.es-update-mode-option input[type="radio"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.es-update-mode-content {
+    flex: 1;
+}
+
+.es-update-mode-content strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+    color: var(--es-text-primary, #ffffff);
+}
+
+.es-update-mode-content p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--es-text-secondary, #a0a0b0);
+}
+
+.es-update-mode-content small {
+    display: block;
+    font-size: 12px;
+    color: var(--es-text-muted, #707080);
+    font-weight: 500;
+}
+
+/* Existing Status Badge */
+.es-badge--info {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+/* Event Exists Row Highlight */
+.es-event-exists {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* Event UID Display */
+.es-event-uid {
+    margin-top: 4px;
+}
+
+.es-event-uid small {
+    color: var(--es-text-muted, #707080);
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 11px;
+}
+
+/* Import Stats Enhancement */
+.es-stat--info {
+    border-left: 3px solid #3b82f6;
+}
+
+.es-stat--info .es-stat-value {
+    color: #60a5fa;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .es-update-mode-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-update-mode-option {
+        padding: 12px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .es-import-tab {
+        padding: 16px;
+    }
+
+    .es-source-toggle {
+        flex-direction: column;
+    }
+
+    .es-import-actions {
+        flex-direction: column;
+    }
+
+    .es-preview-header {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .es-preview-header .es-btn {
+        width: 100%;
+    }
+
+    .es-import-stats {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+}
+
+/**
+ * Import Update Mode Styles
+ * Additional styles for the Update Existing Events feature
+ */
+
+/* Update Mode Section */
+.es-update-mode-section {
+    background: var(--es-bg-secondary, #2a2a3a);
+    border: 1px solid var(--es-border, #3a3a4a);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.es-update-mode-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.es-update-mode-section p {
+    margin: 0 0 15px 0;
+    color: var(--es-text-secondary, #a0a0b0);
+}
+
+/* Update Mode Options */
+.es-update-mode-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.es-update-mode-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 15px;
+    background: var(--es-bg-tertiary, #1a1a2a);
+    border: 2px solid var(--es-border, #3a3a4a);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-update-mode-option:hover {
+    border-color: var(--es-primary, #6366f1);
+    background: var(--es-bg-hover, #2a2a3a);
+}
+
+.es-update-mode-option--active {
+    border-color: var(--es-primary, #6366f1);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.es-update-mode-option input[type="radio"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.es-update-mode-content {
+    flex: 1;
+}
+
+.es-update-mode-content strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+    color: var(--es-text-primary, #ffffff);
+}
+
+.es-update-mode-content p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: var(--es-text-secondary, #a0a0b0);
+}
+
+.es-update-mode-content small {
+    display: block;
+    font-size: 12px;
+    color: var(--es-text-muted, #707080);
+    font-weight: 500;
+}
+
+/* Existing Status Badge */
+.es-badge--info {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+/* Event Exists Row Highlight */
+.es-event-exists {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* Event UID Display */
+.es-event-uid {
+    margin-top: 4px;
+}
+
+.es-event-uid small {
+    color: var(--es-text-muted, #707080);
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 11px;
+}
+
+/* Import Stats Enhancement */
+.es-stat--info {
+    border-left: 3px solid #3b82f6;
+}
+
+.es-stat--info .es-stat-value {
+    color: #60a5fa;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .es-update-mode-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-update-mode-option {
+        padding: 12px;
+    }
+}

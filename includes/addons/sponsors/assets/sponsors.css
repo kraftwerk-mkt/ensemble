@@ -1,0 +1,426 @@
+/**
+ * Ensemble Sponsors Styles
+ * 
+ * Uses existing Designer CSS variables only
+ * NO new variables - single source of truth
+ *
+ * @package Ensemble
+ * @subpackage Addons/Sponsors
+ * @version 1.0.0
+ */
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+.es-sponsors {
+    margin: var(--ensemble-section-spacing, 40px) 0;
+}
+
+.es-sponsors__title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1a1a1a);
+    text-align: center;
+    margin: 0 0 24px;
+}
+
+/* Sponsor item base */
+.es-sponsors__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-sponsor-link {
+    display: block;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.es-sponsor-link:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.es-sponsor-logo {
+    width: auto;
+    max-width: 100%;
+    height: var(--es-sponsor-height, 60px);
+    object-fit: contain;
+    transition: filter 0.3s ease;
+}
+
+.es-sponsor-name {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: 600;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+/* Grayscale effect */
+.es-sponsors--grayscale .es-sponsor-logo {
+    filter: grayscale(100%);
+}
+
+.es-sponsors--grayscale-hover .es-sponsor-logo:hover {
+    filter: grayscale(0%);
+}
+
+/* ============================================
+   CAROUSEL STYLE
+   ============================================ */
+
+.es-sponsors--carousel {
+    position: relative;
+}
+
+.es-sponsors__carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.es-sponsors__track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.es-sponsors__slide {
+    flex: 0 0 auto;
+    padding: 0 var(--ensemble-grid-gap, 24px);
+}
+
+/* Navigation arrows */
+.es-sponsors__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e8e8e8);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--ensemble-text, #1a1a1a);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.es-sponsors__nav:hover {
+    background: var(--ensemble-primary, #0066cc);
+    border-color: var(--ensemble-primary, #0066cc);
+    color: #ffffff;
+}
+
+.es-sponsors__nav--prev {
+    left: 0;
+}
+
+.es-sponsors__nav--next {
+    right: 0;
+}
+
+/* Hide arrows on mobile */
+@media (max-width: 768px) {
+    .es-sponsors__nav {
+        display: none;
+    }
+    
+    .es-sponsors__track {
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .es-sponsors__slide {
+        scroll-snap-align: center;
+    }
+}
+
+/* ============================================
+   GRID STYLE
+   ============================================ */
+
+.es-sponsors--grid .es-sponsors__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--es-sponsor-columns, 4), 1fr);
+    gap: var(--ensemble-grid-gap, 24px);
+    align-items: center;
+}
+
+@media (max-width: 1024px) {
+    .es-sponsors--grid .es-sponsors__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .es-sponsors--grid .es-sponsors__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ============================================
+   BAR STYLE
+   ============================================ */
+
+.es-sponsors--bar .es-sponsors__bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--ensemble-grid-gap, 24px);
+    padding: 20px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e8e8e8);
+    border-radius: var(--ensemble-card-radius, 8px);
+}
+
+/* ============================================
+   MARQUEE STYLE
+   ============================================ */
+
+.es-sponsors--marquee {
+    overflow: hidden;
+}
+
+.es-sponsors__marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 10%,
+        black 90%,
+        transparent
+    );
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 10%,
+        black 90%,
+        transparent
+    );
+}
+
+.es-sponsors__marquee-track {
+    display: flex;
+    width: fit-content;
+    animation: es-sponsors-marquee 30s linear infinite;
+}
+
+.es-sponsors__marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.es-sponsors--marquee .es-sponsors__item {
+    flex: 0 0 auto;
+    padding: 0 calc(var(--ensemble-grid-gap, 24px) * 1.5);
+}
+
+@keyframes es-sponsors-marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* ============================================
+   FOOTER WRAPPER
+   ============================================ */
+
+.es-sponsors-footer-wrapper {
+    background: var(--ensemble-card-bg, #f9f9f9);
+    border-top: 1px solid var(--ensemble-card-border, #e8e8e8);
+    padding: 30px 0;
+}
+
+.es-sponsors-footer-wrapper .es-sponsors {
+    max-width: var(--ensemble-container-width, 1200px);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.es-sponsors-footer-wrapper .es-sponsors__title {
+    font-size: var(--ensemble-small-size, 14px);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ensemble-text-secondary, #666666);
+    margin-bottom: 16px;
+}
+
+/* ============================================
+   SINGLE SPONSOR
+   ============================================ */
+
+.es-sponsor-single {
+    display: inline-block;
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+.es-mode-dark .es-sponsors__title {
+    color: var(--ensemble-text, #f5f5f5);
+}
+
+.es-mode-dark .es-sponsor-name {
+    color: var(--ensemble-text, #f5f5f5);
+}
+
+.es-mode-dark .es-sponsors--bar .es-sponsors__bar {
+    background: var(--ensemble-card-bg, #1a1a1a);
+    border-color: var(--ensemble-card-border, #333333);
+}
+
+.es-mode-dark .es-sponsors__nav {
+    background: var(--ensemble-card-bg, #1a1a1a);
+    border-color: var(--ensemble-card-border, #333333);
+    color: var(--ensemble-text, #f5f5f5);
+}
+
+.es-mode-dark .es-sponsors-footer-wrapper {
+    background: var(--ensemble-card-bg, #111111);
+    border-color: var(--ensemble-card-border, #333333);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .es-sponsors {
+        margin: calc(var(--ensemble-section-spacing, 40px) * 0.6) 0;
+    }
+    
+    .es-sponsors__title {
+        font-size: calc(var(--ensemble-h3-size, 24px) * 0.85);
+    }
+    
+    /* Use mobile height */
+    .es-sponsor-logo {
+        height: calc(var(--es-sponsor-height, 60px) * 0.7);
+    }
+}
+
+/* ============================================
+   MAIN SPONSOR
+   ============================================ */
+
+.es-main-sponsor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-main-sponsor--header {
+    flex-direction: row;
+    align-items: center;
+}
+
+.es-main-sponsor--sidebar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e8e8e8);
+    border-radius: var(--ensemble-card-radius, 8px);
+}
+
+.es-main-sponsor__caption {
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ensemble-text-secondary, #666666);
+    white-space: nowrap;
+    opacity: 0.7;
+}
+
+.es-main-sponsor--sidebar .es-main-sponsor__caption {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.es-main-sponsor__logo {
+    line-height: 0;
+}
+
+.es-main-sponsor__logo a {
+    display: block;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.es-main-sponsor__logo a:hover {
+    opacity: 0.8;
+}
+
+.es-main-sponsor__logo img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.es-main-sponsor__name {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-body-size, 14px);
+    font-weight: 600;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+/* Dark mode */
+.es-mode-dark .es-main-sponsor--sidebar {
+    background: var(--ensemble-card-bg, #1a1a1a);
+    border-color: var(--ensemble-card-border, #333333);
+}
+
+.es-mode-dark .es-main-sponsor__caption {
+    color: var(--ensemble-text-secondary, #999999);
+}
+
+.es-mode-dark .es-main-sponsor__name {
+    color: var(--ensemble-text, #f5f5f5);
+}
+
+/* Header integration styles */
+.et-header .es-main-sponsor {
+    margin-left: auto;
+    padding-left: 16px;
+}
+
+.et-header--split .es-main-sponsor {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    /* Main Sponsor in Header - kompakter auf Mobile */
+    .es-main-sponsor--header {
+        gap: 4px;
+    }
+    
+    .es-main-sponsor--header .es-main-sponsor__caption {
+        font-size: 8px;
+        letter-spacing: 0.03em;
+    }
+    
+    .es-main-sponsor--header .es-main-sponsor__logo img {
+        height: 24px !important; /* Kleiner auf Mobile */
+    }
+    
+    .es-main-sponsor--sidebar {
+        padding: 12px;
+    }
+    
+    .es-main-sponsor--sidebar .es-main-sponsor__caption {
+        font-size: 10px;
+    }
+}

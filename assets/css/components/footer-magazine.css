@@ -1,0 +1,230 @@
+/**
+ * Footer Style - Magazine
+ * Editorial: Large, informative, newsletter
+ */
+
+.et-footer--magazine {
+    background: var(--ensemble-text, #1a1a1a);
+    color: #ffffff;
+}
+
+/* Newsletter Section */
+.et-footer--magazine .et-footer__newsletter {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    padding: 3rem 0;
+}
+
+.et-footer--magazine .et-footer__newsletter-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.et-footer--magazine .et-footer__newsletter-content {
+    flex: 1;
+    min-width: 280px;
+}
+
+.et-footer--magazine .et-footer__newsletter-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+}
+
+.et-footer--magazine .et-footer__newsletter-text {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.et-footer--magazine .et-footer__newsletter-form {
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+}
+
+.et-footer--magazine .et-newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.et-footer--magazine .et-newsletter-form input[type="email"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.et-footer--magazine .et-newsletter-form button {
+    padding: 0.75rem 1.5rem;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--et-transition-fast);
+}
+
+.et-footer--magazine .et-newsletter-form button:hover {
+    background: #333333;
+}
+
+/* Main Footer */
+.et-footer--magazine .et-footer__main {
+    padding: 4rem 0;
+}
+
+.et-footer--magazine .et-footer__main-grid {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: 3rem;
+}
+
+/* Brand Column */
+.et-footer--magazine .et-footer__brand-col .et-footer__logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.et-footer--magazine .et-footer__brand-col .et-logo--large {
+    max-height: 50px;
+    filter: brightness(0) invert(1);
+}
+
+.et-footer--magazine .et-footer__brand-col .et-site-title {
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.et-footer--magazine .et-footer__tagline {
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 1.5rem;
+}
+
+.et-footer--magazine .et-footer__brand-col .et-footer__social .et-social-links {
+    display: flex;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-footer--magazine .et-footer__brand-col .et-footer__social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    color: #ffffff;
+    transition: background var(--et-transition-fast);
+}
+
+.et-footer--magazine .et-footer__brand-col .et-footer__social a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Widget Columns */
+.et-footer--magazine .et-footer-widget-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.et-footer--magazine .et-footer-widget ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-footer--magazine .et-footer-widget li {
+    margin-bottom: 0.75rem;
+}
+
+.et-footer--magazine .et-footer-widget a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color var(--et-transition-fast);
+}
+
+.et-footer--magazine .et-footer-widget a:hover {
+    color: #ffffff;
+}
+
+/* Bottom Bar */
+.et-footer--magazine .et-footer__bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 1.5rem 0;
+}
+
+.et-footer--magazine .et-footer__bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.et-footer--magazine .et-footer__copyright {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+}
+
+.et-footer--magazine .et-footer__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-footer--magazine .et-footer__nav-list a {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.et-footer--magazine .et-footer__nav-list a:hover {
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .et-footer--magazine .et-footer__main-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .et-footer--magazine .et-footer__newsletter-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .et-footer--magazine .et-footer__newsletter-form {
+        max-width: 100%;
+    }
+    
+    .et-footer--magazine .et-newsletter-form {
+        flex-direction: column;
+    }
+    
+    .et-footer--magazine .et-footer__main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .et-footer--magazine .et-footer__bottom-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+}

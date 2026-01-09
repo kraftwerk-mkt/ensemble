@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<ruleset name="Ensemble">
+	<description>Ensemble Plugin - WordPress Coding Standards</description>
+
+	<!-- Zu prüfende Dateien/Ordner -->
+	<file>./ensemble.php</file>
+	<file>./includes</file>
+	<file>./admin</file>
+
+	<!-- Ausgeschlossene Ordner -->
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/assets/css/dist/*</exclude-pattern>
+	<exclude-pattern>*/assets/js/dist/*</exclude-pattern>
+	<exclude-pattern>*.min.js</exclude-pattern>
+	<exclude-pattern>*.min.css</exclude-pattern>
+
+	<!-- Argumente -->
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/> <!-- Show sniff codes and progress -->
+
+	<!-- WordPress Coding Standards -->
+	<rule ref="WordPress">
+		<!-- Dateinamen wie class-es-*.php sind OK -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+	</rule>
+
+	<!-- WordPress Extra Rules -->
+	<rule ref="WordPress-Extra"/>
+
+	<!-- WordPress Docs - Warnungen statt Fehler für fehlende Docs -->
+	<rule ref="WordPress-Docs">
+		<type>warning</type>
+	</rule>
+
+	<!-- PHP Kompatibilität -->
+	<rule ref="PHPCompatibilityWP"/>
+	<config name="testVersion" value="7.4-"/>
+
+	<!-- Textdomain für Übersetzungen -->
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="ensemble"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Erlaubte Prefixes für Hooks und Funktionen -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="ensemble"/>
+				<element value="es_"/>
+				<element value="ES_"/>
+				<element value="ENSEMBLE_"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Minimum WordPress Version -->
+	<config name="minimum_wp_version" value="5.8"/>
+
+</ruleset>

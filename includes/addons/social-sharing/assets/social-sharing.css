@@ -1,0 +1,518 @@
+/**
+ * Social Sharing Addon - Styles
+ * 
+ * Uses Ensemble CSS Variables for consistent theming
+ * Supports multiple color styles: brand, theme, outline, subtle
+ * 
+ * @package Ensemble
+ * @subpackage Addons/SocialSharing
+ * @version 1.1.0
+ * @updated Color Style Options
+ */
+
+/* ==========================================================================
+   Section Container
+   ========================================================================== */
+
+.es-social-sharing-section {
+    margin-top: var(--ensemble-section-spacing, 2rem);
+    padding-top: var(--ensemble-card-padding, 1.5rem);
+    border-top: 1px solid var(--ensemble-card-border, rgba(255,255,255,0.1));
+}
+
+.es-social-sharing-section .es-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 1.1rem);
+    font-weight: var(--ensemble-heading-weight, 600);
+    margin-bottom: 1rem;
+    color: var(--ensemble-text, #fff);
+}
+
+.es-social-sharing-section .es-section-title .dashicons {
+    font-size: 1.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    opacity: 0.7;
+}
+
+/* ==========================================================================
+   Share Buttons Container
+   ========================================================================== */
+
+.es-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ensemble-card-gap, 0.75rem);
+    align-items: center;
+}
+
+/* ==========================================================================
+   Share Button Base
+   ========================================================================== */
+
+.es-share-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: var(--ensemble-button-padding-v, 0.625rem) var(--ensemble-button-padding-h, 1rem);
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: var(--ensemble-small-size, 0.9rem);
+    font-weight: var(--ensemble-button-weight, 500);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+}
+
+.es-share-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.es-share-button:active {
+    transform: translateY(0);
+}
+
+/* Icon */
+.es-share-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+.es-share-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Label */
+.es-share-label {
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   Icon Shape Styles
+   ========================================================================== */
+
+/* Rounded (default) */
+.es-share-icons-rounded .es-share-button {
+    border-radius: var(--ensemble-button-radius, 8px);
+}
+
+/* Square */
+.es-share-icons-square .es-share-button {
+    border-radius: calc(var(--ensemble-button-radius, 8px) / 2);
+}
+
+/* Circle */
+.es-share-icons-circle .es-share-button {
+    border-radius: 50%;
+    padding: 0.75rem;
+}
+
+.es-share-icons-circle .es-share-label {
+    display: none;
+}
+
+/* ==========================================================================
+   Display Styles
+   ========================================================================== */
+
+/* Icons only */
+.es-share-style-icons .es-share-button {
+    padding: 0.75rem;
+}
+
+.es-share-style-icons .es-share-label {
+    display: none;
+}
+
+/* Text only */
+.es-share-style-text .es-share-icon {
+    display: none;
+}
+
+/* ==========================================================================
+   COLOR STYLE: BRAND (Original Platform Colors)
+   ========================================================================== */
+
+.es-share-colors-brand .es-share-facebook {
+    background: #1877f2;
+}
+.es-share-colors-brand .es-share-facebook:hover {
+    background: #0d65d9;
+    color: #fff;
+}
+
+.es-share-colors-brand .es-share-twitter {
+    background: #000;
+}
+.es-share-colors-brand .es-share-twitter:hover {
+    background: #333;
+    color: #fff;
+}
+
+.es-share-colors-brand .es-share-whatsapp {
+    background: #25d366;
+}
+.es-share-colors-brand .es-share-whatsapp:hover {
+    background: #1da851;
+    color: #fff;
+}
+
+.es-share-colors-brand .es-share-telegram {
+    background: #0088cc;
+}
+.es-share-colors-brand .es-share-telegram:hover {
+    background: #006699;
+    color: #fff;
+}
+
+.es-share-colors-brand .es-share-linkedin {
+    background: #0a66c2;
+}
+.es-share-colors-brand .es-share-linkedin:hover {
+    background: #004182;
+    color: #fff;
+}
+
+.es-share-colors-brand .es-share-email {
+    background: #ea4335;
+}
+.es-share-colors-brand .es-share-email:hover {
+    background: #c5221f;
+    color: #fff;
+}
+
+.es-share-colors-brand .es-share-copy {
+    background: var(--ensemble-muted-bg, rgba(255,255,255,0.15));
+    color: var(--ensemble-text, #fff);
+}
+.es-share-colors-brand .es-share-copy:hover {
+    background: var(--ensemble-hover, rgba(255,255,255,0.25));
+}
+
+.es-share-colors-brand .es-share-native {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+.es-share-colors-brand .es-share-native:hover {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
+    color: #fff;
+}
+
+/* ==========================================================================
+   COLOR STYLE: THEME (Ensemble Designer Colors)
+   ========================================================================== */
+
+.es-share-colors-theme .es-share-button {
+    background: var(--ensemble-primary, #3b82f6);
+    color: var(--ensemble-button-text, #fff);
+}
+
+.es-share-colors-theme .es-share-button:hover {
+    background: var(--ensemble-button-hover-bg, #2563eb);
+    color: var(--ensemble-button-hover-text, #fff);
+}
+
+/* Alternating colors for visual variety */
+.es-share-colors-theme .es-share-twitter,
+.es-share-colors-theme .es-share-telegram,
+.es-share-colors-theme .es-share-email {
+    background: var(--ensemble-secondary, #6366f1);
+}
+
+.es-share-colors-theme .es-share-twitter:hover,
+.es-share-colors-theme .es-share-telegram:hover,
+.es-share-colors-theme .es-share-email:hover {
+    background: var(--ensemble-primary, #3b82f6);
+}
+
+.es-share-colors-theme .es-share-copy {
+    background: var(--ensemble-muted-bg, rgba(255,255,255,0.1));
+    color: var(--ensemble-text, #fff);
+}
+
+.es-share-colors-theme .es-share-copy:hover {
+    background: var(--ensemble-hover, rgba(255,255,255,0.2));
+}
+
+.es-share-colors-theme .es-share-native {
+    background: linear-gradient(135deg, var(--ensemble-primary, #667eea) 0%, var(--ensemble-secondary, #764ba2) 100%);
+}
+
+/* ==========================================================================
+   COLOR STYLE: OUTLINE (Minimalist Border Style)
+   ========================================================================== */
+
+.es-share-colors-outline .es-share-button {
+    background: transparent;
+    border: 2px solid var(--ensemble-card-border, rgba(255,255,255,0.2));
+    color: var(--ensemble-text, #fff);
+}
+
+.es-share-colors-outline .es-share-button:hover {
+    border-color: var(--ensemble-primary, #3b82f6);
+    color: var(--ensemble-primary, #3b82f6);
+    background: transparent;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Platform-specific hover colors for outline */
+.es-share-colors-outline .es-share-facebook:hover {
+    border-color: #1877f2;
+    color: #1877f2;
+}
+
+.es-share-colors-outline .es-share-twitter:hover {
+    border-color: #000;
+    color: #000;
+}
+
+.es-share-colors-outline .es-share-whatsapp:hover {
+    border-color: #25d366;
+    color: #25d366;
+}
+
+.es-share-colors-outline .es-share-telegram:hover {
+    border-color: #0088cc;
+    color: #0088cc;
+}
+
+.es-share-colors-outline .es-share-linkedin:hover {
+    border-color: #0a66c2;
+    color: #0a66c2;
+}
+
+.es-share-colors-outline .es-share-email:hover {
+    border-color: #ea4335;
+    color: #ea4335;
+}
+
+.es-share-colors-outline .es-share-copy:hover {
+    border-color: var(--ensemble-primary, #3b82f6);
+    color: var(--ensemble-primary, #3b82f6);
+}
+
+.es-share-colors-outline .es-share-native:hover {
+    border-color: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-secondary, #764ba2);
+}
+
+/* ==========================================================================
+   COLOR STYLE: SUBTLE (Muted/Pastel Colors)
+   ========================================================================== */
+
+.es-share-colors-subtle .es-share-facebook {
+    background: rgba(24, 119, 242, 0.15);
+    color: #1877f2;
+}
+.es-share-colors-subtle .es-share-facebook:hover {
+    background: rgba(24, 119, 242, 0.25);
+}
+
+.es-share-colors-subtle .es-share-twitter {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--ensemble-text, #333);
+}
+.es-share-colors-subtle .es-share-twitter:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.es-share-colors-subtle .es-share-whatsapp {
+    background: rgba(37, 211, 102, 0.15);
+    color: #25d366;
+}
+.es-share-colors-subtle .es-share-whatsapp:hover {
+    background: rgba(37, 211, 102, 0.25);
+}
+
+.es-share-colors-subtle .es-share-telegram {
+    background: rgba(0, 136, 204, 0.15);
+    color: #0088cc;
+}
+.es-share-colors-subtle .es-share-telegram:hover {
+    background: rgba(0, 136, 204, 0.25);
+}
+
+.es-share-colors-subtle .es-share-linkedin {
+    background: rgba(10, 102, 194, 0.15);
+    color: #0a66c2;
+}
+.es-share-colors-subtle .es-share-linkedin:hover {
+    background: rgba(10, 102, 194, 0.25);
+}
+
+.es-share-colors-subtle .es-share-email {
+    background: rgba(234, 67, 53, 0.15);
+    color: #ea4335;
+}
+.es-share-colors-subtle .es-share-email:hover {
+    background: rgba(234, 67, 53, 0.25);
+}
+
+.es-share-colors-subtle .es-share-copy {
+    background: var(--ensemble-muted-bg, rgba(0,0,0,0.05));
+    color: var(--ensemble-text-secondary, #666);
+}
+.es-share-colors-subtle .es-share-copy:hover {
+    background: var(--ensemble-hover, rgba(0,0,0,0.1));
+    color: var(--ensemble-text, #333);
+}
+
+.es-share-colors-subtle .es-share-native {
+    background: rgba(102, 126, 234, 0.15);
+    color: #667eea;
+}
+.es-share-colors-subtle .es-share-native:hover {
+    background: rgba(102, 126, 234, 0.25);
+}
+
+/* ==========================================================================
+   Floating Position
+   ========================================================================== */
+
+.es-share-floating {
+    position: fixed;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+.es-share-floating .es-share-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.es-share-floating .es-share-button {
+    padding: 0.625rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.es-share-floating .es-share-label {
+    display: none;
+}
+
+/* ==========================================================================
+   Copy Success State
+   ========================================================================== */
+
+.es-share-copy.copied {
+    background: var(--ensemble-success, #10b981) !important;
+    color: #fff !important;
+    border-color: var(--ensemble-success, #10b981) !important;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .es-share-buttons {
+        gap: 0.5rem;
+    }
+    
+    .es-share-button {
+        padding: 0.625rem;
+    }
+    
+    .es-share-label {
+        display: none;
+    }
+    
+    /* Show native share button on mobile */
+    .es-share-native {
+        display: inline-flex !important;
+    }
+    
+    /* Floating on mobile */
+    .es-share-floating {
+        position: static;
+        transform: none;
+        margin-top: var(--ensemble-section-spacing, 2rem);
+        padding-top: var(--ensemble-card-padding, 1.5rem);
+        border-top: 1px solid var(--ensemble-card-border, rgba(255,255,255,0.1));
+    }
+    
+    .es-share-floating .es-share-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+/* ==========================================================================
+   Copy Success Animation
+   ========================================================================== */
+
+@keyframes copySuccess {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.es-share-copy.copied {
+    animation: copySuccess 0.3s ease;
+}
+
+/* ==========================================================================
+   Tooltip
+   ========================================================================== */
+
+.es-share-button[title] {
+    position: relative;
+}
+
+.es-share-button::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    white-space: nowrap;
+    color: #fff;
+    background: rgba(0,0,0,0.8);
+    border-radius: calc(var(--ensemble-button-radius, 8px) / 2);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+    margin-bottom: 0.5rem;
+}
+
+.es-share-button:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Hide tooltip on touch devices */
+@media (hover: none) {
+    .es-share-button::after {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   Theme Support - Uses Ensemble Design System Variables
+   Dark/Light mode automatically handled by Designer settings
+   ========================================================================== */

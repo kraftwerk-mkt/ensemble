@@ -1,0 +1,1665 @@
+/**
+ * Kongress Layout Styles
+ * 
+ * Professional conference/congress design
+ * Uses Designer variables (--ensemble-*) for customization
+ * 
+ * @package Ensemble
+ * @version 1.0.0
+ */
+
+/* ===========================================
+   LAYOUT NAMESPACE
+   =========================================== */
+
+.es-layout-kongress {
+    --kongress-accent: var(--ensemble-secondary);
+    --kongress-navy: var(--ensemble-primary);
+    --kongress-copper: var(--ensemble-secondary);
+    --kongress-glass-bg: rgba(255, 255, 255, 0.85);
+    --kongress-glass-border: rgba(255, 255, 255, 0.3);
+    --kongress-glass-shadow: 0 8px 32px rgba(27, 54, 93, 0.1);
+}
+
+/* ===========================================
+   SINGLE EVENT - KONGRESS
+   =========================================== */
+
+.es-kongress-single {
+    background: var(--ensemble-bg);
+    color: var(--ensemble-text);
+    font-family: var(--ensemble-font-body);
+    line-height: var(--ensemble-line-height-body);
+}
+
+/* Hero Section */
+.es-kongress-hero {
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.es-kongress-hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-kongress-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to top,
+        var(--ensemble-overlay-bg) 0%,
+        rgba(27, 54, 93, 0.6) 50%,
+        rgba(27, 54, 93, 0.3) 100%
+    );
+}
+
+.es-kongress-hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: var(--ensemble-container-width);
+    margin: 0 auto;
+    padding: 60px 24px;
+    color: var(--ensemble-overlay-text);
+}
+
+.es-kongress-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 20px;
+    font-size: var(--ensemble-meta-size);
+    color: var(--ensemble-overlay-text-secondary);
+}
+
+.es-kongress-hero-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-kongress-hero-meta-item svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--kongress-copper);
+}
+
+.es-kongress-hero-title {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-hero-size);
+    font-weight: var(--ensemble-heading-weight);
+    line-height: var(--ensemble-line-height-heading);
+    margin: 0 0 16px 0;
+    color: var(--ensemble-overlay-text);
+}
+
+.es-kongress-hero-subtitle {
+    font-size: var(--ensemble-lg-size);
+    color: var(--ensemble-overlay-text-secondary);
+    max-width: 700px;
+    margin-bottom: 24px;
+}
+
+.es-kongress-hero-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--kongress-copper);
+    color: #fff;
+    font-size: var(--ensemble-small-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--ensemble-button-radius);
+}
+
+/* Stats Bar */
+.es-kongress-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 48px 24px;
+    background: var(--ensemble-surface);
+    border-bottom: 1px solid var(--ensemble-divider);
+}
+
+.es-kongress-stat {
+    text-align: center;
+}
+
+.es-kongress-stat-number {
+    font-family: var(--ensemble-font-heading);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--kongress-navy);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.es-kongress-stat-label {
+    font-size: var(--ensemble-small-size);
+    color: var(--ensemble-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Main Content Wrapper */
+.es-kongress-content-wrapper {
+    max-width: var(--ensemble-container-width);
+    margin: 0 auto;
+    padding: var(--ensemble-section-spacing) 24px;
+}
+
+.es-kongress-grid {
+    display: block;
+}
+
+/* Main Content */
+.es-kongress-main {
+    min-width: 0;
+}
+
+/* Section Styling */
+.es-kongress-section {
+    margin-bottom: var(--ensemble-section-spacing);
+}
+
+.es-kongress-section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ensemble-divider);
+}
+
+.es-kongress-section-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--kongress-navy);
+    border-radius: 8px;
+}
+
+.es-kongress-section-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #fff;
+    fill: none;
+}
+
+.es-kongress-section-title {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-h2-size);
+    font-weight: var(--ensemble-heading-weight);
+    color: var(--ensemble-text);
+    margin: 0;
+}
+
+/* ===========================================
+   AGENDA / TIMELINE
+   =========================================== */
+
+.es-kongress-agenda {
+    position: relative;
+}
+
+.es-kongress-agenda-day {
+    margin-bottom: 48px;
+}
+
+.es-kongress-agenda-day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 16px 24px;
+    background: var(--kongress-navy);
+    color: #fff;
+    border-radius: var(--ensemble-card-radius);
+}
+
+.es-kongress-agenda-day-date {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-h3-size);
+    font-weight: 700;
+}
+
+.es-kongress-agenda-day-name {
+    font-size: var(--ensemble-body-size);
+    opacity: 0.8;
+}
+
+/* Timeline */
+.es-kongress-timeline {
+    position: relative;
+    padding-left: 100px;
+}
+
+.es-kongress-timeline::before {
+    content: '';
+    position: absolute;
+    left: 80px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--ensemble-divider);
+}
+
+/* Timeline Item */
+.es-kongress-timeline-item {
+    position: relative;
+    padding: 0 0 32px 32px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.es-kongress-timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+/* Time Display - Left side */
+.es-kongress-timeline-time {
+    position: absolute;
+    left: -100px;
+    width: 75px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--kongress-navy);
+    line-height: 1.3;
+    padding-top: 16px; /* Align with session card content */
+}
+
+/* Time Range Display (start - end) */
+.es-kongress-timeline-time .time-start {
+    display: block;
+}
+
+.es-kongress-timeline-time .time-end {
+    display: block;
+    font-weight: 400;
+    font-size: 11px;
+    color: var(--ensemble-text-muted);
+    margin-top: 2px;
+}
+
+/* Timeline Dot - Centered on line */
+.es-kongress-timeline-dot {
+    position: absolute;
+    left: -8px;
+    top: 20px; /* Vertically centered with session content */
+    width: 14px;
+    height: 14px;
+    background: var(--kongress-copper);
+    border: 3px solid var(--ensemble-bg);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--kongress-copper);
+    z-index: 1;
+}
+
+/* Break item dot - different style */
+.es-kongress-timeline-item.is-break .es-kongress-timeline-dot {
+    background: var(--ensemble-surface);
+    border-color: var(--kongress-copper);
+    box-shadow: 0 0 0 2px var(--ensemble-divider);
+}
+
+/* Session/Break Content Container */
+.es-kongress-timeline-content {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Session Card */
+.es-kongress-session {
+    background: var(--ensemble-card-bg);
+    border: var(--ensemble-card-border-width) solid var(--ensemble-card-border);
+    border-radius: var(--ensemble-card-radius);
+    padding: var(--ensemble-card-padding);
+    box-shadow: var(--ensemble-card-shadow);
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.es-kongress-session:hover {
+    transform: var(--ensemble-card-hover-transform);
+    box-shadow: var(--ensemble-card-hover-shadow);
+}
+
+/* Session Type Badge */
+.es-kongress-session-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    background: var(--session-type-bg, var(--kongress-navy));
+    color: white;
+}
+
+.es-kongress-session-type svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Session Type Colors */
+.es-kongress-session-type.type-keynote { background: #1B365D; }
+.es-kongress-session-type.type-talk { background: #2D4A7C; }
+.es-kongress-session-type.type-workshop { background: #B87333; }
+.es-kongress-session-type.type-panel { background: #4A5568; }
+
+.es-kongress-session-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.es-kongress-session-title {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-lg-size);
+    font-weight: 600;
+    color: var(--ensemble-text);
+    margin: 0;
+    flex: 1;
+}
+
+.es-kongress-session-venue {
+    font-size: var(--ensemble-small-size);
+    color: var(--ensemble-text-muted);
+    background: var(--ensemble-surface);
+    padding: 4px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.es-kongress-session-speakers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ensemble-divider);
+}
+
+.es-kongress-session-speaker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    padding: 8px 12px 8px 8px;
+    background: var(--ensemble-surface);
+    border-radius: 30px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.es-kongress-session-speaker:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.es-kongress-session-speaker-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.es-kongress-session-speaker-name {
+    font-weight: 600;
+    color: var(--ensemble-text);
+}
+
+.es-kongress-session-speaker-title {
+    font-size: var(--ensemble-small-size);
+    color: var(--ensemble-text-secondary);
+}
+
+/* Break/Pause Item */
+.es-kongress-break {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: var(--ensemble-surface);
+    border-radius: var(--ensemble-card-radius);
+    border-left: 4px solid var(--kongress-copper);
+}
+
+.es-kongress-break-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--kongress-copper);
+    border-radius: 8px;
+}
+
+.es-kongress-break-icon svg {
+    width: 20px;
+    height: 20px;
+    stroke: #fff;
+    fill: none;
+}
+
+.es-kongress-break-content {
+    flex: 1;
+}
+
+.es-kongress-break-title {
+    font-weight: 600;
+    color: var(--ensemble-text);
+    margin-bottom: 2px;
+}
+
+.es-kongress-break-duration {
+    font-size: var(--ensemble-small-size);
+    color: var(--ensemble-text-muted);
+}
+
+.es-kongress-timeline-item.is-break .es-kongress-timeline-dot {
+    background: var(--ensemble-surface);
+    border-color: var(--ensemble-bg);
+    box-shadow: 0 0 0 2px var(--kongress-copper);
+}
+
+/* ===========================================
+   SPEAKER GRID
+   =========================================== */
+
+.es-kongress-speakers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--ensemble-grid-gap, 24px);
+}
+
+@media (max-width: 992px) {
+    .es-kongress-speakers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .es-kongress-speakers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Speaker Card */
+.es-kongress-speaker-card {
+    background: var(--ensemble-card-bg);
+    border: var(--ensemble-card-border-width) solid var(--ensemble-card-border);
+    border-radius: var(--ensemble-card-radius);
+    overflow: hidden;
+    box-shadow: var(--ensemble-card-shadow);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.es-kongress-speaker-card:hover {
+    transform: var(--ensemble-card-hover-transform);
+    box-shadow: var(--ensemble-card-hover-shadow);
+}
+
+.es-kongress-speaker-image {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+}
+
+.es-kongress-speaker-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.es-kongress-speaker-card:hover .es-kongress-speaker-image img {
+    transform: scale(1.05);
+}
+
+.es-kongress-speaker-info {
+    padding: var(--ensemble-card-padding);
+}
+
+.es-kongress-speaker-name {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-lg-size);
+    font-weight: var(--ensemble-heading-weight);
+    color: var(--ensemble-text);
+    margin: 0 0 4px 0;
+}
+
+.es-kongress-speaker-role {
+    font-size: var(--ensemble-small-size);
+    color: var(--kongress-copper);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.es-kongress-speaker-company {
+    font-size: var(--ensemble-small-size);
+    color: var(--ensemble-text-secondary);
+}
+
+/* Speaker Hover Overlay */
+.es-kongress-speaker-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--ensemble-overlay-bg, linear-gradient(to top, rgba(31, 41, 55, 0.95) 0%, rgba(31, 41, 55, 0.85) 100%));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.es-kongress-speaker-card:hover .es-kongress-speaker-overlay {
+    opacity: 1;
+}
+
+.es-kongress-speaker-preview {
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+}
+
+.es-kongress-speaker-readmore {
+    color: var(--ensemble-secondary, var(--ensemble-accent, #B87333));
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===========================================
+   DESCRIPTION SECTION (above tabs)
+   =========================================== */
+
+.es-kongress-description-section {
+    background: var(--ensemble-surface, #f8f9fa);
+    padding: 48px 0;
+    border-bottom: 1px solid var(--ensemble-divider, #e5e7eb);
+}
+
+.es-kongress-description-section .es-kongress-description-content {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: var(--ensemble-body-size, 16px);
+    line-height: 1.8;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.es-kongress-description-section .es-kongress-description-content p {
+    margin-bottom: 1.5em;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.es-kongress-description-section .es-kongress-description-content h2,
+.es-kongress-description-section .es-kongress-description-content h3 {
+    font-family: var(--ensemble-font-heading);
+    color: var(--kongress-navy, #1B365D);
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+}
+
+/* ===========================================
+   TICKETS TAB
+   =========================================== */
+
+.es-kongress-tickets-content {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.es-kongress-ticket-price-display {
+    margin-bottom: 24px;
+}
+
+.es-kongress-ticket-price-display .price-label {
+    display: block;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #666);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.es-kongress-ticket-price-display .price-value {
+    display: block;
+    font-family: var(--ensemble-font-heading);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--kongress-navy, #1B365D);
+}
+
+.es-kongress-ticket-info-text {
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-text-secondary, #666);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.es-kongress-btn-large {
+    padding: 16px 48px;
+    font-size: 18px;
+}
+
+.es-kongress-btn-disabled {
+    background: var(--ensemble-text-secondary, #666);
+    color: #fff;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ===========================================
+   SINGLE SPEAKER PAGE
+   =========================================== */
+
+.es-kongress-single-speaker {
+    background: var(--ensemble-bg);
+}
+
+.es-kongress-speaker-hero {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 60px;
+    max-width: var(--ensemble-container-width);
+    margin: 0 auto;
+    padding: var(--ensemble-section-spacing) 24px;
+}
+
+.es-kongress-speaker-portrait {
+    position: relative;
+}
+
+.es-kongress-speaker-portrait img {
+    width: 100%;
+    border-radius: var(--ensemble-card-radius);
+    box-shadow: var(--ensemble-card-shadow);
+}
+
+.es-kongress-speaker-portrait::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: -20px;
+    bottom: -20px;
+    border: 3px solid var(--kongress-copper);
+    border-radius: var(--ensemble-card-radius);
+    z-index: -1;
+}
+
+.es-kongress-speaker-header h1 {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-h1-size);
+    font-weight: var(--ensemble-heading-weight);
+    color: var(--ensemble-text);
+    margin: 0 0 8px 0;
+    line-height: var(--ensemble-line-height-heading);
+}
+
+.es-kongress-speaker-title-role {
+    font-size: var(--ensemble-xl-size);
+    color: var(--kongress-copper);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.es-kongress-speaker-company-name {
+    font-size: var(--ensemble-lg-size);
+    color: var(--ensemble-text-secondary);
+    margin-bottom: 32px;
+}
+
+.es-kongress-speaker-bio {
+    font-size: var(--ensemble-body-size);
+    line-height: 1.8;
+    color: var(--ensemble-text);
+}
+
+.es-kongress-speaker-bio p {
+    margin-bottom: 1.5em;
+}
+
+/* Speaker Social Links */
+.es-kongress-speaker-social {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+}
+
+.es-kongress-speaker-social a {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ensemble-surface);
+    border-radius: 50%;
+    color: var(--ensemble-text);
+    transition: all 0.3s ease;
+}
+
+.es-kongress-speaker-social a:hover {
+    background: var(--kongress-navy);
+    color: #fff;
+}
+
+.es-kongress-speaker-social svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Speaker Sessions */
+.es-kongress-speaker-sessions {
+    background: var(--ensemble-surface);
+    padding: var(--ensemble-section-spacing) 24px;
+}
+
+.es-kongress-speaker-sessions-inner {
+    max-width: var(--ensemble-container-width);
+    margin: 0 auto;
+}
+
+/* ===========================================
+   SIDEBAR
+   =========================================== */
+
+.es-kongress-sidebar {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+}
+
+.es-kongress-sidebar-block {
+    background: var(--ensemble-card-bg);
+    border: var(--ensemble-card-border-width) solid var(--ensemble-card-border);
+    border-radius: var(--ensemble-card-radius);
+    padding: var(--ensemble-card-padding);
+    margin-bottom: 24px;
+    box-shadow: var(--ensemble-card-shadow);
+}
+
+.es-kongress-sidebar-title {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-lg-size);
+    font-weight: 600;
+    color: var(--ensemble-text);
+    margin: 0 0 16px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--kongress-copper);
+}
+
+/* Ticket Box */
+.es-kongress-ticket-box {
+    background: linear-gradient(135deg, var(--kongress-navy), #2D4A7C);
+    border: none;
+    color: #fff;
+}
+
+.es-kongress-ticket-box .es-kongress-sidebar-title {
+    color: #fff;
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+.es-kongress-ticket-price {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-price-size);
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.es-kongress-ticket-info {
+    font-size: var(--ensemble-small-size);
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+/* ===========================================
+   BUTTONS
+   =========================================== */
+
+.es-kongress-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: var(--ensemble-button-padding-v) var(--ensemble-button-padding-h);
+    font-family: var(--ensemble-font-body);
+    font-size: var(--ensemble-button-font-size);
+    font-weight: var(--ensemble-button-weight);
+    text-decoration: none;
+    border-radius: var(--ensemble-button-radius);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: var(--ensemble-button-border-width) solid transparent;
+}
+
+.es-kongress-btn-primary {
+    background: var(--ensemble-button-bg);
+    color: var(--ensemble-button-text);
+    border-color: var(--ensemble-button-bg);
+}
+
+.es-kongress-btn-primary:hover {
+    background: var(--ensemble-button-hover-bg);
+    border-color: var(--ensemble-button-hover-bg);
+}
+
+.es-kongress-btn-secondary {
+    background: transparent;
+    color: var(--kongress-navy);
+    border-color: var(--kongress-navy);
+}
+
+.es-kongress-btn-secondary:hover {
+    background: var(--kongress-navy);
+    color: #fff;
+}
+
+.es-kongress-btn-white {
+    background: #fff;
+    color: var(--kongress-navy);
+    border-color: #fff;
+}
+
+.es-kongress-btn-white:hover {
+    background: transparent;
+    color: #fff;
+}
+
+.es-kongress-btn-block {
+    width: 100%;
+}
+
+/* ===========================================
+   GLASSMORPHISM CARDS
+   =========================================== */
+
+.es-kongress-glass {
+    background: var(--kongress-glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--kongress-glass-border);
+    box-shadow: var(--kongress-glass-shadow);
+}
+
+/* ===========================================
+   SCROLL ANIMATIONS
+   =========================================== */
+
+.es-kongress-animate {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.es-kongress-animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.es-kongress-animate-delay-1 { transition-delay: 0.1s; }
+.es-kongress-animate-delay-2 { transition-delay: 0.2s; }
+.es-kongress-animate-delay-3 { transition-delay: 0.3s; }
+.es-kongress-animate-delay-4 { transition-delay: 0.4s; }
+
+/* ===========================================
+   LOCATION SECTION
+   =========================================== */
+
+.es-kongress-location-block {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.es-kongress-location-image {
+    border-radius: var(--ensemble-card-radius);
+    overflow: hidden;
+}
+
+.es-kongress-location-image img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.es-kongress-location-info h3 {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-lg-size);
+    font-weight: 600;
+    color: var(--ensemble-text);
+    margin: 0 0 8px 0;
+}
+
+.es-kongress-location-address {
+    font-size: var(--ensemble-body-size);
+    color: var(--ensemble-text-secondary);
+    line-height: 1.5;
+}
+
+/* ===========================================
+   RESPONSIVE
+   =========================================== */
+
+/* ===========================================
+   TABS NAVIGATION
+   =========================================== */
+
+.es-kongress-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ensemble-divider);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Centered tabs for multi-day/multi-event */
+.es-kongress-tabs-centered {
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.es-kongress-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background: transparent;
+    border: none;
+    border-radius: var(--ensemble-button-radius);
+    font-family: var(--ensemble-font-body);
+    font-size: var(--ensemble-body-size);
+    font-weight: 500;
+    color: var(--ensemble-text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    position: relative;
+}
+
+.es-kongress-tab svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    transition: stroke 0.3s ease;
+}
+
+.es-kongress-tab:hover {
+    color: var(--ensemble-text);
+    background: var(--ensemble-surface);
+}
+
+.es-kongress-tab.is-active {
+    color: var(--kongress-navy);
+    background: var(--ensemble-surface);
+}
+
+.es-kongress-tab.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 3px;
+    background: var(--kongress-copper);
+    border-radius: 2px;
+}
+
+.es-kongress-tab.is-active svg {
+    stroke: var(--kongress-copper);
+}
+
+/* ===========================================
+   TAB PANELS
+   =========================================== */
+
+.es-kongress-tab-panels {
+    position: relative;
+    min-height: 300px;
+    background: var(--ensemble-bg, #ffffff);
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.es-kongress-tab-panel {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: none;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.es-kongress-tab-panel.is-active {
+    display: block;
+    animation: fadeInTab 0.4s ease forwards;
+}
+
+@keyframes fadeInTab {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================================
+   DESCRIPTION TAB
+   =========================================== */
+
+.es-kongress-description-wrapper {
+    position: relative;
+}
+
+.es-kongress-description-content {
+    font-size: var(--ensemble-body-size, 16px);
+    line-height: 1.8;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.es-kongress-description-content p,
+.es-kongress-description-content h2,
+.es-kongress-description-content h3,
+.es-kongress-description-content h4,
+.es-kongress-description-content ul,
+.es-kongress-description-content ol,
+.es-kongress-description-content blockquote {
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.es-kongress-description-fade {
+    display: none;
+}
+
+.es-kongress-description-content p {
+    margin-bottom: 1.5em;
+}
+
+.es-kongress-description-content h2,
+.es-kongress-description-content h3 {
+    font-family: var(--ensemble-font-heading);
+    color: var(--kongress-navy);
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+}
+
+.es-kongress-description-content blockquote {
+    border-left: 4px solid var(--kongress-copper);
+    padding-left: 24px;
+    margin: 2em 0;
+    font-style: italic;
+    color: var(--ensemble-text-secondary);
+}
+
+/* ===========================================
+   INTRO TEXT (Additional Info)
+   =========================================== */
+
+.es-kongress-intro {
+    font-size: var(--ensemble-lg-size);
+    line-height: 1.7;
+    color: var(--ensemble-text-secondary);
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--ensemble-divider);
+}
+
+.es-kongress-intro p:last-child {
+    margin-bottom: 0;
+}
+
+/* ===========================================
+   EMPTY STATE
+   =========================================== */
+
+.es-kongress-empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--ensemble-text-muted);
+}
+
+.es-kongress-empty-state svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    stroke: var(--ensemble-divider);
+}
+
+.es-kongress-empty-state p {
+    font-size: var(--ensemble-body-size);
+    margin: 0;
+}
+
+/* ===========================================
+   SPEAKER PLACEHOLDER
+   =========================================== */
+
+.es-kongress-speaker-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--ensemble-placeholder-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-kongress-speaker-placeholder svg {
+    width: 48px;
+    height: 48px;
+    stroke: var(--ensemble-placeholder-icon);
+}
+
+/* ===========================================
+   CATALOG WRAPPER
+   =========================================== */
+
+.es-kongress-catalog-wrapper {
+    padding: 16px 0;
+}
+
+/* ===========================================
+   RESPONSIVE - Tabs
+   =========================================== */
+
+@media (max-width: 1024px) {
+    .es-kongress-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-kongress-sidebar {
+        position: static;
+    }
+    
+    .es-kongress-speaker-hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .es-kongress-speaker-portrait {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .es-kongress-tabs {
+        gap: 4px;
+    }
+    
+    .es-kongress-tab {
+        padding: 12px 16px;
+        font-size: var(--ensemble-small-size);
+    }
+    
+    .es-kongress-tab svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 768px) {
+    .es-kongress-hero {
+        min-height: 400px;
+    }
+    
+    .es-kongress-hero-title {
+        font-size: calc(var(--ensemble-hero-size) * 0.6);
+    }
+    
+    .es-kongress-stats {
+        flex-wrap: wrap;
+        gap: 32px;
+    }
+    
+    .es-kongress-stat {
+        flex: 1 1 calc(50% - 16px);
+    }
+    
+    .es-kongress-timeline {
+        padding-left: 60px;
+    }
+    
+    .es-kongress-timeline::before {
+        left: 40px;
+    }
+    
+    .es-kongress-timeline-time {
+        left: -60px;
+        width: 40px;
+        font-size: var(--ensemble-small-size);
+    }
+    
+    .es-kongress-location-block {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Tabs responsive */
+    .es-kongress-tabs {
+        margin-left: -24px;
+        margin-right: -24px;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+    
+    .es-kongress-tab span {
+        display: none;
+    }
+    
+    .es-kongress-tab {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-kongress-hero-meta {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .es-kongress-stats {
+        flex-direction: column;
+        gap: 24px;
+    }
+    
+    .es-kongress-stat {
+        flex: 1 1 100%;
+    }
+}
+
+/* ===========================================
+   MULTI-DAY EVENT STYLES
+   =========================================== */
+
+/* Day Header */
+.es-kongress-day-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(var(--ensemble-primary-rgb, 27, 54, 93), 0.1);
+}
+
+.es-kongress-day-title {
+    font-family: var(--ensemble-font-headings);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--ensemble-primary);
+    margin: 0 0 12px 0;
+}
+
+.es-kongress-day-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 0.9rem;
+    color: var(--ensemble-text-light, #6b7280);
+}
+
+.es-kongress-day-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.es-kongress-day-meta svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.es-kongress-day-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--ensemble-secondary, var(--kongress-copper));
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.es-kongress-day-link:hover {
+    color: var(--ensemble-primary, var(--kongress-navy));
+}
+
+/* ===========================================
+   CATALOG TAB STYLES
+   =========================================== */
+
+.es-kongress-catalog-content {
+    padding: 8px 0;
+}
+
+.es-kongress-catalog-section {
+    margin-bottom: 32px;
+}
+
+.es-kongress-catalog-section:last-child {
+    margin-bottom: 0;
+}
+
+.es-kongress-catalog-title {
+    font-family: var(--ensemble-font-headings);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ensemble-primary);
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--ensemble-secondary, var(--kongress-copper));
+}
+
+.es-kongress-catalog-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-kongress-catalog-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 4px 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--ensemble-divider, rgba(0,0,0,0.08));
+}
+
+.es-kongress-catalog-item:last-child {
+    border-bottom: none;
+}
+
+.es-kongress-catalog-item-name {
+    font-weight: 500;
+    color: var(--ensemble-text);
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.es-kongress-catalog-item-price {
+    font-weight: 600;
+    color: var(--ensemble-secondary, var(--kongress-copper));
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.es-kongress-catalog-item-desc {
+    font-size: 0.875rem;
+    color: var(--ensemble-text-light, #6b7280);
+    grid-column: 1 / -1;
+    grid-row: 2;
+}
+
+/* Multi-Day Tab Styling */
+.es-kongress-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.es-kongress-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* Responsive for many day tabs */
+@media (max-width: 768px) {
+    .es-kongress-day-header {
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+    }
+    
+    .es-kongress-day-title {
+        font-size: 1.4rem;
+    }
+    
+    .es-kongress-day-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-kongress-day-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ===========================================
+   CONTACTS SECTION (Staff Addon)
+   =========================================== */
+
+.es-kongress-contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.es-kongress-contact-card {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: var(--ensemble-card-bg, #fff);
+    border-radius: var(--ensemble-radius-md, 12px);
+    border: 1px solid var(--ensemble-divider, rgba(0,0,0,0.08));
+    transition: all 0.3s ease;
+}
+
+.es-kongress-contact-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.es-kongress-contact-image {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--ensemble-surface, #f5f5f5);
+}
+
+.es-kongress-contact-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-kongress-contact-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--ensemble-primary-light, #e8f4fc) 0%, var(--ensemble-surface, #f5f5f5) 100%);
+}
+
+.es-kongress-contact-placeholder svg {
+    width: 32px;
+    height: 32px;
+    stroke: var(--ensemble-text-light, #9ca3af);
+}
+
+.es-kongress-contact-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-kongress-contact-name {
+    font-family: var(--ensemble-font-headings);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ensemble-text);
+    margin: 0 0 4px 0;
+}
+
+.es-kongress-contact-position {
+    font-size: 0.875rem;
+    color: var(--ensemble-secondary, var(--kongress-copper));
+    margin: 0 0 8px 0;
+}
+
+.es-kongress-contact-email,
+.es-kongress-contact-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    color: var(--ensemble-text-light, #6b7280);
+    text-decoration: none;
+    margin-right: 12px;
+    transition: color 0.2s ease;
+}
+
+.es-kongress-contact-email:hover,
+.es-kongress-contact-phone:hover {
+    color: var(--ensemble-primary);
+}
+
+.es-kongress-contact-email svg,
+.es-kongress-contact-phone svg {
+    stroke: currentColor;
+}
+
+/* Extended contact info */
+.es-kongress-contact-department {
+    font-size: 0.8rem;
+    color: var(--ensemble-text-muted, #64748b);
+    margin: 2px 0;
+    font-weight: 500;
+}
+
+.es-kongress-contact-responsibility {
+    font-size: 0.8rem;
+    color: var(--ensemble-text-muted, #64748b);
+    margin: 2px 0;
+    font-style: italic;
+}
+
+.es-kongress-contact-hours {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--ensemble-text-muted, #64748b);
+    margin: 8px 0;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+}
+
+.es-kongress-contact-hours svg {
+    flex-shrink: 0;
+    stroke: currentColor;
+}
+
+.es-kongress-contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+}
+
+.es-kongress-contact-links a span {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.es-kongress-contact-links a small {
+    color: var(--ensemble-text-muted, #64748b);
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.es-kongress-contact-social {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.es-kongress-contact-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--ensemble-text-muted, #64748b);
+    transition: all 0.2s ease;
+}
+
+.es-kongress-contact-social a:hover {
+    background: var(--ensemble-primary, #0ea5e9);
+    color: white;
+}
+
+.es-kongress-contact-social svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Single contact - full width */
+.es-kongress-contacts-grid:has(.es-kongress-contact-card:only-child) {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .es-kongress-contacts-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-kongress-contact-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .es-kongress-contact-email,
+    .es-kongress-contact-phone {
+        display: flex;
+        justify-content: center;
+        margin: 4px 0;
+    }
+}

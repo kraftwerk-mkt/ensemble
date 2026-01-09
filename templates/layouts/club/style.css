@@ -1,0 +1,1578 @@
+/**
+ * Club Layout - Dark Nightlife Style
+ * Bold, high contrast with date badges
+ * 
+ * @package Ensemble
+ * @version 3.0.0
+ */
+
+/* =====================================================
+   1. CSS VARIABLES
+   Fallback: Dark Mode → Light Mode → Club Defaults
+   ===================================================== */
+
+.es-club-layout,
+.es-club-single,
+.es-club-event,
+.es-club-card,
+.es-club-artist-card,
+.es-club-location-card,
+.es-layout-club {
+    /* Colors - Use ensemble variables (es-mode-dark on body sets them to dark values) */
+    --club-bg: var(--ensemble-bg, #0a0a0a);
+    --club-card-bg: var(--ensemble-card-bg, #111111);
+    --club-card-border: var(--ensemble-card-border, #222222);
+    --club-text: var(--ensemble-text, #ffffff);
+    --club-text-secondary: var(--ensemble-text-secondary, #999999);
+    --club-text-muted: #666666;
+    --club-primary: var(--ensemble-primary, #ff3366);
+    --club-hover: var(--ensemble-hover, #ff4d7a);
+    --club-link: var(--club-primary);
+    
+    /* Surface */
+    --club-surface: var(--ensemble-card-bg, #111111);
+    --club-surface-hover: #1a1a1a;
+    
+    /* Spacing & Radius */
+    --club-radius: var(--ensemble-card-radius, 0px);
+    --club-card-padding: var(--ensemble-card-padding, 20px);
+    --club-card-gap: var(--ensemble-card-gap, 2px);
+    --club-section-spacing: var(--ensemble-section-spacing, 48px);
+    --club-card-border-width: var(--ensemble-card-border-width, 0px);
+    
+    /* Card Effects */
+    --club-card-shadow: var(--ensemble-card-shadow, none);
+    --club-card-hover-transform: var(--ensemble-card-hover-transform, translateY(-8px) scale(1.02));
+    --club-card-hover-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--club-primary);
+    
+    /* Typography - Fonts */
+    --club-font-heading: var(--ensemble-font-heading, 'Inter', -apple-system, sans-serif);
+    --club-font-body: var(--ensemble-font-body, 'Inter', -apple-system, sans-serif);
+    
+    /* Typography - Sizes */
+    --club-h1-size: var(--ensemble-h1-size, 48px);
+    --club-h2-size: var(--ensemble-h2-size, 32px);
+    --club-h3-size: var(--ensemble-h3-size, 24px);
+    --club-body-size: var(--ensemble-body-size, 16px);
+    --club-small-size: var(--ensemble-small-size, 14px);
+    --club-xs-size: var(--ensemble-xs-size, 12px);
+    --club-meta-size: var(--ensemble-meta-size, 13px);
+    --club-hero-title-size: var(--ensemble-hero-size, 56px);
+    
+    /* Typography - Weights */
+    --club-heading-weight: var(--ensemble-heading-weight, 800);
+    --club-body-weight: var(--ensemble-body-weight, 400);
+    
+    /* Typography - Line Heights */
+    --club-line-height-heading: var(--ensemble-line-height-heading, 1.2);
+    --club-line-height-body: var(--ensemble-line-height-body, 1.6);
+    
+    /* Buttons - Use ensemble variables (es-mode-dark sets them to dark values) */
+    --club-btn-bg: var(--ensemble-button-bg, #ffffff);
+    --club-btn-text: var(--ensemble-button-text, #0a0a0a);
+    --club-btn-hover-bg: var(--ensemble-button-hover-bg, var(--club-primary));
+    --club-btn-hover-text: var(--ensemble-button-hover-text, #ffffff);
+    --club-btn-radius: var(--ensemble-button-radius, 0px);
+    --club-btn-padding-v: var(--ensemble-button-padding-v, 14px);
+    --club-btn-padding-h: var(--ensemble-button-padding-h, 28px);
+    --club-btn-weight: var(--ensemble-button-weight, 700);
+    --club-btn-font-size: var(--ensemble-button-font-size, 14px);
+    --club-btn-border-width: var(--ensemble-button-border-width, 0px);
+    
+    /* Grid */
+    --club-grid-columns: var(--ensemble-grid-columns, 3);
+}
+
+/* =====================================================
+   2. BODY BACKGROUND
+   ===================================================== */
+
+body:has(.es-club-layout),
+body:has(.es-club-single),
+body:has(.es-club-event),
+body:has(.es-layout-club) {
+    background: var(--ensemble-dark-bg, #0a0a0a) !important;
+    min-height: 100vh;
+}
+
+/* =====================================================
+   3. BASE CONTAINER
+   ===================================================== */
+
+.es-club-layout,
+.es-club-single,
+.es-club-event {
+    background: transparent;
+    min-height: 100vh;
+    color: var(--club-text);
+    font-family: var(--club-font-body);
+    font-size: var(--club-body-size);
+    line-height: var(--club-line-height-body);
+}
+
+.es-club-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+    .es-club-container {
+        padding: 0 20px;
+    }
+}
+
+/* =====================================================
+   4. GRID WRAPPER - Transparent
+   ===================================================== */
+
+.es-club-layout .ensemble-events-grid,
+.es-layout-club .ensemble-events-grid,
+.es-club-event .ensemble-events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--club-card-gap);
+    background: transparent !important;
+}
+
+.es-club-layout .ensemble-container,
+.es-layout-club .ensemble-container {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.es-club-layout .ensemble-events-grid-wrapper,
+.es-layout-club .ensemble-events-grid-wrapper,
+.ensemble-events-grid-wrapper.es-layout-club {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* =====================================================
+   5. TYPOGRAPHY - Global
+   ===================================================== */
+
+.es-club-layout h1,
+.es-club-layout h2,
+.es-club-layout h3,
+.es-club-layout h4,
+.es-club-single h1,
+.es-club-single h2,
+.es-club-single h3,
+.es-club-single h4 {
+    font-family: var(--club-font-heading);
+    font-weight: var(--club-heading-weight);
+    line-height: var(--club-line-height-heading);
+    color: var(--club-text);
+    margin: 0;
+}
+
+.es-club-layout p,
+.es-club-single p {
+    color: var(--club-text-secondary);
+    margin: 0 0 1em;
+}
+
+.es-club-layout a,
+.es-club-single a {
+    color: var(--club-link);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.es-club-layout a:hover,
+.es-club-single a:hover {
+    color: var(--club-hover);
+}
+
+/* Exception: Buttons keep their own hover text color */
+.es-club-layout a.es-club-btn-ticket:hover,
+.es-club-single a.es-club-btn-ticket:hover,
+.es-club-action-buttons a.es-club-btn-ticket:hover,
+.es-club-layout a.es-club-btn-outline:hover,
+.es-club-single a.es-club-btn-outline:hover {
+    color: var(--club-btn-hover-text, #ffffff) !important;
+}
+
+/* =====================================================
+   6. EVENT CARDS - Grid Style
+   ===================================================== */
+
+.es-club-card {
+    position: relative;
+    background: var(--club-surface);
+    border-radius: var(--club-radius);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.es-club-card:hover {
+    transform: var(--club-card-hover-transform);
+    box-shadow: var(--club-card-hover-shadow);
+    z-index: 10;
+}
+
+.es-club-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Card Image */
+.es-club-image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--club-surface-hover);
+}
+
+.es-club-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.es-club-card:hover .es-club-image img {
+    transform: scale(1.1);
+}
+
+/* Gradient Overlay */
+.es-club-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.9) 100%
+    );
+    pointer-events: none;
+}
+
+/* Placeholder */
+.es-club-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--club-surface) 0%, var(--club-surface-hover) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--club-text-muted);
+}
+
+/* =====================================================
+   7. DATE BADGE - On Image
+   ===================================================== */
+
+.es-club-date-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 4px;
+    text-align: center;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.es-club-card:hover .es-club-date-badge {
+    transform: scale(1.05);
+    background: var(--club-primary);
+}
+
+.es-club-date-day {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #000 !important;
+    transition: color 0.3s ease;
+}
+
+.es-club-card:hover .es-club-date-day {
+    color: #fff !important;
+}
+
+.es-club-date-month {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #333 !important;
+    margin-top: 3px;
+    transition: color 0.3s ease;
+}
+
+.es-club-card:hover .es-club-date-month {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* =====================================================
+   8. STATUS BADGE
+   ===================================================== */
+
+.es-club-status {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 8px 14px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 4px;
+    z-index: 10;
+    color: #fff;
+}
+
+.es-club-status-soldout {
+    background: #ef4444;
+}
+
+.es-club-status-cancelled {
+    background: #6b7280;
+}
+
+.es-club-status-postponed {
+    background: #f59e0b;
+    color: #000;
+}
+
+/* =====================================================
+   9. COUNT BADGE (Artist/Location Cards)
+   ===================================================== */
+
+.es-club-count-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    padding: 10px 14px;
+    background: var(--club-primary);
+    border-radius: 4px;
+    text-align: center;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.es-club-card:hover .es-club-count-badge {
+    transform: scale(1.05);
+    background: #fff;
+}
+
+.es-club-count-number {
+    font-size: 1.75rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.es-club-card:hover .es-club-count-number {
+    color: var(--club-primary);
+}
+
+.es-club-count-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 3px;
+    transition: color 0.3s ease;
+}
+
+.es-club-card:hover .es-club-count-label {
+    color: var(--club-text);
+}
+
+/* =====================================================
+   10. EXCERPT (for Artist/Location Cards)
+   ===================================================== */
+
+.es-club-excerpt {
+    margin: 12px 0 0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--club-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* =====================================================
+   9. CARD CONTENT
+   ===================================================== */
+
+.es-club-content {
+    padding: var(--club-card-padding);
+    background: var(--club-surface);
+}
+
+.es-club-genre {
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--club-primary);
+}
+
+.es-club-card .es-club-title {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--club-text);
+    transition: color 0.2s ease;
+}
+
+.es-club-card:hover .es-club-title {
+    color: var(--club-primary);
+}
+
+.es-club-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.8rem;
+    color: var(--club-text-secondary);
+}
+
+.es-club-time {
+    font-weight: 600;
+    color: var(--club-text);
+}
+
+.es-club-location::before {
+    content: '@ ';
+    opacity: 0.5;
+}
+
+.es-club-price {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--club-text);
+    background: var(--club-surface-hover);
+    border: 1px solid var(--club-card-border);
+}
+
+/* =====================================================
+   10. STATUS STATES
+   ===================================================== */
+
+.es-club-card.es-status-cancelled .es-club-image img {
+    filter: grayscale(100%);
+    opacity: 0.5;
+}
+
+.es-club-card.es-status-cancelled .es-club-title {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.es-club-card.es-status-cancelled .es-club-date-badge {
+    background: #6b7280;
+}
+
+.es-club-card.es-status-cancelled .es-club-date-day,
+.es-club-card.es-status-cancelled .es-club-date-month {
+    color: #fff;
+}
+
+.es-club-card.es-status-soldout .es-club-image img {
+    filter: saturate(0.5);
+}
+
+/* =====================================================
+   11. SINGLE EVENT - HEADER IMAGE
+   ===================================================== */
+
+.es-club-header {
+    margin-bottom: 0;
+}
+
+.es-club-header-image {
+    position: relative;
+    aspect-ratio: 16 / 7;
+    overflow: hidden;
+    background: var(--club-surface-hover);
+    border-radius: var(--club-radius);
+}
+
+.es-club-header-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-club-header-image .es-club-date-badge {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+}
+
+.es-club-header-image .es-club-status {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+}
+
+.es-club-header-image .es-club-badge {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    padding: 8px 16px;
+    font-size: var(--club-xs-size);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: var(--club-primary);
+    color: #fff;
+    border-radius: 4px;
+}
+
+.es-club-header-image .es-club-status + .es-club-badge {
+    top: 70px;
+}
+
+/* Countdown in Header Image (bottom, smaller) */
+.es-club-countdown-wrapper {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.es-club-countdown-wrapper:empty {
+    display: none;
+}
+
+/* Make countdown 25% smaller */
+.es-club-countdown-wrapper .es-countdown-wrapper {
+    transform: scale(0.75);
+    transform-origin: center center;
+}
+
+/* Semi-transparent background for readability */
+.es-club-countdown-wrapper .es-countdown-wrapper {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 8px;
+    padding: 12px 20px;
+}
+
+/* Tickets Section (Add-on) */
+.es-club-tickets-section {
+    background: var(--club-surface);
+    border-radius: var(--club-radius);
+    padding: var(--club-section-padding);
+}
+
+.es-club-tickets-section:empty {
+    display: none;
+}
+
+/* =====================================================
+   12. SINGLE EVENT - TITLE BAR
+   ===================================================== */
+
+.es-club-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--club-card-border);
+    margin-bottom: var(--club-section-spacing);
+}
+
+.es-club-title-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-club-title-bar .es-club-title {
+    font-size: var(--club-h1-size);
+    font-weight: var(--club-heading-weight);
+    line-height: 1.1;
+    color: var(--club-text);
+    margin: 0 0 16px;
+    text-transform: uppercase;
+}
+
+.es-club-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.es-club-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--club-body-size);
+    color: var(--club-text-secondary);
+}
+
+.es-club-meta-item svg {
+    color: var(--club-primary);
+    flex-shrink: 0;
+}
+
+.es-club-meta-item.es-club-time {
+    font-weight: 600;
+    color: var(--club-text);
+}
+
+.es-club-title-right {
+    flex-shrink: 0;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+/* Action Buttons Group - Ticket + Reservation nebeneinander */
+.es-club-action-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.es-club-title-right .es-club-btn-ticket {
+    margin-bottom: 0;
+}
+
+/* Reservations Button inline - Reset Wrapper Styles */
+.es-club-action-buttons .es-reservation-wrapper,
+.es-club-action-buttons .es-section.es-reservation-section {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.es-club-action-buttons .es-reservation-header,
+.es-club-action-buttons .es-section-title,
+.es-club-action-buttons .es-reservation-section > h2 {
+    display: none !important;
+}
+
+/* Reservation Toggle Button - match Ticket Button exactly using club btn vars */
+.es-club-action-buttons .es-reservation-toggle,
+.es-club-action-buttons .es-btn.es-reservation-toggle {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: var(--club-btn-padding-v, 14px) var(--club-btn-padding-h, 28px);
+    font-size: var(--club-btn-font-size, 14px);
+    font-weight: var(--club-btn-weight, 700);
+    font-family: var(--club-font-heading, inherit);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    border: var(--club-btn-border-width, 0) solid transparent;
+    border-radius: var(--club-btn-radius, 0px);
+    background: var(--club-btn-bg, #ffffff);
+    color: var(--club-btn-text, #0a0a0a);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: auto !important;
+    min-width: auto;
+}
+
+.es-club-action-buttons .es-reservation-toggle:hover {
+    background: var(--club-btn-hover-bg, var(--club-primary));
+    color: var(--club-btn-hover-text, #ffffff) !important;
+    transform: translateY(-2px);
+    box-shadow: none;
+}
+
+.es-club-action-buttons .es-reservation-toggle:hover svg {
+    color: var(--club-btn-hover-text, #ffffff);
+}
+
+.es-club-action-buttons .es-reservation-toggle svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Form Container - Dropdown below buttons */
+.es-club-action-buttons .es-reservation-form-container {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 12px;
+    width: 400px;
+    max-width: 90vw;
+    background: var(--club-card-bg);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-radius);
+    padding: 20px;
+    z-index: 100;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+
+/* Price Info below buttons */
+.es-club-ticket-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.es-club-ticket-info .es-club-price {
+    font-size: var(--club-h3-size);
+    font-weight: 700;
+    color: var(--club-text);
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.es-club-ticket-info .es-club-price-label {
+    font-size: var(--club-small-size);
+    color: var(--club-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.es-club-ticket-info .es-club-price-note {
+    font-size: var(--club-small-size);
+    color: var(--club-text-secondary);
+}
+
+/* Title Bar Responsive */
+@media (max-width: 768px) {
+    .es-club-title-bar {
+        flex-direction: column;
+        gap: 24px;
+        padding: 24px 0;
+    }
+    
+    .es-club-title-right {
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+    .es-club-action-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .es-club-ticket-info {
+        align-items: flex-start;
+    }
+    
+    .es-club-title-bar .es-club-title {
+        font-size: calc(var(--club-h1-size) * 0.7);
+    }
+    
+    /* Countdown smaller on mobile */
+    .es-club-countdown-wrapper {
+        bottom: 10px;
+    }
+    
+    .es-club-countdown-wrapper .es-countdown-wrapper {
+        transform: scale(0.6);
+    }
+}
+
+/* =====================================================
+   13. SECTIONS
+   ===================================================== */
+
+.es-club-section {
+    margin-bottom: var(--club-section-spacing);
+}
+
+.es-club-section-title {
+    font-size: var(--club-h2-size);
+    font-weight: var(--club-heading-weight);
+    color: var(--club-text);
+    margin: 0 0 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--club-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+/* Prose / Description */
+.es-club-prose {
+    font-size: var(--club-body-size);
+    line-height: var(--club-line-height-body);
+    color: var(--club-text-secondary);
+}
+
+.es-club-prose p {
+    margin-bottom: 1.5em;
+    color: var(--club-text-secondary);
+}
+
+.es-club-prose strong {
+    color: var(--club-text);
+    font-weight: 600;
+}
+
+.es-club-prose a {
+    color: var(--club-primary);
+    text-decoration: underline;
+}
+
+.es-club-prose a:hover {
+    color: var(--club-hover);
+}
+
+/* =====================================================
+   14. VENUE GROUPS (for Artists)
+   ===================================================== */
+
+.es-club-venue-group {
+    margin-bottom: 40px;
+}
+
+.es-club-venue-group:last-child {
+    margin-bottom: 0;
+}
+
+.es-club-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--club-card-border);
+}
+
+.es-club-venue-title {
+    font-size: var(--club-h3-size);
+    font-weight: var(--club-heading-weight);
+    color: var(--club-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.es-club-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.es-club-venue-genre {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--club-text);
+    background: transparent;
+    border: 1px solid var(--club-card-border);
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.es-club-venue-genre:hover {
+    border-color: var(--club-primary);
+    color: var(--club-primary);
+}
+
+/* Genre Meta (when no venues) */
+.es-club-genre-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.es-club-genre-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--club-text);
+    background: transparent;
+    border: 1px solid var(--club-card-border);
+    border-radius: 20px;
+}
+
+/* Genre Tags in Cards */
+.es-club-genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.es-club-genre-tags .es-club-genre-tag {
+    padding: 4px 10px;
+    font-size: 10px;
+}
+
+/* =====================================================
+   15. ARTIST GRID
+   ===================================================== */
+
+.es-club-artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Artist Item */
+.es-club-artist-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    background: var(--club-card-bg);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-radius);
+    text-decoration: none;
+    color: var(--club-text);
+    transition: all 0.3s ease;
+}
+
+.es-club-artist-item:hover {
+    border-color: var(--club-primary);
+    transform: translateY(-4px);
+}
+
+/* Artist Image - Round */
+.es-club-artist-img {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--club-surface-hover);
+    margin-bottom: 16px;
+}
+
+.es-club-artist-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-club-artist-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--club-text-muted);
+    background: var(--club-surface-hover);
+}
+
+/* Artist Info */
+.es-club-artist-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-club-artist-name {
+    font-size: var(--club-h3-size);
+    font-weight: var(--club-heading-weight);
+    color: var(--club-text);
+    margin: 0 0 4px;
+    transition: color 0.2s ease;
+}
+
+a.es-club-artist-item:hover .es-club-artist-name {
+    color: var(--club-primary);
+}
+
+.es-club-artist-references {
+    display: block;
+    font-size: var(--club-small-size);
+    font-style: italic;
+    color: var(--club-text-secondary);
+    margin-top: 4px;
+}
+
+.es-club-artist-references::before {
+    content: '(';
+}
+
+.es-club-artist-references::after {
+    content: ')';
+}
+
+.es-club-artist-genre {
+    display: block;
+    font-size: var(--club-small-size);
+    color: var(--club-text-secondary);
+    margin-top: 4px;
+}
+
+.es-club-artist-time {
+    display: block;
+    font-size: var(--club-small-size);
+    font-weight: 600;
+    color: var(--club-primary);
+    margin-top: 4px;
+}
+
+.es-club-artist-role {
+    display: block;
+    font-size: var(--club-small-size);
+    font-weight: 600;
+    color: var(--club-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 8px;
+}
+
+.es-club-artist-bio {
+    font-size: var(--club-small-size);
+    color: var(--club-text-secondary);
+    margin-top: 8px;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   16. LOCATION CARD
+   ===================================================== */
+
+.es-club-location-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px;
+    background: var(--club-card-bg);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-radius);
+}
+
+.es-club-location-image {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: var(--club-radius);
+    overflow: hidden;
+    background: var(--club-surface-hover);
+}
+
+.es-club-location-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-club-location-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-club-location-name {
+    font-size: var(--club-h3-size);
+    font-weight: var(--club-heading-weight);
+    color: var(--club-text);
+    margin: 0 0 8px;
+}
+
+.es-club-location-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.es-club-location-name a:hover {
+    color: var(--club-primary);
+}
+
+.es-club-location-address {
+    font-size: var(--club-body-size);
+    color: var(--club-text-secondary);
+    line-height: 1.5;
+}
+
+.es-club-location-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: var(--club-small-size);
+    font-weight: 600;
+    color: var(--club-primary);
+    text-decoration: none;
+}
+
+.es-club-location-link:hover {
+    color: var(--club-hover);
+}
+
+/* Location Row - Side by side layout for single event */
+.es-club-location-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px;
+    background: var(--club-card-bg);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-radius);
+}
+
+.es-club-location-row .es-club-location-image {
+    width: 120px;
+    height: 80px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    overflow: visible;
+}
+
+.es-club-location-row .es-club-location-image img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.es-club-location-row .es-club-location-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.es-club-location-row .es-club-location-name {
+    font-size: var(--club-h3-size, 20px);
+    font-weight: var(--club-heading-weight, 700);
+    color: var(--club-text);
+    margin: 0 0 4px;
+}
+
+.es-club-location-row .es-club-location-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.es-club-location-row .es-club-location-name a:hover {
+    color: var(--club-primary);
+}
+
+.es-club-location-row .es-club-location-address {
+    font-size: var(--club-small-size, 14px);
+    color: var(--club-text-secondary);
+    margin: 0 0 8px;
+}
+
+.es-club-location-row .es-club-location-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--club-small-size, 14px);
+    font-weight: 600;
+    color: var(--club-primary);
+    text-decoration: none;
+    margin-top: 4px;
+}
+
+.es-club-location-row .es-club-location-link:hover {
+    color: var(--club-hover);
+}
+
+@media (max-width: 480px) {
+    .es-club-location-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .es-club-location-row .es-club-location-image {
+        width: 100%;
+        height: auto;
+        max-height: 80px;
+    }
+}
+
+/* Info Card (for single-location) */
+.es-club-info-card {
+    padding: 24px;
+    background: var(--club-card-bg);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-radius);
+}
+
+.es-club-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.es-club-info-row svg {
+    color: var(--club-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.es-club-info-content {
+    flex: 1;
+}
+
+.es-club-info-value {
+    color: var(--club-text);
+    line-height: 1.5;
+}
+
+/* =====================================================
+   17. BUTTONS
+   ===================================================== */
+
+.es-club-btn-ticket {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: var(--club-btn-padding-v) var(--club-btn-padding-h);
+    background: var(--club-btn-bg);
+    color: var(--club-btn-text);
+    text-align: center;
+    text-decoration: none;
+    font-family: var(--club-font-heading);
+    font-weight: var(--club-btn-weight);
+    font-size: var(--club-btn-font-size);
+    border-radius: var(--club-btn-radius);
+    border: var(--club-btn-border-width) solid transparent;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.es-club-btn-ticket svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.es-club-btn-ticket:hover {
+    background: var(--club-btn-hover-bg);
+    color: var(--club-btn-hover-text) !important;
+    transform: translateY(-2px);
+}
+
+.es-club-btn-ticket:hover svg {
+    color: var(--club-btn-hover-text, #ffffff);
+}
+
+.es-club-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: transparent;
+    color: var(--club-text);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-btn-radius);
+    font-size: var(--club-small-size);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.es-club-btn-outline:hover {
+    border-color: var(--club-primary);
+    color: var(--club-primary);
+}
+
+/* =====================================================
+   18. RELATED EVENTS GRID
+   ===================================================== */
+
+.es-club-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.es-club-date-inline {
+    display: block;
+    font-size: var(--club-small-size);
+    font-weight: 600;
+    color: var(--club-primary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* =====================================================
+   19. FULL ARTIST CARD (artist-card-full.php)
+   ===================================================== */
+
+.es-club-artist-card-full {
+    background: var(--club-card-bg);
+    border: 1px solid var(--club-card-border);
+    border-radius: var(--club-radius);
+    overflow: hidden;
+}
+
+.es-club-artist-card-full .es-club-card-image-link {
+    display: block;
+}
+
+.es-club-artist-card-full .es-club-card-image {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--club-surface-hover);
+}
+
+.es-club-artist-card-full .es-club-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.es-club-artist-card-full:hover .es-club-card-image img {
+    transform: scale(1.05);
+}
+
+.es-club-artist-card-full .es-club-card-content {
+    padding: var(--club-card-padding);
+}
+
+.es-club-artist-card-full .es-club-title a {
+    color: var(--club-text);
+    text-decoration: none;
+}
+
+.es-club-artist-card-full .es-club-title a:hover {
+    color: var(--club-primary);
+}
+
+.es-club-artist-card-full .es-club-genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.es-club-artist-card-full .es-club-excerpt {
+    font-size: var(--club-small-size);
+    color: var(--club-text-secondary);
+    margin: 12px 0;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   22. NO RESULTS
+   ===================================================== */
+
+.es-club-no-results,
+.ensemble-events-grid-wrapper.es-layout-club .ensemble-no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--club-text-secondary);
+}
+
+/* =====================================================
+   23. RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 1024px) {
+    .es-club-artist-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .es-club-header-image {
+        aspect-ratio: 16 / 9;
+    }
+    
+    .es-club-header-image .es-club-date-badge {
+        top: 16px;
+        left: 16px;
+    }
+    
+    .es-club-section-title {
+        font-size: calc(var(--club-h2-size) * 0.8);
+    }
+    
+    .es-club-artist-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-club-artist-item {
+        flex-direction: row;
+        text-align: left;
+        gap: 16px;
+    }
+    
+    .es-club-artist-img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 0;
+    }
+    
+    .es-club-location-card {
+        flex-direction: column;
+    }
+    
+    .es-club-location-image {
+        width: 100%;
+        height: 150px;
+    }
+    
+    .es-club-related-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-club-container {
+        padding: 0 16px;
+    }
+    
+    .es-club-meta-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .es-club-btn-ticket {
+        width: 100%;
+    }
+}
+
+/* =====================================================
+   HERO SLIDER - Club Style
+   ===================================================== */
+
+.es-layout-club .es-hero-slide::before {
+    background: linear-gradient(
+        0deg,
+        var(--club-bg, #0a0a0a) 0%,
+        rgba(10, 10, 10, 0.9) 30%,
+        rgba(10, 10, 10, 0.5) 60%,
+        transparent 100%
+    );
+}
+
+.es-layout-club .es-hero-slide__content {
+    font-family: var(--club-font-body, 'Inter', sans-serif);
+}
+
+.es-layout-club .es-hero-slide__category {
+    background: var(--club-primary, #ff3366);
+    color: #fff;
+    font-family: var(--club-font-heading, 'Inter', sans-serif);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 0;
+}
+
+.es-layout-club .es-hero-slide__title {
+    font-family: var(--club-font-heading, 'Inter', sans-serif);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 4rem);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+}
+
+.es-layout-club .es-hero-slide__title a {
+    color: var(--club-text, #ffffff);
+}
+
+.es-layout-club .es-hero-slide__title a:hover {
+    color: var(--club-primary, #ff3366);
+}
+
+.es-layout-club .es-hero-slide__meta {
+    font-size: 14px;
+    color: var(--club-text-secondary, #999999);
+}
+
+.es-layout-club .es-hero-slide__btn--primary {
+    background: var(--club-btn-bg, #ffffff);
+    color: var(--club-btn-text, #0a0a0a);
+    font-family: var(--club-font-heading, 'Inter', sans-serif);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: var(--club-btn-radius, 0);
+    border: none;
+}
+
+.es-layout-club .es-hero-slide__btn--primary:hover {
+    background: var(--club-btn-hover-bg, var(--club-primary));
+    color: var(--club-btn-hover-text, #ffffff);
+}
+
+.es-layout-club .es-hero-slide__btn--secondary {
+    background: transparent;
+    color: var(--club-text, #ffffff);
+    border: 1px solid var(--club-card-border, #333333);
+    font-family: var(--club-font-heading, 'Inter', sans-serif);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: var(--club-btn-radius, 0);
+}
+
+.es-layout-club .es-hero-slide__btn--secondary:hover {
+    border-color: var(--club-text, #ffffff);
+}
+
+.es-layout-club .es-slider__arrow {
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--club-text, #ffffff);
+    border: 1px solid var(--club-card-border, #333333);
+}
+
+.es-layout-club .es-slider__arrow:hover {
+    background: var(--club-primary, #ff3366);
+    border-color: var(--club-primary, #ff3366);
+}
+
+.es-layout-club .es-slider__dot.active {
+    background: var(--club-primary, #ff3366);
+}

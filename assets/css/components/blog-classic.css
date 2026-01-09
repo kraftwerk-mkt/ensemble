@@ -1,0 +1,195 @@
+/**
+ * Blog Style - Classic
+ * Standard card grid layout
+ */
+
+/* Grid */
+.et-posts-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.et-posts-grid--2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.et-posts-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.et-posts-grid--4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Post Card - Classic */
+.et-post-card--classic {
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    box-shadow: var(--et-shadow-sm);
+    transition: transform var(--et-transition-fast), box-shadow var(--et-transition-fast);
+}
+
+.et-post-card--classic:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--et-shadow-lg);
+}
+
+/* Image */
+.et-post-card--classic .et-post-card__image {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+}
+
+.et-post-card--classic .et-post-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--et-transition-slow);
+}
+
+.et-post-card--classic:hover .et-post-card__image img {
+    transform: scale(1.05);
+}
+
+/* Content */
+.et-post-card--classic .et-post-card__content {
+    padding: 1.5rem;
+}
+
+/* Meta / Category */
+.et-post-card--classic .et-post-card__category {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ensemble-primary, #2563eb);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+}
+
+/* Title */
+.et-post-card--classic .et-post-card__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0 0 0.75rem;
+}
+
+.et-post-card--classic .et-post-card__title a {
+    color: var(--ensemble-text, #1a1a1a);
+    text-decoration: none;
+}
+
+.et-post-card--classic .et-post-card__title a:hover {
+    color: var(--ensemble-primary, #2563eb);
+}
+
+/* Excerpt */
+.et-post-card--classic .et-post-card__excerpt {
+    font-size: 0.95rem;
+    color: var(--ensemble-text-secondary, #6b7280);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.et-post-card--classic .et-post-card__excerpt p {
+    margin: 0;
+}
+
+/* Footer */
+.et-post-card--classic .et-post-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+/* Archive Header */
+.et-archive-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--ensemble-card-border, #e5e7eb);
+}
+
+.et-archive-title {
+    font-size: 2rem;
+    margin: 0 0 0.5rem;
+}
+
+.et-archive-description {
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+/* Pagination */
+.et-pagination {
+    margin-top: 3rem;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.nav-links a,
+.nav-links span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding: 0 0.75rem;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e5e7eb);
+    border-radius: 8px;
+    color: var(--ensemble-text, #1a1a1a);
+    text-decoration: none;
+    transition: all var(--et-transition-fast);
+}
+
+.nav-links a:hover {
+    background: var(--ensemble-primary, #2563eb);
+    border-color: var(--ensemble-primary, #2563eb);
+    color: #ffffff;
+}
+
+.nav-links .current {
+    background: var(--ensemble-primary, #2563eb);
+    border-color: var(--ensemble-primary, #2563eb);
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .et-posts-grid--4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .et-posts-grid--3,
+    .et-posts-grid--4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .et-posts-grid--2,
+    .et-posts-grid--3,
+    .et-posts-grid--4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Dark Mode */
+.et-dark-mode .et-post-card--classic {
+    background: var(--ensemble-card-bg, #1a1a1a);
+}
+
+.et-dark-mode .et-post-card--classic .et-post-card__title a {
+    color: #ffffff;
+}

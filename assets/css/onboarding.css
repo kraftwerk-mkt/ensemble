@@ -1,0 +1,395 @@
+/**
+ * Ensemble Onboarding Styles
+ * Basierend auf admin-unified.css und ensemble-buttons-unified.css
+ * 
+ * @package Ensemble
+ */
+
+/* ============================================
+   ONBOARDING WRAP - Gleicher Style wie andere Seiten
+   ============================================ */
+
+.es-onboarding-wrap {
+    background: var(--es-background);
+    min-height: 100vh;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 20px;
+}
+
+.es-onboarding-wrap h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--es-primary);
+    margin: 0 0 25px 0;
+    background: linear-gradient(135deg, var(--es-primary), var(--es-primary-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.es-onboarding-wrap h1 .dashicons {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: linear-gradient(135deg, var(--es-primary), var(--es-primary-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================
+   ONBOARDING CONTAINER
+   ============================================ */
+
+.es-onboarding-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Timeline ist bereits in admin-unified.css definiert */
+
+/* ============================================
+   ONBOARDING STEPS
+   ============================================ */
+
+.es-onboarding-form {
+    padding: 0;
+}
+
+.es-onboarding-step {
+    display: none !important;
+}
+
+.es-onboarding-step.active {
+    display: block !important;
+}
+
+.es-step-content {
+    padding: 40px;
+}
+
+.es-step-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.es-step-header h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--es-text);
+    margin: 0 0 15px 0;
+}
+
+.es-step-description {
+    font-size: 15px;
+    color: var(--es-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ============================================
+   PILLS GRID - Interaktive Option Pills
+   ============================================ */
+
+.es-pills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.es-pills-grid.es-pills-vertical {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.es-pill-option {
+    position: relative;
+    cursor: pointer;
+    display: block;
+}
+
+.es-pill-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.es-pill-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 25px 20px;
+    background: var(--es-surface-secondary);
+    border: 2px solid var(--es-border);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.es-pill-option:hover .es-pill-content {
+    border-color: var(--es-primary);
+    background: var(--es-surface-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(53, 130, 196, 0.15);
+}
+
+.es-pill-option input[type="radio"]:checked + .es-pill-content {
+    border-color: var(--es-primary);
+    background: var(--es-primary);
+}
+
+.es-pill-option input[type="radio"]:checked + .es-pill-content * {
+    color: white;
+}
+
+.es-pill-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+    line-height: 1;
+}
+
+.es-pill-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--es-text);
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+}
+
+.es-pill-subtitle {
+    font-size: 13px;
+    color: var(--es-text-secondary);
+    line-height: 1.4;
+    transition: color 0.2s ease;
+}
+
+/* ============================================
+   CUSTOM LABEL SECTION
+   ============================================ */
+
+.es-custom-label-section {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid var(--es-border);
+}
+
+.es-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--es-text);
+}
+
+.es-toggle-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.es-toggle-label span {
+    cursor: pointer;
+}
+
+#es-custom-label-fields {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.es-form-row {
+    margin-bottom: 20px;
+}
+
+.es-form-row:last-child {
+    margin-bottom: 0;
+}
+
+.es-form-row label {
+    display: block;
+    font-weight: 500;
+    color: var(--es-text);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.es-form-row input[type="text"] {
+    width: 100%;
+    padding: 10px 15px;
+    background: var(--es-background);
+    border: 1px solid var(--es-border);
+    border-radius: 4px;
+    color: var(--es-text);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.es-form-row input[type="text"]:focus {
+    border-color: var(--es-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(53, 130, 196, 0.1);
+}
+
+.es-form-row input[type="text"]::placeholder {
+    color: var(--es-text-secondary);
+    opacity: 0.6;
+}
+
+/* ============================================
+   NAVIGATION BUTTONS
+   ============================================ */
+
+.es-onboarding-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    background: var(--es-surface-secondary);
+    border-top: 1px solid var(--es-border);
+    gap: 20px;
+}
+
+.es-nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.es-onboarding-prev,
+.es-onboarding-next,
+.es-onboarding-finish {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.es-onboarding-prev .dashicons {
+    order: -1;
+}
+
+.es-onboarding-next .dashicons,
+.es-onboarding-finish .dashicons {
+    order: 1;
+}
+
+.es-onboarding-skip {
+    color: var(--es-text-secondary);
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    padding: 8px 16px;
+    transition: color 0.2s ease;
+}
+
+.es-onboarding-skip:hover {
+    color: var(--es-text);
+    text-decoration: underline;
+}
+
+/* ============================================
+   NOTICE IN ONBOARDING
+   ============================================ */
+
+.es-onboarding-step .es-notice {
+    margin-top: 30px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media screen and (max-width: 782px) {
+    .es-onboarding-wrap {
+        margin-left: -10px;
+        margin-right: -10px;
+        padding: 10px;
+    }
+    
+    .es-step-content {
+        padding: 20px;
+    }
+    
+    .es-pills-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-onboarding-nav {
+        flex-direction: column;
+        padding: 15px 20px;
+        gap: 10px;
+    }
+    
+    .es-nav-center {
+        order: 3;
+        width: 100%;
+    }
+    
+    .es-onboarding-prev,
+    .es-onboarding-next,
+    .es-onboarding-finish,
+    .es-onboarding-skip {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .es-onboarding-prev {
+        order: 2;
+    }
+    
+    .es-onboarding-next,
+    .es-onboarding-finish {
+        order: 1;
+    }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.es-onboarding-step.active {
+    animation: slideInRight 0.3s ease;
+}
+
+.es-onboarding-step.active.backwards {
+    animation: slideInLeft 0.3s ease;
+}

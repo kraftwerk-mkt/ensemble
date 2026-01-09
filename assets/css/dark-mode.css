@@ -1,0 +1,204 @@
+/**
+ * Dark Mode Styles
+ * Applied when et-dark-mode class is on body
+ */
+
+.et-dark-mode {
+    --ensemble-bg: #0a0a0a;
+    --ensemble-card-bg: #1a1a1a;
+    --ensemble-text: #fafafa;
+    --ensemble-text-secondary: #888888;
+    --ensemble-card-border: #333333;
+}
+
+.et-dark-mode body {
+    background-color: #0a0a0a;
+    color: #fafafa;
+}
+
+/* Content areas */
+.et-dark-mode .et-content {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+/* Forms */
+.et-dark-mode input[type="text"],
+.et-dark-mode input[type="email"],
+.et-dark-mode input[type="url"],
+.et-dark-mode input[type="password"],
+.et-dark-mode input[type="search"],
+.et-dark-mode input[type="number"],
+.et-dark-mode input[type="tel"],
+.et-dark-mode input[type="date"],
+.et-dark-mode textarea,
+.et-dark-mode select {
+    background: #252525;
+    border-color: #333;
+    color: #fafafa;
+}
+
+.et-dark-mode input::placeholder,
+.et-dark-mode textarea::placeholder {
+    color: #666;
+}
+
+.et-dark-mode input:focus,
+.et-dark-mode textarea:focus,
+.et-dark-mode select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Buttons */
+.et-dark-mode .et-button,
+.et-dark-mode button,
+.et-dark-mode input[type="submit"],
+.et-dark-mode .wp-block-button__link {
+    background: #ffffff;
+    color: #0a0a0a;
+}
+
+.et-dark-mode .et-button:hover,
+.et-dark-mode button:hover,
+.et-dark-mode input[type="submit"]:hover,
+.et-dark-mode .wp-block-button__link:hover {
+    background: #e5e7eb;
+}
+
+/* Links */
+.et-dark-mode a {
+    color: #a5b4fc;
+}
+
+.et-dark-mode a:hover {
+    color: #c7d2fe;
+}
+
+/* Headings */
+.et-dark-mode h1,
+.et-dark-mode h2,
+.et-dark-mode h3,
+.et-dark-mode h4,
+.et-dark-mode h5,
+.et-dark-mode h6 {
+    color: #fafafa;
+}
+
+/* Single post */
+.et-dark-mode .et-single-content {
+    color: rgba(255,255,255,0.85);
+}
+
+.et-dark-mode .et-single-content a {
+    color: #a5b4fc;
+}
+
+/* Tags */
+.et-dark-mode .et-tag {
+    background: #252525;
+    color: rgba(255,255,255,0.8);
+    border-color: #333;
+}
+
+.et-dark-mode .et-tag:hover {
+    background: #333;
+    color: #ffffff;
+}
+
+/* Pagination */
+.et-dark-mode .nav-links a,
+.et-dark-mode .nav-links span {
+    background: #1a1a1a;
+    border-color: #333;
+    color: #fafafa;
+}
+
+.et-dark-mode .nav-links a:hover {
+    background: #6366f1;
+    border-color: #6366f1;
+}
+
+/* Archive header */
+.et-dark-mode .et-archive-header {
+    border-bottom-color: #333;
+}
+
+.et-dark-mode .et-archive-description {
+    color: rgba(255,255,255,0.6);
+}
+
+/* Search */
+.et-dark-mode .et-search-header {
+    color: #fafafa;
+}
+
+/* 404 */
+.et-dark-mode .et-404-code {
+    color: rgba(255,255,255,0.1);
+}
+
+.et-dark-mode .et-404-text {
+    color: rgba(255,255,255,0.6);
+}
+
+/* No posts */
+.et-dark-mode .et-no-posts {
+    color: rgba(255,255,255,0.7);
+}
+
+/* Comments */
+.et-dark-mode .comment-body {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+.et-dark-mode .comment-author {
+    color: #fafafa;
+}
+
+.et-dark-mode .comment-content {
+    color: rgba(255,255,255,0.85);
+}
+
+/* Widgets */
+.et-dark-mode .et-widget {
+    background: #1a1a1a;
+    border-color: #333;
+}
+
+.et-dark-mode .et-widget-title {
+    color: #fafafa;
+}
+
+/* Tables */
+.et-dark-mode table {
+    border-color: #333;
+}
+
+.et-dark-mode th {
+    background: #1a1a1a;
+    color: #fafafa;
+}
+
+.et-dark-mode td {
+    border-color: #333;
+}
+
+/* Code blocks */
+.et-dark-mode pre,
+.et-dark-mode code {
+    background: #1a1a1a;
+    color: #e5e7eb;
+}
+
+/* Blockquotes */
+.et-dark-mode blockquote {
+    border-left-color: #6366f1;
+    color: rgba(255,255,255,0.8);
+}
+
+/* HR */
+.et-dark-mode hr {
+    border-color: #333;
+}

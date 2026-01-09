@@ -1,0 +1,286 @@
+/**
+ * Header Style - Minimal
+ * Ultra-clean: Logo left, hamburger right, fullscreen overlay menu
+ */
+
+.et-header--minimal {
+    background: transparent;
+    position: relative;
+    z-index: var(--et-z-sticky);
+}
+
+.et-header--minimal .et-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+}
+
+/* Brand */
+.et-header--minimal .et-header__brand {
+    flex-shrink: 0;
+}
+
+.et-header--minimal .et-header__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.et-header--minimal .et-logo-img {
+    max-height: 40px;
+    width: auto;
+}
+
+.et-header--minimal .et-site-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+/* Spacer */
+.et-header--minimal .et-header__spacer {
+    flex: 1;
+}
+
+/* Actions */
+.et-header--minimal .et-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Search Toggle */
+.et-header--minimal .et-search-toggle {
+    background: none;
+    border: none;
+    color: var(--ensemble-text, #1a1a1a);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: opacity var(--et-transition-fast);
+}
+
+.et-header--minimal .et-search-toggle:hover {
+    opacity: 0.7;
+}
+
+/* Menu Toggle - Minimal style */
+.et-header--minimal .et-menu-toggle--minimal {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: var(--ensemble-text, #1a1a1a);
+}
+
+.et-header--minimal .et-menu-toggle__label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.et-header--minimal .et-menu-toggle__icon {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 28px;
+}
+
+.et-header--minimal .et-menu-toggle__bar {
+    height: 2px;
+    background: currentColor;
+    transition: all var(--et-transition-fast);
+}
+
+.et-header--minimal .et-menu-toggle__bar:first-child {
+    width: 100%;
+}
+
+.et-header--minimal .et-menu-toggle__bar:last-child {
+    width: 60%;
+}
+
+.et-header--minimal .et-menu-toggle--minimal:hover .et-menu-toggle__bar:last-child {
+    width: 100%;
+}
+
+/* Fullscreen Overlay */
+.et-header--minimal .et-header__overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--ensemble-card-bg, #ffffff);
+    z-index: var(--et-z-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--et-transition-slow);
+}
+
+.et-header--minimal .et-header__overlay:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.et-header--minimal .et-header__overlay[hidden] {
+    display: flex;
+}
+
+.et-header--minimal .et-header__overlay-inner {
+    text-align: center;
+    padding: 2rem;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Close Button */
+.et-header--minimal .et-header__overlay-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: none;
+    border: none;
+    color: var(--ensemble-text, #1a1a1a);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: transform var(--et-transition-fast);
+}
+
+.et-header--minimal .et-header__overlay-close:hover {
+    transform: rotate(90deg);
+}
+
+/* Overlay Navigation */
+.et-header--minimal .et-overlay-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-header--minimal .et-overlay-menu > li {
+    margin: 0.5rem 0;
+}
+
+.et-header--minimal .et-overlay-menu > li > a {
+    display: inline-block;
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--ensemble-text, #1a1a1a);
+    text-decoration: none;
+    padding: 0.25rem 0;
+    position: relative;
+    transition: color var(--et-transition-fast);
+}
+
+.et-header--minimal .et-overlay-menu > li > a:hover {
+    color: var(--ensemble-primary, #2563eb);
+}
+
+.et-header--minimal .et-overlay-menu > li > a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--ensemble-primary, #2563eb);
+    transition: width var(--et-transition-fast);
+}
+
+.et-header--minimal .et-overlay-menu > li > a:hover::after {
+    width: 100%;
+}
+
+/* Overlay Submenu */
+.et-header--minimal .et-overlay-menu .sub-menu {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+}
+
+.et-header--minimal .et-overlay-menu .sub-menu a {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--ensemble-text-secondary, #6b7280);
+}
+
+/* Secondary Nav in Overlay */
+.et-header--minimal .et-header__overlay-secondary {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--ensemble-card-border, #e5e7eb);
+}
+
+.et-header--minimal .et-overlay-menu-secondary {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.et-header--minimal .et-overlay-menu-secondary a {
+    font-size: 0.9rem;
+    color: var(--ensemble-text-secondary, #6b7280);
+    text-decoration: none;
+}
+
+/* Social in Overlay */
+.et-header--minimal .et-header__overlay-social {
+    margin-top: 2rem;
+}
+
+.et-header--minimal .et-header__overlay-social .et-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+/* Sticky */
+.et-header-sticky .et-header--minimal {
+    position: sticky;
+    top: 0;
+    background: var(--ensemble-card-bg, #ffffff);
+}
+
+/* Transparent on hero */
+.et-header-transparent .et-header--minimal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.et-header-transparent .et-header--minimal .et-header__logo,
+.et-header-transparent .et-header--minimal .et-menu-toggle--minimal,
+.et-header-transparent .et-header--minimal .et-search-toggle {
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .et-header--minimal .et-overlay-menu > li > a {
+        font-size: 2rem;
+    }
+    
+    .et-header--minimal .et-menu-toggle__label {
+        display: none;
+    }
+}
+
+/* Dark Mode */
+.et-dark-mode .et-header--minimal .et-header__overlay {
+    background: #0a0a0a;
+}
+
+.et-dark-mode .et-header--minimal .et-header__overlay-close,
+.et-dark-mode .et-header--minimal .et-overlay-menu > li > a {
+    color: #ffffff;
+}
