@@ -1,1082 +1,797 @@
 /**
- * Ensemble Timetable Editor - Admin JavaScript
+ * Ensemble Timetable Admin JavaScript
  * 
- * @package Ensemble
- * @since 2.9.0
+ * Handles both modes:
+ * - Festival Timeline (Multi-Event)
+ * - Conference Agenda (Single-Event)
  */
 
 (function($) {
     'use strict';
 
-    const ESTimetable = {
+    // =========================================
+    // FESTIVAL TIMELINE (MULTI-EVENT MODE)
+    // =========================================
+
+    const ESFestivalTimeline = {
         
-        // State
-        eventId: 0,
         data: null,
+        pixelsPerMinute: 2,
+        timeStart: 10,
+        timeEnd: 26,
+        activeDay: 'all',
         
-        // Settings
-        timeInterval: 30,
-        defaultDuration: 60,
-        slotHeight: 40,
-        
-        /**
-         * Initialize
-         */
         init: function() {
-            const $container = $('.es-timetable-container');
-            if (!$container.length) {
-                this.bindEventSelector();
-                return;
-            }
-            
-            this.eventId = parseInt($container.data('event-id'), 10);
-            this.timeInterval = parseInt($container.data('interval'), 10) || 30;
-            
-            // Parse initial data
-            const $dataScript = $('#es-timetable-data');
-            if ($dataScript.length) {
-                try {
-                    this.data = JSON.parse($dataScript.html());
-                    this.defaultDuration = this.data.default_duration || 60;
-                } catch (e) {
-                    console.error('Failed to parse timetable data:', e);
-                }
-            }
-            
+            this.pixelsPerMinute = esTimetable.pixel_per_min || 2;
             this.bindEvents();
+            this.loadTimeline();
+        },
+
+        bindEvents: function() {
+            // Load button
+            $('#es-load-timeline').on('click', () => this.loadTimeline());
+
+            // Time range change
+            $('#es-time-start, #es-time-end').on('change', () => this.rebuildTimeline());
+
+            // Day tabs
+            $(document).on('click', '.es-day-tab', (e) => {
+                const $tab = $(e.currentTarget);
+                $('.es-day-tab').removeClass('active');
+                $tab.addClass('active');
+                this.activeDay = $tab.data('day');
+                this.renderEvents();
+            });
+
+            // Search events
+            $('#es-event-search').on('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                $('.es-unscheduled-event').each(function() {
+                    const title = $(this).find('.es-event-title').text().toLowerCase();
+                    $(this).toggle(title.includes(query));
+                });
+            });
+
+            // Event double-click to edit
+            $(document).on('dblclick', '.es-timeline-event', (e) => {
+                const eventId = $(e.currentTarget).data('event-id');
+                this.openEventModal(eventId);
+            });
+
+            // Event edit button
+            $(document).on('click', '.es-event-edit-btn', (e) => {
+                e.stopPropagation();
+                const eventId = $(e.currentTarget).closest('.es-timeline-event, .es-unscheduled-event').data('event-id');
+                this.openEventModal(eventId);
+            });
+
+            // Save event from modal
+            $('#es-save-event-schedule').on('click', () => this.saveEventFromModal());
+
+            // Modal close
+            $('[data-dismiss="modal"]').on('click', () => {
+                $('.es-modal').removeClass('active');
+            });
+        },
+
+        loadTimeline: function() {
+            const dateFrom = $('#es-date-from').val();
+            const dateTo = $('#es-date-to').val();
+
+            $('#es-festival-loading').addClass('active');
+
+            $.ajax({
+                url: esTimetable.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'es_load_multi_timetable',
+                    nonce: esTimetable.nonce,
+                    date_from: dateFrom,
+                    date_to: dateTo
+                },
+                success: (response) => {
+                    $('#es-festival-loading').removeClass('active');
+                    if (response.success) {
+                        this.data = response.data;
+                        this.buildDayTabs();
+                        this.buildTimeline();
+                        this.renderEvents();
+                        this.initDragDrop();
+                    } else {
+                        this.showToast('Error loading', 'error');
+                    }
+                },
+                error: () => {
+                    $('#es-festival-loading').removeClass('active');
+                    this.showToast('Connection error', 'error');
+                }
+            });
+        },
+
+        buildDayTabs: function() {
+            const $tabs = $('#es-day-tabs');
+            $tabs.find('.es-day-tab:not(:first)').remove();
+
+            if (!this.data || !this.data.days) return;
+
+            this.data.days.forEach(day => {
+                $tabs.append(`
+                    <button type="button" class="es-day-tab" data-day="${day.date}">
+                        <span class="es-day-name">${day.day_name}</span>
+                        <span class="es-day-date">${day.label}</span>
+                    </button>
+                `);
+            });
+        },
+
+        buildTimeline: function() {
+            this.timeStart = parseInt($('#es-time-start').val()) || 10;
+            this.timeEnd = parseInt($('#es-time-end').val()) || 26;
+
+            this.buildTimelineHeader();
+            this.buildStageRows();
+        },
+
+        rebuildTimeline: function() {
+            this.buildTimeline();
+            this.renderEvents();
+        },
+
+        buildTimelineHeader: function() {
+            const $header = $('#es-timeline-header');
+            $header.empty();
+
+            // Spacer for stage labels
+            $header.append('<div class="es-timeline-spacer"></div>');
+
+            const hours = this.timeEnd - this.timeStart;
+            const totalWidth = hours * 60 * this.pixelsPerMinute;
+
+            const $slots = $('<div class="es-time-slots"></div>').css('width', totalWidth + 'px');
+
+            for (let h = this.timeStart; h < this.timeEnd; h++) {
+                const displayHour = h % 24;
+                $slots.append(`
+                    <div class="es-time-slot" style="width: ${60 * this.pixelsPerMinute}px">
+                        ${String(displayHour).padStart(2, '0')}:00
+                    </div>
+                `);
+            }
+
+            $header.append($slots);
+        },
+
+        buildStageRows: function() {
+            const $grid = $('#es-timeline-grid');
+            $grid.empty();
+
+            if (!this.data || !this.data.locations) return;
+
+            const hours = this.timeEnd - this.timeStart;
+            const totalWidth = hours * 60 * this.pixelsPerMinute;
+
+            this.data.locations.forEach(loc => {
+                const $row = $(`
+                    <div class="es-stage-row" data-location-id="${loc.id}">
+                        <div class="es-stage-label" style="border-left-color: ${loc.color}">
+                            <span class="es-stage-name">${loc.name}</span>
+                        </div>
+                        <div class="es-stage-timeline" style="width: ${totalWidth}px">
+                            <div class="es-events-container"></div>
+                        </div>
+                    </div>
+                `);
+                $grid.append($row);
+            });
+        },
+
+        renderEvents: function() {
+            if (!this.data || !this.data.events) return;
+
+            // Clear existing
+            $('.es-events-container').empty();
+            $('#es-unscheduled-list').empty();
+
+            let scheduledCount = 0;
+            let unscheduledCount = 0;
+
+            this.data.events.forEach(event => {
+                // Filter by day
+                if (this.activeDay !== 'all' && event.date !== this.activeDay) {
+                    return;
+                }
+
+                if (event.scheduled && event.location_id && event.start_time) {
+                    this.renderScheduledEvent(event);
+                    scheduledCount++;
+                } else {
+                    this.renderUnscheduledEvent(event);
+                    unscheduledCount++;
+                }
+            });
+
+            $('#es-unscheduled-count').text(unscheduledCount);
+
+            // Init drag for new elements
             this.initDragDrop();
         },
-        
-        /**
-         * Bind event selector (for when no event selected)
-         */
-        bindEventSelector: function() {
-            // Main dropdown
-            $('#es-event-select').on('change', function() {
-                const eventId = $(this).val();
-                if (eventId) {
-                    window.location.href = window.location.pathname + '?page=ensemble-timetable&event_id=' + eventId;
-                }
-            });
-            
-            // Filter for events list
-            $('#es-filter-timetable').on('change', function() {
-                const filter = $(this).val();
-                const $cards = $('.es-timetable-event-card');
-                
-                if (!filter) {
-                    $cards.show();
-                } else {
-                    $cards.each(function() {
-                        const hasTimetable = $(this).data('has-timetable');
-                        $(this).toggle(hasTimetable === filter);
-                    });
-                }
-            });
-        },
-        
-        /**
-         * Bind all event handlers
-         */
-        bindEvents: function() {
-            const self = this;
-            
-            // Event selector
-            $('#es-event-select').on('change', function() {
-                const eventId = $(this).val();
-                if (eventId) {
-                    window.location.href = window.location.pathname + '?page=ensemble-timetable&event_id=' + eventId;
-                }
-            });
-            
-            // Add buttons
-            $('#es-add-speaker-btn').on('click', function() {
-                self.openAddSpeakerModal();
-            });
-            
-            $('#es-add-break-btn').on('click', function() {
-                self.openBreakModal();
-            });
-            
-            // Save button
-            $('#es-save-timetable').on('click', function() {
-                self.saveTimetable();
-            });
-            
-            // Modal close - direct binding on each button
-            $('.es-modal-close').each(function() {
-                $(this).on('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('[Timetable] Close button clicked directly');
-                    $('.es-modal').hide();
-                    return false;
-                });
-            });
-            
-            // Also add mousedown as fallback
-            $(document).on('mousedown', '.es-modal-close', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[Timetable] Close button mousedown');
-                $('.es-modal').hide();
-                return false;
-            });
-            
-            // Cancel button
-            $('.es-modal-cancel').on('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[Timetable] Cancel button clicked');
-                self.closeModals();
-                return false;
-            });
-            
-            // Overlay click
-            $('.es-modal-overlay').on('click', function(e) {
-                console.log('[Timetable] Overlay clicked');
-                self.closeModals();
-            });
-            
-            // ESC key to close modals
-            $(document).on('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    self.closeModals();
-                }
-            });
-            
-            // Session double-click to edit
-            $(document).on('dblclick', '.es-session-block', function(e) {
-                if ($(e.target).closest('.es-session-actions').length) return;
-                const artistId = $(this).data('artist-id');
-                self.openSessionModal(artistId);
-            });
-            
-            // Session edit/remove buttons
-            $(document).on('click', '.es-edit-session', function(e) {
-                e.stopPropagation();
-                const artistId = $(this).closest('.es-session-block').data('artist-id');
-                self.openSessionModal(artistId);
-            });
-            
-            $(document).on('click', '.es-remove-session', function(e) {
-                e.stopPropagation();
-                const artistId = $(this).closest('.es-session-block').data('artist-id');
-                self.confirmRemoveSpeaker(artistId);
-            });
-            
-            // Unassigned speaker double-click to edit
-            $(document).on('dblclick', '.es-speaker-card', function(e) {
-                if ($(e.target).closest('.es-speaker-actions').length) return;
-                const artistId = $(this).data('artist-id');
-                self.openSessionModal(artistId);
-            });
-            
-            // Unassigned speaker edit/remove buttons
-            $(document).on('click', '.es-speaker-card .es-edit-speaker', function(e) {
-                e.stopPropagation();
-                const artistId = $(this).closest('.es-speaker-card').data('artist-id');
-                self.openSessionModal(artistId);
-            });
-            
-            $(document).on('click', '.es-speaker-card .es-remove-speaker', function(e) {
-                e.stopPropagation();
-                const artistId = $(this).closest('.es-speaker-card').data('artist-id');
-                self.confirmRemoveSpeaker(artistId);
-            });
-            
-            // Break double-click to edit
-            $(document).on('dblclick', '.es-break-block', function(e) {
-                if ($(e.target).hasClass('es-break-remove')) return;
-                const index = $(this).data('break-index');
-                self.openBreakModal(index);
-            });
-            
-            // Break remove button
-            $(document).on('click', '.es-break-remove', function(e) {
-                e.stopPropagation();
-                const index = $(this).closest('.es-break-block').data('break-index');
-                self.confirmRemoveBreak(index);
-            });
-            
-            // Session modal save
-            $('#es-session-modal .es-modal-save').on('click', function() {
-                self.saveSession();
-            });
-            
-            // Session modal unassign
-            $('#es-session-modal .es-modal-unassign').on('click', function() {
-                self.unassignSession();
-            });
-            
-            // Break modal save
-            $('#es-break-modal .es-modal-save').on('click', function() {
-                self.saveBreak();
-            });
-            
-            // Break modal delete
-            $('#es-break-modal .es-break-delete').on('click', function() {
-                const index = $('#es-break-index').val();
-                if (index >= 0) {
-                    self.confirmRemoveBreak(parseInt(index));
-                    self.closeModals();
-                }
-            });
-            
-            // Speaker search
-            let searchTimeout;
-            $('#es-speaker-search').on('input', function() {
-                clearTimeout(searchTimeout);
-                const query = $(this).val();
-                searchTimeout = setTimeout(function() {
-                    self.searchSpeakers(query);
-                }, 300);
-            });
-            
-            // Prevent modal close on content click
-            $('.es-modal-content').on('click', function(e) {
-                e.stopPropagation();
-            });
-        },
-        
-        /**
-         * Initialize drag and drop
-         */
-        initDragDrop: function() {
-            const self = this;
-            
-            // Safely destroy existing instances (only if initialized)
-            $('.es-speaker-card.es-draggable').each(function() {
-                if ($(this).data('ui-draggable')) {
-                    $(this).draggable('destroy');
-                }
-            });
-            $('.es-session-block').each(function() {
-                if ($(this).data('ui-draggable')) {
-                    $(this).draggable('destroy');
-                }
-            });
-            $('.es-break-block').each(function() {
-                if ($(this).data('ui-draggable')) {
-                    $(this).draggable('destroy');
-                }
-            });
-            $('.es-grid-cell').each(function() {
-                if ($(this).data('ui-droppable')) {
-                    $(this).droppable('destroy');
-                }
-            });
-            $('#es-unassigned-list').each(function() {
-                if ($(this).data('ui-droppable')) {
-                    $(this).droppable('destroy');
-                }
-            });
-            
-            // Make unassigned speakers draggable
-            $('.es-speaker-card.es-draggable').draggable({
-                helper: 'clone',
-                appendTo: 'body',
-                zIndex: 1000,
-                cursor: 'grabbing',
-                revert: 'invalid',
-                start: function(event, ui) {
-                    $(this).addClass('is-dragging');
-                    ui.helper.addClass('es-dragging-helper');
-                },
-                stop: function() {
-                    $(this).removeClass('is-dragging');
-                }
-            });
-            
-            // Make session blocks draggable
-            $('.es-session-block').draggable({
-                helper: 'clone',
-                appendTo: 'body',
-                zIndex: 1000,
-                cursor: 'grabbing',
-                revert: 'invalid',
-                start: function(event, ui) {
-                    $(this).addClass('is-dragging').css('opacity', 0.5);
-                    ui.helper.addClass('es-dragging-helper');
-                },
-                stop: function() {
-                    $(this).removeClass('is-dragging').css('opacity', 1);
-                }
-            });
-            
-            // Make break blocks draggable
-            $('.es-break-block').draggable({
-                helper: 'clone',
-                appendTo: 'body',
-                zIndex: 1000,
-                cursor: 'grabbing',
-                revert: 'invalid',
-                axis: 'y', // Breaks only move vertically (span all rooms)
-                start: function(event, ui) {
-                    $(this).addClass('is-dragging').css('opacity', 0.5);
-                    ui.helper.addClass('es-dragging-helper es-break-helper');
-                },
-                stop: function() {
-                    $(this).removeClass('is-dragging').css('opacity', 1);
-                }
-            });
-            
-            // Make grid cells droppable
-            $('.es-grid-cell').droppable({
-                accept: '.es-speaker-card, .es-session-block, .es-break-block',
-                hoverClass: 'es-drop-hover',
-                tolerance: 'pointer',
-                drop: function(event, ui) {
-                    const $cell = $(this);
-                    const time = $cell.data('time');
-                    const room = $cell.data('room');
-                    
-                    // Check if it's a break being dropped
-                    if (ui.draggable.hasClass('es-break-block')) {
-                        const breakIndex = ui.draggable.data('break-index');
-                        console.log('[Timetable] Break drop:', {breakIndex, time});
-                        self.updateBreakTime(breakIndex, time);
-                        return;
-                    }
-                    
-                    // It's a speaker/session
-                    const artistId = ui.draggable.data('artist-id');
-                    const duration = ui.draggable.data('duration') || self.defaultDuration;
-                    
-                    console.log('[Timetable] Drop:', {artistId, time, room, duration});
-                    self.updateSession(artistId, time, room, duration);
-                }
-            });
-            
-            // Make time column droppable for breaks (easier targeting)
-            $('.es-grid-time').droppable({
-                accept: '.es-break-block',
-                hoverClass: 'es-drop-hover',
-                tolerance: 'pointer',
-                drop: function(event, ui) {
-                    const $row = $(this).closest('.es-grid-row');
-                    const time = $row.data('time');
-                    const breakIndex = ui.draggable.data('break-index');
-                    
-                    console.log('[Timetable] Break drop on time:', {breakIndex, time});
-                    self.updateBreakTime(breakIndex, time);
-                }
-            });
-            
-            // Make unassigned area droppable (to unassign sessions)
-            $('#es-unassigned-list').droppable({
-                accept: '.es-session-block',
-                hoverClass: 'es-drop-hover',
-                drop: function(event, ui) {
-                    const artistId = ui.draggable.data('artist-id');
-                    self.updateSession(artistId, '', '', self.defaultDuration);
-                }
-            });
-        },
-        
-        /**
-         * Update session via AJAX
-         */
-        updateSession: function(artistId, time, room, duration, sessionTitle) {
-            const self = this;
-            
-            console.log('[Timetable] updateSession:', {artistId, time, room, duration});
-            
-            this.showLoading();
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_update_session',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    artist_id: artistId,
-                    time: time || '',
-                    venue: room || '',
-                    duration: duration || this.defaultDuration,
-                    session_title: sessionTitle || ''
-                },
-                success: function(response) {
-                    console.log('[Timetable] updateSession response:', response);
-                    self.hideLoading();
-                    
-                    if (response.success && response.data) {
-                        self.data = response.data;
-                        self.renderAll();
-                    } else {
-                        alert(response.data?.message || 'Error updating session');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('[Timetable] updateSession error:', status, error);
-                    self.hideLoading();
-                    alert('Network error: ' + error);
-                }
-            });
-        },
-        
-        /**
-         * Render everything
-         */
-        renderAll: function() {
-            console.log('[Timetable] renderAll called, data:', this.data);
-            try {
-                this.renderSessions();
-                this.renderBreaks();
-                this.renderUnassigned();
-                this.initDragDrop();
-                console.log('[Timetable] renderAll complete');
-            } catch (e) {
-                console.error('[Timetable] renderAll error:', e);
-            }
-        },
-        
-        /**
-         * Render sessions on grid
-         */
-        renderSessions: function() {
-            const self = this;
-            
-            // Remove existing
-            $('.es-session-block').remove();
-            
-            if (!this.data || !this.data.sessions) return;
-            
-            const $gridBody = $('#es-grid-body');
-            const startTime = $('.es-timetable-container').data('start-time') || '08:00';
-            const startMinutes = this.timeToMinutes(startTime);
-            const rooms = this.data.rooms || [];
-            const roomCount = rooms.length || 1;
-            
-            this.data.sessions.forEach(function(session) {
-                if (!session.time) return;
-                
-                // Find room index
-                let roomIndex = 0;
-                for (let i = 0; i < rooms.length; i++) {
-                    if (rooms[i].name === session.venue) {
-                        roomIndex = i;
-                        break;
-                    }
-                }
-                
-                const duration = session.duration || self.defaultDuration;
-                const sessionStart = self.timeToMinutes(session.time);
-                const offsetMinutes = sessionStart - startMinutes;
-                
-                const topPx = (offsetMinutes / self.timeInterval) * self.slotHeight;
-                const heightPx = Math.max((duration / self.timeInterval) * self.slotHeight, 60);
-                
-                const left = 'calc(80px + ' + roomIndex + ' * (100% - 80px) / ' + roomCount + ' + 4px)';
-                const width = 'calc((100% - 80px) / ' + roomCount + ' - 8px)';
-                
-                const title = session.session_title || session.artist_name;
-                const endTime = self.minutesToTime(sessionStart + duration);
-                
-                const $block = $(`
-                    <div class="es-session-block" 
-                         data-artist-id="${session.artist_id}"
-                         data-duration="${duration}"
-                         data-room="${session.venue || ''}"
-                         style="position: absolute; top: ${topPx}px; height: ${heightPx}px; left: ${left}; width: ${width}; z-index: 10;">
-                        <div class="es-session-time">${session.time} - ${endTime}</div>
-                        <div class="es-session-title">${self.escapeHtml(title)}</div>
-                        <div class="es-session-speaker">
-                            ${session.artist_image ? `<img src="${session.artist_image}" alt="">` : ''}
-                            <span>${self.escapeHtml(session.artist_name)}</span>
-                        </div>
-                        <div class="es-session-actions">
-                            <button type="button" class="es-edit-session" title="Edit">
-                                <span class="dashicons dashicons-edit"></span>
-                            </button>
-                            <button type="button" class="es-remove-session" title="Remove">
-                                <span class="dashicons dashicons-trash"></span>
-                            </button>
-                        </div>
+
+        renderScheduledEvent: function(event) {
+            const $container = $(`.es-stage-row[data-location-id="${event.location_id}"] .es-events-container`);
+            if (!$container.length) return;
+
+            const startMins = this.timeToMinutes(event.start_time);
+            const offsetMins = startMins - (this.timeStart * 60);
+
+            if (offsetMins < 0) return; // Outside visible range
+
+            const left = offsetMins * this.pixelsPerMinute;
+            const width = (event.duration || 60) * this.pixelsPerMinute;
+
+            const $event = $(`
+                <div class="es-timeline-event" 
+                     data-event-id="${event.id}"
+                     data-date="${event.date}"
+                     data-start="${event.start_time}"
+                     data-duration="${event.duration}"
+                     style="left: ${left}px; width: ${width}px; background-color: ${event.location_color || '#3582c4'}">
+                    <div class="es-event-content">
+                        <span class="es-event-time">${event.start_time}</span>
+                        <span class="es-event-title">${event.title}</span>
+                        ${event.artist ? `<span class="es-event-artist">${event.artist}</span>` : ''}
                     </div>
-                `);
-                
-                $gridBody.append($block);
-            });
-            
-            // Update stats
-            const totalSpeakers = (this.data.sessions?.length || 0) + (this.data.unassigned?.length || 0);
-            $('.es-stat-speakers').text(totalSpeakers);
-            $('.es-stat-sessions').text(this.data.sessions?.length || 0);
-        },
-        
-        /**
-         * Render breaks on grid
-         */
-        renderBreaks: function() {
-            const self = this;
-            
-            // Remove existing
-            $('.es-break-block').remove();
-            
-            if (!this.data || !this.data.breaks) return;
-            
-            const $gridBody = $('#es-grid-body');
-            const startTime = $('.es-timetable-container').data('start-time') || '08:00';
-            const startMinutes = this.timeToMinutes(startTime);
-            
-            const icons = {
-                coffee: '☕', lunch: '🍽️', networking: '🤝',
-                registration: '📋', pause: '⏸️', discussion: '💬'
-            };
-            
-            this.data.breaks.forEach(function(breakItem, index) {
-                if (!breakItem.time) return;
-                
-                const duration = breakItem.duration || 30;
-                const breakStart = self.timeToMinutes(breakItem.time);
-                const offsetMinutes = breakStart - startMinutes;
-                
-                const topPx = (offsetMinutes / self.timeInterval) * self.slotHeight;
-                const heightPx = Math.max((duration / self.timeInterval) * self.slotHeight, 30);
-                
-                const icon = icons[breakItem.icon] || icons.pause;
-                
-                const $block = $(`
-                    <div class="es-break-block" 
-                         data-break-index="${index}"
-                         style="position: absolute; top: ${topPx}px; height: ${heightPx}px; left: 80px; right: 0; z-index: 5;">
-                        <span class="es-break-icon">${icon}</span>
-                        <span class="es-break-title">${self.escapeHtml(breakItem.title)}</span>
-                        <span class="es-break-time">${breakItem.time}</span>
-                        <span class="es-break-duration">${duration} min</span>
-                        <button type="button" class="es-break-remove" title="Remove">×</button>
-                    </div>
-                `);
-                
-                $gridBody.append($block);
-            });
-        },
-        
-        /**
-         * Render unassigned speakers
-         */
-        renderUnassigned: function() {
-            const self = this;
-            const $list = $('#es-unassigned-list');
-            $list.empty();
-            
-            if (!this.data || !this.data.unassigned || this.data.unassigned.length === 0) {
-                $list.html('<p class="es-no-unassigned">All speakers have been assigned.</p>');
-                $('#es-unassigned-speakers .es-count').text('(0)');
-                return;
-            }
-            
-            this.data.unassigned.forEach(function(speaker) {
-                $list.append(`
-                    <div class="es-speaker-card es-draggable" 
-                         data-artist-id="${speaker.artist_id}"
-                         data-duration="${speaker.duration || self.defaultDuration}">
-                        ${speaker.artist_image ? 
-                            `<img src="${speaker.artist_image}" alt="" class="es-speaker-image">` : 
-                            '<div class="es-speaker-image es-no-image"><span class="dashicons dashicons-admin-users"></span></div>'}
-                        <div class="es-speaker-info">
-                            <div class="es-speaker-name">${self.escapeHtml(speaker.artist_name)}</div>
-                            ${speaker.artist_role ? `<div class="es-speaker-role">${self.escapeHtml(speaker.artist_role)}</div>` : ''}
-                        </div>
-                        <div class="es-speaker-actions">
-                            <button type="button" class="es-edit-speaker" title="Edit">
-                                <span class="dashicons dashicons-edit"></span>
-                            </button>
-                            <button type="button" class="es-remove-speaker" title="Remove">
-                                <span class="dashicons dashicons-trash"></span>
-                            </button>
-                        </div>
-                    </div>
-                `);
-            });
-            
-            $('#es-unassigned-speakers .es-count').text('(' + this.data.unassigned.length + ')');
-        },
-        
-        /**
-         * Open session edit modal
-         */
-        openSessionModal: function(artistId) {
-            const self = this;
-            
-            // Find session data
-            let session = null;
-            if (this.data.sessions) {
-                session = this.data.sessions.find(s => s.artist_id == artistId);
-            }
-            if (!session && this.data.unassigned) {
-                session = this.data.unassigned.find(s => s.artist_id == artistId);
-            }
-            
-            if (!session) return;
-            
-            // Fill modal
-            $('#es-session-artist-id').val(artistId);
-            $('#es-session-title').val(session.session_title || '');
-            $('#es-session-time').val(session.time || '');
-            $('#es-session-duration').val(session.duration || this.defaultDuration);
-            
-            // Speaker display
-            $('#es-session-speaker-display').html(`
-                ${session.artist_image ? `<img src="${session.artist_image}" alt="">` : ''}
-                <span>${this.escapeHtml(session.artist_name)}</span>
+                    <button type="button" class="es-event-edit-btn" title="Bearbeiten">
+                        <span class="dashicons dashicons-edit"></span>
+                    </button>
+                    <div class="es-event-resize-handle"></div>
+                </div>
             `);
-            
-            // Room select
-            const $roomSelect = $('#es-session-room');
-            $roomSelect.empty().append('<option value="">-- Select Room --</option>');
-            if (this.data.rooms) {
-                this.data.rooms.forEach(function(room) {
-                    $roomSelect.append(`<option value="${room.name}" ${room.name === session.venue ? 'selected' : ''}>${room.name}</option>`);
-                });
-            }
-            
-            // Show/hide unassign button
-            $('#es-session-modal .es-modal-unassign').toggle(!!session.time);
-            
-            $('#es-session-modal').show();
+
+            $container.append($event);
+            this.makeResizable($event);
         },
-        
-        /**
-         * Save session from modal
-         */
-        saveSession: function() {
-            const artistId = $('#es-session-artist-id').val();
-            const time = $('#es-session-time').val();
-            const room = $('#es-session-room').val();
-            const duration = $('#es-session-duration').val();
-            const title = $('#es-session-title').val();
-            
-            this.closeModals();
-            this.updateSession(artistId, time, room, duration, title);
-        },
-        
-        /**
-         * Unassign session
-         */
-        unassignSession: function() {
-            const artistId = $('#es-session-artist-id').val();
-            this.closeModals();
-            this.updateSession(artistId, '', '', this.defaultDuration, '');
-        },
-        
-        /**
-         * Open break modal
-         */
-        openBreakModal: function(index) {
-            const isEdit = index !== undefined && index >= 0;
-            let breakData = {};
-            
-            if (isEdit && this.data.breaks && this.data.breaks[index]) {
-                breakData = this.data.breaks[index];
-            }
-            
-            $('#es-break-index').val(isEdit ? index : -1);
-            $('#es-break-title-input').val(breakData.title || '');
-            $('#es-break-time').val(breakData.time || '');
-            $('#es-break-duration-input').val(breakData.duration || 30);
-            $('#es-break-type').val(breakData.icon || 'pause');
-            
-            // Update button text and show delete
-            $('#es-break-modal .es-modal-save').text(isEdit ? 'Update' : 'Add Break');
-            $('#es-break-modal .es-break-delete').toggle(isEdit);
-            $('#es-break-modal h2').text(isEdit ? 'Edit Break' : 'Add Break');
-            
-            $('#es-break-modal').show();
-        },
-        
-        /**
-         * Save break from modal
-         */
-        saveBreak: function() {
-            const self = this;
-            const index = parseInt($('#es-break-index').val());
-            const isEdit = index >= 0;
-            
-            const breakData = {
-                time: $('#es-break-time').val(),
-                title: $('#es-break-title-input').val() || 'Break',
-                duration: parseInt($('#es-break-duration-input').val()) || 30,
-                icon: $('#es-break-type').val() || 'pause'
-            };
-            
-            if (!breakData.time) {
-                alert('Please enter a time');
-                return;
-            }
-            
-            this.closeModals();
-            this.showLoading();
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: isEdit ? 'es_timetable_update_break' : 'es_timetable_add_break',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    break_index: index,
-                    time: breakData.time,
-                    title: breakData.title,
-                    duration: breakData.duration,
-                    icon: breakData.icon
-                },
-                success: function(response) {
-                    if (response.success && response.data) {
-                        self.data = response.data;
-                        self.renderAll();
-                    } else {
-                        alert(response.data?.message || 'Error saving break');
-                    }
-                    self.hideLoading();
-                },
-                error: function() {
-                    alert('Network error');
-                    self.hideLoading();
-                }
-            });
-        },
-        
-        /**
-         * Update break time via drag & drop
-         */
-        updateBreakTime: function(breakIndex, newTime) {
-            const self = this;
-            
-            if (breakIndex < 0 || !this.data.breaks || !this.data.breaks[breakIndex]) {
-                console.error('[Timetable] Invalid break index:', breakIndex);
-                return;
-            }
-            
-            const breakData = this.data.breaks[breakIndex];
-            
-            console.log('[Timetable] updateBreakTime:', {breakIndex, oldTime: breakData.time, newTime});
-            
-            this.showLoading();
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_update_break',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    break_index: breakIndex,
-                    time: newTime,
-                    title: breakData.title,
-                    duration: breakData.duration,
-                    icon: breakData.icon
-                },
-                success: function(response) {
-                    console.log('[Timetable] updateBreakTime response:', response);
-                    self.hideLoading();
-                    
-                    if (response.success && response.data) {
-                        self.data = response.data;
-                        self.renderAll();
-                    } else {
-                        alert(response.data?.message || 'Error updating break');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('[Timetable] updateBreakTime error:', status, error);
-                    self.hideLoading();
-                    alert('Network error');
-                }
-            });
-        },
-        
-        /**
-         * Confirm and remove break
-         */
-        confirmRemoveBreak: function(index) {
-            if (!confirm('Remove this break?')) return;
-            
-            const self = this;
-            this.showLoading();
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_remove_break',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    break_index: index
-                },
-                success: function(response) {
-                    if (response.success && response.data) {
-                        self.data = response.data;
-                        self.renderAll();
-                    }
-                    self.hideLoading();
-                },
-                error: function() {
-                    alert('Network error');
-                    self.hideLoading();
-                }
-            });
-        },
-        
-        /**
-         * Open add speaker modal
-         */
-        openAddSpeakerModal: function() {
-            $('#es-speaker-search').val('');
-            $('#es-speaker-results').html('<p class="es-loading">Loading speakers...</p>');
-            $('#es-add-speaker-modal').show();
-            
-            // Load all speakers immediately
-            this.searchSpeakers('');
-            
-            setTimeout(function() {
-                $('#es-speaker-search').focus();
-            }, 100);
-        },
-        
-        /**
-         * Search speakers via AJAX
-         */
-        searchSpeakers: function(query) {
-            const self = this;
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_search_speakers',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    search: query
-                },
-                success: function(response) {
-                    if (response.success && response.data?.speakers) {
-                        self.renderSpeakerResults(response.data.speakers);
-                    } else {
-                        $('#es-speaker-results').html('<p class="es-no-results">No speakers found.</p>');
-                    }
-                },
-                error: function() {
-                    $('#es-speaker-results').html('<p class="es-error">Error loading speakers.</p>');
-                }
-            });
-        },
-        
-        /**
-         * Render speaker search results
-         */
-        renderSpeakerResults: function(speakers) {
-            const self = this;
-            const $container = $('#es-speaker-results');
-            $container.empty();
-            
-            console.log('[Timetable] renderSpeakerResults:', speakers.length, 'speakers');
-            
-            if (!speakers.length) {
-                $container.html('<p class="es-no-results">No speakers found.</p>');
-                return;
-            }
-            
-            speakers.forEach(function(speaker) {
-                const $item = $(`
-                    <div class="es-speaker-result ${speaker.assigned ? 'is-assigned' : ''}" data-speaker-id="${speaker.id}">
-                        ${speaker.image ? 
-                            `<img src="${speaker.image}" alt="">` : 
-                            '<div class="es-no-image"><span class="dashicons dashicons-admin-users"></span></div>'}
-                        <div class="es-speaker-info">
-                            <div class="es-speaker-name">${self.escapeHtml(speaker.name)}</div>
-                            ${speaker.role ? `<div class="es-speaker-role">${self.escapeHtml(speaker.role)}</div>` : ''}
-                        </div>
-                        ${speaker.assigned ? '<span class="es-assigned-badge">Added</span>' : '<span class="es-add-badge">+ Add</span>'}
+
+        renderUnscheduledEvent: function(event) {
+            const $list = $('#es-unscheduled-list');
+
+            const $event = $(`
+                <div class="es-unscheduled-event" data-event-id="${event.id}">
+                    ${event.image ? `<img src="${event.image}" class="es-event-thumb" alt="">` : ''}
+                    <div class="es-event-info">
+                        <span class="es-event-title">${event.title}</span>
+                        ${event.artist ? `<span class="es-event-artist">${event.artist}</span>` : ''}
+                        ${event.date ? `<span class="es-event-date">${event.date}</span>` : ''}
                     </div>
-                `);
-                
-                if (!speaker.assigned) {
-                    $item.on('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log('[Timetable] Speaker clicked:', speaker.id, speaker.name);
-                        self.addSpeaker(speaker.id);
-                    });
-                    $item.css('cursor', 'pointer');
-                }
-                
-                $container.append($item);
+                    <button type="button" class="es-event-edit-btn" title="Bearbeiten">
+                        <span class="dashicons dashicons-edit"></span>
+                    </button>
+                </div>
+            `);
+
+            $list.append($event);
+        },
+
+        initDragDrop: function() {
+            // Unscheduled events are draggable
+            $('.es-unscheduled-event').draggable({
+                helper: 'clone',
+                appendTo: 'body',
+                zIndex: 1000,
+                revert: 'invalid',
+                cursor: 'move',
+                opacity: 0.8
+            });
+
+            // Scheduled events are draggable within timeline
+            $('.es-timeline-event').draggable({
+                axis: 'x',
+                containment: 'parent',
+                grid: [5 * this.pixelsPerMinute, 0], // Snap to 5 min
+                stop: (e, ui) => this.onEventDrag(e, ui)
+            });
+
+            // Stage timelines are droppable
+            $('.es-stage-timeline').droppable({
+                accept: '.es-unscheduled-event',
+                hoverClass: 'es-drop-hover',
+                drop: (e, ui) => this.onEventDrop(e, ui)
+            });
+
+            // Sidebar is droppable (to unschedule)
+            $('#es-unscheduled-list').droppable({
+                accept: '.es-timeline-event',
+                hoverClass: 'es-drop-hover',
+                drop: (e, ui) => this.onEventUnschedule(e, ui)
             });
         },
-        
-        /**
-         * Add speaker to event
-         */
-        addSpeaker: function(speakerId) {
-            const self = this;
-            
-            console.log('[Timetable] addSpeaker called:', {speakerId, eventId: this.eventId});
-            
-            if (!this.eventId) {
-                console.error('[Timetable] No eventId set!');
-                alert('Error: No event selected');
-                return;
-            }
-            
-            this.closeModals();
-            this.showLoading();
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_add_speaker',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    speaker_id: speakerId
-                },
-                success: function(response) {
-                    console.log('[Timetable] addSpeaker response:', response);
-                    self.hideLoading();
+
+        makeResizable: function($event) {
+            $event.find('.es-event-resize-handle').on('mousedown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const startX = e.pageX;
+                const startWidth = $event.width();
+                const eventId = $event.data('event-id');
+
+                $(document).on('mousemove.resize', (moveE) => {
+                    const diff = moveE.pageX - startX;
+                    let newWidth = startWidth + diff;
                     
-                    if (response.success && response.data) {
-                        self.data = response.data;
-                        self.renderAll();
-                    } else {
-                        alert(response.data?.message || 'Error adding speaker');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('[Timetable] addSpeaker error:', status, error, xhr.responseText);
-                    self.hideLoading();
-                    alert('Network error: ' + error);
-                }
+                    // Snap to 5 minutes
+                    const minWidth = 15 * this.pixelsPerMinute; // Min 15 min
+                    newWidth = Math.max(minWidth, Math.round(newWidth / (5 * this.pixelsPerMinute)) * (5 * this.pixelsPerMinute));
+                    
+                    $event.width(newWidth);
+                });
+
+                $(document).on('mouseup.resize', () => {
+                    $(document).off('.resize');
+                    
+                    // Calculate new duration
+                    const newWidth = $event.width();
+                    const newDuration = Math.round(newWidth / this.pixelsPerMinute);
+                    
+                    // Update data
+                    $event.data('duration', newDuration);
+                    
+                    // Save
+                    this.saveEventSchedule(eventId, {
+                        duration: newDuration
+                    });
+                });
             });
         },
-        
-        /**
-         * Confirm and remove speaker
-         */
-        confirmRemoveSpeaker: function(artistId) {
-            if (!confirm('Remove this speaker from the event?')) return;
+
+        onEventDrag: function(e, ui) {
+            const $event = ui.helper;
+            const eventId = $event.data('event-id');
+            const left = parseInt($event.css('left'));
             
-            const self = this;
-            this.showLoading();
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_remove_speaker',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    speaker_id: artistId
-                },
-                success: function(response) {
-                    if (response.success && response.data) {
-                        self.data = response.data;
-                        self.renderAll();
-                    }
-                    self.hideLoading();
-                },
-                error: function() {
-                    alert('Network error');
-                    self.hideLoading();
-                }
+            // Calculate new time
+            const offsetMins = Math.round(left / this.pixelsPerMinute);
+            const totalMins = (this.timeStart * 60) + offsetMins;
+            const hours = Math.floor(totalMins / 60) % 24;
+            const mins = totalMins % 60;
+            const newTime = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+
+            // Update display
+            $event.find('.es-event-time').text(newTime);
+            $event.data('start', newTime);
+
+            // Save
+            this.saveEventSchedule(eventId, {
+                start_time: newTime
             });
         },
-        
-        /**
-         * Save complete timetable
-         */
-        saveTimetable: function() {
-            const self = this;
-            const $btn = $('#es-save-timetable');
-            
-            $btn.prop('disabled', true).text('Saving...');
-            
-            $.ajax({
-                url: esTimetable.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'es_timetable_save',
-                    nonce: esTimetable.nonce,
-                    event_id: this.eventId,
-                    sessions: JSON.stringify(this.data.sessions || []),
-                    breaks: JSON.stringify(this.data.breaks || [])
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $btn.text('✓ Saved!');
-                        setTimeout(function() {
-                            $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Timetable');
-                        }, 2000);
-                    } else {
-                        alert(response.data?.message || 'Error saving');
-                        $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Timetable');
-                    }
-                },
-                error: function() {
-                    alert('Network error');
-                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Timetable');
-                }
-            });
-        },
-        
-        /**
-         * Close all modals
-         */
-        closeModals: function() {
-            $('.es-modal').hide();
-        },
-        
-        /**
-         * Show loading overlay
-         */
-        showLoading: function() {
-            if (!$('#es-loading-overlay').length) {
-                $('body').append('<div id="es-loading-overlay"><div class="es-spinner"></div></div>');
+
+        onEventDrop: function(e, ui) {
+            const $event = ui.draggable;
+            const eventId = $event.data('event-id');
+            const $target = $(e.target);
+            const locationId = $target.closest('.es-stage-row').data('location-id');
+
+            // Calculate drop position time
+            const offset = ui.offset.left - $target.offset.left;
+            const offsetMins = Math.round(offset / this.pixelsPerMinute);
+            const totalMins = (this.timeStart * 60) + offsetMins;
+            const hours = Math.floor(totalMins / 60) % 24;
+            const mins = totalMins % 60;
+            const newTime = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+
+            // Get event data
+            const eventData = this.data.events.find(ev => ev.id === eventId);
+            const duration = eventData ? eventData.duration : 60;
+            const endMins = totalMins + duration;
+            const endHours = Math.floor(endMins / 60) % 24;
+            const endM = endMins % 60;
+            const endTime = `${String(endHours).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+
+            // Get date (use active day or first available)
+            let date = this.activeDay !== 'all' ? this.activeDay : '';
+            if (!date && this.data.days && this.data.days.length) {
+                date = this.data.days[0].date;
             }
-            $('#es-loading-overlay').show();
+
+            // Save
+            this.saveEventSchedule(eventId, {
+                location_id: locationId,
+                start_time: newTime,
+                end_time: endTime,
+                date: date
+            }, () => {
+                // Update local data
+                if (eventData) {
+                    eventData.location_id = locationId;
+                    eventData.start_time = newTime;
+                    eventData.end_time = endTime;
+                    eventData.date = date;
+                    eventData.scheduled = true;
+                    
+                    // Get location color
+                    const loc = this.data.locations.find(l => l.id === locationId);
+                    if (loc) {
+                        eventData.location_color = loc.color;
+                    }
+                }
+                this.renderEvents();
+            });
         },
-        
-        /**
-         * Hide loading overlay
-         */
-        hideLoading: function() {
-            $('#es-loading-overlay').hide();
+
+        onEventUnschedule: function(e, ui) {
+            const $event = ui.draggable;
+            const eventId = $event.data('event-id');
+
+            this.saveEventSchedule(eventId, {
+                unschedule: true
+            }, () => {
+                // Update local data
+                const eventData = this.data.events.find(ev => ev.id === eventId);
+                if (eventData) {
+                    eventData.scheduled = false;
+                    eventData.location_id = 0;
+                    eventData.start_time = '';
+                }
+                this.renderEvents();
+            });
         },
-        
-        /**
-         * Time to minutes helper
-         */
+
+        saveEventSchedule: function(eventId, data, callback) {
+            const postData = {
+                action: 'es_update_event_schedule',
+                nonce: esTimetable.nonce,
+                event_id: eventId,
+                ...data
+            };
+
+            $.ajax({
+                url: esTimetable.ajax_url,
+                type: 'POST',
+                data: postData,
+                success: (response) => {
+                    if (response.success) {
+                        this.showToast('Gespeichert!', 'success');
+                        if (callback) callback();
+                    } else {
+                        this.showToast('Error saving', 'error');
+                    }
+                },
+                error: () => {
+                    this.showToast('Verbindungsfehler', 'error');
+                }
+            });
+        },
+
+        openEventModal: function(eventId) {
+            const event = this.data.events.find(ev => ev.id === eventId);
+            if (!event) return;
+
+            $('#es-edit-event-id').val(eventId);
+            $('#es-edit-location').val(event.location_id || '');
+            $('#es-edit-date').val(event.date || '');
+            $('#es-edit-start').val(event.start_time || '');
+            $('#es-edit-end').val(event.end_time || '');
+            $('#es-edit-full').attr('href', event.edit_url || '#');
+
+            // Preview
+            $('#es-event-preview').html(`
+                <div class="es-preview-title">${event.title}</div>
+                ${event.artist ? `<div class="es-preview-artist">${event.artist}</div>` : ''}
+            `);
+
+            $('#es-event-modal').addClass('active');
+        },
+
+        saveEventFromModal: function() {
+            const eventId = $('#es-edit-event-id').val();
+            const data = {
+                location_id: $('#es-edit-location').val(),
+                date: $('#es-edit-date').val(),
+                start_time: $('#es-edit-start').val(),
+                end_time: $('#es-edit-end').val()
+            };
+
+            this.saveEventSchedule(eventId, data, () => {
+                // Update local data
+                const event = this.data.events.find(ev => ev.id == eventId);
+                if (event) {
+                    Object.assign(event, data);
+                    event.scheduled = !!(data.location_id && data.start_time);
+                    
+                    // Update location color
+                    const loc = this.data.locations.find(l => l.id == data.location_id);
+                    if (loc) {
+                        event.location_color = loc.color;
+                    }
+                }
+                
+                $('#es-event-modal').removeClass('active');
+                this.renderEvents();
+            });
+        },
+
         timeToMinutes: function(time) {
             if (!time) return 0;
             const parts = time.split(':');
             return parseInt(parts[0]) * 60 + parseInt(parts[1] || 0);
         },
-        
-        /**
-         * Minutes to time helper
-         */
-        minutesToTime: function(minutes) {
-            const h = Math.floor(minutes / 60);
-            const m = minutes % 60;
-            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
-        },
-        
-        /**
-         * Escape HTML
-         */
-        escapeHtml: function(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+
+        showToast: function(message, type = 'info') {
+            const $toast = $('#es-toast');
+            $toast.removeClass('success error info').addClass(type);
+            $toast.find('.es-toast-message').text(message);
+            $toast.addClass('active');
+            
+            setTimeout(() => {
+                $toast.removeClass('active');
+            }, 3000);
         }
     };
 
-    // Initialize on ready
+    // =========================================
+    // CONFERENCE AGENDA (SINGLE-EVENT MODE)
+    // =========================================
+
+    const ESConferenceAgenda = {
+
+        eventId: null,
+        data: null,
+
+        init: function() {
+            this.bindEvents();
+        },
+
+        bindEvents: function() {
+            // Event select
+            $('#es-event-select').on('change', (e) => {
+                this.eventId = $(e.target).val();
+                if (this.eventId) {
+                    this.loadAgenda();
+                    $('#es-add-entry, #es-add-break').prop('disabled', false);
+                } else {
+                    this.showEmptyState();
+                    $('#es-add-entry, #es-add-break').prop('disabled', true);
+                }
+            });
+
+            // Add entry
+            $('#es-add-entry').on('click', () => this.openEntryModal());
+            $('#es-add-break').on('click', () => this.openEntryModal(true));
+
+            // Save entry
+            $('#es-save-entry').on('click', () => this.saveEntry());
+
+            // Delete entry
+            $('#es-delete-entry').on('click', () => this.deleteEntry());
+
+            // Edit entry
+            $(document).on('click', '.es-entry-edit', (e) => {
+                const entryId = $(e.currentTarget).closest('.es-agenda-entry').data('entry-id');
+                this.openEntryModal(false, entryId);
+            });
+        },
+
+        loadAgenda: function() {
+            $('#es-conference-loading').addClass('active');
+
+            $.ajax({
+                url: esTimetable.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'es_load_timetable',
+                    nonce: esTimetable.nonce,
+                    event_id: this.eventId
+                },
+                success: (response) => {
+                    $('#es-conference-loading').removeClass('active');
+                    if (response.success) {
+                        this.data = response.data;
+                        this.populateSpeakerSelect();
+                        this.renderAgenda();
+                    }
+                },
+                error: () => {
+                    $('#es-conference-loading').removeClass('active');
+                }
+            });
+        },
+
+        populateSpeakerSelect: function() {
+            const $select = $('#es-entry-speaker');
+            $select.find('option:not(:first)').remove();
+
+            if (this.data && this.data.speakers) {
+                this.data.speakers.forEach(speaker => {
+                    $select.append(`<option value="${speaker.id}">${speaker.name}</option>`);
+                });
+            }
+        },
+
+        renderAgenda: function() {
+            const $grid = $('#es-conference-grid');
+            $grid.empty();
+
+            if (!this.data || !this.data.entries || !this.data.entries.length) {
+                $grid.html(`
+                    <div class="es-empty-state">
+                        <span class="dashicons dashicons-calendar-alt"></span>
+                        <p>No entries yet. Click "Add Entry" to get started.</p>
+                    </div>
+                `);
+                return;
+            }
+
+            // Sort by time
+            const entries = [...this.data.entries].sort((a, b) => {
+                return (a.start_time || '').localeCompare(b.start_time || '');
+            });
+
+            entries.forEach(entry => {
+                const speaker = this.data.speakers.find(s => s.id == entry.speaker_id);
+                const room = this.data.rooms.find(r => r.id == entry.room_id);
+
+                const $entry = $(`
+                    <div class="es-agenda-entry ${entry.is_break ? 'is-break' : ''}" data-entry-id="${entry.id}">
+                        <div class="es-entry-time">
+                            <span class="es-time-start">${entry.start_time || '--:--'}</span>
+                            <span class="es-time-sep">–</span>
+                            <span class="es-time-end">${entry.end_time || '--:--'}</span>
+                        </div>
+                        <div class="es-entry-content">
+                            ${entry.is_break ? 
+                                `<span class="es-entry-break"><span class="dashicons dashicons-coffee"></span> ${entry.title || 'Break'}</span>` :
+                                `<span class="es-entry-title">${entry.title || ''}</span>
+                                 ${speaker ? `<span class="es-entry-speaker">${speaker.name}</span>` : ''}
+                                 ${room ? `<span class="es-entry-room">${room.name}</span>` : ''}`
+                            }
+                        </div>
+                        <div class="es-entry-actions">
+                            <button type="button" class="es-btn es-btn-sm es-btn-icon es-entry-edit">
+                                <span class="dashicons dashicons-edit"></span>
+                            </button>
+                        </div>
+                    </div>
+                `);
+
+                $grid.append($entry);
+            });
+        },
+
+        showEmptyState: function() {
+            $('#es-conference-grid').html(`
+                <div class="es-empty-state">
+                    <span class="dashicons dashicons-calendar-alt"></span>
+                    <p>Select an event to edit the agenda.</p>
+                </div>
+            `);
+        },
+
+        openEntryModal: function(isBreak = false, entryId = null) {
+            const $modal = $('#es-entry-modal');
+            
+            // Reset form
+            $('#es-entry-id').val('');
+            $('#es-entry-is-break').val(isBreak ? '1' : '0');
+            $('#es-entry-speaker').val('');
+            $('#es-entry-room').val('');
+            $('#es-entry-title').val('');
+            $('#es-entry-start').val('09:00');
+            $('#es-entry-end').val('10:00');
+
+            // Show/hide fields
+            $('#es-speaker-row').toggle(!isBreak);
+            $('#es-room-row').toggle(!isBreak);
+
+            // Set title
+            $('#es-modal-title').text(isBreak ? 'Add Break' : (entryId ? 'Edit Entry' : 'Add Entry'));
+
+            // If editing, populate
+            if (entryId && this.data && this.data.entries) {
+                const entry = this.data.entries.find(e => e.id === entryId);
+                if (entry) {
+                    $('#es-entry-id').val(entry.id);
+                    $('#es-entry-is-break').val(entry.is_break ? '1' : '0');
+                    $('#es-entry-speaker').val(entry.speaker_id || '');
+                    $('#es-entry-room').val(entry.room_id || '');
+                    $('#es-entry-title').val(entry.title || '');
+                    $('#es-entry-start').val(entry.start_time || '09:00');
+                    $('#es-entry-end').val(entry.end_time || '10:00');
+                    
+                    $('#es-speaker-row').toggle(!entry.is_break);
+                    $('#es-room-row').toggle(!entry.is_break);
+                    $('#es-delete-entry').show();
+                }
+            } else {
+                $('#es-delete-entry').hide();
+            }
+
+            $modal.addClass('active');
+        },
+
+        saveEntry: function() {
+            const entry = {
+                id: $('#es-entry-id').val() || null,
+                speaker_id: $('#es-entry-speaker').val(),
+                room_id: $('#es-entry-room').val(),
+                title: $('#es-entry-title').val(),
+                start_time: $('#es-entry-start').val(),
+                end_time: $('#es-entry-end').val(),
+                is_break: $('#es-entry-is-break').val() === '1'
+            };
+
+            $.ajax({
+                url: esTimetable.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'es_save_timetable_entry',
+                    nonce: esTimetable.nonce,
+                    event_id: this.eventId,
+                    entry: entry
+                },
+                success: (response) => {
+                    if (response.success) {
+                        $('#es-entry-modal').removeClass('active');
+                        this.loadAgenda();
+                        ESFestivalTimeline.showToast('Gespeichert!', 'success');
+                    }
+                }
+            });
+        },
+
+        deleteEntry: function() {
+            if (!confirm(esTimetable.strings.confirm_delete)) return;
+
+            const entryId = $('#es-entry-id').val();
+
+            $.ajax({
+                url: esTimetable.ajax_url,
+                type: 'POST',
+                data: {
+                    action: 'es_delete_timetable_entry',
+                    nonce: esTimetable.nonce,
+                    event_id: this.eventId,
+                    entry_id: entryId
+                },
+                success: (response) => {
+                    if (response.success) {
+                        $('#es-entry-modal').removeClass('active');
+                        this.loadAgenda();
+                        ESFestivalTimeline.showToast('Gelöscht!', 'success');
+                    }
+                }
+            });
+        }
+    };
+
+    // =========================================
+    // MODE SWITCHER
+    // =========================================
+
+    function initModeSwitcher() {
+        $('.es-tab[data-mode]').on('click', function() {
+            const mode = $(this).data('mode');
+            
+            // Update tabs
+            $('.es-tab[data-mode]').removeClass('active');
+            $(this).addClass('active');
+
+            // Show/hide modes
+            $('.es-timetable-mode').removeClass('active');
+            $(`#es-mode-${mode}`).addClass('active');
+        });
+    }
+
+    // =========================================
+    // INIT
+    // =========================================
+
     $(document).ready(function() {
-        ESTimetable.init();
+        // Only init if on timetable page
+        if (!$('.es-timetable-wrap').length) return;
+
+        initModeSwitcher();
+        ESFestivalTimeline.init();
+        ESConferenceAgenda.init();
     });
 
 })(jQuery);

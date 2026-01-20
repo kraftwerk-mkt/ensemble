@@ -121,8 +121,27 @@
 .es-layout-stage .ensemble-artists-list,
 .es-layout-stage .ensemble-locations-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(var(--stage-grid-columns, 3), 1fr);
     gap: var(--stage-card-gap);
+}
+
+/* Respect shortcode columns attribute */
+.es-layout-stage .ensemble-events-grid.ensemble-columns-2,
+.es-layout-stage .ensemble-artists-list.ensemble-columns-2,
+.es-layout-stage .ensemble-locations-list.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.es-layout-stage .ensemble-events-grid.ensemble-columns-3,
+.es-layout-stage .ensemble-artists-list.ensemble-columns-3,
+.es-layout-stage .ensemble-locations-list.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.es-layout-stage .ensemble-events-grid.ensemble-columns-4,
+.es-layout-stage .ensemble-artists-list.ensemble-columns-4,
+.es-layout-stage .ensemble-locations-list.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
 }
 
 @media (max-width: 900px) {
@@ -204,7 +223,7 @@
 .es-stage-gradient-hover {
     opacity: 0;
     background: linear-gradient(0deg, var(--stage-gradient-start) 0%, var(--stage-gradient-mid) 50%, rgba(0, 0, 0, 0.2) 100%);
-    transition: opacity 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-stage-card:hover .es-stage-gradient-hover {
@@ -251,7 +270,7 @@
 
 .es-stage-overlay-hover {
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-stage-card--minimal:hover .es-stage-overlay-hover {
@@ -281,8 +300,8 @@
 
 .es-stage-next-date {
     font-family: var(--stage-font-body);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-overlay-text);
@@ -369,8 +388,8 @@
 
 .es-stage-card-meta {
     font-family: var(--stage-font-body);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-text-secondary);
@@ -410,14 +429,14 @@
 .es-stage-card-day {
     font-family: var(--stage-font-heading);
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: var(--ensemble-heading-weight, 700);
     color: var(--stage-overlay-text);
 }
 
 .es-stage-card-month {
     font-family: var(--stage-font-body);
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-overlay-text-secondary);
@@ -442,7 +461,7 @@
     color: var(--stage-overlay-text-secondary);
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-stage-card--event:hover .es-stage-card-artists {
@@ -461,8 +480,8 @@
     right: 16px;
     padding: 6px 12px;
     font-family: var(--stage-font-body);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     background: var(--stage-primary);
@@ -496,7 +515,7 @@
     letter-spacing: 0.05em;
     text-decoration: none;
     border-radius: var(--stage-btn-radius);
-    transition: all 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     cursor: pointer;
     border: none;
 }
@@ -607,14 +626,14 @@
 .es-stage-date-day {
     font-family: var(--stage-font-heading);
     font-size: 2.5rem;
-    font-weight: 700;
+    font-weight: var(--ensemble-heading-weight, 700);
     line-height: 1;
 }
 
 .es-stage-date-month {
     font-family: var(--stage-font-body);
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-text-secondary);
@@ -640,8 +659,8 @@
     display: inline-block;
     padding: 8px 16px;
     font-family: var(--stage-font-body);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -744,7 +763,7 @@
 .es-stage-title-ticket .es-stage-ticket-price {
     font-family: var(--stage-font-heading);
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: var(--ensemble-heading-weight, 700);
     color: var(--stage-text);
 }
 
@@ -833,8 +852,8 @@
     display: inline-block;
     padding: 8px 16px;
     font-family: var(--stage-font-body);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-text);
@@ -863,7 +882,7 @@
     border: 1px solid var(--stage-border);
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s ease, background-color 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 a.es-stage-lineup-item:hover {
@@ -948,7 +967,7 @@ a.es-stage-lineup-item:hover {
     margin: 0;
     font-family: var(--stage-font-heading);
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.02em;
     color: var(--stage-text);
@@ -960,8 +979,8 @@ a.es-stage-lineup-item:hover {
 }
 
 .es-stage-venue-genre {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-text-secondary);
@@ -1029,13 +1048,13 @@ a.es-stage-lineup-item:hover {
     gap: 10px;
     font-family: var(--stage-font-body);
     font-size: var(--stage-body-size);
-    font-weight: 500;
+    font-weight: var(--ensemble-body-weight, 400);
     color: var(--stage-text);
     text-decoration: none;
     padding: 12px 20px;
     background: var(--stage-surface);
     border: 1px solid var(--stage-border);
-    transition: border-color 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-stage-facebook-link:hover {
@@ -1080,7 +1099,7 @@ a.es-stage-lineup-item:hover {
     color: var(--stage-text);
     background: transparent;
     border: none;
-    transition: opacity 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-layout-stage .es-stage-share-icons a:hover {
@@ -1180,8 +1199,8 @@ a.es-stage-lineup-item:hover {
 }
 
 .es-layout-stage .es-stage-meta-label {
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--stage-text-muted);
@@ -1227,7 +1246,7 @@ a.es-stage-lineup-item:hover {
     color: var(--stage-text);
     background: transparent;
     border: none;
-    transition: opacity 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-layout-stage .es-stage-share-icons a:hover {
@@ -1332,8 +1351,8 @@ body.es-layout-stage .es-hero-slider {
     color: var(--stage-text, #1a1a1a) !important;
     border-radius: var(--stage-btn-radius, 0);
     font-family: var(--stage-font-body);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     padding: 8px 16px;

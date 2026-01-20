@@ -1,8 +1,12 @@
 <?php
 /**
  * Taxonomies Manager Template
+ * 
+ * USES: admin-unified.css for all styles
+ * NO inline CSS - all styles are in the unified stylesheet
  *
  * @package Ensemble
+ * @version 3.0.0
  */
 
 // Exit if accessed directly
@@ -532,583 +536,75 @@ $current_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'catego
     </div>
 </div>
 
-<style>
-/* Taxonomies Page Styles */
-.es-taxonomies-wrap {
-    background: var(--es-background, #1e1e1e);
-    min-height: 100vh;
-    margin-left: -20px;
-    margin-right: -20px;
-    padding: 20px;
-}
-
-.es-taxonomies-container {
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Tabs */
-.es-taxonomy-tabs {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 30px;
-    padding: 20px;
-    background: var(--es-surface, #2c2c2c);
-    border-radius: 12px;
-    border: 2px solid var(--es-border, #3c3c3c);
-}
-
-.es-tab-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background: transparent;
-    border: 2px solid var(--es-border, #3c3c3c);
-    border-radius: 8px;
-    color: var(--es-text-secondary, #a0a0a0);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.es-tab-btn:hover {
-    background: var(--es-surface-hover, #404040);
-    border-color: var(--es-primary, #3582c4);
-    color: var(--es-text, #e0e0e0);
-}
-
-.es-tab-btn.active {
-    background: var(--es-primary, #3582c4);
-    border-color: var(--es-primary, #3582c4);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(53, 130, 196, 0.3);
-}
-
-.es-tab-btn .dashicons {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-}
-
-/* Taxonomy Section */
-.es-taxonomy-section {
-    background: var(--es-surface, #2c2c2c);
-    border: 2px solid var(--es-border, #3c3c3c);
-    border-radius: 12px;
-    padding: 30px;
-}
-
-/* Header */
-.es-taxonomy-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--es-border, #3c3c3c);
-}
-
-.es-header-text h2 {
-    margin: 0 0 8px 0;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--es-text, #e0e0e0);
-}
-
-.es-description {
-    margin: 0;
-    color: var(--es-text-secondary, #a0a0a0);
-    font-size: 14px;
-}
-
-/* Pills Grid */
-.es-taxonomy-pills {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.es-taxonomy-pill {
-    background: var(--es-surface-secondary, #383838);
-    border: 2px solid var(--es-border, #3c3c3c);
-    border-radius: 12px;
-    padding: 20px;
-    transition: all 0.2s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.es-taxonomy-pill:hover {
-    border-color: var(--es-primary, #3582c4);
-    box-shadow: 0 4px 12px rgba(53, 130, 196, 0.2);
-    transform: translateY(-2px);
-}
-
-/* Category Color Indicator */
-.es-pill-color-indicator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6px;
-    height: 100%;
-    border-radius: 12px 0 0 12px;
-}
-
-.es-pill-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.es-pill-header h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--es-text, #e0e0e0);
-}
-
-.es-pill-count {
-    padding: 4px 12px;
-    background: var(--es-primary, #3582c4);
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 12px;
-}
-
-.es-pill-meta {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-    font-size: 13px;
-}
-
-.es-meta-label {
-    color: var(--es-text-secondary, #a0a0a0);
-    font-weight: 500;
-}
-
-.es-meta-value {
-    color: var(--es-text, #e0e0e0);
-    font-family: monospace;
-}
-
-.es-pill-description {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: var(--es-surface, #2c2c2c);
-    border-radius: 6px;
-    color: var(--es-text-secondary, #a0a0a0);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.es-pill-actions {
-    display: flex;
-    gap: 8px;
-    padding-top: 16px;
-    border-top: 1px solid var(--es-border, #3c3c3c);
-}
-
-.es-pill-actions .button {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 13px;
-}
-
-/* Empty State */
-.es-taxonomy-empty {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.es-taxonomy-empty .dashicons {
-    font-size: 64px;
-    width: 64px;
-    height: 64px;
-    color: var(--es-text-secondary, #a0a0a0);
-    margin-bottom: 20px;
-}
-
-.es-taxonomy-empty h3 {
-    margin: 0 0 12px 0;
-    font-size: 20px;
-    color: var(--es-text, #e0e0e0);
-}
-
-.es-taxonomy-empty p {
-    margin: 0 0 24px 0;
-    color: var(--es-text-secondary, #a0a0a0);
-}
-
-/* Info Box */
-.es-taxonomy-info-box {
-    display: flex;
-    gap: 16px;
-    padding: 20px;
-    background: var(--es-surface-secondary, #383838);
-    border: 2px solid var(--es-info, #3582c4);
-    border-radius: 8px;
-}
-
-.es-taxonomy-info-box .dashicons {
-    flex-shrink: 0;
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-    color: var(--es-info, #3582c4);
-}
-
-.es-taxonomy-info-box strong {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--es-text, #e0e0e0);
-    font-size: 14px;
-}
-
-.es-taxonomy-info-box p {
-    margin: 0;
-    color: var(--es-text-secondary, #a0a0a0);
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.es-taxonomy-info-box a {
-    color: var(--es-primary, #3582c4);
-    text-decoration: none;
-}
-
-.es-taxonomy-info-box a:hover {
-    text-decoration: underline;
-}
-
-/* Responsive */
-@media screen and (max-width: 782px) {
-    .es-taxonomies-wrap {
-        margin-left: -10px;
-        margin-right: -10px;
-        padding: 10px;
-    }
-    
-    .es-taxonomy-tabs {
-        flex-direction: column;
-        padding: 10px;
-    }
-    
-    .es-tab-btn {
-        margin-right: 0;
-        margin-bottom: 8px;
-        justify-content: center;
-    }
-    
-    .es-taxonomy-section {
-        padding: 20px;
-    }
-    
-    .es-taxonomy-header {
-        flex-direction: column;
-    }
-    
-    .es-taxonomy-header .button {
-        width: 100%;
-        text-align: center;
-    }
-    
-    .es-taxonomy-pills {
-        grid-template-columns: 1fr;
-    }
-}
-</style>
-
-<!-- Taxonomy Edit/Add Modal -->
+<!-- Taxonomy Edit/Add Modal (follows unified modal pattern) -->
 <div id="es-taxonomy-modal" class="es-modal" style="display: none;">
-    <div class="es-modal-overlay"></div>
-    <div class="es-modal-content">
+    <div class="es-modal-content es-modal-medium es-modal-scrollable">
+        <span class="es-modal-close" id="es-modal-close">&times;</span>
+        
         <div class="es-modal-header">
             <h2 id="es-modal-title"><?php _e('Add Term', 'ensemble'); ?></h2>
-            <button class="es-modal-close" id="es-modal-close">×</button>
         </div>
-        <div class="es-modal-body">
-            <form id="es-taxonomy-form">
-                <input type="hidden" id="es-term-id" name="term_id" value="">
-                <input type="hidden" id="es-taxonomy" name="taxonomy" value="">
-                <input type="hidden" id="es-post-type" name="post_type" value="">
-                
-                <div class="es-form-row">
-                    <label for="es-term-name"><?php _e('Name', 'ensemble'); ?> *</label>
-                    <input type="text" id="es-term-name" name="name" required>
-                    <p class="description"><?php _e('The name is how it appears on your site.', 'ensemble'); ?></p>
-                </div>
-                
-                <div class="es-form-row">
-                    <label for="es-term-slug"><?php _e('Slug', 'ensemble'); ?></label>
-                    <input type="text" id="es-term-slug" name="slug">
-                    <p class="description"><?php _e('The "slug" is the URL-friendly version of the name. Leave blank to auto-generate.', 'ensemble'); ?></p>
-                </div>
-                
-                <div class="es-form-row es-color-row" id="es-color-row" style="display: none;">
-                    <label for="es-term-color"><?php _e('Color', 'ensemble'); ?></label>
-                    <div class="es-color-input-wrapper">
-                        <input type="color" id="es-term-color" name="color" value="#3582c4">
-                        <input type="text" id="es-term-color-hex" name="color_hex" value="#3582c4" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
-                        <div class="es-color-presets">
-                            <button type="button" class="es-color-preset" data-color="#3582c4" style="background: #3582c4;" title="Blue"></button>
-                            <button type="button" class="es-color-preset" data-color="#e74c3c" style="background: #e74c3c;" title="Red"></button>
-                            <button type="button" class="es-color-preset" data-color="#27ae60" style="background: #27ae60;" title="Green"></button>
-                            <button type="button" class="es-color-preset" data-color="#f39c12" style="background: #f39c12;" title="Orange"></button>
-                            <button type="button" class="es-color-preset" data-color="#9b59b6" style="background: #9b59b6;" title="Purple"></button>
-                            <button type="button" class="es-color-preset" data-color="#1abc9c" style="background: #1abc9c;" title="Teal"></button>
-                            <button type="button" class="es-color-preset" data-color="#e91e63" style="background: #e91e63;" title="Pink"></button>
-                            <button type="button" class="es-color-preset" data-color="#607d8b" style="background: #607d8b;" title="Gray"></button>
-                        </div>
+        
+        <form id="es-taxonomy-form" class="es-manager-form">
+            <input type="hidden" id="es-term-id" name="term_id" value="">
+            <input type="hidden" id="es-taxonomy" name="taxonomy" value="">
+            <input type="hidden" id="es-post-type" name="post_type" value="">
+            
+            <div class="es-form-card">
+                <div class="es-form-card-body">
+                    
+                    <div class="es-form-row">
+                        <label for="es-term-name"><?php _e('Name', 'ensemble'); ?> *</label>
+                        <input type="text" id="es-term-name" name="name" required>
+                        <p class="description"><?php _e('The name is how it appears on your site.', 'ensemble'); ?></p>
                     </div>
-                    <p class="description"><?php _e('Color for this category in the calendar view.', 'ensemble'); ?></p>
+                    
+                    <div class="es-form-row">
+                        <label for="es-term-slug"><?php _e('Slug', 'ensemble'); ?></label>
+                        <input type="text" id="es-term-slug" name="slug">
+                        <p class="description"><?php _e('The "slug" is the URL-friendly version of the name. Leave blank to auto-generate.', 'ensemble'); ?></p>
+                    </div>
+                    
+                    <div class="es-form-row es-color-row" id="es-color-row" style="display: none;">
+                        <label for="es-term-color"><?php _e('Color', 'ensemble'); ?></label>
+                        <div class="es-color-input-wrapper">
+                            <input type="color" id="es-term-color" name="color" value="#3582c4">
+                            <input type="text" id="es-term-color-hex" name="color_hex" value="#3582c4" pattern="^#[0-9A-Fa-f]{6}$" maxlength="7">
+                            <div class="es-color-presets">
+                                <button type="button" class="es-color-preset" data-color="#3582c4" style="background: #3582c4;" title="Blue"></button>
+                                <button type="button" class="es-color-preset" data-color="#e74c3c" style="background: #e74c3c;" title="Red"></button>
+                                <button type="button" class="es-color-preset" data-color="#27ae60" style="background: #27ae60;" title="Green"></button>
+                                <button type="button" class="es-color-preset" data-color="#f39c12" style="background: #f39c12;" title="Orange"></button>
+                                <button type="button" class="es-color-preset" data-color="#9b59b6" style="background: #9b59b6;" title="Purple"></button>
+                                <button type="button" class="es-color-preset" data-color="#1abc9c" style="background: #1abc9c;" title="Teal"></button>
+                                <button type="button" class="es-color-preset" data-color="#e91e63" style="background: #e91e63;" title="Pink"></button>
+                                <button type="button" class="es-color-preset" data-color="#607d8b" style="background: #607d8b;" title="Gray"></button>
+                            </div>
+                        </div>
+                        <p class="description"><?php _e('Color for this category in the calendar view.', 'ensemble'); ?></p>
+                    </div>
+                    
+                    <div class="es-form-row">
+                        <label for="es-term-description"><?php _e('Description', 'ensemble'); ?></label>
+                        <textarea id="es-term-description" name="description" rows="4"></textarea>
+                        <p class="description"><?php _e('Optional description for this term.', 'ensemble'); ?></p>
+                    </div>
+                    
                 </div>
-                
-                <div class="es-form-row">
-                    <label for="es-term-description"><?php _e('Description', 'ensemble'); ?></label>
-                    <textarea id="es-term-description" name="description" rows="4"></textarea>
-                    <p class="description"><?php _e('Optional description for this term.', 'ensemble'); ?></p>
-                </div>
-                
-                <div class="es-modal-actions">
+            </div>
+            
+            <div class="es-form-footer">
+                <div class="es-form-footer-right">
                     <button type="button" class="button" id="es-modal-cancel"><?php _e('Cancel', 'ensemble'); ?></button>
                     <button type="submit" class="button button-primary" id="es-modal-save">
-                        <span class="dashicons dashicons-yes"></span>
+                        <span class="dashicons dashicons-saved"></span>
                         <?php _e('Save', 'ensemble'); ?>
                     </button>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </div>
-
-<style>
-/* Modal Styles */
-.es-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 100000;
-}
-
-.es-modal-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-}
-
-.es-modal-content {
-    position: relative;
-    width: 90%;
-    max-width: 600px;
-    margin: 5vh auto;
-    background: var(--es-surface, #2c2c2c);
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.es-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    background: var(--es-background, #1e1e1e);
-    border-bottom: 2px solid var(--es-border, #3c3c3c);
-}
-
-.es-modal-header h2 {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--es-text, #e0e0e0);
-}
-
-.es-modal-close {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: 2px solid var(--es-border, #3c3c3c);
-    border-radius: 8px;
-    font-size: 28px;
-    line-height: 1;
-    color: var(--es-text-secondary, #a0a0a0);
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.es-modal-close:hover {
-    background: var(--es-danger, #dc2626);
-    border-color: var(--es-danger, #dc2626);
-    color: white;
-    transform: rotate(90deg);
-}
-
-.es-modal-body {
-    padding: 24px;
-    max-height: calc(90vh - 160px);
-    overflow-y: auto;
-}
-
-.es-modal-body .es-form-row {
-    margin-bottom: 20px;
-}
-
-.es-modal-body .es-form-row:last-child {
-    margin-bottom: 0;
-}
-
-.es-modal-body label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--es-text, #e0e0e0);
-    font-weight: 500;
-    font-size: 14px;
-}
-
-.es-modal-body input[type="text"],
-.es-modal-body textarea {
-    width: 100%;
-    padding: 10px 12px;
-    background: var(--es-surface-secondary, #383838);
-    border: 2px solid var(--es-border, #3c3c3c);
-    border-radius: 6px;
-    color: var(--es-text, #e0e0e0);
-    font-size: 14px;
-    transition: all 0.2s ease;
-}
-
-.es-modal-body input[type="text"]:focus,
-.es-modal-body textarea:focus {
-    outline: none;
-    border-color: var(--es-primary, #3582c4);
-    box-shadow: 0 0 0 3px rgba(53, 130, 196, 0.1);
-}
-
-.es-modal-body .description {
-    margin: 6px 0 0 0;
-    color: var(--es-text-secondary, #a0a0a0);
-    font-size: 12px;
-}
-
-/* Color Input Styles */
-.es-color-input-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.es-color-input-wrapper input[type="color"] {
-    width: 50px;
-    height: 40px;
-    padding: 2px;
-    border: 2px solid var(--es-border, #3c3c3c);
-    border-radius: 6px;
-    background: var(--es-surface-secondary, #383838);
-    cursor: pointer;
-}
-
-.es-color-input-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
-    padding: 2px;
-}
-
-.es-color-input-wrapper input[type="color"]::-webkit-color-swatch {
-    border-radius: 4px;
-    border: none;
-}
-
-.es-color-input-wrapper input[type="text"] {
-    width: 90px !important;
-    font-family: monospace;
-    text-transform: uppercase;
-}
-
-.es-color-presets {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.es-color-preset {
-    width: 28px;
-    height: 28px;
-    border-radius: 4px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 0;
-}
-
-.es-color-preset:hover {
-    transform: scale(1.15);
-    border-color: var(--es-text, #e0e0e0);
-}
-
-.es-color-preset.active {
-    border-color: var(--es-text, #e0e0e0);
-    box-shadow: 0 0 0 2px var(--es-primary, #3582c4);
-}
-
-.es-modal-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 2px solid var(--es-border, #3c3c3c);
-}
-
-.es-modal-actions .button {
-    padding: 10px 20px;
-}
-
-/* Loading State */
-.es-loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-}
-
-.es-loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid var(--es-border, #3c3c3c);
-    border-top-color: var(--es-primary, #3582c4);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-</style>
 
 <script>
 jQuery(document).ready(function($) {
@@ -1237,7 +733,7 @@ jQuery(document).ready(function($) {
         
         // Show loading
         const $btn = $(this);
-        $btn.prop('disabled', true).html('<span class="dashicons dashicons-update-alt" style="animation: spin 1s linear infinite;"></span>');
+        $btn.prop('disabled', true).html('<span class="dashicons dashicons-update-alt es-spin"></span>');
         
         $.ajax({
             url: ajaxurl,
@@ -1253,12 +749,12 @@ jQuery(document).ready(function($) {
                     location.reload();
                 } else {
                     alert(response.data.message || '<?php _e('Error deleting term', 'ensemble'); ?>');
-                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-trash"></span> <?php _e('Delete', 'ensemble'); ?>');
+                    $btn.prop('disabled', false).html('<?php ES_Icons::icon('trash'); ?>');
                 }
             },
             error: function() {
                 alert('<?php _e('Error deleting term', 'ensemble'); ?>');
-                $btn.prop('disabled', false).html('<span class="dashicons dashicons-trash"></span> <?php _e('Delete', 'ensemble'); ?>');
+                $btn.prop('disabled', false).html('<?php ES_Icons::icon('trash'); ?>');
             }
         });
     });
@@ -1270,7 +766,14 @@ jQuery(document).ready(function($) {
         $('body').css('overflow', 'auto');
     }
     
-    $('#es-modal-close, #es-modal-cancel, .es-modal-overlay').on('click', closeModal);
+    $('#es-modal-close, #es-modal-cancel').on('click', closeModal);
+    
+    // Close on clicking outside modal content
+    modal.on('click', function(e) {
+        if ($(e.target).hasClass('es-modal')) {
+            closeModal();
+        }
+    });
     
     // Close on escape key
     $(document).on('keyup', function(e) {
@@ -1299,7 +802,7 @@ jQuery(document).ready(function($) {
         // Show loading
         const $saveBtn = $('#es-modal-save');
         const originalText = $saveBtn.html();
-        $saveBtn.prop('disabled', true).html('<span class="dashicons dashicons-update-alt" style="animation: spin 1s linear infinite;"></span> <?php _e('Saving...', 'ensemble'); ?>');
+        $saveBtn.prop('disabled', true).html('<span class="dashicons dashicons-update-alt es-spin"></span> <?php _e('Saving...', 'ensemble'); ?>');
         
         $.ajax({
             url: ajaxurl,

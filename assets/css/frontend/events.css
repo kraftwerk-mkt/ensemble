@@ -1,0 +1,533 @@
+/**
+ * Ensemble Shortcodes - Events
+ * 
+ * Styles for event-related shortcodes:
+ * - [ensemble_events] - Events Grid
+ * - [ensemble_upcoming] - Upcoming Events List
+ * - [ensemble_featured] - Featured Events
+ * - Single Event components
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * DEPENDENCIES:
+ * - _base.css
+ * - _components.css
+ * 
+ * CONDITIONAL LOADING:
+ * Only loaded when event shortcodes are present on page.
+ */
+
+/* ============================================
+   EVENTS GRID WRAPPER
+   ============================================ */
+
+.ensemble-events-grid-wrapper {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* No margin for slider/hero layouts */
+.ensemble-events-grid-wrapper.es-is-slider {
+    margin: 0;
+}
+
+/* Hide filters for slider layouts */
+.ensemble-events-grid-wrapper.es-is-slider .ensemble-grid-filters {
+    display: none !important;
+}
+
+/* ============================================
+   GRID FILTERS
+   ============================================ */
+
+.ensemble-grid-filters {
+    margin-bottom: 32px;
+    padding: var(--ensemble-card-padding, 24px);
+    background: var(--ensemble-filter-bg, var(--ensemble-surface, #ffffff));
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+.ensemble-search-box {
+    margin-bottom: 16px;
+}
+
+.ensemble-search-input {
+    width: 100%;
+    padding: var(--ensemble-input-padding-v, 12px) var(--ensemble-input-padding-h, 16px);
+    border: var(--ensemble-input-border-width, 1px) solid var(--ensemble-input-border, var(--ensemble-card-border, #e2e8f0));
+    border-radius: var(--ensemble-input-radius, var(--ensemble-radius, 8px));
+    font-size: var(--ensemble-body-size, 16px);
+    font-family: var(--ensemble-font-body, inherit);
+    background: var(--ensemble-input-bg, var(--ensemble-card-bg, #ffffff));
+    color: var(--ensemble-input-text, var(--ensemble-text, #1a202c));
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ensemble-search-input::placeholder {
+    color: var(--ensemble-input-placeholder, var(--ensemble-text-muted, #a0aec0));
+}
+
+.ensemble-search-input:focus {
+    outline: none;
+    border-color: var(--ensemble-input-focus-border, var(--ensemble-primary, #667eea));
+    box-shadow: 0 0 0 3px var(--ensemble-input-focus-shadow, rgba(102, 126, 234, 0.15));
+}
+
+.ensemble-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.ensemble-filter {
+    flex: 1;
+    min-width: 150px;
+    padding: var(--ensemble-input-padding-v, 10px) var(--ensemble-input-padding-h, 16px);
+    border: var(--ensemble-input-border-width, 1px) solid var(--ensemble-input-border, var(--ensemble-card-border, #e2e8f0));
+    border-radius: var(--ensemble-input-radius, var(--ensemble-radius, 8px));
+    font-size: var(--ensemble-body-size, 16px);
+    font-family: var(--ensemble-font-body, inherit);
+    background: var(--ensemble-input-bg, var(--ensemble-card-bg, #ffffff));
+    color: var(--ensemble-input-text, var(--ensemble-text, #1a202c));
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.ensemble-filter:focus {
+    outline: none;
+    border-color: var(--ensemble-input-focus-border, var(--ensemble-primary, #667eea));
+}
+
+/* ============================================
+   SINGLE EVENT/ARTIST/LOCATION PAGES
+   ============================================ */
+
+.ensemble-single-event,
+.ensemble-single-artist,
+.ensemble-single-location {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+.ensemble-single-event .ensemble-event-header,
+.ensemble-single-artist .ensemble-artist-header,
+.ensemble-single-location .ensemble-location-header {
+    margin-bottom: 24px;
+}
+
+/* Meta Grid */
+.ensemble-single-event .ensemble-meta-grid,
+.ensemble-single-artist .ensemble-meta-grid,
+.ensemble-single-location .ensemble-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+    padding: var(--ensemble-card-padding, 24px);
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+.ensemble-single-event .ensemble-meta-item,
+.ensemble-single-artist .ensemble-meta-item,
+.ensemble-single-location .ensemble-meta-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+/* Description */
+.ensemble-single-event .ensemble-event-description,
+.ensemble-single-artist .ensemble-artist-description,
+.ensemble-single-location .ensemble-location-description {
+    margin: 32px 0;
+}
+
+.ensemble-single-event .ensemble-content,
+.ensemble-single-artist .ensemble-content,
+.ensemble-single-location .ensemble-content {
+    line-height: var(--ensemble-line-height, 1.6);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-single-event .ensemble-content p,
+.ensemble-single-artist .ensemble-content p,
+.ensemble-single-location .ensemble-content p {
+    margin: 0 0 16px 0;
+}
+
+/* ============================================
+   SOCIAL LINKS
+   ============================================ */
+
+.ensemble-artist-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.ensemble-social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-radius, 8px);
+    color: var(--ensemble-text, #1a202c);
+    text-decoration: none;
+    font-size: var(--ensemble-small-size, 14px);
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-social-link:hover {
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border-color: var(--ensemble-primary, #667eea);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.ensemble-social-link .dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+/* ============================================
+   ARTIST/LOCATION REFERENCES
+   ============================================ */
+
+.ensemble-artist-references {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+    padding: 12px 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border-left: 3px solid var(--ensemble-primary, #667eea);
+    border-radius: var(--ensemble-radius, 8px);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-artist-references .dashicons {
+    color: var(--ensemble-primary, #667eea);
+    font-size: var(--ensemble-lg-size, 18px);
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.ensemble-references-text {
+    line-height: 1.4;
+}
+
+/* ============================================
+   EVENTS LIST (on Artist/Location pages)
+   ============================================ */
+
+.ensemble-artist-events-section,
+.ensemble-location-events-section {
+    margin-top: 48px;
+}
+
+.ensemble-artist-events-section h2,
+.ensemble-location-events-section h2 {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h2-size, 28px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1a202c);
+    margin: 0 0 24px 0;
+}
+
+.ensemble-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ensemble-event-list-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-event-list-item:hover {
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.ensemble-event-list-item .ensemble-event-date {
+    flex-shrink: 0;
+}
+
+.ensemble-event-list-item .ensemble-event-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ensemble-event-list-item .ensemble-event-title {
+    margin: 0 0 8px 0;
+    font-size: var(--ensemble-h4-size, 20px);
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+.ensemble-event-list-item .ensemble-event-title a {
+    color: var(--ensemble-text, #1a202c);
+    text-decoration: none;
+}
+
+.ensemble-event-list-item .ensemble-event-title a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-event-list-item .ensemble-event-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-event-list-item .ensemble-event-details span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ensemble-event-list-item .ensemble-event-details .dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* ============================================
+   UPCOMING EVENTS
+   ============================================ */
+
+.ensemble-upcoming-events {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+.ensemble-upcoming-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-upcoming-item:hover {
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Thumbnail */
+.ensemble-upcoming-thumb {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: calc(var(--ensemble-card-radius, 12px) / 2);
+    overflow: hidden;
+}
+
+.ensemble-upcoming-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Content */
+.ensemble-upcoming-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.ensemble-upcoming-date {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+/* Date Badge */
+.ensemble-date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: calc(var(--ensemble-radius, 8px) / 2);
+    flex-shrink: 0;
+}
+
+.ensemble-date-badge .date-day {
+    font-size: var(--ensemble-xl-size, 20px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    line-height: 1;
+}
+
+.ensemble-date-badge .date-month {
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+/* Countdown Badge */
+.ensemble-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 8px);
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 12px);
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+/* Title */
+.ensemble-upcoming-title {
+    margin: 0 0 8px 0;
+}
+
+.ensemble-upcoming-title a {
+    color: var(--ensemble-text, #1a202c);
+    text-decoration: none;
+    font-size: var(--ensemble-h4-size, 20px);
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+.ensemble-upcoming-title a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* Details */
+.ensemble-upcoming-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-upcoming-details span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ensemble-upcoming-details .dashicons {
+    width: 14px;
+    height: 14px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* ============================================
+   FEATURED EVENTS
+   ============================================ */
+
+.ensemble-featured-events {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+.ensemble-featured-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: var(--ensemble-badge-padding-v, 6px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 16px);
+    font-size: var(--ensemble-badge-font-size, var(--ensemble-small-size, 14px));
+    font-weight: var(--ensemble-badge-font-weight, 600);
+    z-index: 10;
+}
+
+/* ============================================
+   MOBILE TICKET CARD
+   ============================================ */
+
+.es-mobile-ticket-card {
+    display: none;
+}
+
+.es-desktop-ticket {
+    display: block;
+}
+
+@media (max-width: 991px) {
+    .es-mobile-ticket-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: var(--ensemble-card-padding, 24px);
+        margin: 24px 0;
+        background: var(--ensemble-surface, #ffffff);
+        border-radius: var(--ensemble-card-radius, 12px);
+        text-align: center;
+    }
+    
+    .es-mobile-ticket-price {
+        font-size: var(--ensemble-h3-size, 24px);
+        font-weight: var(--ensemble-heading-weight, 700);
+        color: var(--ensemble-text, #1a202c);
+    }
+    
+    .es-mobile-ticket-card .es-ticket-button {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .es-desktop-ticket {
+        display: none !important;
+    }
+}
+
+/* ============================================
+   VENUE HEADER
+   ============================================ */
+
+.es-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.es-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.es-venue-genre {
+    display: inline-block;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    font-size: var(--ensemble-xs-size, 12px);
+    border-radius: var(--ensemble-badge-radius, 20px);
+}

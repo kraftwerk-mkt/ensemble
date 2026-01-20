@@ -1,103 +1,146 @@
 /**
- * Ensemble Gallery Pro - JavaScript
+ * Gallery Pro - Frontend JavaScript
+ * 
+ * Handles lightbox, carousel, and filmstrip functionality
+ * Supports images and videos (YouTube, Vimeo, Self-hosted)
  * 
  * @package Ensemble
  * @subpackage Addons/Gallery Pro
+ * @since 3.0.0
  */
 
 (function($) {
     'use strict';
-    
+
     /**
-     * Gallery Pro Controller
+     * Gallery Pro Module
      */
-    var EnsembleGalleryPro = {
+    const EnsembleGalleryPro = {
         
         /**
-         * Configuration from localized script
+         * Lightbox instances
          */
-        config: window.ensembleGalleryPro || {},
+        lightboxes: {},
         
         /**
-         * GLightbox instances
+         * Swiper instances
          */
-        lightboxInstances: {},
+        swipers: {},
+        
+        /**
+         * Settings
+         */
+        settings: {},
         
         /**
          * Initialize
          */
         init: function() {
+            this.settings = window.ensembleGalleryPro || {};
+            
             this.initLightboxes();
-            this.initMasonryLayout();
-            this.initJustifiedLayout();
-            this.bindEvents();
+            this.initCarousels();
+            this.initFilmstrips();
+            this.initMasonry();
         },
         
         /**
-         * Initialize all lightboxes
+         * Initialize GLightbox instances
          */
         initLightboxes: function() {
-            var self = this;
+            const self = this;
+            const lightboxSettings = this.settings.lightbox || {};
             
-            // Find all galleries with lightbox
+            // Find all galleries
             $('.es-gallery').each(function() {
-                var $gallery = $(this);
-                var galleryId = $gallery.attr('id');
+                const $gallery = $(this);
+                const galleryId = $gallery.attr('id');
                 
                 if (!galleryId) return;
                 
-                // Get lightbox elements for this gallery
-                var selector = '#' + galleryId + ' .glightbox';
-                
-                if ($(selector).length === 0) return;
+                // Check if gallery has lightbox links
+                const $links = $gallery.find('.glightbox');
+                if ($links.length === 0) return;
                 
                 // Initialize GLightbox
-                self.lightboxInstances[galleryId] = GLightbox({
-                    selector: selector,
+                self.lightboxes[galleryId] = GLightbox({
+                    selector: '#' + galleryId + ' .glightbox',
                     touchNavigation: true,
-                    loop: self.config.lightbox?.loop !== false,
-                    autoplayVideos: self.config.lightbox?.autoplay || false,
-                    slideEffect: self.config.lightbox?.slideEffect || 'zoom',
+                    loop: lightboxSettings.loop !== false,
+                    autoplayVideos: lightboxSettings.autoplay === true,
+                    openEffect: lightboxSettings.slideEffect || 'zoom',
                     closeEffect: 'fade',
                     cssEfects: {
                         fade: { in: 'fadeIn', out: 'fadeOut' },
                         zoom: { in: 'zoomIn', out: 'zoomOut' },
                         slide: { in: 'slideInRight', out: 'slideOutLeft' }
                     },
-                    skin: 'glightbox-' + (self.config.lightbox?.theme || 'dark'),
-                    moreText: self.config.strings?.more || 'Mehr',
-                    moreLength: 60,
-                    closeButton: true,
-                    touchFollowAxis: true,
-                    keyboardNavigation: true,
-                    draggable: true,
-                    zoomable: true,
-                    preload: true,
-                    svg: {
-                        close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-                        next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
-                        prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>'
-                    },
                     plyr: {
                         css: 'https://cdn.plyr.io/3.7.8/plyr.css',
-                        js: 'https://cdn.plyr.io/3.7.8/plyr.polyfilled.js',
+                        js: 'https://cdn.plyr.io/3.7.8/plyr.js',
                         config: {
                             ratio: '16:9',
-                            muted: false,
-                            hideControls: true,
                             youtube: {
                                 noCookie: true,
                                 rel: 0,
-                                showinfo: 0,
-                                iv_load_policy: 3
+                                showinfo: 0
                             },
                             vimeo: {
                                 byline: false,
                                 portrait: false,
                                 title: false,
-                                speed: true,
                                 transparent: false
                             }
+                        }
+                    },
+                    // Custom video source handler for local videos
+                    videosWidth: '900px'
+                });
+            });
+        },
+        
+        /**
+         * Initialize Swiper carousels
+         */
+        initCarousels: function() {
+            const self = this;
+            const carouselSettings = this.settings.carousel || {};
+            
+            $('.es-gallery-carousel').each(function() {
+                const $gallery = $(this);
+                const galleryId = $gallery.attr('id');
+                const $swiper = $gallery.find('.es-gallery-swiper');
+                
+                if ($swiper.length === 0) return;
+                
+                self.swipers[galleryId] = new Swiper($swiper[0], {
+                    slidesPerView: 1,
+                    spaceBetween: 16,
+                    loop: carouselSettings.loop !== false,
+                    autoplay: carouselSettings.autoplay ? {
+                        delay: carouselSettings.delay || 5000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true
+                    } : false,
+                    navigation: {
+                        nextEl: $gallery.find('.swiper-button-next')[0],
+                        prevEl: $gallery.find('.swiper-button-prev')[0]
+                    },
+                    pagination: {
+                        el: $gallery.find('.swiper-pagination')[0],
+                        clickable: true
+                    },
+                    keyboard: {
+                        enabled: true
+                    },
+                    // Pause autoplay when video is playing
+                    on: {
+                        slideChangeTransitionEnd: function() {
+                            // Pause any playing videos when slide changes
+                            const $videos = $gallery.find('video');
+                            $videos.each(function() {
+                                this.pause();
+                            });
                         }
                     }
                 });
@@ -105,253 +148,135 @@
         },
         
         /**
-         * Initialize Masonry layout (using CSS columns, but we can add JS enhancements)
+         * Initialize filmstrip navigation
          */
-        initMasonryLayout: function() {
-            var self = this;
-            
-            $('.es-gallery-masonry').each(function() {
-                var $gallery = $(this);
+        initFilmstrips: function() {
+            $('.es-gallery-filmstrip').each(function() {
+                const $gallery = $(this);
+                const $track = $gallery.find('.es-filmstrip-items');
+                const $prev = $gallery.find('.es-filmstrip-prev');
+                const $next = $gallery.find('.es-filmstrip-next');
                 
-                // Lazy load images and reflow on load
-                $gallery.find('img').each(function() {
-                    var $img = $(this);
+                const scrollAmount = 200;
+                
+                $prev.on('click', function() {
+                    $track.animate({
+                        scrollLeft: $track.scrollLeft() - scrollAmount
+                    }, 300);
+                });
+                
+                $next.on('click', function() {
+                    $track.animate({
+                        scrollLeft: $track.scrollLeft() + scrollAmount
+                    }, 300);
+                });
+                
+                // Update button states
+                function updateNavButtons() {
+                    const scrollLeft = $track.scrollLeft();
+                    const maxScroll = $track[0].scrollWidth - $track.width();
                     
-                    if ($img[0].complete) {
-                        $img.addClass('loaded');
+                    $prev.prop('disabled', scrollLeft <= 0);
+                    $next.prop('disabled', scrollLeft >= maxScroll - 1);
+                }
+                
+                $track.on('scroll', updateNavButtons);
+                $(window).on('resize', updateNavButtons);
+                updateNavButtons();
+            });
+        },
+        
+        /**
+         * Initialize masonry layout
+         * Uses CSS columns, but we handle image loading for smooth layout
+         */
+        initMasonry: function() {
+            $('.es-gallery-masonry').each(function() {
+                const $gallery = $(this);
+                const $items = $gallery.find('.es-gallery-image');
+                
+                // Wait for images to load for proper layout
+                let loadedCount = 0;
+                const totalCount = $items.length;
+                
+                if (totalCount === 0) return;
+                
+                $items.each(function() {
+                    const img = this;
+                    
+                    if (img.complete) {
+                        loadedCount++;
+                        checkAllLoaded();
                     } else {
-                        $img.on('load', function() {
-                            $(this).addClass('loaded');
+                        $(img).on('load error', function() {
+                            loadedCount++;
+                            checkAllLoaded();
                         });
                     }
                 });
+                
+                function checkAllLoaded() {
+                    if (loadedCount >= totalCount) {
+                        $gallery.addClass('es-masonry-loaded');
+                    }
+                }
             });
         },
         
         /**
-         * Initialize Justified layout
+         * Refresh a specific gallery
+         * Useful after dynamic content updates
          */
-        initJustifiedLayout: function() {
-            var self = this;
+        refresh: function(galleryId) {
+            // Refresh lightbox
+            if (this.lightboxes[galleryId]) {
+                this.lightboxes[galleryId].reload();
+            }
             
-            $('.es-gallery-justified').each(function() {
-                var $gallery = $(this);
-                
-                // Calculate and set proper flex values based on loaded images
-                $gallery.find('.es-gallery-justified-item img').each(function() {
-                    var $img = $(this);
-                    var $item = $img.closest('.es-gallery-justified-item');
-                    
-                    function setFlexGrow() {
-                        var naturalWidth = this.naturalWidth || 400;
-                        var naturalHeight = this.naturalHeight || 300;
-                        var ratio = naturalWidth / Math.max(naturalHeight, 1);
-                        var flexGrow = Math.max(1, Math.min(ratio * 100, 300));
-                        
-                        $item.css('flex-grow', flexGrow);
-                        
-                        // Update padding-bottom for aspect ratio
-                        $item.find('i').css('padding-bottom', ((1 / ratio) * 100) + '%');
-                    }
-                    
-                    if ($img[0].complete && $img[0].naturalWidth) {
-                        setFlexGrow.call($img[0]);
-                    } else {
-                        $img.on('load', setFlexGrow);
-                    }
-                });
-            });
-        },
-        
-        /**
-         * Bind events
-         */
-        bindEvents: function() {
-            var self = this;
-            
-            // Keyboard navigation for galleries
-            $(document).on('keydown', function(e) {
-                // Only if a gallery is focused or hovered
-                var $activeGallery = $('.es-gallery:hover, .es-gallery:focus-within').first();
-                
-                if ($activeGallery.length === 0) return;
-                
-                var galleryId = $activeGallery.attr('id');
-                var lightbox = self.lightboxInstances[galleryId];
-                
-                if (!lightbox) return;
-                
-                // Enter key opens lightbox on first image
-                if (e.key === 'Enter' && !$('body').hasClass('glightbox-open')) {
-                    var $firstLink = $activeGallery.find('.glightbox').first();
-                    if ($firstLink.length) {
-                        lightbox.openAt(0);
-                        e.preventDefault();
-                    }
-                }
-            });
-            
-            // Fullscreen button
-            $(document).on('click', '.es-gallery-fullscreen', function(e) {
-                e.preventDefault();
-                var $gallery = $(this).closest('.es-gallery');
-                self.toggleFullscreen($gallery[0]);
-            });
-            
-            // Window resize - recalculate layouts
-            var resizeTimeout;
-            $(window).on('resize', function() {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(function() {
-                    self.initJustifiedLayout();
-                }, 250);
-            });
-        },
-        
-        /**
-         * Toggle fullscreen mode
-         * 
-         * @param {HTMLElement} element
-         */
-        toggleFullscreen: function(element) {
-            if (!document.fullscreenElement && 
-                !document.webkitFullscreenElement && 
-                !document.mozFullScreenElement && 
-                !document.msFullscreenElement) {
-                
-                if (element.requestFullscreen) {
-                    element.requestFullscreen();
-                } else if (element.webkitRequestFullscreen) {
-                    element.webkitRequestFullscreen();
-                } else if (element.mozRequestFullScreen) {
-                    element.mozRequestFullScreen();
-                } else if (element.msRequestFullscreen) {
-                    element.msRequestFullscreen();
-                }
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
+            // Refresh swiper
+            if (this.swipers[galleryId]) {
+                this.swipers[galleryId].update();
             }
         },
         
         /**
-         * Refresh lightbox instance
-         * 
-         * @param {string} galleryId
+         * Destroy a specific gallery
          */
-        refreshLightbox: function(galleryId) {
-            if (this.lightboxInstances[galleryId]) {
-                this.lightboxInstances[galleryId].reload();
+        destroy: function(galleryId) {
+            // Destroy lightbox
+            if (this.lightboxes[galleryId]) {
+                this.lightboxes[galleryId].destroy();
+                delete this.lightboxes[galleryId];
             }
-        },
-        
-        /**
-         * Open lightbox at specific index
-         * 
-         * @param {string} galleryId
-         * @param {number} index
-         */
-        openLightbox: function(galleryId, index) {
-            if (this.lightboxInstances[galleryId]) {
-                this.lightboxInstances[galleryId].openAt(index || 0);
+            
+            // Destroy swiper
+            if (this.swipers[galleryId]) {
+                this.swipers[galleryId].destroy();
+                delete this.swipers[galleryId];
             }
-        },
-        
-        /**
-         * Close all lightboxes
-         */
-        closeAllLightboxes: function() {
-            Object.keys(this.lightboxInstances).forEach(function(key) {
-                this.lightboxInstances[key].close();
-            }, this);
-        },
-        
-        /**
-         * Lazy load images
-         * 
-         * @param {jQuery} $container
-         */
-        lazyLoadImages: function($container) {
-            var self = this;
-            
-            $container.find('img[loading="lazy"]').each(function() {
-                var $img = $(this);
-                
-                if (self.isElementInViewport($img[0])) {
-                    // Browser handles lazy loading, but we can add a class
-                    $img.addClass('es-lazy-loaded');
-                }
-            });
-        },
-        
-        /**
-         * Check if element is in viewport
-         * 
-         * @param {HTMLElement} el
-         * @return {boolean}
-         */
-        isElementInViewport: function(el) {
-            var rect = el.getBoundingClientRect();
-            
-            return (
-                rect.top >= 0 &&
-                rect.left >= 0 &&
-                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
         }
     };
     
     /**
-     * Carousel initialization (separate from main init to allow Swiper to load)
-     */
-    function initCarousels() {
-        if (typeof Swiper === 'undefined') return;
-        
-        // Carousels are initialized inline in the template
-        // This function can be used for additional setup
-        
-        $('.es-gallery-carousel').each(function() {
-            var $gallery = $(this);
-            
-            // Stop autoplay on hover
-            var $swiper = $gallery.find('.es-gallery-swiper-main');
-            if ($swiper.length && $swiper[0].swiper) {
-                $swiper.on('mouseenter', function() {
-                    if ($swiper[0].swiper.autoplay) {
-                        $swiper[0].swiper.autoplay.stop();
-                    }
-                });
-                
-                $swiper.on('mouseleave', function() {
-                    if ($swiper[0].swiper.autoplay && EnsembleGalleryPro.config.carousel?.autoplay) {
-                        $swiper[0].swiper.autoplay.start();
-                    }
-                });
-            }
-        });
-    }
-    
-    /**
-     * Document ready
+     * Initialize on DOM ready
      */
     $(document).ready(function() {
         EnsembleGalleryPro.init();
-        
-        // Initialize carousels after a short delay to ensure Swiper is loaded
-        setTimeout(initCarousels, 100);
+    });
+    
+    /**
+     * Re-initialize after AJAX content loads
+     */
+    $(document).on('ajaxComplete', function() {
+        // Small delay to ensure DOM is updated
+        setTimeout(function() {
+            EnsembleGalleryPro.init();
+        }, 100);
     });
     
     /**
      * Expose to global scope
      */
     window.EnsembleGalleryPro = EnsembleGalleryPro;
-    
+
 })(jQuery);

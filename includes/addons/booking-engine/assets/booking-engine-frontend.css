@@ -1,0 +1,987 @@
+/**
+ * Booking Engine Frontend Styles
+ * 
+ * Fully integrated with Ensemble Designer CSS Variables
+ * Following the same pattern as ensemble-frontend.css and shortcodes
+ * 
+ * Variable Hierarchy:
+ * 1. Designer variables (--ensemble-*) from active Layout Set
+ * 2. Sensible fallbacks matching Ensemble defaults
+ * 
+ * @package Ensemble
+ * @subpackage Addons/BookingEngine
+ */
+
+/* ============================================
+   BOOKING WIDGET CONTAINER
+   ============================================ */
+
+.es-booking-widget {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    box-shadow: var(--ensemble-card-shadow, 0 2px 8px rgba(0,0,0,0.08));
+    padding: 24px;
+    max-width: 500px;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.es-booking-widget:hover {
+    box-shadow: var(--ensemble-card-shadow-hover, 0 4px 16px rgba(0,0,0,0.12));
+}
+
+/* Dark mode support - follows Ensemble pattern */
+.es-mode-dark .es-booking-widget,
+[data-theme="dark"] .es-booking-widget {
+    --ensemble-card-bg: #1a1a2e;
+    --ensemble-card-border: #333;
+    --ensemble-text: #ffffff;
+    --ensemble-text-secondary: #aaa;
+    --ensemble-text-muted: #777;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.es-booking-header {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-booking-header h4 {
+    margin: 0 0 8px;
+    font-size: var(--ensemble-h4-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-booking-date {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-booking-date .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: var(--ensemble-primary, #667eea);
+}
+
+.es-booking-time {
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-booking-availability {
+    margin: 8px 0 0;
+    font-size: 13px;
+}
+
+.es-spots-remaining {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--ensemble-success-light, rgba(16, 185, 129, 0.1));
+    color: var(--ensemble-success, #10b981);
+    border-radius: var(--ensemble-tag-radius, 12px);
+    font-weight: 500;
+}
+
+/* ============================================
+   SOLD OUT STATE
+   ============================================ */
+
+.es-booking-soldout {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.es-booking-soldout .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--ensemble-warning, #f59e0b);
+    margin-bottom: 15px;
+}
+
+.es-booking-soldout strong {
+    display: block;
+    font-size: var(--ensemble-h4-size, 18px);
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-text, #1a202c);
+    margin-bottom: 8px;
+}
+
+.es-booking-soldout p {
+    margin: 0;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+/* ============================================
+   WAITLIST NOTICE
+   ============================================ */
+
+.es-booking-waitlist-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--ensemble-warning-light, rgba(245, 158, 11, 0.1));
+    border: 1px solid var(--ensemble-warning-border, rgba(245, 158, 11, 0.3));
+    border-radius: var(--ensemble-button-radius, 8px);
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--ensemble-warning-text, #b45309);
+}
+
+.es-booking-waitlist-notice .dashicons {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--ensemble-warning, #f59e0b);
+}
+
+/* ============================================
+   FORM FIELDS
+   ============================================ */
+
+.es-booking-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.es-field-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.es-field-row label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-field-row label .required {
+    color: var(--ensemble-danger, #ef4444);
+}
+
+.es-field-optional {
+    font-weight: 400;
+    color: var(--ensemble-text-muted, #a0aec0);
+    font-size: 12px;
+}
+
+.es-field-row input[type="text"],
+.es-field-row input[type="email"],
+.es-field-row input[type="tel"],
+.es-field-row input[type="number"],
+.es-field-row select,
+.es-field-row textarea {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-button-radius, 8px);
+    background: var(--ensemble-card-bg, #ffffff);
+    color: var(--ensemble-text, #1a202c);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.es-field-row input:focus,
+.es-field-row select:focus,
+.es-field-row textarea:focus {
+    outline: none;
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: 0 0 0 3px var(--ensemble-primary-light, rgba(102, 126, 234, 0.15));
+}
+
+.es-field-row input::placeholder,
+.es-field-row textarea::placeholder {
+    color: var(--ensemble-text-muted, #a0aec0);
+    opacity: 0.8;
+}
+
+.es-field-row select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23718096' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+}
+
+.es-field-row textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* ============================================
+   PRIVACY CHECKBOX
+   ============================================ */
+
+.es-booking-privacy {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-checkbox-label input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: var(--ensemble-primary, #667eea);
+}
+
+.es-checkbox-label a {
+    color: var(--ensemble-primary, #667eea);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.es-checkbox-label a:hover {
+    color: var(--ensemble-secondary, #764ba2);
+    text-decoration: underline;
+}
+
+/* ============================================
+   SUBMIT BUTTON
+   ============================================ */
+
+.es-booking-submit {
+    margin-top: 24px;
+}
+
+.es-booking-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ensemble-button-text, #ffffff);
+    background: var(--ensemble-primary, #667eea);
+    border: none;
+    border-radius: var(--ensemble-button-radius, 8px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-booking-btn:hover {
+    background: var(--ensemble-secondary, #764ba2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--ensemble-primary-light, rgba(102, 126, 234, 0.3));
+}
+
+.es-booking-btn:active {
+    transform: translateY(0);
+}
+
+.es-booking-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.es-booking-btn .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Loading state */
+.es-booking-form.is-loading .es-booking-btn {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.es-booking-form.is-loading .es-booking-btn::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top-color: var(--ensemble-button-text, #fff);
+    border-radius: 50%;
+    animation: es-spin 0.8s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes es-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   MESSAGES
+   ============================================ */
+
+.es-booking-messages {
+    margin-top: 20px;
+}
+
+.es-booking-success,
+.es-booking-error {
+    display: none;
+    padding: 20px;
+    border-radius: var(--ensemble-button-radius, 8px);
+    text-align: center;
+}
+
+/* Success Message */
+.es-booking-success {
+    background: var(--ensemble-success-light, rgba(16, 185, 129, 0.1));
+    border: 1px solid var(--ensemble-success-border, rgba(16, 185, 129, 0.3));
+}
+
+.es-booking-success .dashicons {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--ensemble-success, #10b981);
+    margin-bottom: 10px;
+}
+
+.es-booking-success strong {
+    display: block;
+    font-size: var(--ensemble-h4-size, 18px);
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-success, #10b981);
+    margin-bottom: 8px;
+}
+
+.es-booking-success p {
+    margin: 0;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-confirmation-code {
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ensemble-primary, #667eea);
+    letter-spacing: 2px;
+    margin-top: 15px !important;
+    padding: 10px 16px;
+    background: var(--ensemble-primary-light, rgba(102, 126, 234, 0.1));
+    border-radius: var(--ensemble-tag-radius, 6px);
+    display: inline-block;
+}
+
+/* Error Message */
+.es-booking-error {
+    background: var(--ensemble-danger-light, rgba(239, 68, 68, 0.1));
+    border: 1px solid var(--ensemble-danger-border, rgba(239, 68, 68, 0.3));
+}
+
+.es-booking-error .dashicons {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--ensemble-danger, #ef4444);
+    margin-bottom: 10px;
+}
+
+.es-booking-error strong {
+    display: block;
+    font-size: var(--ensemble-h4-size, 18px);
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-danger, #ef4444);
+    margin-bottom: 8px;
+}
+
+.es-booking-error p {
+    margin: 0;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+/* ============================================
+   TICKET QUANTITY SELECTOR
+   ============================================ */
+
+.es-quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.es-quantity-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-button-radius, 8px);
+    color: var(--ensemble-text, #1a202c);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-quantity-btn:hover {
+    background: var(--ensemble-primary-light, rgba(102, 126, 234, 0.1));
+    border-color: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.es-quantity-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.es-quantity-value {
+    min-width: 40px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ensemble-text, #1a202c);
+}
+
+/* ============================================
+   PRICE DISPLAY
+   ============================================ */
+
+.es-booking-price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    margin: 16px 0;
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-price-label {
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-price-value {
+    font-size: 24px;
+    font-weight: 700;
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.es-price-free {
+    color: var(--ensemble-success, #10b981);
+}
+
+/* ============================================
+   CANCEL PAGE STYLES
+   ============================================ */
+
+.es-cancel-page {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.es-cancel-card {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    box-shadow: var(--ensemble-card-shadow, 0 2px 8px rgba(0,0,0,0.08));
+    padding: 32px;
+    text-align: center;
+}
+
+.es-cancel-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.es-cancel-card h2 {
+    margin: 0 0 12px;
+    font-size: var(--ensemble-h3-size, 24px);
+    font-family: var(--ensemble-font-heading, inherit);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-cancel-card p {
+    margin: 0 0 24px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-cancel-details {
+    background: var(--ensemble-primary-light, rgba(102, 126, 234, 0.05));
+    border-radius: var(--ensemble-button-radius, 8px);
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.es-cancel-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-cancel-detail-row:last-child {
+    border-bottom: none;
+}
+
+.es-cancel-detail-label {
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: 14px;
+}
+
+.es-cancel-detail-value {
+    color: var(--ensemble-text, #1a202c);
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.es-cancel-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.es-cancel-btn {
+    padding: 12px 24px;
+    border-radius: var(--ensemble-button-radius, 8px);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-cancel-btn-confirm {
+    background: var(--ensemble-danger, #ef4444);
+    color: #ffffff;
+    border: none;
+}
+
+.es-cancel-btn-confirm:hover {
+    background: #dc2626;
+}
+
+.es-cancel-btn-back {
+    background: transparent;
+    color: var(--ensemble-text-secondary, #718096);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-cancel-btn-back:hover {
+    background: var(--ensemble-card-bg, #f7fafc);
+}
+
+/* Cancel Success/Error States */
+.es-cancel-success .es-cancel-icon {
+    color: var(--ensemble-success, #10b981);
+}
+
+.es-cancel-error .es-cancel-icon {
+    color: var(--ensemble-danger, #ef4444);
+}
+
+/* ============================================
+   CHECK-IN RESULT PAGE
+   ============================================ */
+
+.es-checkin-result {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.es-checkin-card {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    box-shadow: var(--ensemble-card-shadow, 0 2px 8px rgba(0,0,0,0.08));
+    padding: 32px;
+    text-align: center;
+}
+
+.es-checkin-success .es-checkin-card {
+    border-color: var(--ensemble-success, #10b981);
+    border-width: 2px;
+}
+
+.es-checkin-error .es-checkin-card {
+    border-color: var(--ensemble-danger, #ef4444);
+    border-width: 2px;
+}
+
+.es-checkin-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-checkin-success .es-checkin-icon {
+    background: var(--ensemble-success-light, rgba(16, 185, 129, 0.1));
+}
+
+.es-checkin-success .es-checkin-icon .dashicons {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--ensemble-success, #10b981);
+}
+
+.es-checkin-error .es-checkin-icon {
+    background: var(--ensemble-danger-light, rgba(239, 68, 68, 0.1));
+}
+
+.es-checkin-error .es-checkin-icon .dashicons {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: var(--ensemble-danger, #ef4444);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 480px) {
+    .es-booking-widget {
+        padding: 16px;
+        border-radius: var(--ensemble-card-radius-mobile, 8px);
+    }
+    
+    .es-booking-header h4 {
+        font-size: 16px;
+    }
+    
+    .es-field-row input,
+    .es-field-row select,
+    .es-field-row textarea {
+        padding: 10px 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .es-booking-btn {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+    
+    .es-cancel-card,
+    .es-checkin-card {
+        padding: 24px 16px;
+    }
+    
+    .es-cancel-actions {
+        flex-direction: column;
+    }
+}
+
+/* ============================================
+   FLOOR PLAN INTEGRATION STYLES
+   Add this to the end of booking-engine-frontend.css
+   ============================================ */
+
+/* ============================================
+   BOOKING WIDGET WITH FLOOR PLAN
+   ============================================ */
+
+.es-booking-widget.es-booking-with-floor-plan {
+    max-width: 800px;
+}
+
+/* ============================================
+   FLOOR PLAN SECTION
+   ============================================ */
+
+.es-booking-floor-plan-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-booking-floor-plan-header {
+    margin-bottom: 16px;
+}
+
+.es-booking-floor-plan-header h4 {
+    margin: 0 0 4px;
+    font-size: var(--ensemble-h4-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-booking-floor-plan-hint {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-booking-floor-plan-container {
+    position: relative;
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    background: var(--ensemble-bg-secondary, #f7fafc);
+}
+
+/* Embedded floor plan adjustments */
+.es-booking-floor-plan-container .es-floor-plan-wrapper {
+    margin: 0;
+}
+
+.es-booking-floor-plan-container .es-floor-plan-legend {
+    padding: 12px 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-booking-floor-plan-container .es-floor-plan-canvas-wrap {
+    background: var(--ensemble-bg-secondary, #f7fafc);
+}
+
+/* ============================================
+   SELECTED ELEMENT DISPLAY
+   ============================================ */
+
+.es-booking-selected-element {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: var(--ensemble-success-light, rgba(16, 185, 129, 0.1));
+    border: 1px solid var(--ensemble-success-border, rgba(16, 185, 129, 0.3));
+    border-radius: var(--ensemble-button-radius, 8px);
+}
+
+.es-booking-selected-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--ensemble-success-text, #047857);
+}
+
+.es-booking-selected-info .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: var(--ensemble-success, #10b981);
+}
+
+.es-booking-selected-label {
+    font-weight: 600;
+}
+
+.es-booking-change-selection {
+    padding: 6px 12px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-success-border, rgba(16, 185, 129, 0.3));
+    border-radius: var(--ensemble-button-radius, 6px);
+    font-size: 13px;
+    color: var(--ensemble-success-text, #047857);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-booking-change-selection:hover {
+    background: var(--ensemble-success-light, rgba(16, 185, 129, 0.1));
+    border-color: var(--ensemble-success, #10b981);
+}
+
+/* ============================================
+   FLOOR PLAN NOTICE
+   ============================================ */
+
+.es-booking-floor-plan-notice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--ensemble-info-light, rgba(53, 130, 196, 0.1));
+    border: 1px solid var(--ensemble-info-border, rgba(53, 130, 196, 0.3));
+    border-radius: var(--ensemble-button-radius, 8px);
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--ensemble-info-text, #1e6091);
+}
+
+.es-booking-floor-plan-notice .dashicons {
+    flex-shrink: 0;
+    color: var(--ensemble-info, #3582c4);
+}
+
+/* ============================================
+   FLOOR PLAN GUESTS ROW
+   ============================================ */
+
+.es-floor-plan-guests-row .es-field-hint {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: var(--ensemble-text-muted, #a0aec0);
+}
+
+/* ============================================
+   FLOOR PLAN MODAL INTEGRATION
+   Override modal styles when triggered from booking widget
+   ============================================ */
+
+.es-booking-with-floor-plan .es-floor-plan-booking-modal {
+    display: none !important; /* Use inline form instead of modal */
+}
+
+/* Alternative: Minimal modal for quick element info */
+.es-booking-element-info-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.es-booking-element-info-modal.es-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.es-booking-element-info-content {
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--ensemble-modal-shadow, 0 20px 50px rgba(0,0,0,0.3));
+}
+
+/* ============================================
+   KONVA CANVAS INTERACTIONS
+   ============================================ */
+
+/* Bookable elements cursor */
+.es-booking-floor-plan-container .konvajs-content {
+    cursor: default;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .es-booking-widget.es-booking-with-floor-plan {
+        max-width: 100%;
+    }
+    
+    .es-booking-floor-plan-container {
+        margin: 0 -16px;
+        border-radius: 0;
+    }
+    
+    .es-booking-selected-element {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .es-booking-change-selection {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-booking-floor-plan-header h4 {
+        font-size: 16px;
+    }
+    
+    .es-booking-floor-plan-hint {
+        font-size: 13px;
+    }
+    
+    .es-booking-selected-info {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   ANIMATION FOR FORM REVEAL
+   ============================================ */
+
+.es-booking-fields,
+.es-booking-privacy,
+.es-booking-submit {
+    transition: all 0.3s ease;
+}
+
+/* Slide down animation */
+.es-booking-with-floor-plan .es-booking-fields,
+.es-booking-with-floor-plan .es-booking-privacy,
+.es-booking-with-floor-plan .es-booking-submit {
+    overflow: hidden;
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+.es-mode-dark .es-booking-floor-plan-container,
+[data-theme="dark"] .es-booking-floor-plan-container {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.es-mode-dark .es-booking-floor-plan-container .es-floor-plan-legend,
+[data-theme="dark"] .es-booking-floor-plan-container .es-floor-plan-legend {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.es-mode-dark .es-booking-selected-element,
+[data-theme="dark"] .es-booking-selected-element {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.es-mode-dark .es-booking-change-selection,
+[data-theme="dark"] .es-booking-change-selection {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--ensemble-success, #10b981);
+}
+
+.es-mode-dark .es-booking-floor-plan-notice,
+[data-theme="dark"] .es-booking-floor-plan-notice {
+    background: rgba(53, 130, 196, 0.15);
+    border-color: rgba(53, 130, 196, 0.4);
+}
+

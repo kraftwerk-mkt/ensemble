@@ -5,6 +5,8 @@
  * Handles gallery management functionality
  *
  * @package Ensemble
+ * @since 2.0.0
+ * @updated 3.0.0 - Added video support
  */
 
 // Exit if accessed directly
@@ -83,6 +85,12 @@ class ES_Gallery_Manager {
             }
         }
         
+        // Get videos (NEU in 3.0)
+        $videos = get_post_meta($post->ID, '_gallery_videos', true);
+        if (!is_array($videos)) {
+            $videos = array();
+        }
+        
         // Get categories
         $categories = wp_get_post_terms($post->ID, 'ensemble_gallery_category');
         $category_data = array();
@@ -152,6 +160,9 @@ class ES_Gallery_Manager {
             'slug'            => $post->post_name,
             'images'          => $images,
             'image_count'     => count($images),
+            'videos'          => $videos,
+            'video_count'     => count($videos),
+            'total_count'     => count($images) + count($videos),
             'categories'      => $category_data,
             'category'        => implode(', ', $category_names),
             'linked_event'    => $linked_event,
@@ -178,6 +189,19 @@ class ES_Gallery_Manager {
             return array();
         }
         return $gallery['images'];
+    }
+    
+    /**
+     * Get gallery videos only
+     * @param int $gallery_id
+     * @return array
+     */
+    public function get_gallery_videos($gallery_id) {
+        $gallery = $this->get_gallery($gallery_id);
+        if (!$gallery) {
+            return array();
+        }
+        return $gallery['videos'];
     }
     
     /**
@@ -292,6 +316,22 @@ class ES_Gallery_Manager {
         if (isset($data['image_ids']) && is_array($data['image_ids'])) {
             $image_ids = array_map('intval', array_filter($data['image_ids']));
             update_post_meta($gallery_id, '_gallery_images', $image_ids);
+        }
+        
+        // Save gallery videos (NEU in 3.0)
+        if (isset($data['videos']) && is_array($data['videos'])) {
+            $videos = array();
+            foreach ($data['videos'] as $video) {
+                if (!empty($video['url'])) {
+                    $videos[] = array(
+                        'url'       => esc_url_raw($video['url']),
+                        'title'     => isset($video['title']) ? sanitize_text_field($video['title']) : '',
+                        'provider'  => isset($video['provider']) ? sanitize_text_field($video['provider']) : 'local',
+                        'thumbnail' => isset($video['thumbnail']) ? esc_url_raw($video['thumbnail']) : '',
+                    );
+                }
+            }
+            update_post_meta($gallery_id, '_gallery_videos', $videos);
         }
         
         // Save linked event

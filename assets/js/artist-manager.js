@@ -146,6 +146,11 @@
                                 </svg>
                                 Edit
                             </button>
+                            <button class="es-icon-btn es-copy-artist" data-artist-id="${artist.id}" title="Copy">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
                             <button class="es-icon-btn es-icon-btn-danger es-delete-artist" data-artist-id="${artist.id}" title="Löschen">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M4 7h16"/><path d="M10 4h4"/><path d="M6 7l1 13h10l1-13"/>
@@ -164,6 +169,12 @@
             e.stopPropagation();
             const artistId = $(this).data('artist-id');
             editArtist(artistId);
+        });
+        
+        $('.es-copy-artist').on('click', function(e) {
+            e.stopPropagation();
+            const artistId = $(this).data('artist-id');
+            copyArtist(artistId, $(this));
         });
         
         $('.es-delete-artist').on('click', function(e) {
@@ -553,9 +564,7 @@
      * Delete artist
      */
     function deleteArtist(artistId) {
-        if (!confirm('Are you sure you want to delete this artist?')) {
-            return;
-        }
+        console.log('🗑️ deleteArtist called with ID:', artistId);
         
         $.ajax({
             url: ensembleAjax.ajaxurl,
@@ -566,6 +575,7 @@
                 artist_id: artistId
             },
             success: function(response) {
+                console.log('🗑️ Delete response:', response);
                 if (response.success) {
                     showMessage('success', response.data.message);
                     $('#es-artist-modal').fadeOut();
@@ -576,6 +586,49 @@
             },
             error: function() {
                 showMessage('error', 'Failed to delete artist');
+            }
+        });
+    }
+    
+    /**
+     * Copy artist
+     */
+    function copyArtist(artistId, $btn) {
+        console.log('📋 copyArtist called with ID:', artistId);
+        
+        // Show loading state
+        const $icon = $btn.find('svg');
+        const originalSvg = $icon.prop('outerHTML');
+        $btn.prop('disabled', true);
+        $icon.replaceWith('<span class="dashicons dashicons-update es-spin"></span>');
+        
+        $.ajax({
+            url: ensembleAjax.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'es_copy_artist',
+                nonce: ensembleAjax.nonce,
+                artist_id: artistId
+            },
+            success: function(response) {
+                console.log('📋 Copy response:', response);
+                if (response.success) {
+                    showMessage('success', response.data.message || 'Artist copied!');
+                    loadArtists();
+                    // Open the copy for editing
+                    setTimeout(function() {
+                        editArtist(response.data.artist_id);
+                    }, 500);
+                } else {
+                    showMessage('error', response.data.message || 'Failed to copy artist');
+                }
+            },
+            error: function() {
+                showMessage('error', 'Failed to copy artist');
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+                $btn.find('.dashicons').replaceWith(originalSvg);
             }
         });
     }
@@ -638,9 +691,7 @@
     function bulkDeleteArtists() {
         if (selectedArtists.length === 0) return;
         
-        if (!confirm(`Are you sure you want to delete ${selectedArtists.length} artist(s)?`)) {
-            return;
-        }
+        console.log('🗑️ bulkDeleteArtists called, count:', selectedArtists.length);
         
         $.ajax({
             url: ensembleAjax.ajaxurl,
@@ -651,6 +702,7 @@
                 artist_ids: selectedArtists
             },
             success: function(response) {
+                console.log('🗑️ Bulk delete response:', response);
                 if (response.success) {
                     showMessage('success', `Deleted ${response.data.deleted} artist(s)`);
                     selectedArtists = [];

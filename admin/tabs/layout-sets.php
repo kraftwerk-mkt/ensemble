@@ -181,16 +181,17 @@ $is_pro = function_exists('ensemble_is_pro') && ensemble_is_pro();
         <?php endforeach; ?>
     </div>
     
-    <!-- Custom Templates Section - Coming Soon -->
+    <!-- Custom Templates Section - Pro Feature (Coming Soon) -->
     <div style="margin-top: 40px; padding-top: 40px; border-top: 2px solid #ddd;">
         <h3><?php _e('Custom Templates', 'ensemble'); ?></h3>
         
-        <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border: 2px dashed #dee2e6; border-radius: 12px; padding: 40px; text-align: center; margin-top: 20px;">
-            <div style="font-size: 48px; margin-bottom: 16px;">🎨</div>
-            <h4 style="margin: 0 0 12px; font-size: 20px; color: #495057;"><?php _e('Coming Soon', 'ensemble'); ?></h4>
-            <p style="margin: 0; color: #6c757d; max-width: 400px; margin: 0 auto;">
-                <?php _e('Create your own templates with full access to HTML, PHP and CSS. This feature is currently in development.', 'ensemble'); ?>
-            </p>
+        <div class="es-pro-upgrade-prompt" style="margin-top: 20px; padding: 2rem;">
+            <span class="dashicons dashicons-admin-customizer" style="font-size: 36px; width: 36px; height: 36px; color: #f59e0b; margin-bottom: 1rem; display: block;"></span>
+            <span class="es-pro-badge" style="margin-left: 0; margin-bottom: 0.75rem; display: inline-flex;">
+                <span class="dashicons dashicons-star-filled"></span> PRO
+            </span>
+            <h4><?php _e('Custom Template Editor', 'ensemble'); ?></h4>
+            <p><?php _e('Create your own templates with full access to HTML, PHP and CSS. Coming soon for Pro users.', 'ensemble'); ?></p>
         </div>
     </div>
 </div>

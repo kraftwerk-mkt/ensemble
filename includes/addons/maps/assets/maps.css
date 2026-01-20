@@ -3,57 +3,50 @@
  * 
  * @package Ensemble
  * @subpackage Addons/Maps Pro
+ * @version 2.3.6
  */
 
+
 /* =========================================
-   CSS Variables - Inherit from Ensemble Design System
+   CSS Variables Note
+   =========================================
+   Uses --ensemble-* Designer variables directly.
+   Dark/Light mode handled by Designer system.
+   See CSS-ARCHITECTURE.md for variable reference.
    ========================================= */
-.es-map-container,
-.es-map-overview-wrapper {
-    --es-map-primary: var(--ensemble-primary, #3b82f6);
-    --es-map-primary-hover: var(--ensemble-button-hover-bg, #2563eb);
-    --es-map-bg: var(--ensemble-card-bg, #fff);
-    --es-map-bg-secondary: var(--ensemble-hover, #f8f9fa);
-    --es-map-border: var(--ensemble-card-border, #e5e7eb);
-    --es-map-text: var(--ensemble-text, #374151);
-    --es-map-text-muted: var(--ensemble-text-secondary, #6b7280);
-    --es-map-radius: var(--ensemble-card-radius, 8px);
-    --es-map-shadow: var(--ensemble-card-shadow, 0 4px 12px rgba(0,0,0,0.1));
-    --es-map-transition: 0.2s ease;
-}
 
 /* =========================================
    Single Map Container
    ========================================= */
 .es-map-container {
     margin: 30px 0;
-    background: var(--es-map-bg);
-    border-radius: var(--es-map-radius);
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
     overflow: hidden;
-    box-shadow: var(--es-map-shadow);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 .es-map-embed {
     width: 100%;
     height: 400px;
     position: relative;
-    background: #e5e7eb;
+    background: var(--ensemble-card-border, #e2e8f0);
 }
 
 .es-map-address {
     padding: 15px 20px;
-    background: var(--es-map-bg-secondary);
-    border-top: 1px solid var(--es-map-border);
+    background: var(--ensemble-bg, #f7fafc);
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 14px;
-    color: var(--es-map-text);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-address .dashicons {
-    color: var(--es-map-text-muted);
-    font-size: 18px;
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-lg-size, 18px);
     width: 18px;
     height: 18px;
 }
@@ -68,25 +61,25 @@
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background: var(--es-map-primary);
-    color: #fff;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
     text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all var(--es-map-transition);
+    border-radius: var(--ensemble-radius, 8px);
+    font-weight: var(--ensemble-body-weight, 400);
+    transition: all var(--ensemble-transition, all 0.3s ease);
     border: none;
     cursor: pointer;
 }
 
 .es-button-route:hover {
-    background: var(--es-map-primary-hover);
-    color: #fff;
+    background: var(--ensemble-button-hover-bg, #5568d3);
+    color: var(--ensemble-button-text, #ffffff);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
 .es-button-route .dashicons {
-    font-size: 20px;
+    font-size: var(--ensemble-h4-size, 20px);
     width: 20px;
     height: 20px;
 }
@@ -96,10 +89,10 @@
    ========================================= */
 .es-locations-map-wrapper {
     position: relative;
-    background: var(--es-map-bg);
-    border-radius: var(--es-map-radius);
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
     overflow: hidden;
-    box-shadow: var(--es-map-shadow);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
     margin: 30px 0;
 }
 
@@ -109,8 +102,8 @@
     align-items: center;
     gap: 15px;
     padding: 15px 20px;
-    background: var(--es-map-bg);
-    border-bottom: 1px solid var(--es-map-border);
+    background: var(--ensemble-card-bg, #ffffff);
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
     flex-wrap: wrap;
 }
 
@@ -126,11 +119,11 @@
 
 .es-map-filter {
     padding: 8px 32px 8px 12px;
-    border: 1px solid var(--es-map-border);
-    border-radius: 6px;
-    background: var(--es-map-bg);
-    font-size: 14px;
-    color: var(--es-map-text);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-radius, 8px);
+    background: var(--ensemble-card-bg, #ffffff);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text, #1a202c);
     cursor: pointer;
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
@@ -142,7 +135,7 @@
 
 .es-map-filter:focus {
     outline: none;
-    border-color: var(--es-map-primary);
+    border-color: var(--ensemble-primary, #667eea);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -157,15 +150,15 @@
 .es-map-search-input {
     width: 100%;
     padding: 8px 36px 8px 12px;
-    border: 1px solid var(--es-map-border);
-    border-radius: 6px;
-    font-size: 14px;
-    color: var(--es-map-text);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-radius, 8px);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-search-input:focus {
     outline: none;
-    border-color: var(--es-map-primary);
+    border-color: var(--ensemble-primary, #667eea);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -179,7 +172,7 @@
     background: none;
     cursor: pointer;
     opacity: 0;
-    transition: opacity var(--es-map-transition);
+    transition: opacity var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-search-input:not(:placeholder-shown) + .es-map-search-clear {
@@ -193,7 +186,7 @@
 .es-map-search-clear svg {
     width: 16px;
     height: 16px;
-    color: var(--es-map-text-muted);
+    color: var(--ensemble-text-secondary, #718096);
 }
 
 .es-map-search-results {
@@ -201,15 +194,15 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--es-map-bg);
-    border: 1px solid var(--es-map-border);
-    border-radius: 6px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-radius, 8px);
     margin-top: 4px;
     max-height: 250px;
     overflow-y: auto;
     z-index: 100;
     display: none;
-    box-shadow: var(--es-map-shadow);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 .es-map-search-results.active {
@@ -219,8 +212,8 @@
 .es-map-search-result {
     padding: 10px 12px;
     cursor: pointer;
-    border-bottom: 1px solid var(--es-map-border);
-    transition: background var(--es-map-transition);
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+    transition: background var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-search-result:last-child {
@@ -228,17 +221,17 @@
 }
 
 .es-map-search-result:hover {
-    background: var(--es-map-bg-secondary);
+    background: var(--ensemble-bg, #f7fafc);
 }
 
 .es-map-search-result-name {
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: var(--ensemble-body-weight, 400);
+    font-size: var(--ensemble-small-size, 14px);
 }
 
 .es-map-search-result-address {
-    font-size: 12px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-secondary, #718096);
     margin-top: 2px;
 }
 
@@ -252,18 +245,18 @@
     align-items: center;
     gap: 6px;
     padding: 8px 12px;
-    border: 1px solid var(--es-map-border);
-    border-radius: 6px;
-    background: var(--es-map-bg);
-    color: var(--es-map-text);
-    font-size: 14px;
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-radius, 8px);
+    background: var(--ensemble-card-bg, #ffffff);
+    color: var(--ensemble-text, #1a202c);
+    font-size: var(--ensemble-small-size, 14px);
     cursor: pointer;
-    transition: all var(--es-map-transition);
+    transition: all var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-btn:hover {
-    background: var(--es-map-bg-secondary);
-    border-color: var(--es-map-text-muted);
+    background: var(--ensemble-bg, #f7fafc);
+    border-color: var(--ensemble-text-secondary, #718096);
 }
 
 .es-map-btn svg {
@@ -291,9 +284,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--es-map-bg, rgba(255, 255, 255, 0.9));
+    background: var(--ensemble-card-bg, rgba(255, 255, 255, 0.9));
     z-index: 1000;
-    transition: opacity var(--es-map-transition);
+    transition: opacity var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-loading.hidden {
@@ -304,21 +297,21 @@
 .es-map-loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid var(--es-map-border, #e5e7eb);
-    border-top-color: var(--es-map-primary, #3b82f6);
+    border: 3px solid var(--ensemble-card-border, #e2e8f0);
+    border-top-color: var(--ensemble-primary, #667eea);
     border-radius: 50%;
     animation: es-map-spin 0.8s linear infinite;
     margin-bottom: 10px;
 }
 
 .es-map-loading-text {
-    font-size: 14px;
-    color: var(--es-map-text-muted, #6b7280);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
 }
 
 .es-map-error {
-    color: #ef4444;
-    font-size: 14px;
+    color: var(--ensemble-error, #ef4444);
+    font-size: var(--ensemble-small-size, 14px);
     text-align: center;
     padding: 20px;
 }
@@ -330,15 +323,15 @@
 /* Stats Bar */
 .es-map-stats {
     padding: 10px 20px;
-    background: var(--es-map-bg-secondary);
-    border-top: 1px solid var(--es-map-border);
-    font-size: 13px;
-    color: var(--es-map-text-muted);
+    background: var(--ensemble-bg, #f7fafc);
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
 }
 
 .es-map-stats-filtered {
     margin-left: 5px;
-    color: var(--es-map-primary);
+    color: var(--ensemble-primary, #667eea);
 }
 
 /* =========================================
@@ -350,11 +343,11 @@
     right: 0;
     bottom: 0;
     width: 350px;
-    background: var(--es-map-bg);
+    background: var(--ensemble-card-bg, #ffffff);
     box-shadow: -4px 0 20px rgba(0,0,0,0.1);
     z-index: 1000;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     overflow-y: auto;
 }
 
@@ -368,21 +361,21 @@
     right: 15px;
     padding: 8px;
     border: none;
-    background: var(--es-map-bg-secondary);
+    background: var(--ensemble-bg, #f7fafc);
     border-radius: 50%;
     cursor: pointer;
     z-index: 10;
-    transition: background var(--es-map-transition);
+    transition: background var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-sidebar-close:hover {
-    background: var(--es-map-border);
+    background: var(--ensemble-card-border, #e2e8f0);
 }
 
 .es-map-sidebar-close svg {
     width: 20px;
     height: 20px;
-    color: var(--es-map-text);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-sidebar-content {
@@ -393,20 +386,20 @@
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: var(--es-map-radius);
+    border-radius: var(--ensemble-card-radius, 12px);
     margin-bottom: 20px;
 }
 
 .es-map-sidebar-title {
-    font-size: 20px;
-    font-weight: 600;
+    font-size: var(--ensemble-h4-size, 20px);
+    font-weight: var(--ensemble-button-weight, 600);
     margin: 0 0 10px;
-    color: var(--es-map-text);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-sidebar-address {
-    font-size: 14px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
     margin-bottom: 20px;
     display: flex;
     align-items: flex-start;
@@ -425,10 +418,10 @@
 }
 
 .es-map-sidebar-events-title {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
     margin-bottom: 12px;
-    color: var(--es-map-text);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-sidebar-event {
@@ -436,16 +429,16 @@
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: var(--es-map-bg-secondary);
-    border-radius: 6px;
+    background: var(--ensemble-bg, #f7fafc);
+    border-radius: var(--ensemble-radius, 8px);
     margin-bottom: 8px;
     text-decoration: none;
     color: inherit;
-    transition: all var(--es-map-transition);
+    transition: all var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-sidebar-event:hover {
-    background: var(--es-map-border);
+    background: var(--ensemble-card-border, #e2e8f0);
     transform: translateX(4px);
 }
 
@@ -453,20 +446,20 @@
     flex-shrink: 0;
     text-align: center;
     padding: 8px;
-    background: var(--es-map-primary);
-    color: #fff;
-    border-radius: 6px;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-radius, 8px);
     min-width: 50px;
 }
 
 .es-map-sidebar-event-day {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: var(--ensemble-lg-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 700);
     line-height: 1;
 }
 
 .es-map-sidebar-event-month {
-    font-size: 11px;
+    font-size: var(--ensemble-xs-size, 12px);
     text-transform: uppercase;
     margin-top: 2px;
 }
@@ -477,8 +470,8 @@
 }
 
 .es-map-sidebar-event-title {
-    font-weight: 500;
-    font-size: 14px;
+    font-weight: var(--ensemble-body-weight, 400);
+    font-size: var(--ensemble-small-size, 14px);
     margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -486,8 +479,8 @@
 }
 
 .es-map-sidebar-event-time {
-    font-size: 12px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-secondary, #718096);
 }
 
 .es-map-sidebar-actions {
@@ -502,33 +495,33 @@
     justify-content: center;
     gap: 8px;
     padding: 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
+    border-radius: var(--ensemble-radius, 8px);
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-decoration: none;
-    transition: all var(--es-map-transition);
+    transition: all var(--ensemble-transition, all 0.3s ease);
     cursor: pointer;
     border: none;
 }
 
 .es-map-sidebar-btn-primary {
-    background: var(--es-map-primary);
-    color: #fff;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-map-sidebar-btn-primary:hover {
-    background: var(--es-map-primary-hover);
-    color: #fff;
+    background: var(--ensemble-button-hover-bg, #5568d3);
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-map-sidebar-btn-secondary {
-    background: var(--es-map-bg-secondary);
-    color: var(--es-map-text);
-    border: 1px solid var(--es-map-border);
+    background: var(--ensemble-bg, #f7fafc);
+    color: var(--ensemble-text, #1a202c);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
 }
 
 .es-map-sidebar-btn-secondary:hover {
-    background: var(--es-map-border);
+    background: var(--ensemble-card-border, #e2e8f0);
 }
 
 .es-map-sidebar-btn svg {
@@ -563,15 +556,15 @@
 }
 
 .es-map-popup-title {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
     margin: 0 0 8px;
-    color: var(--es-map-text);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-popup-address {
-    font-size: 13px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
     margin: 0 0 12px;
     display: flex;
     align-items: flex-start;
@@ -579,10 +572,10 @@
 }
 
 .es-map-popup-events {
-    font-size: 12px;
+    font-size: var(--ensemble-xs-size, 12px);
     padding: 8px 10px;
-    background: var(--es-map-bg-secondary);
-    border-radius: 4px;
+    background: var(--ensemble-bg, #f7fafc);
+    border-radius: var(--ensemble-badge-radius, 4px);
     margin-bottom: 12px;
 }
 
@@ -594,15 +587,15 @@
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    color: var(--es-map-primary);
-    font-weight: 500;
+    color: var(--ensemble-primary, #667eea);
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 .es-map-popup-actions {
     display: flex;
     gap: 8px;
     padding-top: 12px;
-    border-top: 1px solid var(--es-map-border);
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
 }
 
 .es-map-popup-link {
@@ -612,17 +605,17 @@
     justify-content: center;
     gap: 6px;
     padding: 8px 12px;
-    background: var(--es-map-primary);
-    color: #fff !important;
-    border-radius: 4px;
-    font-size: 13px;
-    font-weight: 500;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff) !important;
+    border-radius: var(--ensemble-badge-radius, 4px);
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-decoration: none;
-    transition: all var(--es-map-transition);
+    transition: all var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-popup-link:hover {
-    background: var(--es-map-primary-hover);
+    background: var(--ensemble-button-hover-bg, #5568d3);
 }
 
 .es-map-popup-link svg {
@@ -636,17 +629,17 @@
     justify-content: center;
     gap: 6px;
     padding: 8px 12px;
-    background: var(--es-map-bg-secondary);
-    color: var(--es-map-text);
-    border: 1px solid var(--es-map-border);
-    border-radius: 4px;
-    font-size: 13px;
+    background: var(--ensemble-bg, #f7fafc);
+    color: var(--ensemble-text, #1a202c);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-badge-radius, 4px);
+    font-size: var(--ensemble-small-size, 14px);
     cursor: pointer;
-    transition: all var(--es-map-transition);
+    transition: all var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-map-popup-route:hover {
-    background: var(--es-map-border);
+    background: var(--ensemble-card-border, #e2e8f0);
 }
 
 .es-map-popup-route svg {
@@ -666,12 +659,12 @@
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    transition: all var(--es-map-transition);
+    transition: all var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-marker-inner {
     transform: rotate(45deg);
-    font-size: 18px;
+    font-size: var(--ensemble-lg-size, 18px);
     line-height: 1;
 }
 
@@ -681,9 +674,9 @@
 }
 
 .es-marker-cluster {
-    background: var(--es-map-primary);
-    color: #fff;
-    font-weight: 600;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    font-weight: var(--ensemble-button-weight, 600);
     border-radius: 50%;
     box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
 }
@@ -700,8 +693,8 @@
    Leaflet Overrides
    ========================================= */
 .leaflet-popup-content-wrapper {
-    border-radius: var(--es-map-radius);
-    box-shadow: var(--es-map-shadow);
+    border-radius: var(--ensemble-card-radius, 12px);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
     padding: 0;
 }
 
@@ -711,28 +704,28 @@
 }
 
 .leaflet-popup-tip {
-    box-shadow: var(--es-map-shadow);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 /* Fullscreen */
 .leaflet-control-fullscreen a {
-    background-color: var(--es-map-bg);
+    background-color: var(--ensemble-card-bg, #ffffff);
 }
 
 /* Locate Control */
 .leaflet-control-locate a {
-    background-color: var(--es-map-bg);
+    background-color: var(--ensemble-card-bg, #ffffff);
 }
 
 .leaflet-control-locate.active a {
-    color: var(--es-map-primary);
+    color: var(--ensemble-primary, #667eea);
 }
 
 /* Routing */
 .leaflet-routing-container {
-    background: var(--es-map-bg);
-    border-radius: var(--es-map-radius);
-    box-shadow: var(--es-map-shadow);
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
     max-height: 300px;
     overflow-y: auto;
 }
@@ -742,14 +735,14 @@
 }
 
 .leaflet-routing-alt h2 {
-    font-size: 14px;
+    font-size: var(--ensemble-small-size, 14px);
     margin: 0 0 10px;
 }
 
 .leaflet-routing-alt h3 {
-    font-size: 12px;
+    font-size: var(--ensemble-xs-size, 12px);
     margin: 5px 0;
-    color: var(--es-map-text-muted);
+    color: var(--ensemble-text-secondary, #718096);
 }
 
 /* Cluster */
@@ -758,9 +751,9 @@
 }
 
 .marker-cluster div {
-    background: var(--es-map-primary);
-    color: #fff;
-    font-weight: 600;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    font-weight: var(--ensemble-button-weight, 600);
 }
 
 .marker-cluster-small {
@@ -783,11 +776,11 @@
     align-items: center;
     gap: 4px;
     padding: 4px 8px;
-    background: var(--es-map-primary);
-    color: #fff;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 .es-map-distance svg {
@@ -801,8 +794,8 @@
 .es-map-no-locations {
     padding: 40px 20px;
     text-align: center;
-    color: var(--es-map-text-muted);
-    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-small-size, 14px);
 }
 
 /* =========================================
@@ -862,29 +855,21 @@
 /* =========================================
    Dark Mode Support
    ========================================= */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --es-map-bg: #1e1e1e;
-        --es-map-bg-secondary: #2d2d2d;
-        --es-map-border: #404040;
-        --es-map-text: #e0e0e0;
-        --es-map-text-muted: #9ca3af;
-    }
     
     .es-map-loading {
         background: rgba(30, 30, 30, 0.9);
     }
     
     .leaflet-popup-content-wrapper {
-        background: var(--es-map-bg);
+        background: var(--ensemble-card-bg, #ffffff);
     }
     
     .leaflet-popup-tip {
-        background: var(--es-map-bg);
+        background: var(--ensemble-card-bg, #ffffff);
     }
     
     .leaflet-container a.leaflet-popup-close-button {
-        color: var(--es-map-text);
+        color: var(--ensemble-text, #1a202c);
     }
 }
 
@@ -904,17 +889,17 @@
 
 .gm-style .gm-style-iw-c {
     padding: 0 !important;
-    border-radius: var(--es-map-radius) !important;
-    box-shadow: var(--es-map-shadow) !important;
+    border-radius: var(--ensemble-card-radius, 12px) !important;
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1)) !important;
 }
 
 .gm-style .gm-style-iw-tc::after {
-    background: var(--es-map-bg) !important;
+    background: var(--ensemble-card-bg, #ffffff) !important;
 }
 
 /* Google Maps Controls */
 .gm-style .gm-bundled-control button {
-    background: var(--es-map-bg) !important;
+    background: var(--ensemble-card-bg, #ffffff) !important;
 }
 
 /* Geolocation Control for Google Maps */
@@ -928,27 +913,27 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: var(--es-map-bg, #fff);
+    background: var(--ensemble-card-bg, #ffffff);
     border: none;
-    border-radius: 2px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     cursor: pointer;
-    transition: background 0.2s;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-google-locate-control button:hover {
-    background: var(--es-map-bg-secondary, #f0f0f0);
+    background: var(--ensemble-bg, #f7fafc);
 }
 
 .es-google-locate-control button .dashicons {
-    font-size: 20px;
+    font-size: var(--ensemble-h4-size, 20px);
     width: 20px;
     height: 20px;
-    color: #666;
+    color: var(--ensemble-text-secondary, #718096);
 }
 
 .es-google-locate-control button:hover .dashicons {
-    color: var(--es-map-primary, #3b82f6);
+    color: var(--ensemble-primary, #667eea);
 }
 
 /* Route Info Panel */
@@ -961,8 +946,8 @@
     align-items: center;
     gap: 20px;
     padding: 12px 20px;
-    background: var(--es-map-bg, #fff);
-    border-radius: 8px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-radius, 8px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     z-index: 1000;
     animation: slideUp 0.3s ease;
@@ -990,15 +975,15 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--es-map-text, #374151);
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-route-distance .dashicons,
 .es-route-duration .dashicons {
-    color: var(--es-map-primary, #3b82f6);
-    font-size: 18px;
+    color: var(--ensemble-primary, #667eea);
+    font-size: var(--ensemble-lg-size, 18px);
     width: 18px;
     height: 18px;
 }
@@ -1012,41 +997,41 @@
     background: transparent;
     border: none;
     border-radius: 50%;
-    font-size: 18px;
-    color: var(--es-map-text-muted, #9ca3af);
+    font-size: var(--ensemble-lg-size, 18px);
+    color: var(--ensemble-text-secondary, #718096);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-route-info-close:hover {
-    background: var(--es-map-bg-secondary, #f0f0f0);
-    color: var(--es-map-text, #374151);
+    background: var(--ensemble-bg, #f7fafc);
+    color: var(--ensemble-text, #1a202c);
 }
 
 /* Google Maps Dark Mode Support */
 @media (prefers-color-scheme: dark) {
     .gm-style .gm-style-iw-c {
-        background: var(--es-map-bg) !important;
+        background: var(--ensemble-card-bg, #ffffff) !important;
     }
     
     .gm-style .gm-style-iw-tc::after {
-        background: var(--es-map-bg) !important;
+        background: var(--ensemble-card-bg, #ffffff) !important;
     }
     
     .es-google-locate-control button {
-        background: #2d2d2d;
+        background: var(--ensemble-card-bg, #2d2d2d);
     }
     
     .es-google-locate-control button:hover {
-        background: #404040;
+        background: var(--ensemble-bg, #404040);
     }
     
     .es-google-locate-control button .dashicons {
-        color: #9ca3af;
+        color: var(--ensemble-text-secondary, #9ca3af);
     }
     
     .es-route-info {
-        background: #2d2d2d;
+        background: var(--ensemble-card-bg, #2d2d2d);
     }
 }
 
@@ -1069,20 +1054,20 @@
     height: 28px;
     padding: 0;
     border: none;
-    background: var(--es-map-bg-secondary);
+    background: var(--ensemble-bg, #f7fafc);
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--es-map-text-muted);
-    transition: all 0.2s ease;
+    color: var(--ensemble-text-secondary, #718096);
+    transition: var(--ensemble-transition, all 0.3s ease);
     z-index: 10;
 }
 
 .es-map-popup-close:hover {
-    background: var(--es-map-primary);
-    color: #fff;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-map-popup-close svg {
@@ -1101,7 +1086,7 @@
     flex-shrink: 0;
     width: 60px;
     height: 60px;
-    border-radius: 8px;
+    border-radius: var(--ensemble-radius, 8px);
     overflow: hidden;
 }
 
@@ -1117,40 +1102,40 @@
 }
 
 .es-map-popup-compact .es-map-popup-title {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
     margin: 0 0 4px;
     line-height: 1.3;
 }
 
 .es-map-popup-compact .es-map-popup-title a {
-    color: var(--es-map-text);
+    color: var(--ensemble-text, #1a202c);
     text-decoration: none;
 }
 
 .es-map-popup-compact .es-map-popup-title a:hover {
-    color: var(--es-map-primary);
+    color: var(--ensemble-primary, #667eea);
 }
 
 .es-map-popup-compact .es-map-popup-address {
-    font-size: 12px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-secondary, #718096);
     margin: 0;
     line-height: 1.4;
 }
 
 /* Next Event in Compact Popup */
 .es-map-popup-next-event {
-    background: var(--es-map-bg-secondary);
-    border-radius: 6px;
+    background: var(--ensemble-bg, #f7fafc);
+    border-radius: var(--ensemble-radius, 8px);
     padding: 10px 12px;
     margin-bottom: 12px;
 }
 
 .es-map-popup-next-event .es-event-label {
     display: block;
-    font-size: 11px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-secondary, #718096);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 4px;
@@ -1159,30 +1144,30 @@
 .es-map-popup-next-event .es-event-link {
     display: block;
     text-decoration: none;
-    color: var(--es-map-text);
+    color: var(--ensemble-text, #1a202c);
 }
 
 .es-map-popup-next-event .es-event-link:hover {
-    color: var(--es-map-primary);
+    color: var(--ensemble-primary, #667eea);
 }
 
 .es-map-popup-next-event .es-event-title {
     display: block;
-    font-weight: 500;
-    font-size: 13px;
+    font-weight: var(--ensemble-body-weight, 400);
+    font-size: var(--ensemble-small-size, 14px);
     line-height: 1.3;
     margin-bottom: 2px;
 }
 
 .es-map-popup-next-event .es-event-date {
     display: block;
-    font-size: 12px;
-    color: var(--es-map-primary);
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-primary, #667eea);
 }
 
 .es-no-events {
-    font-size: 12px;
-    color: var(--es-map-text-muted);
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-secondary, #718096);
     text-align: center;
     padding: 8px;
     margin: 0 0 12px;
@@ -1196,22 +1181,22 @@
     gap: 8px;
     width: 100%;
     padding: 10px 16px;
-    background: var(--es-map-primary);
-    color: #fff !important;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff) !important;
     border: none;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 500;
+    border-radius: var(--ensemble-radius, 8px);
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     box-sizing: border-box;
 }
 
 .es-popup-route-btn:hover {
-    background: var(--es-map-primary-hover);
+    background: var(--ensemble-button-hover-bg, #5568d3);
     transform: translateY(-1px);
-    color: #fff !important;
+    color: var(--ensemble-button-text, #ffffff) !important;
     text-decoration: none;
 }
 
@@ -1234,7 +1219,7 @@
     height: 56px;
     position: relative;
     cursor: pointer;
-    transition: transform 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-marker-thumbnail::before {
@@ -1244,7 +1229,7 @@
     left: 3px;
     width: 40px;
     height: 40px;
-    background: #fff;
+    background: var(--ensemble-card-bg, #ffffff);
     border: 3px solid;
     border-color: inherit;
     border-radius: 50%;
@@ -1287,8 +1272,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    color: #fff;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-button-text, #ffffff);
     z-index: 0;
 }
 
@@ -1321,8 +1306,8 @@
 .es-map-popup-events-loading .es-spinner {
     width: 20px;
     height: 20px;
-    border: 2px solid var(--es-map-border, #e5e7eb);
-    border-top-color: var(--es-map-primary, #3b82f6);
+    border: 2px solid var(--ensemble-card-border, #e2e8f0);
+    border-top-color: var(--ensemble-primary, #667eea);
     border-radius: 50%;
     animation: es-spin 0.8s linear infinite;
 }
@@ -1331,8 +1316,8 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    border: 2px solid var(--es-map-border, #e5e7eb);
-    border-top-color: var(--es-map-primary, #3b82f6);
+    border: 2px solid var(--ensemble-card-border, #e2e8f0);
+    border-top-color: var(--ensemble-primary, #667eea);
     border-radius: 50%;
     animation: es-spin 0.8s linear infinite;
 }
@@ -1359,6 +1344,51 @@
     }
     
     .es-map-popup-compact .es-map-popup-title {
-        font-size: 14px;
+        font-size: var(--ensemble-small-size, 14px);
     }
+}
+
+/* =========================================
+   Route Button Click Protection (v2.3.6)
+   Prevents accidental clicks when popup opens
+   ========================================= */
+.es-popup-route-btn[style*="pointer-events: none"] {
+    opacity: 0.7;
+    cursor: default;
+}
+
+/* Ensure popup content doesn't receive marker click */
+.es-map-popup,
+.es-map-popup-compact {
+    pointer-events: auto;
+}
+
+/* Leaflet popup specific fixes */
+.leaflet-popup-content {
+    margin: 0 !important;
+}
+
+.leaflet-popup-content-wrapper {
+    padding: 0 !important;
+    border-radius: var(--ensemble-card-radius, 12px) !important;
+    overflow: hidden;
+}
+
+.leaflet-popup-close-button {
+    display: none !important; /* We use our own close button */
+}
+
+/* Google Maps InfoWindow fixes */
+.gm-style-iw-d {
+    overflow: visible !important;
+}
+
+.gm-style-iw-c {
+    padding: 0 !important;
+    border-radius: var(--ensemble-card-radius, 12px) !important;
+}
+
+/* Hide Google's close button - we use our own */
+.gm-style-iw-chr {
+    display: none !important;
 }

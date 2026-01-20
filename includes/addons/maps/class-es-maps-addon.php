@@ -17,7 +17,11 @@
  * @package Ensemble
  * @subpackage Addons
  * @since 2.0.0
- * @version 2.3.5
+ * @version 2.3.6
+ * 
+ * Changes in 2.3.6:
+ * - Fixed Gutenberg block support (scripts now load when block is used)
+ * - has_map_shortcode() now also checks for ensemble/locations-map block
  * 
  * Changes in 2.3.5:
  * - Fixed style not applying in locations map shortcode (used wrong setting key)
@@ -59,7 +63,7 @@ class ES_Maps_Addon extends ES_Addon_Base {
      */
     protected $slug = 'maps';
     protected $name = 'Maps Pro';
-    protected $version = '2.3.5';
+    protected $version = '2.3.6';
     
     /**
      * Map providers
@@ -406,7 +410,7 @@ class ES_Maps_Addon extends ES_Addon_Base {
     }
     
     /**
-     * Check if current page has map shortcode
+     * Check if current page has map shortcode or block
      * 
      * @return bool
      */
@@ -414,8 +418,21 @@ class ES_Maps_Addon extends ES_Addon_Base {
         global $post;
         if (!$post) return false;
         
-        return has_shortcode($post->post_content, 'ensemble_map') ||
-               has_shortcode($post->post_content, 'ensemble_locations_map');
+        // Check for shortcodes
+        if (has_shortcode($post->post_content, 'ensemble_map') ||
+            has_shortcode($post->post_content, 'ensemble_locations_map')) {
+            return true;
+        }
+        
+        // Check for Gutenberg blocks (v2.3.6)
+        if (function_exists('has_block')) {
+            if (has_block('ensemble/locations-map', $post) ||
+                has_block('ensemble/map', $post)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     /**

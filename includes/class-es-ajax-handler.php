@@ -491,6 +491,18 @@ class ES_AJAX_Handler {
             }
         }
         
+        /**
+         * Hook: ensemble_wizard_after_save
+         * 
+         * Fires after the event has been saved via the wizard.
+         * Allows addons to save their own meta data.
+         *
+         * @since 2.10.0
+         * @param int   $event_id The saved event ID
+         * @param array $_POST    The submitted form data
+         */
+        do_action('ensemble_wizard_after_save', $event_id, $_POST);
+        
         wp_send_json_success(array(
             'message'  => 'Event saved successfully!',
             'event_id' => $event_id,
@@ -1364,10 +1376,10 @@ class ES_AJAX_Handler {
             'map_type'           => isset($_POST['map_type']) ? sanitize_text_field($_POST['map_type']) : 'embedded',
             // Multivenue fields
             'is_multivenue'      => isset($_POST['is_multivenue']) ? intval($_POST['is_multivenue']) : 0,
-            'venues'             => array(), // Wird unten gefüllt
+            'venues'             => array(), // Wird unten gefÃ¼llt
             // Opening Hours fields
             'has_opening_hours'    => isset($_POST['has_opening_hours']) ? intval($_POST['has_opening_hours']) : 0,
-            'opening_hours'        => array(), // Wird unten gefüllt
+            'opening_hours'        => array(), // Wird unten gefÃ¼llt
             'opening_hours_note'   => isset($_POST['opening_hours_note']) ? sanitize_text_field($_POST['opening_hours_note']) : '',
         );
         
@@ -1541,51 +1553,74 @@ class ES_AJAX_Handler {
      * Save gallery
      */
     public function save_gallery() {
-        check_ajax_referer('ensemble_ajax', 'nonce');
-        
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => 'Unauthorized'));
-            return;
+    check_ajax_referer('ensemble_ajax', 'nonce');
+    
+    if (!current_user_can('manage_options')) {
+        wp_send_json_error(array('message' => 'Unauthorized'));
+        return;
+    }
+    
+    // Parse image_ids if it's an array
+    $image_ids = array();
+    if (isset($_POST['image_ids'])) {
+        if (is_array($_POST['image_ids'])) {
+            $image_ids = array_map('intval', $_POST['image_ids']);
+        } elseif (is_string($_POST['image_ids']) && !empty($_POST['image_ids'])) {
+            $image_ids = array_map('intval', explode(',', $_POST['image_ids']));
         }
-        
-        // Parse image_ids if it's an array
-        $image_ids = array();
-        if (isset($_POST['image_ids'])) {
-            if (is_array($_POST['image_ids'])) {
-                $image_ids = array_map('intval', $_POST['image_ids']);
-            } elseif (is_string($_POST['image_ids']) && !empty($_POST['image_ids'])) {
-                $image_ids = array_map('intval', explode(',', $_POST['image_ids']));
+    }
+    
+    // Parse videos (NEU in 3.0)
+    $videos = array();
+    if (isset($_POST['videos'])) {
+        $videos_raw = $_POST['videos'];
+        // Wenn als JSON-String gesendet
+        if (is_string($videos_raw)) {
+            $videos_raw = json_decode(stripslashes($videos_raw), true);
+        }
+        if (is_array($videos_raw)) {
+            foreach ($videos_raw as $video) {
+                if (!empty($video['url'])) {
+                    $videos[] = array(
+                        'url'       => esc_url_raw($video['url']),
+                        'title'     => isset($video['title']) ? sanitize_text_field($video['title']) : '',
+                        'provider'  => isset($video['provider']) ? sanitize_text_field($video['provider']) : 'local',
+                        'thumbnail' => isset($video['thumbnail']) ? esc_url_raw($video['thumbnail']) : '',
+                    );
+                }
             }
         }
-        
-        $data = array(
-            'gallery_id'        => isset($_POST['gallery_id']) ? intval($_POST['gallery_id']) : 0,
-            'title'             => isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '',
-            'description'       => isset($_POST['description']) ? wp_kses_post($_POST['description']) : '',
-            'categories'        => isset($_POST['categories']) ? array_map('intval', (array) $_POST['categories']) : array(),
-            'image_ids'         => $image_ids,
-            'linked_event'      => isset($_POST['linked_event']) ? intval($_POST['linked_event']) : 0,
-            'linked_artist'     => isset($_POST['linked_artist']) ? intval($_POST['linked_artist']) : 0,
-            'linked_location'   => isset($_POST['linked_location']) ? intval($_POST['linked_location']) : 0,
-            'layout'            => isset($_POST['layout']) ? sanitize_text_field($_POST['layout']) : 'grid',
-            'columns'           => isset($_POST['columns']) ? absint($_POST['columns']) : 3,
-            'lightbox'          => isset($_POST['lightbox']) && $_POST['lightbox'],
-            'featured_image_id' => isset($_POST['featured_image_id']) ? intval($_POST['featured_image_id']) : 0,
-        );
-        
-        $manager = new ES_Gallery_Manager();
-        $result = $manager->save_gallery($data);
-        
-        if (is_wp_error($result)) {
-            wp_send_json_error(array('message' => $result->get_error_message()));
-            return;
-        }
-        
-        wp_send_json_success(array(
-            'message'    => __('Gallery saved successfully!', 'ensemble'),
-            'gallery_id' => $result,
-        ));
     }
+    
+    $data = array(
+        'gallery_id'        => isset($_POST['gallery_id']) ? intval($_POST['gallery_id']) : 0,
+        'title'             => isset($_POST['title']) ? sanitize_text_field($_POST['title']) : '',
+        'description'       => isset($_POST['description']) ? wp_kses_post($_POST['description']) : '',
+        'categories'        => isset($_POST['categories']) ? array_map('intval', (array) $_POST['categories']) : array(),
+        'image_ids'         => $image_ids,
+        'videos'            => $videos, // NEU: Videos Array
+        'linked_event'      => isset($_POST['linked_event']) ? intval($_POST['linked_event']) : 0,
+        'linked_artist'     => isset($_POST['linked_artist']) ? intval($_POST['linked_artist']) : 0,
+        'linked_location'   => isset($_POST['linked_location']) ? intval($_POST['linked_location']) : 0,
+        'layout'            => isset($_POST['layout']) ? sanitize_text_field($_POST['layout']) : 'grid',
+        'columns'           => isset($_POST['columns']) ? absint($_POST['columns']) : 3,
+        'lightbox'          => isset($_POST['lightbox']) && $_POST['lightbox'],
+        'featured_image_id' => isset($_POST['featured_image_id']) ? intval($_POST['featured_image_id']) : 0,
+    );
+    
+    $manager = new ES_Gallery_Manager();
+    $result = $manager->save_gallery($data);
+    
+    if (is_wp_error($result)) {
+        wp_send_json_error(array('message' => $result->get_error_message()));
+        return;
+    }
+    
+    wp_send_json_success(array(
+        'message'    => __('Gallery saved successfully!', 'ensemble'),
+        'gallery_id' => $result,
+    ));
+    }   
     
     /**
      * Delete gallery
@@ -2433,6 +2468,180 @@ class ES_AJAX_Handler {
         wp_send_json_success(array(
             'events' => $events,
             'count'  => count($events),
+        ));
+    }
+    
+    /**
+     * Copy artist with all fields
+     * 
+     * @since 2.11.0
+     */
+    public function copy_artist() {
+        check_ajax_referer('ensemble_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+            return;
+        }
+        
+        $artist_id = isset($_POST['artist_id']) ? intval($_POST['artist_id']) : 0;
+        
+        if (!$artist_id) {
+            wp_send_json_error(array('message' => __('Invalid artist ID', 'ensemble')));
+            return;
+        }
+        
+        $original_post = get_post($artist_id);
+        if (!$original_post || $original_post->post_type !== 'ensemble_artist') {
+            wp_send_json_error(array('message' => __('Artist not found', 'ensemble')));
+            return;
+        }
+        
+        // Create new post with copied data
+        $new_post_data = array(
+            'post_title'   => $original_post->post_title . ' (' . __('Copy', 'ensemble') . ')',
+            'post_content' => $original_post->post_content,
+            'post_type'    => 'ensemble_artist',
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+        );
+        
+        $new_artist_id = wp_insert_post($new_post_data);
+        
+        if (is_wp_error($new_artist_id)) {
+            wp_send_json_error(array('message' => __('Failed to create copy', 'ensemble')));
+            return;
+        }
+        
+        // Copy featured image
+        $thumbnail_id = get_post_thumbnail_id($artist_id);
+        if ($thumbnail_id) {
+            set_post_thumbnail($new_artist_id, $thumbnail_id);
+        }
+        
+        // Copy taxonomies (genres, artist_type)
+        $taxonomies = get_object_taxonomies($original_post->post_type);
+        foreach ($taxonomies as $taxonomy) {
+            $terms = wp_get_object_terms($artist_id, $taxonomy, array('fields' => 'ids'));
+            if (!is_wp_error($terms) && !empty($terms)) {
+                wp_set_object_terms($new_artist_id, $terms, $taxonomy);
+            }
+        }
+        
+        // Copy ALL meta fields
+        global $wpdb;
+        $meta_data = $wpdb->get_results($wpdb->prepare(
+            "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d",
+            $artist_id
+        ));
+        
+        foreach ($meta_data as $meta) {
+            if (in_array($meta->meta_key, array('_edit_lock', '_edit_last', '_wp_old_slug'))) {
+                continue;
+            }
+            add_post_meta($new_artist_id, $meta->meta_key, maybe_unserialize($meta->meta_value));
+        }
+        
+        // ACF fields
+        if (function_exists('get_fields')) {
+            $fields = get_fields($artist_id);
+            if ($fields) {
+                foreach ($fields as $field_name => $field_value) {
+                    update_field($field_name, $field_value, $new_artist_id);
+                }
+            }
+        }
+        
+        wp_send_json_success(array(
+            'message' => __('Artist copied successfully!', 'ensemble'),
+            'artist_id' => $new_artist_id
+        ));
+    }
+    
+    /**
+     * Copy location with all fields
+     * 
+     * @since 2.11.0
+     */
+    public function copy_location() {
+        check_ajax_referer('ensemble_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => 'Unauthorized'));
+            return;
+        }
+        
+        $location_id = isset($_POST['location_id']) ? intval($_POST['location_id']) : 0;
+        
+        if (!$location_id) {
+            wp_send_json_error(array('message' => __('Invalid location ID', 'ensemble')));
+            return;
+        }
+        
+        $original_post = get_post($location_id);
+        if (!$original_post || $original_post->post_type !== 'ensemble_location') {
+            wp_send_json_error(array('message' => __('Location not found', 'ensemble')));
+            return;
+        }
+        
+        // Create new post with copied data
+        $new_post_data = array(
+            'post_title'   => $original_post->post_title . ' (' . __('Copy', 'ensemble') . ')',
+            'post_content' => $original_post->post_content,
+            'post_type'    => 'ensemble_location',
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+        );
+        
+        $new_location_id = wp_insert_post($new_post_data);
+        
+        if (is_wp_error($new_location_id)) {
+            wp_send_json_error(array('message' => __('Failed to create copy', 'ensemble')));
+            return;
+        }
+        
+        // Copy featured image
+        $thumbnail_id = get_post_thumbnail_id($location_id);
+        if ($thumbnail_id) {
+            set_post_thumbnail($new_location_id, $thumbnail_id);
+        }
+        
+        // Copy taxonomies (location_type)
+        $taxonomies = get_object_taxonomies($original_post->post_type);
+        foreach ($taxonomies as $taxonomy) {
+            $terms = wp_get_object_terms($location_id, $taxonomy, array('fields' => 'ids'));
+            if (!is_wp_error($terms) && !empty($terms)) {
+                wp_set_object_terms($new_location_id, $terms, $taxonomy);
+            }
+        }
+        
+        // Copy ALL meta fields (inkl. Multivenue, Adresse, Öffnungszeiten, etc.)
+        global $wpdb;
+        $meta_data = $wpdb->get_results($wpdb->prepare(
+            "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d",
+            $location_id
+        ));
+        
+        foreach ($meta_data as $meta) {
+            if (in_array($meta->meta_key, array('_edit_lock', '_edit_last', '_wp_old_slug'))) {
+                continue;
+            }
+            add_post_meta($new_location_id, $meta->meta_key, maybe_unserialize($meta->meta_value));
+        }
+        
+        // ACF fields
+        if (function_exists('get_fields')) {
+            $fields = get_fields($location_id);
+            if ($fields) {
+                foreach ($fields as $field_name => $field_value) {
+                    update_field($field_name, $field_value, $new_location_id);
+                }
+            }
+        }
+        
+        wp_send_json_success(array(
+            'message' => __('Location copied successfully!', 'ensemble'),
+            'location_id' => $new_location_id
         ));
     }
 }

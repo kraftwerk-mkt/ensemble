@@ -1,0 +1,570 @@
+/**
+ * Ensemble Shortcodes - Shared Components
+ * 
+ * Reusable components used across multiple shortcodes.
+ * Includes: Meta badges, Grid layouts, Cards, Placeholders, Status badges
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * DEPENDENCIES:
+ * - _base.css (must be loaded first for CSS variables)
+ * 
+ * ARCHITECTURE:
+ * - All values use --ensemble-* Designer variables with fallbacks
+ * - Uses Extended variables for badges, inputs, etc.
+ * - See docs/CSS-ARCHITECTURE.md for complete reference
+ */
+
+/* ============================================
+   META BADGES & LABELS
+   ============================================ */
+
+.ensemble-meta-badge,
+.ensemble-category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-badge-primary-bg, var(--ensemble-primary, #667eea));
+    color: var(--ensemble-badge-primary-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 16px);
+    font-size: var(--ensemble-badge-font-size, var(--ensemble-small-size, 14px));
+    font-weight: var(--ensemble-badge-font-weight, 600);
+    line-height: 1.4;
+}
+
+.ensemble-event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+/* ============================================
+   GENRE TAGS
+   ============================================ */
+
+.ensemble-event-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.ensemble-genres-label {
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text-secondary, #718096);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ensemble-genre-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-badge-bg, var(--ensemble-surface, #ffffff));
+    color: var(--ensemble-badge-text, var(--ensemble-text, #1a202c));
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-badge-radius, 16px);
+    font-size: var(--ensemble-badge-font-size, var(--ensemble-small-size, 14px));
+    font-weight: var(--ensemble-body-weight, 400);
+    transition: var(--ensemble-transition, all 0.3s ease);
+    text-decoration: none;
+}
+
+.ensemble-genre-tag:hover {
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-badge-primary-text, #ffffff);
+    border-color: var(--ensemble-primary, #667eea);
+    text-decoration: none;
+}
+
+/* ============================================
+   META ITEMS (Icon + Text)
+   ============================================ */
+
+.ensemble-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-meta-icon {
+    font-size: var(--ensemble-lg-size, 18px);
+    color: var(--ensemble-primary, #667eea);
+    flex-shrink: 0;
+}
+
+/* Dashicons support */
+.ensemble-meta-icon.dashicons,
+.ensemble-info-icon.dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: var(--ensemble-xl-size, 20px);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-meta-label {
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-small-size, 14px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ensemble-meta-value {
+    color: var(--ensemble-text, #1a202c);
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+.ensemble-meta-value a {
+    color: var(--ensemble-primary, #667eea);
+    text-decoration: none;
+}
+
+.ensemble-meta-value a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   GRID LAYOUTS
+   ============================================ */
+
+.ensemble-events-grid,
+.ensemble-artists-list.ensemble-layout-grid,
+.ensemble-locations-list.ensemble-layout-grid {
+    display: grid;
+    gap: var(--ensemble-grid-gap, 24px);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* Column-specific overrides */
+.ensemble-columns-2,
+.ensemble-events-grid.ensemble-columns-2,
+.ensemble-artists-list.ensemble-columns-2,
+.ensemble-locations-list.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.ensemble-columns-3,
+.ensemble-events-grid.ensemble-columns-3,
+.ensemble-artists-list.ensemble-columns-3,
+.ensemble-locations-list.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ensemble-columns-4,
+.ensemble-events-grid.ensemble-columns-4,
+.ensemble-artists-list.ensemble-columns-4,
+.ensemble-locations-list.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Designer-based columns */
+.ensemble-grid-auto {
+    grid-template-columns: repeat(var(--ensemble-grid-columns, 3), 1fr);
+}
+
+/* ============================================
+   CARD BASE STYLES
+   ============================================ */
+
+.ensemble-event-card,
+.ensemble-artist-card,
+.ensemble-location-card {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    padding: var(--ensemble-card-padding, 24px);
+    transition: var(--ensemble-transition, all 0.3s ease);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.ensemble-event-card:hover,
+.ensemble-artist-card:hover,
+.ensemble-location-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--ensemble-shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.15));
+    border-color: var(--ensemble-primary, #667eea);
+}
+
+/* Card focus state (accessibility) */
+.ensemble-event-card:focus-within,
+.ensemble-artist-card:focus-within,
+.ensemble-location-card:focus-within {
+    outline: var(--ensemble-focus-ring-width, 3px) solid var(--ensemble-focus-ring-color, var(--ensemble-primary, #667eea));
+    outline-offset: var(--ensemble-focus-ring-offset, 2px);
+}
+
+/* ============================================
+   CARD IMAGES
+   ============================================ */
+
+.ensemble-event-image,
+.ensemble-artist-image,
+.ensemble-location-image {
+    width: calc(100% + var(--ensemble-card-padding, 24px) * 2);
+    margin-top: calc(var(--ensemble-card-padding, 24px) * -1);
+    margin-left: calc(var(--ensemble-card-padding, 24px) * -1);
+    margin-right: calc(var(--ensemble-card-padding, 24px) * -1);
+    margin-bottom: var(--ensemble-card-padding, 24px);
+    border-radius: var(--ensemble-card-radius, 12px) var(--ensemble-card-radius, 12px) 0 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.ensemble-event-image img,
+.ensemble-artist-image img,
+.ensemble-location-image img {
+    width: 100%;
+    height: var(--ensemble-card-image-height, 200px);
+    object-fit: var(--ensemble-card-image-fit, cover);
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.ensemble-event-card:hover .ensemble-event-image img,
+.ensemble-artist-card:hover .ensemble-artist-image img,
+.ensemble-location-card:hover .ensemble-location-image img {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   CARD CONTENT
+   ============================================ */
+
+.ensemble-event-content,
+.ensemble-artist-content,
+.ensemble-location-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card Actions (bottom aligned) */
+.ensemble-event-actions,
+.ensemble-artist-actions,
+.ensemble-location-actions {
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+/* ============================================
+   IMAGE PLACEHOLDERS
+   Uses Extended placeholder variables
+   ============================================ */
+
+.ensemble-artist-placeholder,
+.ensemble-location-placeholder,
+.ensemble-event-placeholder {
+    width: 100%;
+    height: var(--ensemble-card-image-height, 200px);
+    background: var(--ensemble-placeholder-bg, linear-gradient(135deg, var(--ensemble-primary, #667eea), var(--ensemble-secondary, #764ba2)));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ensemble-artist-placeholder .dashicons,
+.ensemble-location-placeholder .dashicons,
+.ensemble-event-placeholder .dashicons {
+    font-size: var(--ensemble-hero-size, 72px);
+    width: 64px;
+    height: 64px;
+    color: var(--ensemble-placeholder-icon, rgba(255, 255, 255, 0.5));
+}
+
+/* Simple placeholder (no gradient) */
+.ensemble-placeholder-simple {
+    background: var(--ensemble-placeholder-bg, #e2e8f0);
+}
+
+.ensemble-placeholder-simple .dashicons {
+    color: var(--ensemble-placeholder-icon, #a0aec0);
+}
+
+/* ============================================
+   EVENT STATUS BANNERS
+   ============================================ */
+
+.ensemble-event-status-banner {
+    padding: 12px 16px;
+    border-radius: var(--ensemble-radius, 8px);
+    margin-bottom: 16px;
+    font-weight: var(--ensemble-button-weight, 600);
+    font-size: var(--ensemble-small-size, 14px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ensemble-event-status-banner .status-icon {
+    font-size: var(--ensemble-xl-size, 20px);
+    flex-shrink: 0;
+}
+
+/* Status: Cancelled */
+.ensemble-status-cancelled {
+    background: var(--ensemble-error-bg, #fee2e2);
+    color: var(--ensemble-error-text, #991b1b);
+    border: 1px solid var(--ensemble-error-border, #fecaca);
+}
+
+/* Status: Postponed */
+.ensemble-status-postponed {
+    background: var(--ensemble-warning-bg, #fef3c7);
+    color: var(--ensemble-warning-text, #92400e);
+    border: 1px solid var(--ensemble-warning-border, #fde68a);
+}
+
+/* Status: Draft */
+.ensemble-status-draft {
+    background: var(--ensemble-info-bg, #e0e7ff);
+    color: var(--ensemble-info-text, #3730a3);
+    border: 1px solid var(--ensemble-info-border, #c7d2fe);
+}
+
+/* Status: Sold Out */
+.ensemble-status-soldout {
+    background: var(--ensemble-surface, #ffffff);
+    color: var(--ensemble-status-soldout, #1a202c);
+    border: 1px solid var(--ensemble-border, #e2e8f0);
+}
+
+/* Cancelled title styling */
+.ensemble-event-title.ensemble-cancelled {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* ============================================
+   EVENT BADGES (Header badges)
+   Uses Extended badge variables
+   ============================================ */
+
+.es-event-badge {
+    display: inline-block;
+    padding: var(--ensemble-badge-padding-v, 6px) var(--ensemble-badge-padding-h, 16px);
+    background: var(--ensemble-badge-primary-bg, var(--ensemble-primary, #667eea));
+    color: var(--ensemble-badge-primary-text, #ffffff);
+    font-size: var(--ensemble-badge-font-size, var(--ensemble-xs-size, 12px));
+    font-weight: var(--ensemble-badge-font-weight, 600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--ensemble-badge-radius, 20px);
+    margin-bottom: 12px;
+}
+
+/* Badge color variants */
+.es-badge-sold_out {
+    background: var(--ensemble-badge-error-bg, var(--ensemble-danger, #e53e3e));
+    color: var(--ensemble-badge-error-text, #ffffff);
+}
+
+.es-badge-few_tickets {
+    background: var(--ensemble-badge-warning-bg, var(--ensemble-warning, #dd6b20));
+    color: var(--ensemble-badge-warning-text, #1a202c);
+}
+
+.es-badge-free {
+    background: var(--ensemble-badge-success-bg, var(--ensemble-success, #38a169));
+    color: var(--ensemble-badge-success-text, #ffffff);
+}
+
+.es-badge-new {
+    background: var(--ensemble-info, #3182ce);
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+.es-badge-premiere {
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+/* ============================================
+   LOCATION HINT
+   ============================================ */
+
+.es-location-hint {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+    font-style: italic;
+    margin-top: 8px;
+}
+
+/* ============================================
+   LOCATION ROW COMPONENT
+   Horizontal layout with logo + content
+   ============================================ */
+
+[class*="-location-row"] {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: var(--ensemble-card-padding, 24px);
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+/* Location Logo/Image */
+[class*="-location-row"] [class*="-location-image"] {
+    flex-shrink: 0;
+    width: 160px;
+    min-width: 120px;
+    max-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[class*="-location-row"] [class*="-location-image"] img {
+    width: 100%;
+    height: auto;
+    max-height: 120px;
+    object-fit: contain;
+}
+
+/* Placeholder for location row */
+[class*="-location-row"] [class*="-location-placeholder"] {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--ensemble-placeholder-bg, var(--ensemble-surface, #ffffff));
+    border-radius: var(--ensemble-radius, 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ensemble-placeholder-icon, var(--ensemble-text-muted, #a0aec0));
+}
+
+/* Content block */
+[class*="-location-row"] [class*="-location-content"] {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Location Name */
+[class*="-location-row"] [class*="-location-name"] {
+    margin: 0;
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1a202c);
+}
+
+[class*="-location-row"] [class*="-location-name"] a {
+    color: inherit;
+    text-decoration: none;
+}
+
+[class*="-location-row"] [class*="-location-name"] a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* Location Address */
+[class*="-location-row"] [class*="-location-address"] {
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-text-secondary, #718096);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+[class*="-location-row"] [class*="-location-address"] .dashicons {
+    color: var(--ensemble-primary, #667eea);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* ============================================
+   PRICE DISPLAY
+   ============================================ */
+
+.ensemble-price {
+    font-size: var(--ensemble-price-size, 32px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-price-label {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-muted, #a0aec0);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ensemble-price-free {
+    color: var(--ensemble-success, #38a169);
+}
+
+/* ============================================
+   DIVIDERS
+   ============================================ */
+
+.ensemble-divider {
+    height: 1px;
+    background: var(--ensemble-divider, var(--ensemble-border, #e2e8f0));
+    margin: 16px 0;
+    border: none;
+}
+
+.ensemble-divider-dashed {
+    background: none;
+    border-top: 2px dashed var(--ensemble-divider, var(--ensemble-border, #e2e8f0));
+}
+
+/* ============================================
+   TOOLTIPS (if using custom tooltips)
+   Uses Extended tooltip variables
+   ============================================ */
+
+.ensemble-tooltip {
+    position: relative;
+}
+
+.ensemble-tooltip-content {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: var(--ensemble-tooltip-padding-v, 8px) var(--ensemble-tooltip-padding-h, 12px);
+    background: var(--ensemble-tooltip-bg, #1a202c);
+    color: var(--ensemble-tooltip-text, #ffffff);
+    font-size: var(--ensemble-tooltip-font-size, 13px);
+    border-radius: var(--ensemble-tooltip-radius, 6px);
+    box-shadow: var(--ensemble-tooltip-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 1000;
+    margin-bottom: 8px;
+}
+
+.ensemble-tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: var(--ensemble-tooltip-arrow-size, 6px) solid transparent;
+    border-top-color: var(--ensemble-tooltip-bg, #1a202c);
+}
+
+.ensemble-tooltip:hover .ensemble-tooltip-content {
+    opacity: 1;
+    visibility: visible;
+}

@@ -1,0 +1,762 @@
+/**
+ * Ensemble Timetable Frontend Styles
+ * 
+ * Layout: Days side by side, Time column left
+ * 100% width, responsive
+ *
+ * @package Ensemble
+ * @subpackage Addons/Timetable
+ */
+
+/* ============================================
+   BASE
+   ============================================ */
+
+.es-timetable-frontend {
+    width: 100%;
+    margin: var(--ensemble-spacing, 30px) 0;
+    font-family: var(--ensemble-font-body, inherit);
+}
+
+/* ============================================
+   DAY FILTER - CENTERED
+   ============================================ */
+
+.es-timetable-filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--ensemble-spacing, 24px);
+}
+
+.es-filters-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.es-day-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 12px 24px;
+    background: var(--ensemble-card-bg, rgba(255,255,255,0.05));
+    border: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    border-radius: var(--ensemble-button-radius, 8px);
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.7));
+    cursor: pointer;
+    transition: var(--ensemble-transition, all 0.3s ease);
+    font-family: inherit;
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+.es-day-filter:hover {
+    background: var(--ensemble-card-hover-bg, rgba(255,255,255,0.1));
+    border-color: var(--ensemble-primary, #e94560);
+    color: var(--ensemble-text, #fff);
+}
+
+.es-day-filter.active {
+    background: var(--ensemble-primary, #e94560);
+    border-color: var(--ensemble-primary, #e94560);
+    color: var(--ensemble-button-text, #fff);
+}
+
+.es-filter-day {
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+.es-filter-date {
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+/* ============================================
+   TIMETABLE GRID - Days Side by Side
+   ============================================ */
+
+.es-timetable-grid {
+    display: flex;
+    width: 100%;
+    border: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    border-radius: var(--ensemble-card-radius, 8px);
+    overflow: hidden;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.2));
+}
+
+/* Time Column (Left) */
+.es-time-column {
+    width: 70px;
+    min-width: 70px;
+    flex-shrink: 0;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.3));
+    border-right: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+}
+
+.es-time-header {
+    height: 60px;
+    border-bottom: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+}
+
+.es-time-slot {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 8px;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.5));
+    border-bottom: 1px solid var(--ensemble-border, rgba(255,255,255,0.05));
+    box-sizing: border-box;
+}
+
+/* Days Container */
+.es-days-container {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Single Day Column */
+.es-day-column {
+    flex: 1;
+    min-width: 200px;
+    border-right: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.es-day-column:last-child {
+    border-right: none;
+}
+
+/* Hidden day (filtered) */
+.es-day-column.es-hidden {
+    display: none;
+}
+
+/* Day Header */
+.es-day-header {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.3));
+    border-bottom: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    padding: 10px;
+}
+
+.es-day-name {
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-heading, var(--ensemble-text, #fff));
+}
+
+.es-day-date {
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.6));
+}
+
+/* Day Content - Events Area */
+.es-day-content {
+    position: relative;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.1));
+}
+
+/* Hour Grid Lines */
+.es-hour-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--ensemble-border, rgba(255,255,255,0.05));
+    pointer-events: none;
+}
+
+/* Location Lanes */
+.es-location-lane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-right: 1px solid var(--ensemble-border, rgba(255,255,255,0.03));
+}
+
+.es-location-lane:last-child {
+    border-right: none;
+}
+
+/* ============================================
+   EVENTS
+   ============================================ */
+
+.es-event {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    border-radius: var(--ensemble-card-radius, 6px);
+    background: var(--event-color, var(--ensemble-primary, #e94560));
+    color: var(--ensemble-button-text, #ffffff);
+    text-decoration: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: var(--ensemble-transition, all 0.3s ease);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    z-index: 1;
+}
+
+.es-event:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    z-index: 10;
+}
+
+/* Event Info */
+.es-event-info {
+    flex: 1;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.es-event-time {
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    opacity: 0.9;
+}
+
+.es-event-title {
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.es-event-artist {
+    font-size: var(--ensemble-xs-size, 12px);
+    opacity: 0.85;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.es-event-genre {
+    display: inline-block;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: var(--ensemble-radius, 8px);
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 3px;
+    width: fit-content;
+}
+
+/* ============================================
+   IMAGE POSITIONS
+   ============================================ */
+
+/* Image Left */
+.es-event.es-image-left {
+    flex-direction: row;
+}
+
+.es-event.es-image-left .es-event-image {
+    width: 50px;
+    min-width: 50px;
+    flex-shrink: 0;
+}
+
+.es-event.es-image-left .es-event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Image Top */
+.es-event.es-image-top {
+    flex-direction: column;
+}
+
+.es-event.es-image-top .es-event-image {
+    width: 100%;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.es-event.es-image-top .es-event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Image Background */
+.es-event.es-image-background {
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* No Image */
+.es-event.es-image-none .es-event-image {
+    display: none;
+}
+
+/* ============================================
+   LOCATION LEGEND
+   ============================================ */
+
+.es-location-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: var(--ensemble-spacing, 20px);
+    padding: 15px;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.2));
+    border-radius: var(--ensemble-card-radius, 8px);
+}
+
+.es-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: var(--ensemble-badge-radius, 4px);
+    flex-shrink: 0;
+}
+
+.es-legend-name {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text, #fff);
+    font-weight: var(--ensemble-body-weight, 400);
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.es-timetable-empty {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.5));
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+/* ============================================
+   VERTICAL LAYOUT - One Table per Day
+   ============================================ */
+
+/* Days Wrapper - horizontal scroll if needed */
+.es-timetable-days-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 15px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar for days wrapper */
+.es-timetable-days-wrapper::-webkit-scrollbar {
+    height: 10px;
+}
+
+.es-timetable-days-wrapper::-webkit-scrollbar-track {
+    background: var(--ensemble-card-bg, rgba(255,255,255,0.05));
+    border-radius: var(--ensemble-radius, 8px);
+}
+
+.es-timetable-days-wrapper::-webkit-scrollbar-thumb {
+    background: var(--ensemble-primary, #e94560);
+    border-radius: var(--ensemble-radius, 8px);
+}
+
+/* Single Day Table */
+.es-day-table {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    border-radius: var(--ensemble-card-radius, 8px);
+    overflow: hidden;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.2));
+}
+
+.es-day-table.es-hidden {
+    display: none !important;
+}
+
+/* Day Title */
+.es-day-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 8px;
+    background: var(--ensemble-primary, #e94560);
+    color: var(--ensemble-button-text, #fff);
+    text-align: center;
+}
+
+.es-day-title .es-day-name {
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-heading-weight, 700);
+}
+
+.es-day-title .es-day-date {
+    font-size: var(--ensemble-xs-size, 12px);
+    opacity: 0.9;
+}
+
+/* Day Grid - Time + Stages */
+.es-day-grid {
+    display: flex;
+}
+
+/* Time Column in Day Table */
+.es-day-grid .es-time-column {
+    width: 45px;
+    min-width: 45px;
+    flex-shrink: 0;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.3));
+    border-right: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+}
+
+.es-day-grid .es-time-slot {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.5));
+    border-bottom: 1px solid var(--ensemble-border, rgba(255,255,255,0.05));
+    box-sizing: border-box;
+}
+
+/* Stages Row */
+.es-stages-row {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Stage Column */
+.es-stage-col {
+    flex: 1;
+    min-width: 60px;
+    border-right: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+}
+
+.es-stage-col:last-child {
+    border-right: none;
+}
+
+/* Stage Header */
+.es-stage-col .es-stage-header {
+    padding: 8px 4px;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.3));
+    border-bottom: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    border-top: 3px solid var(--stage-color, var(--ensemble-primary, #e94560));
+    text-align: center;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.es-stage-col .es-stage-name {
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-heading, var(--ensemble-text, #fff));
+    line-height: 1.2;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+/* Stage Events Area */
+.es-stage-events {
+    position: relative;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.1));
+}
+
+/* Events in vertical layout */
+.es-day-table .es-event {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+}
+
+.es-day-table .es-event-info {
+    padding: 4px 6px;
+}
+
+.es-day-table .es-event-time {
+    font-size: var(--ensemble-xs-size, 12px);
+}
+
+.es-day-table .es-event-title {
+    font-size: var(--ensemble-xs-size, 12px);
+    -webkit-line-clamp: 2;
+}
+
+.es-day-table .es-event-artist {
+    font-size: var(--ensemble-xs-size, 12px);
+}
+
+/* ============================================
+   CONFERENCE AGENDA
+   ============================================ */
+
+.es-agenda-frontend {
+    width: 100%;
+    margin: var(--ensemble-spacing, 30px) 0;
+}
+
+.es-agenda-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-agenda-entry {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background: var(--ensemble-card-bg, rgba(255,255,255,0.05));
+    border: 1px solid var(--ensemble-border, rgba(255,255,255,0.1));
+    border-radius: var(--ensemble-card-radius, 8px);
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.es-agenda-entry:hover {
+    background: var(--ensemble-card-hover-bg, rgba(255,255,255,0.08));
+    border-color: var(--ensemble-primary, #e94560);
+}
+
+.es-agenda-entry.is-break {
+    background: linear-gradient(135deg, 
+        rgba(240, 184, 73, 0.15),
+        rgba(240, 184, 73, 0.05)
+    );
+    border-color: var(--ensemble-warning, #f0b849);
+    border-left-width: 4px;
+}
+
+.es-entry-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    padding: 12px;
+    background: var(--ensemble-card-bg, rgba(0,0,0,0.2));
+    border-radius: var(--ensemble-button-radius, 6px);
+}
+
+.es-time-start,
+.es-time-end {
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-heading, var(--ensemble-text, #fff));
+}
+
+.es-time-divider {
+    font-size: var(--ensemble-xs-size, 12px);
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.5));
+    margin: 2px 0;
+}
+
+.es-entry-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+}
+
+.es-entry-title {
+    margin: 0;
+    font-size: var(--ensemble-h4-size, 1.1rem);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-heading, var(--ensemble-text, #fff));
+}
+
+.es-entry-speaker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.es-speaker-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--ensemble-primary, #e94560);
+}
+
+.es-speaker-name {
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-primary, #e94560);
+    text-decoration: none;
+}
+
+a.es-speaker-name:hover {
+    text-decoration: underline;
+}
+
+.es-entry-room {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.7));
+}
+
+.es-entry-break {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.es-break-icon {
+    font-size: 1.3rem;
+}
+
+.es-break-title {
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-warning, #f0b849);
+}
+
+.es-agenda-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--ensemble-text-muted, rgba(255,255,255,0.5));
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+    .es-days-container {
+        flex-wrap: wrap;
+    }
+
+    .es-day-column {
+        min-width: calc(50% - 1px);
+        flex: 1 1 calc(50% - 1px);
+    }
+}
+
+@media (max-width: 600px) {
+    .es-time-column {
+        width: 50px;
+        min-width: 50px;
+    }
+
+    .es-time-slot {
+        font-size: var(--ensemble-xs-size, 12px);
+        padding-top: 5px;
+    }
+
+    .es-day-column {
+        min-width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .es-day-header {
+        height: 50px;
+    }
+
+    .es-day-name {
+        font-size: var(--ensemble-small-size, 14px);
+    }
+
+    .es-day-date {
+        font-size: var(--ensemble-xs-size, 12px);
+    }
+
+    .es-event-info {
+        padding: 6px 8px;
+    }
+
+    .es-event-title {
+        font-size: var(--ensemble-xs-size, 12px);
+    }
+
+    .es-event-time,
+    .es-event-artist {
+        font-size: var(--ensemble-xs-size, 12px);
+    }
+
+    .es-location-legend {
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .es-legend-name {
+        font-size: var(--ensemble-xs-size, 12px);
+    }
+
+    /* Agenda */
+    .es-agenda-entry {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+    }
+
+    .es-entry-time {
+        flex-direction: row;
+        width: fit-content;
+        padding: 8px 12px;
+        gap: 8px;
+    }
+
+    .es-time-divider {
+        margin: 0;
+    }
+}
+
+/* ============================================
+   PRINT
+   ============================================ */
+
+@media print {
+    .es-timetable-frontend {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .es-timetable-filters {
+        display: none;
+    }
+
+    .es-event {
+        border: 1px solid #999 !important;
+        background: #f0f0f0 !important;
+        color: #000 !important;
+        box-shadow: none !important;
+    }
+
+    .es-day-header,
+    .es-time-column {
+        background: #e0e0e0 !important;
+    }
+
+    .es-location-legend {
+        background: #f5f5f5 !important;
+    }
+}

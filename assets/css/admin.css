@@ -1407,79 +1407,17 @@
     display: none; /* No longer needed - using cards instead */
 }
 
-/* Form section content */
-.es-form-section > .es-form-card {
-    margin: 0;
-}
-
-.es-form-row {
-    margin-bottom: 20px;
-}
-
+/* Form Rows - Additional Wizard-specific styles
+   Base styles are in admin-unified.css */
 .es-form-row:last-child {
     margin-bottom: 0;
 }
 
-.es-form-row label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-size: 13px;
-    color: var(--es-text);
-}
-
-.es-form-row input[type="text"],
-.es-form-row input[type="date"],
-.es-form-row input[type="time"],
-.es-form-row input[type="url"],
-.es-form-row input[type="number"],
-.es-form-row input[type="email"],
-.es-form-row select,
-.es-form-row textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--es-border);
-    border-radius: 6px;
-    font-size: 14px;
-    color: var(--es-text);
-    background: var(--es-surface);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
-}
-
-.es-form-row input:focus,
-.es-form-row select:focus,
-.es-form-row textarea:focus {
-    outline: none;
-    border-color: var(--es-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-.es-form-row input::placeholder,
-.es-form-row textarea::placeholder {
-    color: var(--es-text-secondary);
-    opacity: 0.6;
-}
-
-.es-form-row textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-.es-form-row select[multiple] {
-    height: auto;
-}
-
-.es-form-row-group {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
+/* Field Help Text */
 .es-field-help {
     display: block;
     margin-top: 5px;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--es-text-secondary);
     font-style: italic;
 }

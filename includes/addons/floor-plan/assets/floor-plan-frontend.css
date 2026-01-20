@@ -1,0 +1,487 @@
+/**
+ * Floor Plan Pro - Frontend Styles
+ *
+ * Uses Designer CSS variables from Ensemble (--ensemble-*)
+ * Falls back to sensible defaults for standalone use
+ *
+ * @package Ensemble
+ * @subpackage Addons/FloorPlan
+ */
+
+/* ============================================
+   Base Wrapper
+   ============================================ */
+.es-floor-plan-wrapper {
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-border-radius, 8px);
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+/* ============================================
+   Legend
+   ============================================ */
+.es-floor-plan-legend {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+    background: var(--ensemble-card-bg, #fff);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.es-legend-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ensemble-text, #1e293b);
+}
+
+.es-legend-items {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.es-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--ensemble-text-secondary, #64748b);
+}
+
+.es-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.es-legend-available .es-legend-dot {
+    background: #10b981;
+}
+
+.es-legend-partial .es-legend-dot {
+    background: #f59e0b;
+}
+
+.es-legend-sold-out .es-legend-dot {
+    background: #ef4444;
+}
+
+/* ============================================
+   Canvas
+   ============================================ */
+.es-floor-plan-canvas-wrap {
+    position: relative;
+    overflow: auto;
+    background: #f8fafc;
+    max-height: 600px;
+}
+
+.es-floor-plan-canvas {
+    position: relative;
+    width: 100%;
+    max-height: 600px;
+    margin: 0 auto;
+}
+
+/* Prevent focus scroll on canvas */
+.es-floor-plan-canvas .konvajs-content,
+.es-floor-plan-canvas canvas {
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent;
+    scroll-margin: 0 !important;
+    scroll-snap-margin: 0 !important;
+}
+
+.es-floor-plan-canvas .konvajs-content:focus,
+.es-floor-plan-canvas canvas:focus {
+    outline: none !important;
+}
+
+/* Prevent any scroll behavior on floor plan interaction */
+.es-floor-plan-wrapper {
+    scroll-behavior: auto;
+    scroll-margin: 0;
+}
+
+.es-floor-plan-canvas-wrap {
+    scroll-behavior: auto;
+    overflow-anchor: none;
+    scroll-margin: 0;
+}
+
+.es-floor-plan-canvas {
+    scroll-margin: 0;
+}
+
+.es-floor-plan-canvas canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Loading */
+.es-floor-plan-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--es-fp-text-muted);
+    font-size: 14px;
+}
+
+.es-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--es-fp-border);
+    border-top-color: var(--es-fp-primary);
+    border-radius: 50%;
+    animation: es-spin 0.8s linear infinite;
+}
+
+@keyframes es-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   Sections Legend
+   ============================================ */
+.es-floor-plan-sections-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 15px 20px;
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+    background: var(--ensemble-card-bg, #fff);
+    flex-wrap: wrap;
+}
+
+.es-section-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.es-section-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+}
+
+.es-section-name {
+    font-weight: 500;
+    color: var(--ensemble-text, #1e293b);
+}
+
+.es-section-price {
+    color: var(--ensemble-text-secondary, #64748b);
+    font-size: 12px;
+}
+
+/* ============================================
+   Interactive Elements (canvas rendered)
+   ============================================ */
+.es-floor-plan-wrapper[data-bookable="true"] .es-fp-element-bookable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-floor-plan-wrapper[data-bookable="true"] .es-fp-element-bookable:hover {
+    filter: brightness(1.1);
+}
+
+/* Status indicators */
+.es-fp-element.es-status-available {
+    opacity: 1;
+}
+
+.es-fp-element.es-status-partial {
+    opacity: 0.8;
+}
+
+.es-fp-element.es-status-sold-out {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+}
+
+/* ============================================
+   Booking Modal
+   ============================================ */
+.es-floor-plan-booking-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.es-floor-plan-booking-modal.es-active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.es-booking-modal-content {
+    background: var(--ensemble-card-bg, #fff);
+    border-radius: var(--ensemble-border-radius, 8px);
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.es-floor-plan-booking-modal.es-active .es-booking-modal-content {
+    transform: translateY(0);
+}
+
+.es-booking-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--ensemble-text-secondary, #64748b);
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.es-booking-modal-close:hover {
+    background: var(--ensemble-card-border, #e2e8f0);
+    color: var(--ensemble-text, #1e293b);
+}
+
+/* Modal Header */
+.es-booking-modal-header {
+    padding: 25px 25px 15px;
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-booking-element-name {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ensemble-text, #1e293b);
+}
+
+.es-booking-section-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+}
+
+/* Modal Body */
+.es-booking-modal-body {
+    padding: 20px 25px;
+}
+
+.es-booking-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.es-booking-info > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--ensemble-text, #1e293b);
+}
+
+.es-booking-info .dashicons {
+    color: var(--ensemble-text-secondary, #64748b);
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+}
+
+.es-booking-description {
+    padding: 15px;
+    background: var(--ensemble-surface, #f8fafc);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #64748b);
+    margin-bottom: 20px;
+}
+
+/* Booking Form */
+.es-booking-form label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ensemble-text-secondary, #64748b);
+    margin-bottom: 8px;
+}
+
+.es-booking-seats {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 15px;
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: 6px;
+    background: var(--ensemble-card-bg, #fff);
+    color: var(--ensemble-text, #1e293b);
+}
+
+.es-booking-seats:focus {
+    border-color: var(--ensemble-primary, #3b82f6);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Modal Footer */
+.es-booking-modal-footer {
+    padding: 15px 25px 25px;
+}
+
+.es-booking-reserve-btn,
+.es-booking-tickets-btn {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.es-booking-reserve-btn {
+    background: var(--ensemble-primary, #3b82f6);
+    color: #fff !important;
+    border: none;
+}
+
+.es-booking-reserve-btn:hover {
+    background: var(--ensemble-primary-hover, #2563eb);
+    transform: translateY(-1px);
+}
+
+.es-booking-info-text {
+    text-align: center;
+    color: var(--ensemble-text-secondary, #64748b);
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ============================================
+   Tooltip (for hover info)
+   ============================================ */
+.es-fp-tooltip {
+    position: fixed !important;
+    background: #1e293b !important;
+    color: #ffffff !important;
+    padding: 10px 14px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    pointer-events: none !important;
+    z-index: 999999 !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+    max-width: 220px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    white-space: normal;
+}
+
+.es-fp-tooltip.es-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.es-fp-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #1e293b;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 768px) {
+    .es-floor-plan-legend {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .es-legend-items {
+        gap: 12px;
+    }
+    
+    .es-floor-plan-sections-legend {
+        gap: 12px;
+    }
+    
+    .es-booking-modal-content {
+        max-width: 100%;
+        margin: 10px;
+    }
+}
+
+/* ============================================
+   Error State
+   ============================================ */
+.es-floor-plan-error {
+    padding: 40px 20px;
+    text-align: center;
+    color: #d63638;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: var(--ensemble-border-radius, 8px);
+}
+
+/* ============================================
+   Print Styles
+   ============================================ */
+@media print {
+    .es-floor-plan-legend,
+    .es-floor-plan-sections-legend {
+        background: none;
+    }
+    
+    .es-floor-plan-booking-modal {
+        display: none !important;
+    }
+}

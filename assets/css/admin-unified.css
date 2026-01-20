@@ -1,9 +1,9 @@
 /**
  * Ensemble Unified Admin Styles
  * =============================
- * Single Source of Truth für alle Admin-Seiten
+ * Single Source of Truth fÃƒÂ¼r alle Admin-Seiten
  * 
- * Enthält:
+ * EnthÃƒÂ¤lt:
  * - CSS Variables
  * - Layout (Wrap, Container, Section)
  * - Tabs (JS-gesteuert & PHP-gesteuert)
@@ -129,6 +129,7 @@
    GLOBAL WRAP - Alle Admin-Seiten
    ============================================ */
 
+/* Core Wraps */
 .es-wizard-wrap,
 .es-manager-wrap,
 .es-settings-wrap,
@@ -140,7 +141,17 @@
 .es-frontend-wrap,
 .es-dashboard-wrap,
 .es-addons-wrap,
-.es-onboarding-wrap {
+.es-onboarding-wrap,
+/* Addon Wraps */
+.es-catalog-wrap,
+.es-downloads-wrap,
+.es-booking-wrap,
+.es-floor-plan-wrap,
+.es-faq-wrap,
+.es-sponsors-wrap,
+.es-tickets-wrap,
+.es-u18-wrap,
+.es-gallery-pro-wrap {
     background: var(--es-background);
     min-height: 100vh;
     margin-left: -20px;
@@ -152,6 +163,7 @@
    PAGE TITLE - Einheitlich mit Gradient
    ============================================ */
 
+/* Core Page Titles */
 .es-wizard-wrap h1,
 .es-manager-wrap h1,
 .es-settings-wrap h1,
@@ -163,7 +175,17 @@
 .es-frontend-wrap h1,
 .es-dashboard-wrap h1,
 .es-addons-wrap h1,
-.es-onboarding-wrap h1 {
+.es-onboarding-wrap h1,
+/* Addon Page Titles */
+.es-catalog-wrap h1,
+.es-downloads-wrap h1,
+.es-booking-wrap h1,
+.es-floor-plan-wrap h1,
+.es-faq-wrap h1,
+.es-sponsors-wrap h1,
+.es-tickets-wrap h1,
+.es-u18-wrap h1,
+.es-gallery-pro-wrap h1 {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,6 +231,7 @@
    MAIN CONTAINER - Mit Border
    ============================================ */
 
+/* Core Containers */
 .es-wizard-container,
 .es-manager-container,
 .es-settings-container,
@@ -219,7 +242,17 @@
 .es-addons-container,
 .es-import-container,
 .es-export-container,
-.es-onboarding-container {
+.es-onboarding-container,
+/* Addon Containers */
+.es-catalog-container,
+.es-downloads-container,
+.es-booking-container,
+.es-floor-plan-container,
+.es-faq-container,
+.es-sponsors-container,
+.es-tickets-container,
+.es-u18-container,
+.es-gallery-pro-container {
     background: var(--es-surface);
     border: 1px solid var(--es-border);
     border-radius: var(--es-radius-lg);
@@ -228,7 +261,7 @@
 }
 
 /* ============================================
-   TAB NAVIGATION - Unified für JS & PHP Tabs
+   TAB NAVIGATION - Unified fÃƒÂ¼r JS & PHP Tabs
    ============================================ */
 
 /* Tab Container */
@@ -359,6 +392,721 @@
 
 .es-section-intro {
     margin-bottom: var(--es-spacing-lg);
+}
+
+/* ============================================
+   TAXONOMY PILLS GRID - Card-Style Terms
+   ============================================ */
+
+.es-taxonomy-pills {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.es-taxonomy-pill {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius-lg);
+    padding: 20px;
+    transition: var(--es-transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.es-taxonomy-pill:hover {
+    border-color: var(--es-primary);
+    box-shadow: var(--es-shadow);
+    transform: translateY(-2px);
+}
+
+/* Category Color Indicator (left border) */
+.es-pill-color-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: var(--es-radius-lg) 0 0 var(--es-radius-lg);
+}
+
+.es-pill-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.es-pill-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--es-text);
+}
+
+.es-pill-count {
+    padding: 4px 10px;
+    background: var(--es-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: var(--es-radius-pill);
+}
+
+.es-pill-meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.es-meta-label {
+    color: var(--es-text-secondary);
+    font-weight: 500;
+}
+
+.es-meta-value {
+    color: var(--es-text);
+    font-family: monospace;
+}
+
+.es-pill-description {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: var(--es-surface);
+    border-radius: var(--es-radius);
+    color: var(--es-text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.es-pill-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--es-border);
+}
+
+.es-pill-actions .button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+/* ============================================
+   TAXONOMY EMPTY STATE
+   ============================================ */
+
+.es-taxonomy-empty,
+.es-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.es-taxonomy-empty .dashicons,
+.es-empty-state .dashicons {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--es-text-muted);
+    margin-bottom: 20px;
+}
+
+.es-taxonomy-empty h3,
+.es-empty-state h3 {
+    margin: 0 0 12px 0;
+    font-size: 20px;
+    color: var(--es-text);
+}
+
+.es-taxonomy-empty p,
+.es-empty-state p {
+    margin: 0 0 24px 0;
+    color: var(--es-text-secondary);
+}
+
+/* ============================================
+   INFO BOX
+   ============================================ */
+
+.es-taxonomy-info-box,
+.es-info-box {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: var(--es-info-light);
+    border: 1px solid var(--es-info);
+    border-radius: var(--es-radius-lg);
+}
+
+.es-taxonomy-info-box .dashicons,
+.es-info-box .dashicons {
+    flex-shrink: 0;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: var(--es-info);
+}
+
+.es-taxonomy-info-box strong,
+.es-info-box strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--es-text);
+    font-size: 14px;
+}
+
+.es-taxonomy-info-box p,
+.es-info-box p {
+    margin: 0;
+    color: var(--es-text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.es-taxonomy-info-box a,
+.es-info-box a {
+    color: var(--es-primary);
+    text-decoration: none;
+}
+
+.es-taxonomy-info-box a:hover,
+.es-info-box a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   COLOR INPUT / COLOR PICKER
+   ============================================ */
+
+.es-color-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.es-color-input-wrapper input[type="color"] {
+    width: 50px;
+    height: 40px;
+    padding: 2px;
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    background: var(--es-surface-secondary);
+    cursor: pointer;
+}
+
+.es-color-input-wrapper input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 2px;
+}
+
+.es-color-input-wrapper input[type="color"]::-webkit-color-swatch {
+    border-radius: var(--es-radius-sm);
+    border: none;
+}
+
+.es-color-input-wrapper input[type="text"] {
+    width: 90px !important;
+    font-family: monospace;
+    text-transform: uppercase;
+}
+
+.es-color-presets {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.es-color-preset {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--es-radius-sm);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: var(--es-transition);
+    padding: 0;
+}
+
+.es-color-preset:hover {
+    transform: scale(1.15);
+    border-color: var(--es-text);
+}
+
+.es-color-preset.active {
+    border-color: var(--es-text);
+    box-shadow: 0 0 0 2px var(--es-primary);
+}
+
+/* ============================================
+   ICON BUTTONS (Small)
+   ============================================ */
+
+.es-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    color: var(--es-text-secondary);
+    cursor: pointer;
+    transition: var(--es-transition);
+}
+
+.es-icon-btn:hover {
+    background: var(--es-surface-hover);
+    color: var(--es-text);
+    border-color: var(--es-primary);
+}
+
+.es-icon-btn-danger:hover {
+    background: var(--es-danger-light);
+    color: var(--es-danger);
+    border-color: var(--es-danger);
+}
+
+.es-icon-btn .dashicons,
+.es-icon-btn svg {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   PRO GATE (Feature Lock)
+   ============================================ */
+
+.es-pro-gate {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius-lg);
+    padding: 40px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.es-pro-gate-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    background: var(--es-surface-secondary);
+    border-radius: 50%;
+    color: var(--es-warning);
+}
+
+.es-pro-gate-icon .dashicons {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+}
+
+.es-pro-gate h2 {
+    margin: 0 0 10px;
+    color: var(--es-text);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.es-pro-gate p {
+    color: var(--es-text-secondary);
+    max-width: 400px;
+    margin: 0 auto 20px;
+    line-height: 1.6;
+}
+
+.es-btn-upgrade {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    border: none !important;
+    color: #fff !important;
+}
+
+.es-btn-upgrade:hover {
+    background: linear-gradient(135deg, #d97706, #b45309) !important;
+    color: #fff !important;
+}
+
+/* ============================================
+   LIMITS BANNER (Free Version Info)
+   ============================================ */
+
+.es-limits-banner {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius-lg);
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.es-limits-banner-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.es-limits-banner-text strong {
+    color: var(--es-text);
+}
+
+.es-limits-banner-text span {
+    color: var(--es-text-secondary);
+}
+
+/* ============================================
+   DISABLED BUTTONS & PRO BADGES
+   ============================================ */
+
+.es-btn-disabled,
+button[disabled] {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+}
+
+.es-pro-badge {
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 9px;
+    padding: 2px 6px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    border-radius: var(--es-radius-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.es-limit-warning {
+    color: var(--es-warning);
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+/* ============================================
+   TEMPLATE CATEGORY BOX
+   ============================================ */
+
+.es-template-category-box {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: var(--es-surface-secondary);
+    border-radius: var(--es-radius);
+}
+
+.es-template-category-box label {
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 10px;
+    display: block;
+    color: var(--es-text);
+}
+
+.es-template-category-box .es-field-help {
+    margin: 8px 0 0 0;
+    font-size: 11px;
+    color: var(--es-text-muted);
+}
+
+/* ============================================
+   PRO FEATURES OVERVIEW (License Tab)
+   ============================================ */
+
+.es-pro-features-overview {
+    margin-top: 2rem;
+}
+
+.es-pro-features-overview h4 {
+    margin: 0 0 1rem;
+    color: var(--es-text);
+}
+
+.es-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.es-feature-card {
+    background: var(--es-surface-secondary);
+    padding: 1rem;
+    border-radius: var(--es-radius-lg);
+    border: 1px solid var(--es-border);
+}
+
+.es-feature-card h5 {
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--es-text);
+}
+
+.es-feature-card h5 .dashicons {
+    color: var(--es-primary);
+}
+
+.es-feature-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--es-text-secondary);
+}
+
+.es-pro-upgrade-prompt {
+    margin-top: 1.5rem;
+}
+
+/* ============================================
+   RADIO GROUPS (Settings Forms)
+   ============================================ */
+
+.es-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-radio-group-horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.es-radio-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.es-radio-label input[type="radio"] {
+    margin-top: 3px;
+}
+
+.es-radio-label .description {
+    display: block;
+    color: var(--es-text-muted);
+    font-size: 13px;
+}
+
+/* ============================================
+   EXTERNAL LINK OPTIONS BOX
+   ============================================ */
+
+.es-external-link-options {
+    margin-top: 16px;
+    padding: 12px;
+    background: var(--es-surface-secondary);
+    border-radius: var(--es-radius-lg);
+}
+
+.es-link-options-nested {
+    margin-left: 40px;
+    padding-left: 20px;
+    border-left: 3px solid var(--es-primary);
+}
+
+/* ============================================
+   SETTINGS FORM HELPERS
+   ============================================ */
+
+.es-settings-description {
+    margin-bottom: 30px;
+    color: var(--es-text-secondary);
+}
+
+.es-form-label-block {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--es-text);
+}
+
+.es-form-group-spacing {
+    margin-bottom: 15px;
+}
+
+/* Settings HR */
+.es-settings-divider {
+    margin: 40px 0;
+    border: none;
+    border-top: 1px solid var(--es-border);
+}
+
+/* ============================================
+   ADDON SETTINGS MODAL CONTENT
+   ============================================ */
+
+.es-addon-settings-content {
+    padding: 0;
+}
+
+.es-addon-settings-content .es-settings-section {
+    background: var(--es-surface-secondary);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius-lg);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.es-addon-settings-content .es-settings-section:first-child {
+    margin-top: 0;
+}
+
+.es-addon-settings-content .es-settings-section h3 {
+    margin: 0 0 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--es-border);
+    color: var(--es-text);
+    font-size: 14px;
+}
+
+.es-addon-settings-content .es-settings-section h4 {
+    margin: 20px 0 10px;
+    color: var(--es-text);
+    font-size: 13px;
+}
+
+/* Form Table in Addon Settings */
+.es-addon-settings-content .form-table {
+    margin: 0;
+}
+
+.es-addon-settings-content .form-table th {
+    padding: 15px 10px 15px 0;
+    color: var(--es-text);
+    font-weight: 500;
+    width: 200px;
+}
+
+.es-addon-settings-content .form-table td {
+    padding: 15px 0;
+}
+
+.es-addon-settings-content .form-table td .description {
+    color: var(--es-text-muted);
+    margin-top: 5px;
+}
+
+.es-addon-settings-content .form-table select,
+.es-addon-settings-content .form-table input[type="text"],
+.es-addon-settings-content .form-table input[type="number"] {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    color: var(--es-text);
+    border-radius: var(--es-radius);
+    padding: 8px 12px;
+}
+
+.es-addon-settings-content .form-table select:focus,
+.es-addon-settings-content .form-table input:focus {
+    border-color: var(--es-primary);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+/* Toggle Group in Addon Settings */
+.es-addon-settings-content .es-toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.es-addon-settings-content .es-toggle--block {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.es-addon-settings-content .es-toggle--block:hover {
+    border-color: var(--es-primary);
+}
+
+.es-addon-settings-content .es-toggle--block .es-toggle-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: var(--es-text);
+}
+
+.es-addon-settings-content .es-toggle--block .es-toggle-label small {
+    color: var(--es-text-muted);
+    font-weight: normal;
+}
+
+/* Shortcode Examples */
+.es-shortcode-examples code {
+    display: block;
+    padding: 10px 15px;
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: var(--es-text);
+    font-family: monospace;
+}
+
+.es-shortcode-examples p {
+    margin: 15px 0 5px;
+    color: var(--es-text);
+}
+
+.es-shortcode-examples p:first-child {
+    margin-top: 0;
+}
+
+/* Reference Table in Addon Settings */
+.es-addon-settings-content .widefat {
+    background: var(--es-surface);
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.es-addon-settings-content .widefat thead th {
+    background: var(--es-surface-secondary);
+    color: var(--es-text);
+    font-weight: 600;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--es-border);
+}
+
+.es-addon-settings-content .widefat tbody td {
+    padding: 10px 12px;
+    color: var(--es-text);
+    border-bottom: 1px solid var(--es-border);
+}
+
+.es-addon-settings-content .widefat tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.es-addon-settings-content .widefat code {
+    background: var(--es-surface-secondary);
+    padding: 2px 6px;
+    border-radius: var(--es-radius-sm);
+    font-size: 12px;
 }
 
 /* ============================================
@@ -835,7 +1583,7 @@ input[type="radio"]:disabled + .es-toggle-switch {
 /* Checkmark for selected pills */
 .es-pill input[type="checkbox"]:checked ~ span::before,
 .es-pill input[type="radio"]:checked ~ span::before {
-    content: '✓ ';
+    content: 'Ã¢Å“â€œ ';
     font-weight: bold;
 }
 
@@ -855,7 +1603,7 @@ input[type="radio"]:disabled + .es-toggle-switch {
 }
 
 /* ============================================
-   CARDS GRID - Für Templates/Features
+   CARDS GRID - FÃƒÂ¼r Templates/Features
    ============================================ */
 
 .es-cards-grid,
@@ -1078,17 +1826,6 @@ input[type="radio"]:disabled + .es-toggle-switch {
     font-style: italic;
 }
 
-/* Form Rows */
-.es-form-row {
-    margin-bottom: var(--es-spacing-md);
-}
-
-.es-form-row-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--es-spacing-md);
-}
-
 .es-form-group {
     margin-bottom: var(--es-spacing-md);
 }
@@ -1127,98 +1864,242 @@ input[type="radio"]:disabled + .es-toggle-switch {
 
 /* ============================================
    FORM CARDS (Grouped Sections)
+   Wizard-specific styles - Manager has own styles in manager.css
    ============================================ */
 
-.es-form-card {
-    background: var(--es-surface-secondary);
+.es-wizard-wrap .es-form-card {
+    background: var(--es-surface);
     border: 1px solid var(--es-border);
-    border-radius: var(--es-radius);
-    padding: 20px;
-    margin-bottom: 20px;
+    border-radius: var(--es-radius-lg);
+    margin-bottom: 24px;
+    overflow: hidden;
 }
 
-.es-form-card h3 {
-    margin-top: 0 !important;
-    padding-top: 0;
-    color: var(--es-text);
-    font-size: 16px;
-    font-weight: 600;
+.es-wizard-wrap .es-form-card:last-child {
+    margin-bottom: 0;
 }
 
-.es-form-card h3:not(:first-child) {
-    margin-top: 25px !important;
-    padding-top: 20px;
-    border-top: 1px solid var(--es-border);
+.es-wizard-wrap .es-form-card + .es-form-card {
+    margin-top: 24px;
 }
 
-/* Sub-section headers within cards */
-.es-form-card .es-subsection-header {
+.es-wizard-wrap .es-form-card-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin: 20px 0 12px;
-    padding-top: 15px;
-    border-top: 1px solid var(--es-border);
-    color: var(--es-text);
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.es-form-card .es-subsection-header:first-child {
-    margin-top: 0;
-    padding-top: 0;
-    border-top: none;
-}
-
-.es-form-card .es-subsection-header .dashicons {
-    color: var(--es-primary);
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-}
-
-.es-form-card-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-    padding-bottom: 12px;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(90deg, rgba(53, 130, 196, 0.08) 0%, transparent 60%);
     border-bottom: 1px solid var(--es-border);
 }
 
-.es-form-card-header h3 {
+.es-wizard-wrap .es-form-card-header h3 {
     margin: 0 !important;
     padding: 0 !important;
     border: none !important;
     flex: 1;
     color: var(--es-text);
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    line-height: 1.2;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    line-height: 1.3;
 }
 
-.es-form-card-icon {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    background: var(--es-surface);
+.es-wizard-wrap .es-form-card-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    background: linear-gradient(135deg, var(--es-primary) 0%, #2a6ba3 100%);
     border-radius: var(--es-radius);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--es-primary);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(53, 130, 196, 0.3);
 }
 
-.es-form-card-icon .dashicons,
-.es-form-card-icon .es-icon,
-.es-form-card-icon svg {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
+.es-wizard-wrap .es-form-card-icon .dashicons,
+.es-wizard-wrap .es-form-card-icon .es-icon,
+.es-wizard-wrap .es-form-card-icon svg {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
     line-height: 1;
+}
+
+.es-wizard-wrap .es-form-card-title {
+    flex: 1;
+}
+
+.es-wizard-wrap .es-form-card-title h3 {
+    margin: 0 0 4px 0 !important;
+    font-size: 15px;
+}
+
+.es-wizard-wrap .es-form-card-desc {
+    margin: 0;
+    font-size: 13px;
+    color: var(--es-text-secondary);
+    font-weight: 400;
+}
+
+.es-wizard-wrap .es-form-card-body {
+    padding: 24px;
+}
+
+/* Form card without header (simple) */
+.es-wizard-wrap .es-form-card.es-form-card-simple {
+    padding: 20px;
+}
+
+.es-wizard-wrap .es-form-card.es-form-card-simple .es-form-card-body {
+    padding: 0;
+}
+
+/* ============================================
+   FORM ROWS - Labels above inputs
+   ============================================ */
+
+.es-form-row {
+    margin-bottom: var(--es-spacing-md);
+}
+
+.es-form-row:last-child {
+    margin-bottom: 0;
+}
+
+.es-form-row label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--es-text);
+}
+
+.es-form-row label .required,
+.es-form-row label span.required {
+    color: var(--es-danger);
+    margin-left: 2px;
+}
+
+/* All form inputs - full width by default */
+.es-form-row input[type="text"],
+.es-form-row input[type="email"],
+.es-form-row input[type="url"],
+.es-form-row input[type="number"],
+.es-form-row input[type="tel"],
+.es-form-row input[type="date"],
+.es-form-row input[type="time"],
+.es-form-row input[type="datetime-local"],
+.es-form-row select,
+.es-form-row textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--es-border);
+    border-radius: var(--es-radius);
+    font-size: 14px;
+    color: var(--es-text);
+    background: var(--es-surface-secondary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.es-form-row input:focus,
+.es-form-row select:focus,
+.es-form-row textarea:focus {
+    outline: none;
+    border-color: var(--es-primary);
+    box-shadow: 0 0 0 3px var(--es-primary-light);
+}
+
+.es-form-row input::placeholder,
+.es-form-row textarea::placeholder {
+    color: var(--es-text-muted);
+}
+
+.es-form-row textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.es-form-row .description,
+.es-form-row p.description {
+    margin: 6px 0 0;
+    font-size: 12px;
+    color: var(--es-text-secondary);
+    font-style: italic;
+}
+
+/* Two columns - 50/50 split */
+.es-form-row-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--es-spacing-md);
+}
+
+/* Three columns */
+.es-form-row-group-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--es-spacing-md);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .es-form-row-group,
+    .es-form-row-group-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   FORM CARD VARIANTS
+   ============================================ */
+
+/* Highlighted card (for important sections) */
+.es-form-card.es-form-card-highlight {
+    border-color: var(--es-primary);
+    border-width: 2px;
+}
+
+.es-form-card.es-form-card-highlight .es-form-card-header {
+    background: linear-gradient(135deg, rgba(53, 130, 196, 0.15) 0%, rgba(53, 130, 196, 0.05) 100%);
+}
+
+/* Warning card */
+.es-form-card.es-form-card-warning {
+    border-color: var(--es-warning);
+}
+
+.es-form-card.es-form-card-warning .es-form-card-header {
+    background: linear-gradient(135deg, rgba(240, 184, 73, 0.15) 0%, rgba(240, 184, 73, 0.05) 100%);
+}
+
+.es-form-card.es-form-card-warning .es-form-card-icon {
+    background: linear-gradient(135deg, var(--es-warning) 0%, #e0a030 100%);
+}
+
+/* Collapsible card */
+.es-form-card.es-collapsible .es-form-card-header {
+    cursor: pointer;
+    user-select: none;
+}
+
+.es-form-card.es-collapsible .es-form-card-header::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid var(--es-text-secondary);
+    margin-left: auto;
+    transition: transform 0.2s;
+}
+
+.es-form-card.es-collapsible.es-collapsed .es-form-card-header::after {
+    transform: rotate(-90deg);
+}
+
+.es-form-card.es-collapsible.es-collapsed .es-form-card-body {
+    display: none;
 }
 
 /* ============================================
@@ -1569,7 +2450,7 @@ input[type="radio"]:disabled + .es-toggle-switch {
 }
 
 /* ============================================
-   STATS ROW - Für Dashboards
+   STATS ROW - FÃƒÂ¼r Dashboards
    ============================================ */
 
 .es-stats-row {
@@ -3043,4 +3924,52 @@ a.es-event-card-link:hover .es-event-title {
     background: #d63d55;
     border-color: #d63d55;
 }
+
+/* ===================================================
+   GALLERY UPLOAD BOX - Artist Manager Pattern
+   HinzufÃƒÂ¼gen zu admin-unified.css
+   =================================================== */
+
+/* Gallery Upload Box Container - Wizard Only */
+.es-wizard-wrap .es-gallery-upload-box {
+    display: flex;
+    flex-direction: column;
+    gap: var(--es-spacing-sm, 10px);
+}
+
+/* Upload Button - Wizard Style Only (Manager has own styles) */
+.es-wizard-wrap .es-upload-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--es-surface-secondary, #f5f5f5);
+    border: 1px dashed var(--es-border, #ddd);
+    border-radius: var(--es-radius, 6px);
+    color: var(--es-text-secondary, #666);
+    cursor: pointer;
+    transition: var(--es-transition, all 0.2s ease);
+    font-size: 13px;
+    width: fit-content;
+}
+
+.es-wizard-wrap .es-upload-btn:hover {
+    background: var(--es-surface-hover, #eee);
+    border-color: var(--es-primary, #2271b1);
+    color: var(--es-primary, #2271b1);
+}
+
+.es-wizard-wrap .es-upload-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* Gallery Preview im Upload Box */
+.es-gallery-upload-box .es-gallery-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 

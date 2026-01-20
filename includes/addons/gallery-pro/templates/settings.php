@@ -4,6 +4,7 @@
  * 
  * @package Ensemble
  * @subpackage Addons/Gallery Pro
+ * @since 3.0.0
  */
 
 // Exit if accessed directly
@@ -187,7 +188,7 @@ if (!defined('ABSPATH')) {
             <span class="es-toggle-track"></span>
             <span class="es-toggle-label">
                 <?php _e('Enable video support', 'ensemble'); ?>
-                <small><?php _e('Embed YouTube and Vimeo videos in the gallery', 'ensemble'); ?></small>
+                <small><?php _e('Embed YouTube, Vimeo, and self-hosted videos in the gallery', 'ensemble'); ?></small>
             </span>
         </label>
     </div>
@@ -201,7 +202,7 @@ if (!defined('ABSPATH')) {
             <span class="es-toggle-track"></span>
             <span class="es-toggle-label">
                 <?php _e('Autoplay videos', 'ensemble'); ?>
-                <small><?php _e('Videos start automatically when opened in lightbox', 'ensemble'); ?></small>
+                <small><?php _e('Automatically start video playback in lightbox', 'ensemble'); ?></small>
             </span>
         </label>
     </div>
@@ -212,25 +213,61 @@ if (!defined('ABSPATH')) {
     <h3><?php _e('Usage', 'ensemble'); ?></h3>
     
     <div class="es-info-box">
-        <h4><?php _e('Automatic in event pages', 'ensemble'); ?></h4>
-        <p><?php _e('The gallery is automatically displayed when events have a "gallery" field with images.', 'ensemble'); ?></p>
+        <h4><?php _e('Automatic Display', 'ensemble'); ?></h4>
+        <p><?php _e('Galleries are automatically displayed on event, artist, and location pages when they have images or linked galleries.', 'ensemble'); ?></p>
         
         <h4><?php _e('Shortcode', 'ensemble'); ?></h4>
-        <code>[ensemble_gallery]</code> - <?php _e('Gallery of the current event', 'ensemble'); ?><br>
-        <code>[ensemble_gallery event="123"]</code> - <?php _e('Gallery of a specific event', 'ensemble'); ?><br>
-        <code>[ensemble_gallery layout="masonry" columns="3"]</code> - <?php _e('With layout options', 'ensemble'); ?><br>
-        <code>[ensemble_gallery ids="1,2,3,4"]</code> - <?php _e('Specific attachment IDs', 'ensemble'); ?>
+        <table class="es-shortcode-examples">
+            <tr>
+                <td><code>[ensemble_gallery]</code></td>
+                <td><?php _e('Gallery of the current event/artist/location', 'ensemble'); ?></td>
+            </tr>
+            <tr>
+                <td><code>[ensemble_gallery id="123"]</code></td>
+                <td><?php _e('Specific gallery from Gallery Manager', 'ensemble'); ?></td>
+            </tr>
+            <tr>
+                <td><code>[ensemble_gallery event="123"]</code></td>
+                <td><?php _e('Gallery of a specific event', 'ensemble'); ?></td>
+            </tr>
+            <tr>
+                <td><code>[ensemble_gallery artist="456"]</code></td>
+                <td><?php _e('Gallery of a specific artist', 'ensemble'); ?></td>
+            </tr>
+            <tr>
+                <td><code>[ensemble_gallery location="789"]</code></td>
+                <td><?php _e('Gallery of a specific location', 'ensemble'); ?></td>
+            </tr>
+            <tr>
+                <td><code>[ensemble_gallery layout="masonry" columns="3"]</code></td>
+                <td><?php _e('With layout options', 'ensemble'); ?></td>
+            </tr>
+            <tr>
+                <td><code>[ensemble_gallery ids="1,2,3,4"]</code></td>
+                <td><?php _e('Specific attachment IDs', 'ensemble'); ?></td>
+            </tr>
+        </table>
         
         <h4><?php _e('Shortcode Parameters', 'ensemble'); ?></h4>
         <table class="es-params-table">
+            <tr><td><code>id</code></td><td><?php _e('Gallery Manager ID', 'ensemble'); ?></td></tr>
             <tr><td><code>event</code></td><td><?php _e('Event ID', 'ensemble'); ?></td></tr>
-            <tr><td><code>layout</code></td><td><?php _e('grid, masonry, carousel, justified, filmstrip', 'ensemble'); ?></td></tr>
+            <tr><td><code>artist</code></td><td><?php _e('Artist ID', 'ensemble'); ?></td></tr>
+            <tr><td><code>location</code></td><td><?php _e('Location ID', 'ensemble'); ?></td></tr>
+            <tr><td><code>layout</code></td><td><?php _e('grid, masonry, carousel, filmstrip', 'ensemble'); ?></td></tr>
             <tr><td><code>columns</code></td><td><?php _e('Number of columns (2-8)', 'ensemble'); ?></td></tr>
             <tr><td><code>captions</code></td><td><?php _e('true/false - Show captions', 'ensemble'); ?></td></tr>
             <tr><td><code>lightbox</code></td><td><?php _e('true/false - Enable lightbox', 'ensemble'); ?></td></tr>
-            <tr><td><code>max</code></td><td><?php _e('Maximum number of images', 'ensemble'); ?></td></tr>
+            <tr><td><code>max</code></td><td><?php _e('Maximum number of items', 'ensemble'); ?></td></tr>
             <tr><td><code>ids</code></td><td><?php _e('Comma-separated attachment IDs', 'ensemble'); ?></td></tr>
         </table>
+        
+        <h4><?php _e('Supported Video Sources', 'ensemble'); ?></h4>
+        <ul class="es-video-sources">
+            <li><strong>YouTube</strong> - youtube.com/watch?v=xxx, youtu.be/xxx</li>
+            <li><strong>Vimeo</strong> - vimeo.com/123456789</li>
+            <li><strong><?php _e('Self-hosted', 'ensemble'); ?></strong> - MP4, WebM, OGG, MOV</li>
+        </ul>
     </div>
 </div>
 
@@ -266,6 +303,13 @@ jQuery(document).ready(function($) {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
+    color: var(--es-addon-text, #1a1a1a);
+}
+
+.es-form-group .description {
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--es-addon-text-secondary, #666);
 }
 
 .es-input-number,
@@ -273,8 +317,10 @@ jQuery(document).ready(function($) {
     width: 100%;
     max-width: 200px;
     padding: 8px 12px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--es-addon-border, #ddd);
     border-radius: 4px;
+    background: var(--es-addon-surface, #fff);
+    color: var(--es-addon-text, #1a1a1a);
 }
 
 /* Layout Selector */
@@ -289,21 +335,21 @@ jQuery(document).ready(function($) {
     flex-direction: column;
     align-items: center;
     padding: 15px;
-    border: 2px solid #e5e7eb;
+    border: 2px solid var(--es-addon-border, #e5e7eb);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
     min-width: 100px;
+    background: var(--es-addon-surface, #fff);
 }
 
 .es-layout-option:hover {
-    border-color: #9ca3af;
-    background: #f9fafb;
+    border-color: var(--es-addon-text-secondary, #9ca3af);
 }
 
 .es-layout-option.active {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: var(--ensemble-primary, #3b82f6);
+    background: rgba(59, 130, 246, 0.1);
 }
 
 .es-layout-option input {
@@ -322,23 +368,80 @@ jQuery(document).ready(function($) {
 .es-layout-preview svg {
     width: 100%;
     height: 100%;
-    color: #6b7280;
+    color: var(--es-addon-text-secondary, #6b7280);
 }
 
 .es-layout-option.active .es-layout-preview svg {
-    color: #3b82f6;
+    color: var(--ensemble-primary, #3b82f6);
 }
 
 .es-layout-label {
     font-size: 13px;
     font-weight: 500;
+    color: var(--es-addon-text, #1a1a1a);
+}
+
+/* Toggle */
+.es-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.es-toggle input {
+    display: none;
+}
+
+.es-toggle-track {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: var(--es-addon-border, #d1d5db);
+    border-radius: 12px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.es-toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.es-toggle input:checked + .es-toggle-track {
+    background: var(--ensemble-primary, #3b82f6);
+}
+
+.es-toggle input:checked + .es-toggle-track::after {
+    transform: translateX(20px);
+}
+
+.es-toggle-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: var(--es-addon-text, #1a1a1a);
+}
+
+.es-toggle-label small {
+    font-size: 12px;
+    color: var(--es-addon-text-secondary, #6b7280);
+    font-weight: normal;
 }
 
 /* Info Box */
 .es-info-box {
     padding: 20px;
-    background: #f0f6fc;
-    border-left: 4px solid #0969da;
+    background: var(--es-addon-surface, #f0f6fc);
+    border-left: 4px solid var(--ensemble-primary, #0969da);
     margin-top: 20px;
     border-radius: 0 4px 4px 0;
 }
@@ -346,20 +449,41 @@ jQuery(document).ready(function($) {
 .es-info-box h4 {
     margin: 15px 0 8px 0;
     font-size: 13px;
+    color: var(--es-addon-text, #1a1a1a);
 }
 
 .es-info-box h4:first-child {
     margin-top: 0;
 }
 
+.es-info-box p {
+    margin: 0 0 10px;
+    color: var(--es-addon-text-secondary, #666);
+}
+
 .es-info-box code {
     display: inline-block;
-    margin: 4px 0;
     padding: 4px 8px;
-    background: #fff;
-    border: 1px solid #ddd;
+    background: var(--es-addon-bg, #fff);
+    border: 1px solid var(--es-addon-border, #ddd);
     border-radius: 3px;
     font-size: 12px;
+}
+
+.es-shortcode-examples {
+    width: 100%;
+    margin: 10px 0;
+    border-collapse: collapse;
+}
+
+.es-shortcode-examples td {
+    padding: 8px;
+    border-bottom: 1px solid var(--es-addon-border, #e5e7eb);
+    vertical-align: top;
+}
+
+.es-shortcode-examples td:first-child {
+    width: 280px;
 }
 
 .es-params-table {
@@ -370,39 +494,32 @@ jQuery(document).ready(function($) {
 
 .es-params-table td {
     padding: 8px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--es-addon-border, #e5e7eb);
 }
 
 .es-params-table td:first-child {
     width: 120px;
 }
 
+.es-video-sources {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.es-video-sources li {
+    margin-bottom: 6px;
+    color: var(--es-addon-text-secondary, #666);
+}
+
 .es-carousel-settings {
     margin-left: 25px;
     padding-left: 15px;
-    border-left: 2px solid #e5e7eb;
+    border-left: 2px solid var(--es-addon-border, #e5e7eb);
 }
 
 hr {
     margin: 25px 0;
     border: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--es-addon-border, #e5e7eb);
 }
 </style>
-
-<?php
-// Helper method for layout icons (would be in class normally)
-if (!function_exists('ensemble_gallery_pro_get_layout_icon')) {
-    function ensemble_gallery_pro_get_layout_icon($layout) {
-        $icons = array(
-            'grid' => '<svg viewBox="0 0 50 40"><rect x="2" y="2" width="14" height="11" rx="1" fill="currentColor"/><rect x="18" y="2" width="14" height="11" rx="1" fill="currentColor"/><rect x="34" y="2" width="14" height="11" rx="1" fill="currentColor"/><rect x="2" y="15" width="14" height="11" rx="1" fill="currentColor"/><rect x="18" y="15" width="14" height="11" rx="1" fill="currentColor"/><rect x="34" y="15" width="14" height="11" rx="1" fill="currentColor"/><rect x="2" y="28" width="14" height="11" rx="1" fill="currentColor"/><rect x="18" y="28" width="14" height="11" rx="1" fill="currentColor"/><rect x="34" y="28" width="14" height="11" rx="1" fill="currentColor"/></svg>',
-            'masonry' => '<svg viewBox="0 0 50 40"><rect x="2" y="2" width="14" height="16" rx="1" fill="currentColor"/><rect x="18" y="2" width="14" height="10" rx="1" fill="currentColor"/><rect x="34" y="2" width="14" height="22" rx="1" fill="currentColor"/><rect x="2" y="20" width="14" height="18" rx="1" fill="currentColor"/><rect x="18" y="14" width="14" height="24" rx="1" fill="currentColor"/><rect x="34" y="26" width="14" height="12" rx="1" fill="currentColor"/></svg>',
-            'carousel' => '<svg viewBox="0 0 50 40"><rect x="6" y="5" width="38" height="24" rx="2" fill="currentColor"/><circle cx="25" cy="35" r="2" fill="currentColor"/><circle cx="19" cy="35" r="1.5" fill="currentColor" opacity="0.5"/><circle cx="31" cy="35" r="1.5" fill="currentColor" opacity="0.5"/><path d="M3 17l4-4v8z" fill="currentColor" opacity="0.7"/><path d="M47 17l-4-4v8z" fill="currentColor" opacity="0.7"/></svg>',
-            'justified' => '<svg viewBox="0 0 50 40"><rect x="2" y="2" width="20" height="11" rx="1" fill="currentColor"/><rect x="24" y="2" width="10" height="11" rx="1" fill="currentColor"/><rect x="36" y="2" width="12" height="11" rx="1" fill="currentColor"/><rect x="2" y="15" width="12" height="11" rx="1" fill="currentColor"/><rect x="16" y="15" width="18" height="11" rx="1" fill="currentColor"/><rect x="36" y="15" width="12" height="11" rx="1" fill="currentColor"/><rect x="2" y="28" width="15" height="10" rx="1" fill="currentColor"/><rect x="19" y="28" width="15" height="10" rx="1" fill="currentColor"/><rect x="36" y="28" width="12" height="10" rx="1" fill="currentColor"/></svg>',
-            'filmstrip' => '<svg viewBox="0 0 50 40"><rect x="0" y="5" width="50" height="30" rx="1" fill="currentColor" opacity="0.2"/><rect x="4" y="10" width="12" height="20" rx="1" fill="currentColor"/><rect x="19" y="10" width="12" height="20" rx="1" fill="currentColor"/><rect x="34" y="10" width="12" height="20" rx="1" fill="currentColor"/><circle cx="7" cy="7" r="1.5" fill="currentColor"/><circle cx="13" cy="7" r="1.5" fill="currentColor"/><circle cx="25" cy="7" r="1.5" fill="currentColor"/><circle cx="40" cy="7" r="1.5" fill="currentColor"/><circle cx="7" cy="33" r="1.5" fill="currentColor"/><circle cx="13" cy="33" r="1.5" fill="currentColor"/><circle cx="25" cy="33" r="1.5" fill="currentColor"/><circle cx="40" cy="33" r="1.5" fill="currentColor"/></svg>',
-        );
-        
-        return $icons[$layout] ?? '';
-    }
-}
-?>

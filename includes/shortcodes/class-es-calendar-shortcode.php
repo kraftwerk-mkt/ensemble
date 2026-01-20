@@ -35,6 +35,11 @@ class ES_Calendar_Shortcode extends ES_Shortcode_Base {
 	}
 
     public function calendar_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('calendar');
+        }
+        
         // Parse attributes
         $atts = shortcode_atts(array(
             'view' => 'dayGridMonth',       // dayGridMonth, timeGridWeek, timeGridDay, listMonth

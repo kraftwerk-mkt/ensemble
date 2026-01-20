@@ -1,0 +1,448 @@
+/**
+ * Tickets Pro - Frontend Styles
+ * 
+ * Fully integrated with Ensemble Designer CSS Variables
+ * Following the same pattern as ensemble-frontend.css and booking-engine
+ * 
+ * Variable Hierarchy:
+ * 1. Designer variables (--ensemble-*) from active Layout Set
+ * 2. Sensible fallbacks matching Ensemble defaults
+ *
+ * @package Ensemble
+ * @subpackage Addons/TicketsPro
+ * @since 3.1.0
+ */
+
+/* ============================================
+   TICKET FORM CONTAINER
+   ============================================ */
+
+.es-ticket-form {
+    margin: 24px 0;
+}
+
+.es-ticket-form-title {
+    margin: 0 0 16px 0;
+    font-size: var(--ensemble-h4-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 600);
+    font-family: var(--ensemble-font-heading, inherit);
+    color: var(--ensemble-text, #1a202c);
+}
+
+/* ============================================
+   TICKET CATEGORY CARDS
+   ============================================ */
+
+.es-ticket-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.es-ticket-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 2px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    transition: all 0.2s ease;
+}
+
+.es-ticket-item:hover {
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: var(--ensemble-card-shadow-hover, 0 4px 16px rgba(0,0,0,0.12));
+}
+
+.es-ticket-item.es-sold-out {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.es-ticket-info {
+    flex: 1;
+}
+
+.es-ticket-name {
+    display: block;
+    font-weight: var(--ensemble-heading-weight, 600);
+    font-size: 16px;
+    color: var(--ensemble-text, #1a202c);
+    margin-bottom: 4px;
+}
+
+.es-ticket-description {
+    display: block;
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+    margin-bottom: 4px;
+}
+
+.es-ticket-availability {
+    font-size: 13px;
+    color: var(--ensemble-text-muted, #a0aec0);
+}
+
+.es-ticket-availability.es-limited {
+    color: var(--ensemble-warning, #f59e0b);
+    font-weight: 500;
+}
+
+.es-ticket-availability.es-sold-out {
+    color: var(--ensemble-danger, #ef4444);
+    font-weight: 600;
+}
+
+.es-ticket-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ensemble-primary, #667eea);
+    min-width: 80px;
+    text-align: right;
+}
+
+/* ============================================
+   QUANTITY SELECTOR
+   ============================================ */
+
+.es-ticket-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.es-ticket-quantity button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-button-radius, 8px);
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ensemble-text-secondary, #718096);
+    transition: all 0.2s ease;
+}
+
+.es-ticket-quantity button:hover {
+    background: var(--ensemble-primary-light, rgba(102, 126, 234, 0.1));
+    border-color: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.es-ticket-quantity input {
+    width: 52px;
+    height: 36px;
+    text-align: center;
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-button-radius, 8px);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ensemble-text, #1a202c);
+    background: var(--ensemble-card-bg, #ffffff);
+}
+
+.es-ticket-quantity input:focus {
+    outline: none;
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: 0 0 0 3px var(--ensemble-primary-light, rgba(102, 126, 234, 0.15));
+}
+
+/* ============================================
+   PAYMENT GATEWAY SELECTION
+   ============================================ */
+
+.es-payment-selection {
+    margin: 24px 0;
+    padding: 20px;
+    background: var(--ensemble-surface, #f7fafc);
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+.es-payment-selection-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-payment-selection-title .dashicons {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.es-payment-gateways {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.es-payment-gateway-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.es-payment-gateway-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.es-payment-gateway-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 2px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    transition: all 0.2s ease;
+}
+
+.es-payment-gateway-option:hover .es-payment-gateway-card {
+    border-color: var(--ensemble-primary, #667eea);
+}
+
+.es-payment-gateway-input:checked + .es-payment-gateway-card {
+    border-color: var(--ensemble-primary, #667eea);
+    background: var(--ensemble-primary-light, rgba(102, 126, 234, 0.08));
+}
+
+.es-payment-gateway-icon {
+    width: 48px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.es-payment-gateway-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.es-payment-gateway-info {
+    flex: 1;
+}
+
+.es-payment-gateway-name {
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-payment-gateway-desc {
+    display: block;
+    font-size: 13px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-payment-gateway-check {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.es-payment-gateway-check .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    color: var(--ensemble-primary, #667eea);
+}
+
+.es-payment-gateway-input:checked ~ .es-payment-gateway-card .es-payment-gateway-check {
+    opacity: 1;
+}
+
+.es-payment-test-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    background: var(--ensemble-warning, #f59e0b);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: var(--ensemble-tag-radius, 12px);
+}
+
+/* ============================================
+   ORDER SUMMARY
+   ============================================ */
+
+.es-order-summary {
+    padding: 20px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    box-shadow: var(--ensemble-card-shadow, 0 2px 8px rgba(0,0,0,0.08));
+    margin-bottom: 24px;
+}
+
+.es-order-summary-title {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-order-summary-items {
+    margin-bottom: 16px;
+}
+
+.es-order-summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--ensemble-card-border, #e2e8f0);
+    font-size: 14px;
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.es-order-summary-item:last-child {
+    border-bottom: none;
+}
+
+.es-order-summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 2px solid var(--ensemble-card-border, #e2e8f0);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-order-summary-total .es-total-price {
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* ============================================
+   CHECKOUT BUTTON
+   ============================================ */
+
+.es-checkout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ensemble-button-text, #ffffff);
+    background: var(--ensemble-primary, #667eea);
+    border: none;
+    border-radius: var(--ensemble-button-radius, 8px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.es-checkout-btn:hover {
+    background: var(--ensemble-secondary, #764ba2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px var(--ensemble-primary-light, rgba(102, 126, 234, 0.3));
+}
+
+.es-checkout-btn:active {
+    transform: translateY(0);
+}
+
+.es-checkout-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.es-checkout-btn .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.es-ticket-form.es-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.es-ticket-form.es-loading .es-checkout-btn::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: es-spin 0.8s linear infinite;
+}
+
+@keyframes es-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================ */
+
+.es-mode-dark .es-ticket-form,
+[data-theme="dark"] .es-ticket-form {
+    --ensemble-card-bg: #1a1a2e;
+    --ensemble-card-border: #333;
+    --ensemble-surface: #16162a;
+    --ensemble-text: #ffffff;
+    --ensemble-text-secondary: #aaa;
+    --ensemble-text-muted: #777;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 600px) {
+    .es-ticket-item {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .es-ticket-info {
+        flex-basis: 100%;
+    }
+    
+    .es-ticket-price {
+        flex: 1;
+        text-align: left;
+    }
+    
+    .es-ticket-quantity {
+        flex: 0;
+    }
+    
+    .es-payment-gateway-card {
+        padding: 12px;
+    }
+    
+    .es-payment-gateway-icon {
+        width: 36px;
+        height: 24px;
+    }
+}

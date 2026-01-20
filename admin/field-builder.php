@@ -2,6 +2,8 @@
 /**
  * Field Builder Page
  * Beautiful UI for managing ACF fields
+ * 
+ * USES: admin-unified.css for all styles
  *
  * @package Ensemble
  */
@@ -121,15 +123,14 @@ $templates_available = ES_Field_Builder::templates_available();
 <div class="wrap es-field-builder-wrap">
     <h1>
         <?php _e('Field Builder', 'ensemble'); ?>
-       
     </h1>
     
     <?php if (!$is_pro): ?>
     <!-- Free Version Limits Info -->
-    <div class="es-limits-banner" style="background: var(--es-surface-secondary, #383838); border: 1px solid var(--es-border, #404040); border-radius: 8px; padding: 15px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-            <strong style="color: var(--es-text, #e0e0e0);"><?php _e('Free Version', 'ensemble'); ?></strong>
-            <span style="color: var(--es-text-secondary, #a0a0a0); margin-left: 10px;">
+    <div class="es-limits-banner">
+        <div class="es-limits-banner-text">
+            <strong><?php _e('Free Version', 'ensemble'); ?></strong>
+            <span>
                 <?php printf(
                     __('Fieldsets: %d/%d | Felder pro Set: max %d', 'ensemble'),
                     $limits_info['fieldsets']['current'],
@@ -138,7 +139,7 @@ $templates_available = ES_Field_Builder::templates_available();
                 ); ?>
             </span>
         </div>
-        <a href="<?php echo admin_url('admin.php?page=ensemble-settings&tab=license'); ?>" class="button" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none; color: #fff;">
+        <a href="<?php echo admin_url('admin.php?page=ensemble-settings&tab=license'); ?>" class="button es-btn-upgrade">
             <?php _e('Upgrade for unlimited', 'ensemble'); ?>
         </a>
     </div>
@@ -151,9 +152,9 @@ $templates_available = ES_Field_Builder::templates_available();
             <?php _e('+ From Template', 'ensemble'); ?>
         </button>
         <?php else: ?>
-        <button type="button" class="page-title-action button-secondary" disabled title="<?php esc_attr_e('Templates require Pro', 'ensemble'); ?>" style="opacity: 0.6; cursor: not-allowed;">
+        <button type="button" class="page-title-action button-secondary es-btn-disabled" disabled title="<?php esc_attr_e('Templates require Pro', 'ensemble'); ?>">
             <?php _e('+ From Template', 'ensemble'); ?>
-            <span class="es-pro-badge" style="margin-left: 5px; font-size: 9px; padding: 2px 5px;">PRO</span>
+            <span class="es-pro-badge">PRO</span>
         </button>
         <?php endif; ?>
         
@@ -162,16 +163,16 @@ $templates_available = ES_Field_Builder::templates_available();
             <?php _e('+ Custom Field Group', 'ensemble'); ?>
         </button>
         <?php else: ?>
-        <button type="button" class="page-title-action button-secondary" disabled title="<?php echo esc_attr($can_create['message']); ?>" style="opacity: 0.6; cursor: not-allowed;">
+        <button type="button" class="page-title-action button-secondary es-btn-disabled" disabled title="<?php echo esc_attr($can_create['message']); ?>">
             <?php _e('+ Custom Field Group', 'ensemble'); ?>
         </button>
-        <span style="color: #f59e0b; font-size: 12px; margin-left: 10px;">
+        <span class="es-limit-warning">
             <?php echo esc_html($can_create['message']); ?>
         </span>
         <?php endif; ?>
         </div>
         <div class="es-field-builder-section">
-    <p class="description" style="margin-bottom: 30px;">
+    <p class="description es-section-description">
         <?php _e('Manage your custom fields for events. Add pre-built templates or create your own field groups.', 'ensemble'); ?>
     </p>
     
@@ -311,10 +312,8 @@ $templates_available = ES_Field_Builder::templates_available();
                         <input type="hidden" name="template_id" value="<?php echo esc_attr($template['id']); ?>">
                         
                         <?php if (!empty($categories)): ?>
-                        <div style="margin-bottom: 15px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
-                            <label style="font-weight: 600; font-size: 13px; margin-bottom: 10px; display: block;">
-                                <?php _e('Assign to Categories:', 'ensemble'); ?>
-                            </label>
+                        <div class="es-template-category-box">
+                            <label><?php _e('Assign to Categories:', 'ensemble'); ?></label>
                             <div class="es-pill-group">
                                 <?php foreach ($categories as $category): ?>
                                 <label class="es-pill">
@@ -325,14 +324,14 @@ $templates_available = ES_Field_Builder::templates_available();
                                 </label>
                                 <?php endforeach; ?>
                             </div>
-                            <p style="margin: 8px 0 0 0; font-size: 11px; color: #666;">
+                            <p class="es-field-help">
                                 <?php _e('Leave empty to assign later in Settings', 'ensemble'); ?>
                             </p>
                         </div>
                         <?php endif; ?>
                         
                         <button type="submit" name="es_create_from_template" class="button button-primary button-large">
-                            <?php _e('Add to Events', 'ensemble'); ?> →
+                            <?php _e('Add to Events', 'ensemble'); ?>
                         </button>
                     </form>
                     <?php else: ?>
@@ -384,7 +383,7 @@ $templates_available = ES_Field_Builder::templates_available();
                         <!-- Fields will be added here dynamically -->
                     </div>
                     <button type="button" class="button button-secondary" id="es-add-field-btn">
-                        ➕ <?php _e('Add Field', 'ensemble'); ?>
+                        + <?php _e('Add Field', 'ensemble'); ?>
                     </button>
                 </div>
                 
@@ -436,7 +435,7 @@ $templates_available = ES_Field_Builder::templates_available();
                         <!-- Fields will be loaded here -->
                     </div>
                     <button type="button" class="button button-secondary" id="es-add-edit-field-btn">
-                        ➕ <?php _e('Add Field', 'ensemble'); ?>
+                        + <?php _e('Add Field', 'ensemble'); ?>
                     </button>
                 </div>
                 
@@ -489,7 +488,7 @@ jQuery(document).ready(function($) {
             <div class="es-field-row" data-field-index="${fieldCounter}">
                 <div class="es-field-row-header">
                     <span class="es-field-number">${fieldCounter}</span>
-                    <button type="button" class="es-remove-field-btn" title="<?php _e('Remove field', 'ensemble'); ?>">×</button>
+                    <button type="button" class="es-remove-field-btn" title="<?php _e('Remove field', 'ensemble'); ?>">x</button>
                 </div>
                 <div class="es-field-row-content">
                     <div class="es-field-input-group">
@@ -587,7 +586,7 @@ jQuery(document).ready(function($) {
         $('#edit_group_title').val(groupTitle);
         
         // Clear and load fields
-        $('#es-edit-fields-container').html('<div style="text-align: center; padding: 20px;"><span class="spinner is-active"></span></div>');
+        $('#es-edit-fields-container').html('<div class="es-loading"><span class="spinner is-active"></span></div>');
         
         // Load fields via AJAX
         $.ajax({
@@ -639,7 +638,7 @@ jQuery(document).ready(function($) {
             <div class="es-field-row" data-field-index="${editFieldCounter}">
                 <div class="es-field-row-header">
                     <span class="es-field-number">${editFieldCounter}</span>
-                    <button type="button" class="es-remove-field-btn" title="<?php _e('Remove field', 'ensemble'); ?>">×</button>
+                    <button type="button" class="es-remove-field-btn" title="<?php _e('Remove field', 'ensemble'); ?>">x</button>
                 </div>
                 <div class="es-field-row-content">
                     <input type="hidden" name="fields[${editFieldCounter}][key]" value="${fieldKey}">

@@ -47,7 +47,7 @@ class ES_Taxonomy_Ajax {
             return;
         }
         
-        if (!in_array($taxonomy, ['ensemble_category', 'ensemble_genre', 'ensemble_artist_type', 'ensemble_location_type'])) {
+        if (!in_array($taxonomy, ['ensemble_category', 'ensemble_genre', 'ensemble_artist_type', 'ensemble_location_type', 'ensemble_department'])) {
             wp_send_json_error(['message' => __('Invalid taxonomy.', 'ensemble')]);
             return;
         }
@@ -129,7 +129,7 @@ class ES_Taxonomy_Ajax {
             return;
         }
         
-        if (!in_array($taxonomy, ['ensemble_category', 'ensemble_genre', 'ensemble_artist_type', 'ensemble_location_type'])) {
+        if (!in_array($taxonomy, ['ensemble_category', 'ensemble_genre', 'ensemble_artist_type', 'ensemble_location_type', 'ensemble_department'])) {
             wp_send_json_error(['message' => __('Invalid taxonomy.', 'ensemble')]);
             return;
         }

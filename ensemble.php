@@ -130,6 +130,9 @@ final class ES_Plugin {
      * Load required dependencies
      */
     private function load_dependencies() {
+        // ✅ NEW: Slider Component (v2.8.0)
+        require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-slider-renderer.php';
+
         // Helper Functions - ZUERST laden!
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/ensemble-helpers.php';
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-tooltip-helper.php';
@@ -156,6 +159,7 @@ final class ES_Plugin {
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-artist-manager.php';
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-location-manager.php';
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-gallery-manager.php';
+        require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-gallery-ajax.php';
         
         // ✅ NEW: Meta Scanner for native field detection
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-meta-scanner.php';
@@ -167,8 +171,6 @@ final class ES_Plugin {
 
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-custom-templates.php';
         
-        // ✅ NEW: Slider Component (v2.8.0)
-        require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-slider-renderer.php';
         
         // ✅ NEW: Shortcodes Handler
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-shortcodes.php';
@@ -204,7 +206,21 @@ final class ES_Plugin {
         // ✅ NEW: Add-on System (v2.0)
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/class-es-addon-base.php';
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/class-es-addon-manager.php';
+
+        // Shortcodes CSS
+        require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-shortcode-styles.php';
         
+
+        // Blocks
+        require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-blocks.php';
+        require_once ENSEMBLE_PLUGIN_DIR . 'includes/shortcodes/class-es-location-shortcodes.php';
+
+        
+        // ✅ NEW: Elementor Integration (v3.0)
+        if ( did_action( 'elementor/loaded' ) ) {
+        require_once ENSEMBLE_PLUGIN_DIR . 'includes/elementor/class-es-elementor-loader.php';
+        }
+
         // Load Add-ons
         if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/maps/class-es-maps-addon.php')) {
             require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/maps/class-es-maps-addon.php';
@@ -237,14 +253,19 @@ final class ES_Plugin {
             require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/catalog/class-es-catalog-addon.php';
         }
         
-        // ✅ NEW: Elementor Pro Add-on (v3.0)
-        if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/elementor-pro/class-es-elementor-pro-addon.php')) {
-            require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/elementor-pro/class-es-elementor-pro-addon.php';
-        }
         
+        // ✅ NEW: Tickets Pro Add-on
+        if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/tickets-pro/class-es-tickets-pro-addon.php')) {
+            require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/tickets-pro/class-es-tickets-pro-addon.php';
+        }
+
         // ✅ NEW: Media Folders Pro Add-on
         if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/media-folders/class-es-media-folders-addon.php')) {
             require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/media-folders/class-es-media-folders-addon.php';
+        }
+        // Floor Plan
+        if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/floor-plan/class-es-floor-plan-addon.php')) {
+            require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/floor-plan/class-es-floor-plan-addon.php';
         }
         
         // ✅ NEW: Sponsors Add-on
@@ -272,6 +293,16 @@ final class ES_Plugin {
             require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/staff/class-es-staff-addon.php';
         }
         
+        // ✅ NEW: Booking Engine Add-on (Central Booking System)
+        if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/booking-engine/class-es-booking-engine-addon.php')) {
+            require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/booking-engine/class-es-booking-engine-addon.php';
+        }
+
+        // U18 Authorization Addon
+        if (file_exists(ENSEMBLE_PLUGIN_DIR . 'includes/addons/u18-authorization/class-es-u18-addon.php')) {
+            require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/u18-authorization/class-es-u18-addon.php';
+        }
+
         require_once ENSEMBLE_PLUGIN_DIR . 'includes/addons/visual-calendar/class-es-visual-calendar-addon.php';
         
         // Quick-Add Modal Handler
@@ -402,6 +433,7 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
         $this->loader->add_action('wp_ajax_es_bulk_delete_artists', $ajax, 'bulk_delete_artists');
         $this->loader->add_action('wp_ajax_es_bulk_assign_artist_taxonomy', $ajax, 'bulk_assign_artist_taxonomy');
         $this->loader->add_action('wp_ajax_es_bulk_remove_artist_taxonomy', $ajax, 'bulk_remove_artist_taxonomy');
+        $this->loader->add_action('wp_ajax_es_copy_artist', $ajax, 'copy_artist');
         
         // Location AJAX handlers
         $this->loader->add_action('wp_ajax_es_get_locations', $ajax, 'get_locations');
@@ -410,6 +442,7 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
         $this->loader->add_action('wp_ajax_es_delete_location', $ajax, 'delete_location');
         $this->loader->add_action('wp_ajax_es_search_locations', $ajax, 'search_locations');
         $this->loader->add_action('wp_ajax_es_bulk_delete_locations', $ajax, 'bulk_delete_locations');
+        $this->loader->add_action('wp_ajax_es_copy_location', $ajax, 'copy_location');
         
         // Gallery AJAX handlers
         $this->loader->add_action('wp_ajax_es_get_galleries', $ajax, 'get_galleries');
@@ -449,8 +482,7 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
             return;
         }
         
-        // Elementor integration is now handled by the Elementor Pro Add-on
-        // See: includes/addons/elementor-pro/class-es-elementor-pro-addon.php
+        // Elementor integration is handled by includes/elementor/class-es-elementor-loader.php
     }
     
     /**
@@ -477,6 +509,21 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
                 'requires_pro'  => true,
                 'class'         => 'ES_Maps_Addon',
                 'icon'          => 'dashicons-location-alt',
+                'settings_page' => true,
+                'has_frontend'  => true,
+            ));
+        }
+
+        if (class_exists('ES_Floor_Plan_Addon')) {
+            ES_Addon_Manager::register_addon('floor-plan', array(
+                'name'          => __('Floor Plan Pro', 'ensemble'),
+                'description'   => __('Interactive floor plan editor with drag & drop. Create venue layouts with tables, sections, and seating. Integrates with Booking Engine for seat selection.', 'ensemble'),
+                'version'       => '1.0.0',
+                'author'        => 'Fabian',
+                'author_uri'    => 'https://kraftwerk-mkt.com',
+                'requires_pro'  => true,
+                'class'         => 'ES_Floor_Plan_Addon',
+                'icon'          => 'dashicons-layout',
                 'settings_page' => true,
                 'has_frontend'  => true,
             ));
@@ -578,6 +625,22 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
             ));
         }
         
+        // ✅ NEW: Booking Engine Add-on (Central Booking System)
+        if (class_exists('ES_Booking_Engine_Addon')) {
+            ES_Addon_Manager::register_addon('booking-engine', array(
+                'name'          => __('Booking Engine', 'ensemble'),
+                'description'   => __('Central booking system for reservations and tickets. Unified database, QR codes, check-in, email notifications, coupons, passes and waitlist.', 'ensemble'),
+                'version'       => '1.0.0',
+                'author'        => 'Fabian',
+                'author_uri'    => 'https://kraftwerk-mkt.com',
+                'requires_pro'  => true,
+                'class'         => 'ES_Booking_Engine_Addon',
+                'icon'          => 'dashicons-tickets-alt',
+                'settings_page' => true,
+                'has_frontend'  => true,
+            ));
+        }
+        
         // ✅ NEW: Catalog Add-on (v2.9)
         if (class_exists('ES_Catalog_Addon')) {
             ES_Addon_Manager::register_addon('catalog', array(
@@ -590,22 +653,6 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
                 'class'         => 'ES_Catalog_Addon',
                 'icon'          => 'dashicons-list-view',
                 'settings_page' => false,
-                'has_frontend'  => true,
-            ));
-        }
-        
-        // ✅ NEW: Elementor Pro Add-on (v3.0)
-        if (class_exists('ES_Elementor_Pro_Addon')) {
-            ES_Addon_Manager::register_addon('elementor-pro', array(
-                'name'          => __('Elementor Pro', 'ensemble'),
-                'description'   => __('Elementor widgets for Events Grid, Calendar, Artists and Locations. Full styling control directly in Elementor with query filters, layout options and design overrides.', 'ensemble'),
-                'version'       => '1.0.0',
-                'author'        => 'Fabian',
-                'author_uri'    => 'https://kraftwerk-mkt.com',
-                'requires_pro'  => true,
-                'class'         => 'ES_Elementor_Pro_Addon',
-                'icon'          => 'dashicons-editor-kitchensink',
-                'settings_page' => true,
                 'has_frontend'  => true,
             ));
         }
@@ -657,6 +704,39 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
                 'has_frontend'  => false,
             ));
         }
+
+
+        // Ticket Pro
+        if (class_exists("ES_Tickets_Pro_Addon")) {
+            ES_Addon_Manager::register_addon('tickets-pro', array(
+                'name'          => __('Tickets Pro', 'ensemble'),
+                'description'   => __('Bezahlte Tickets mit Payment Gateway Integration.', 'ensemble'),
+                'version'       => '1.0.0',
+                'author'        => 'Kraftwerk Marketing',
+                'requires_pro'  => true,
+                'dependencies'  => array('booking-engine'),
+                'class'         => 'ES_Tickets_Pro_Addon',
+                'icon'          => 'dashicons-tickets-alt',
+                'settings_page' => true,
+                'has_frontend'  => true,
+            ));
+        }
+
+        // U18 Authorization (Muttizettel)
+        if (class_exists('ES_U18_Addon')) {
+            ES_Addon_Manager::register_addon('u18-authorization', array(
+                'name'          => __('U18 Muttizettel', 'ensemble'),
+                'description'   => __('Digitale Aufsichtsübertragung für Minderjährige (16-17 Jahre) nach JuSchG.', 'ensemble'),
+                'version'       => '1.0.0',
+                'author'        => 'Fabian',
+                'author_uri'    => 'https://kraftwerk-mkt.com',
+                'requires_pro'  => true,
+                'class'         => 'ES_U18_Addon',
+                'icon'          => 'dashicons-id-alt',
+                'settings_page' => true,
+                'has_frontend'  => true,
+            ));
+        }
         
         // ✅ NEW: FAQ Add-on
         if (class_exists('ES_FAQ_Addon')) {
@@ -701,6 +781,22 @@ require_once ENSEMBLE_PLUGIN_DIR . 'includes/class-es-theme-detector.php';
                 'requires_pro'  => false,
                 'class'         => 'ES_Staff_Addon',
                 'icon'          => 'dashicons-businessperson',
+                'settings_page' => true,
+                'has_frontend'  => true,
+            ));
+        }
+        
+        // Visual Calendar Pro Addon
+        if (class_exists('ES_Visual_Calendar_Addon')) {
+            ES_Addon_Manager::register_addon('visual-calendar', array(
+                'name'          => __('Visual Calendar Pro', 'ensemble'),
+                'description'   => __('Beautiful photo-based calendar grid with event images as backgrounds. Perfect for clubs, festivals, and visual-focused event displays.', 'ensemble'),
+                'version'       => '1.0.0',
+                'author'        => 'Fabian',
+                'author_uri'    => 'https://kraftwerk-mkt.com',
+                'requires_pro'  => true,
+                'class'         => 'ES_Visual_Calendar_Addon',
+                'icon'          => 'dashicons-format-gallery',
                 'settings_page' => true,
                 'has_frontend'  => true,
             ));

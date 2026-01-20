@@ -5,7 +5,12 @@
  * 
  * @package Ensemble
  * @subpackage Addons/Maps Pro
- * @version 2.3.5
+ * @version 2.3.6
+ * 
+ * Fixes in 2.3.6:
+ * - Fixed marker click opening route immediately (click propagation issue)
+ * - Added stopPropagation to thumbnail marker clicks
+ * - Route button disabled for 300ms after popup opens to prevent accidental clicks
  * 
  * Fixes in 2.3.5:
  * - Fixed style not applying in locations map shortcode
@@ -200,6 +205,7 @@
                     city: loc.city,
                     type: loc.type || 'default',
                     categories: loc.categories || [],
+                    category_slugs: loc.category_slugs || [],
                     url: loc.url,
                     thumbnail: loc.thumbnail,
                     upcoming_events: loc.upcoming_events,
@@ -326,9 +332,13 @@
                 self.addGoogleGeolocationControl(map, mapId);
             }
             
+            // Determine if we should skip adding markers directly to map (for clustering)
+            var useClusterer = options.clustering && typeof markerClusterer !== 'undefined';
+            
             var markers = [];
             options.markers.forEach(function(markerData) {
-                var marker = self.createGoogleMarker(markerData, map, mapId, options);
+                // Pass useClusterer flag - markers for clusterer should NOT be added to map directly
+                var marker = self.createGoogleMarker(markerData, map, mapId, options, useClusterer);
                 if (marker) {
                     markers.push(marker);
                 }
@@ -336,7 +346,7 @@
             
             self.googleMaps[mapId].markers = markers;
             
-            if (options.clustering && markers.length > 1 && typeof markerClusterer !== 'undefined') {
+            if (useClusterer && markers.length > 0) {
                 self.googleMaps[mapId].clusterer = new markerClusterer.MarkerClusterer({
                     map: map,
                     markers: markers
@@ -360,22 +370,32 @@
             return map;
         },
         
-        createGoogleMarker: function(data, map, mapId, options) {
+        createGoogleMarker: function(data, map, mapId, options, skipMapAdd) {
             var self = this;
             
-            if (!data.lat || !data.lng) return null;
+            console.log('createGoogleMarker called:', data.name, 'lat:', data.lat, 'lng:', data.lng, 'thumbnail:', !!data.thumbnail, 'skipMapAdd:', !!skipMapAdd);
+            
+            if (!data.lat || !data.lng) {
+                console.warn('Marker skipped - missing coordinates:', data.name);
+                return null;
+            }
             
             options = options || {};
             
             var iconConfig = data.marker_icon || self.config.markerIcons?.[data.type] || self.config.markerIcons?.['default'] || { icon: '📍', color: '#e74c3c' };
             var showThumbnails = options.markerThumbnails !== false && self.config.markerThumbnails !== false;
             
+            console.log('Marker options:', 'showThumbnails:', showThumbnails, 'iconConfig:', iconConfig);
+            
             var marker;
             
             // Use thumbnail marker if available and enabled
-            if (showThumbnails && data.thumbnail) {
+            // Note: Thumbnail markers (OverlayView) are not compatible with MarkerClusterer
+            if (showThumbnails && data.thumbnail && !skipMapAdd) {
+                console.log('Creating thumbnail marker for:', data.name);
                 marker = self.createGoogleThumbnailMarker(data, map, iconConfig);
             } else {
+                console.log('Creating standard marker for:', data.name);
                 // Fallback to simple SVG marker
                 var markerIcon = {
                     url: self.createMarkerIcon(iconConfig.icon, iconConfig.color),
@@ -383,18 +403,25 @@
                     anchor: new google.maps.Point(20, 40)
                 };
                 
-                marker = new google.maps.Marker({
-                    position: { lat: data.lat, lng: data.lng },
-                    map: map,
-                    icon: markerIcon,
-                    title: data.name
-                });
+                try {
+                    // If using clusterer, don't add to map directly - clusterer will handle it
+                    marker = new google.maps.Marker({
+                        position: { lat: data.lat, lng: data.lng },
+                        map: skipMapAdd ? null : map,
+                        icon: markerIcon,
+                        title: data.name
+                    });
+                    console.log('Standard marker created successfully, added to map:', !skipMapAdd);
+                } catch (e) {
+                    console.error('Error creating Google Marker:', e);
+                    return null;
+                }
             }
             
             marker.locationData = data;
             
             if (!options.disablePopup && !self.googleMaps[mapId]?.disablePopup) {
-                marker.addListener('click', function() {
+                marker.addListener('click', function(e) {
                     var infoWindow = self.googleMaps[mapId].infoWindow;
                     var content = self.createPopupContent(data);
                     
@@ -402,6 +429,15 @@
                     infoWindow.open(map, marker);
                     
                     google.maps.event.addListenerOnce(infoWindow, 'domready', function() {
+                        // Disable route button initially to prevent accidental clicks
+                        var $routeBtn = $('.es-popup-route-btn');
+                        $routeBtn.css('pointer-events', 'none');
+                        
+                        // Enable after short delay (prevents click propagation)
+                        setTimeout(function() {
+                            $routeBtn.css('pointer-events', 'auto');
+                        }, 300);
+                        
                         if (data.id) {
                             self.loadLocationEvents(data.id);
                         }
@@ -465,6 +501,13 @@
                 return this.position;
             };
             
+            // Add setVisible for filtering compatibility
+            ThumbnailMarker.prototype.setVisible = function(visible) {
+                if (this.div) {
+                    this.div.style.display = visible ? 'block' : 'none';
+                }
+            };
+            
             var overlay = new ThumbnailMarker(
                 new google.maps.LatLng(data.lat, data.lng),
                 data.thumbnail,
@@ -475,14 +518,23 @@
             
             // Make it behave like a marker for click events
             overlay.addListener = function(event, callback) {
+                var wrappedCallback = function(e) {
+                    // CRITICAL: Stop propagation to prevent click reaching popup elements
+                    if (e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
+                    callback.call(this, e);
+                };
+                
                 if (overlay.div) {
-                    overlay.div.addEventListener(event, callback);
+                    overlay.div.addEventListener(event, wrappedCallback);
                 } else {
                     // Wait for onAdd
                     var checkDiv = setInterval(function() {
                         if (overlay.div) {
                             clearInterval(checkDiv);
-                            overlay.div.addEventListener(event, callback);
+                            overlay.div.addEventListener(event, wrappedCallback);
                         }
                     }, 50);
                 }
@@ -805,6 +857,15 @@
                 });
                 
                 marker.on('popupopen', function() {
+                    // Disable route button initially to prevent accidental clicks
+                    var $routeBtn = $('.es-popup-route-btn');
+                    $routeBtn.css('pointer-events', 'none');
+                    
+                    // Enable after short delay (prevents click propagation)
+                    setTimeout(function() {
+                        $routeBtn.css('pointer-events', 'auto');
+                    }, 300);
+                    
                     if (data.id) {
                         self.loadLocationEvents(data.id);
                     }
@@ -989,7 +1050,10 @@
             
             var filteredMarkers = allMarkers.filter(function(m) {
                 var cityMatch = !cityFilter || m.city === cityFilter;
-                var categoryMatch = !categoryFilter || (m.categories && m.categories.indexOf(categoryFilter) !== -1);
+                // Check both category names AND slugs for compatibility
+                var categoryMatch = !categoryFilter || 
+                    (m.categories && m.categories.indexOf(categoryFilter) !== -1) ||
+                    (m.category_slugs && m.category_slugs.indexOf(categoryFilter) !== -1);
                 return cityMatch && categoryMatch;
             });
             

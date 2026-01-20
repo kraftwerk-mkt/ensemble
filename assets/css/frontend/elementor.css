@@ -1,0 +1,439 @@
+/**
+ * Ensemble Shortcodes - Elementor Integration
+ * 
+ * Card style variants and layout modes for Elementor widgets.
+ * Includes: Compact, Minimal, Overlay, Featured, List, Masonry
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * DEPENDENCIES:
+ * - _base.css
+ * - _components.css
+ * 
+ * CONDITIONAL LOADING:
+ * Only loaded when Elementor is active.
+ */
+
+/* ============================================
+   COMPACT CARD STYLE
+   ============================================ */
+
+.ensemble-card-compact .ensemble-event-image {
+    height: 150px;
+}
+
+.ensemble-card-compact .ensemble-event-image img {
+    height: 150px;
+    object-fit: var(--ensemble-card-image-fit, cover);
+}
+
+.ensemble-card-compact .ensemble-event-content {
+    padding: 12px;
+}
+
+.ensemble-card-compact .ensemble-event-title {
+    font-size: var(--ensemble-body-size, 16px);
+    margin-bottom: 8px;
+}
+
+.ensemble-card-compact .ensemble-event-meta {
+    font-size: var(--ensemble-xs-size, 12px);
+}
+
+.ensemble-card-compact .ensemble-event-date {
+    display: none;
+}
+
+/* ============================================
+   MINIMAL CARD STYLE
+   ============================================ */
+
+.ensemble-card-minimal {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+.ensemble-card-minimal .ensemble-event-image {
+    border-radius: var(--ensemble-radius, 8px);
+    overflow: hidden;
+    margin: 0;
+}
+
+.ensemble-card-minimal .ensemble-event-content {
+    padding: 16px 0;
+}
+
+.ensemble-card-minimal .ensemble-event-title {
+    font-size: var(--ensemble-lg-size, 18px);
+}
+
+.ensemble-card-minimal:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   OVERLAY CARD STYLE
+   Image background with gradient overlay
+   ============================================ */
+
+.ensemble-card-overlay {
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
+    padding: 0;
+}
+
+.ensemble-card-overlay .ensemble-event-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+}
+
+.ensemble-card-overlay .ensemble-event-image img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.ensemble-card-overlay .ensemble-event-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(
+        transparent, 
+        var(--ensemble-gradient-mid, rgba(0, 0, 0, 0.4)) 40%,
+        var(--ensemble-gradient-start, rgba(0, 0, 0, 0.8))
+    );
+    padding: 60px 20px 20px;
+    color: var(--ensemble-overlay-text, #ffffff);
+}
+
+.ensemble-card-overlay .ensemble-event-title a,
+.ensemble-card-overlay .ensemble-event-title {
+    color: var(--ensemble-overlay-text, #ffffff);
+}
+
+.ensemble-card-overlay .ensemble-event-meta {
+    color: var(--ensemble-overlay-text-secondary, rgba(255, 255, 255, 0.8));
+}
+
+.ensemble-card-overlay .ensemble-event-date {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    padding: 8px 12px;
+    border-radius: var(--ensemble-radius, 8px);
+}
+
+.ensemble-card-overlay:hover {
+    transform: none;
+}
+
+.ensemble-card-overlay:hover .ensemble-event-image img {
+    transform: scale(1.05);
+}
+
+/* ============================================
+   FEATURED CARD STYLE
+   ============================================ */
+
+.ensemble-card-featured {
+    border: 2px solid var(--ensemble-primary, #667eea);
+    position: relative;
+}
+
+.ensemble-card-featured::before {
+    content: attr(data-featured-label, "Featured");
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-badge-font-weight, 600);
+    border-radius: var(--ensemble-badge-radius, 4px);
+    z-index: 10;
+}
+
+.ensemble-card-featured .ensemble-event-image {
+    height: 220px;
+}
+
+.ensemble-card-featured .ensemble-event-image img {
+    height: 220px;
+    object-fit: var(--ensemble-card-image-fit, cover);
+}
+
+/* ============================================
+   CATEGORY BADGE (on card)
+   ============================================ */
+
+.ensemble-event-category-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 10px);
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-badge-font-weight, 600);
+    border-radius: var(--ensemble-badge-radius, 4px);
+    text-transform: uppercase;
+    z-index: 10;
+}
+
+/* ============================================
+   EVENT EXCERPT
+   ============================================ */
+
+.ensemble-event-excerpt {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+    margin-bottom: 12px;
+    line-height: var(--ensemble-line-height, 1.6);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ============================================
+   PRICE IN META
+   ============================================ */
+
+.ensemble-meta-price {
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-meta-price-free {
+    color: var(--ensemble-success, #38a169);
+}
+
+/* ============================================
+   LIST LAYOUT
+   ============================================ */
+
+.ensemble-layout-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ensemble-grid-gap, 24px);
+}
+
+.ensemble-layout-list .ensemble-event-card {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    padding: 0;
+}
+
+.ensemble-layout-list .ensemble-event-image {
+    width: 250px;
+    min-width: 250px;
+    flex-shrink: 0;
+    margin: 0;
+    border-radius: var(--ensemble-card-radius, 12px) 0 0 var(--ensemble-card-radius, 12px);
+    height: auto;
+}
+
+.ensemble-layout-list .ensemble-event-image img {
+    height: 100%;
+    min-height: 180px;
+    object-fit: cover;
+}
+
+.ensemble-layout-list .ensemble-event-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--ensemble-card-padding, 24px);
+}
+
+.ensemble-layout-list .ensemble-event-card:hover {
+    transform: none;
+}
+
+/* ============================================
+   MASONRY LAYOUT
+   ============================================ */
+
+.ensemble-layout-masonry {
+    column-count: 3;
+    column-gap: var(--ensemble-grid-gap, 24px);
+}
+
+.ensemble-layout-masonry.ensemble-columns-2 {
+    column-count: 2;
+}
+
+.ensemble-layout-masonry.ensemble-columns-3 {
+    column-count: 3;
+}
+
+.ensemble-layout-masonry.ensemble-columns-4 {
+    column-count: 4;
+}
+
+.ensemble-layout-masonry .ensemble-event-card {
+    break-inside: avoid;
+    margin-bottom: var(--ensemble-grid-gap, 24px);
+    display: inline-block;
+    width: 100%;
+}
+
+.ensemble-layout-masonry .ensemble-event-image {
+    height: auto;
+}
+
+.ensemble-layout-masonry .ensemble-event-image img {
+    height: auto;
+    aspect-ratio: auto;
+}
+
+/* ============================================
+   CAROUSEL/SLIDER LAYOUT
+   ============================================ */
+
+.ensemble-layout-carousel {
+    overflow: visible;
+}
+
+.ensemble-layout-carousel .ensemble-event-card {
+    width: 100%;
+}
+
+/* ============================================
+   HORIZONTAL SCROLL LAYOUT
+   ============================================ */
+
+.ensemble-layout-horizontal {
+    display: flex;
+    gap: var(--ensemble-grid-gap, 24px);
+    overflow-x: auto;
+    padding-bottom: 16px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.ensemble-layout-horizontal .ensemble-event-card {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+}
+
+.ensemble-layout-horizontal::-webkit-scrollbar {
+    height: 8px;
+}
+
+.ensemble-layout-horizontal::-webkit-scrollbar-track {
+    background: var(--ensemble-scrollbar-track, var(--ensemble-surface, #ffffff));
+    border-radius: var(--ensemble-scrollbar-radius, 4px);
+}
+
+.ensemble-layout-horizontal::-webkit-scrollbar-thumb {
+    background: var(--ensemble-scrollbar-thumb, var(--ensemble-card-border, #e2e8f0));
+    border-radius: var(--ensemble-scrollbar-radius, 4px);
+}
+
+.ensemble-layout-horizontal::-webkit-scrollbar-thumb:hover {
+    background: var(--ensemble-scrollbar-thumb-hover, var(--ensemble-text-muted, #a0aec0));
+}
+
+/* ============================================
+   ELEMENTOR WIDGET SPECIFIC
+   ============================================ */
+
+/* Elementor section padding override */
+.elementor-widget-ensemble-events .elementor-widget-container {
+    overflow: visible;
+}
+
+/* Alignment helpers */
+.ensemble-align-left {
+    text-align: left;
+}
+
+.ensemble-align-center {
+    text-align: center;
+}
+
+.ensemble-align-right {
+    text-align: right;
+}
+
+/* Button alignment */
+.ensemble-button-align-left .ensemble-event-actions {
+    justify-content: flex-start;
+}
+
+.ensemble-button-align-center .ensemble-event-actions {
+    justify-content: center;
+}
+
+.ensemble-button-align-right .ensemble-event-actions {
+    justify-content: flex-end;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .ensemble-layout-masonry {
+        column-count: 2;
+    }
+    
+    .ensemble-layout-masonry.ensemble-columns-4 {
+        column-count: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .ensemble-layout-list .ensemble-event-card {
+        flex-direction: column;
+        padding: 0;
+    }
+    
+    .ensemble-layout-list .ensemble-event-image {
+        width: 100%;
+        min-width: 100%;
+        border-radius: var(--ensemble-card-radius, 12px) var(--ensemble-card-radius, 12px) 0 0;
+    }
+    
+    .ensemble-layout-list .ensemble-event-image img {
+        min-height: 200px;
+    }
+    
+    .ensemble-layout-masonry {
+        column-count: 1;
+    }
+    
+    .ensemble-card-overlay {
+        min-height: 250px;
+    }
+    
+    .ensemble-layout-horizontal .ensemble-event-card {
+        flex: 0 0 280px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ensemble-layout-horizontal .ensemble-event-card {
+        flex: 0 0 85vw;
+    }
+}

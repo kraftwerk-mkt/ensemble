@@ -17,6 +17,43 @@ class ES_Layout_Sets {
     const PRO_LAYOUTS = array();
     
     /**
+     * Initialize layout sets (called on init)
+     */
+    public static function init() {
+        // Load layout helper files for active layout
+        self::load_layout_helpers();
+    }
+    
+    /**
+     * Load helper PHP files for the active layout
+     * These files can register hooks, enqueue scripts, etc.
+     */
+    private static function load_layout_helpers() {
+        $active_set = self::get_active_set();
+        $set_data = self::get_set_data($active_set);
+        
+        if (empty($set_data['path'])) {
+            return;
+        }
+        
+        $layout_path = $set_data['path'];
+        
+        // List of helper files to check and load
+        $helper_files = array(
+            $active_set . '-helpers.php',  // e.g., bristol-helpers.php, pure-helpers.php
+            'helpers.php',                  // Generic fallback
+        );
+        
+        foreach ($helper_files as $helper_file) {
+            $helper_path = $layout_path . '/' . $helper_file;
+            if (file_exists($helper_path)) {
+                require_once $helper_path;
+                break; // Only load one helper file
+            }
+        }
+    }
+    
+    /**
      * Check if a layout is available
      * 
      * @param string $layout_slug Layout slug
@@ -42,23 +79,25 @@ class ES_Layout_Sets {
         $sets = array(
             'modern' => array(
                 'name' => __('Modern', 'ensemble'),
-                'description' => __('Clean, contemporary design with a minimalist aesthetic. Versatile for any event type.', 'ensemble'),
+                'description' => __('Sophisticated dark design with champagne gold accents. Elegant serif typography with smooth transitions. Perfect for upscale venues and design-focused events.', 'ensemble'),
                 'preview_image' => '',
-                'style' => __('Contemporary', 'ensemble'),
-                'best_for' => __('Design-focused events', 'ensemble'),
+                'style' => __('Dark / Elegant', 'ensemble'),
+                'best_for' => __('Upscale venues, galas, design-focused events', 'ensemble'),
                 'requires_pro' => false,
                 'supports_modes' => false,
                 'default_mode' => 'dark',
                 'features' => array(
-                    __('Side-by-side layout', 'ensemble'),
-                    __('Gradient accents', 'ensemble'),
-                    __('Sticky sidebar navigation', 'ensemble'),
-                    __('Perfect for festivals & clubs', 'ensemble'),
+                    __('Deep black background', 'ensemble'),
+                    __('Champagne gold accents', 'ensemble'),
+                    __('Elegant Cormorant Garamond typography', 'ensemble'),
+                    __('Refined hover transitions', 'ensemble'),
+                    __('Sharp, sophisticated edges', 'ensemble'),
                 ),
                 'layouts' => array(
                     'event_card' => 'modern',
                     'artist_card' => 'modern',
                     'location_card' => 'modern',
+                    'hero_slide' => 'modern',
                     'calendar_event' => 'modern_teaser',
                     'event_single' => 'modern_single',
                     'artist_single' => 'modern_single',
@@ -68,18 +107,19 @@ class ES_Layout_Sets {
             
             'club' => array(
                 'name' => __('Club', 'ensemble'),
-                'description' => __('Dark, bold nightclub style with date badges and status indicators. Perfect for electronic music, festivals, and nightlife events.', 'ensemble'),
+                'description' => __('Elegant anthracite design with warm gold accents. Sharp edges, dramatic hover effects. Perfect for upscale nightlife, VIP lounges, and sophisticated club events.', 'ensemble'),
                 'preview_image' => '',
-                'style' => __('Dark / Nightlife', 'ensemble'),
-                'best_for' => __('Clubs, festivals, DJ events', 'ensemble'),
+                'style' => __('Dark / Elegant', 'ensemble'),
+                'best_for' => __('Upscale clubs, VIP lounges, nightlife', 'ensemble'),
                 'requires_pro' => false,
                 'supports_modes' => false,
                 'default_mode' => 'dark',
                 'features' => array(
-                    __('Dark theme optimized', 'ensemble'),
-                    __('Date badge overlays', 'ensemble'),
-                    __('Status badges (Sold Out, Presale)', 'ensemble'),
-                    __('Perfect for nightlife & electronic music', 'ensemble'),
+                    __('Warm anthracite background', 'ensemble'),
+                    __('Gold accent colors', 'ensemble'),
+                    __('Sharp edges (no border-radius)', 'ensemble'),
+                    __('Dramatic scale hover effects', 'ensemble'),
+                    __('Gold inset glow on hover', 'ensemble'),
                 ),
                 'layouts' => array(
                     'event_card' => 'club',
@@ -94,18 +134,20 @@ class ES_Layout_Sets {
             
             'lovepop' => array(
                 'name' => __('Lovepop', 'ensemble'),
-                'description' => __('Dark gradient background with glowing magenta accents. Bold, impactful design with large hero header.', 'ensemble'),
+                'description' => __('Vibrant pop design with deep aubergine/purple background and neon magenta accents. Playful animations with bouncy hover effects. Perfect for festivals, pop concerts, and party events.', 'ensemble'),
                 'preview_image' => '',
-                'style' => __('Dark / Bold', 'ensemble'),
-                'best_for' => __('Festivals, parties, nightlife', 'ensemble'),
+                'style' => __('Dark / Pop', 'ensemble'),
+                'best_for' => __('Festivals, pop concerts, party events', 'ensemble'),
                 'requires_pro' => false,
                 'supports_modes' => false,
                 'default_mode' => 'dark',
                 'features' => array(
-                    __('Dark gradient background', 'ensemble'),
-                    __('Glowing magenta borders', 'ensemble'),
-                    __('Large hero with overlay', 'ensemble'),
-                    __('Bold uppercase typography', 'ensemble'),
+                    __('Deep aubergine/purple background', 'ensemble'),
+                    __('Neon magenta accents', 'ensemble'),
+                    __('Extra-rounded cards (20px)', 'ensemble'),
+                    __('Pill-shaped buttons', 'ensemble'),
+                    __('Bouncy hover animations', 'ensemble'),
+                    __('Neon glow effects', 'ensemble'),
                 ),
                 'layouts' => array(
                     'event_card' => 'lovepop',
@@ -200,19 +242,19 @@ class ES_Layout_Sets {
             
             'simpleclub' => array(
                 'name' => __('Simple Club', 'ensemble'),
-                'description' => __('Clean club-style layout with prominent location display and fading gallery. Dark gradient background with glowing magenta accents.', 'ensemble'),
+                'description' => __('Modern tech-inspired design with deep navy background and electric cyan accents. Clean glassmorphism effects with subtle transparency. Perfect for modern venues and tech events.', 'ensemble'),
                 'preview_image' => '',
-                'style' => __('Dark / Club', 'ensemble'),
-                'best_for' => __('Clubs, electronic music, nightlife', 'ensemble'),
+                'style' => __('Dark / Tech', 'ensemble'),
+                'best_for' => __('Modern venues, tech events, contemporary clubs', 'ensemble'),
                 'requires_pro' => false,
                 'supports_modes' => false,
                 'default_mode' => 'dark',
                 'features' => array(
-                    __('Dark gradient background', 'ensemble'),
-                    __('Glowing magenta accents', 'ensemble'),
-                    __('Prominent location display', 'ensemble'),
-                    __('Fading gallery with lightbox', 'ensemble'),
-                    __('Bold Montserrat typography', 'ensemble'),
+                    __('Deep navy background', 'ensemble'),
+                    __('Electric cyan accents', 'ensemble'),
+                    __('Glassmorphism card effects', 'ensemble'),
+                    __('Clean Inter typography', 'ensemble'),
+                    __('Subtle border glow on hover', 'ensemble'),
                 ),
                 'layouts' => array(
                     'event_card' => 'simpleclub',
@@ -225,33 +267,70 @@ class ES_Layout_Sets {
                 ),
             ),
             
+            // ========================================
+            // KONGRESS - Professional Conference Layout
+            // ========================================
             'kongress' => array(
                 'name' => __('Kongress', 'ensemble'),
-                'description' => __('Professional conference/congress design with Navy & Copper color scheme. Elegant typography, agenda/timeline view, optimized for multi-day events with speakers.', 'ensemble'),
+                'description' => __('Professional conference design with navy & copper color scheme. Elegant Playfair Display headings, agenda-style layouts, and speaker cards. Perfect for conferences, seminars, and business events.', 'ensemble'),
                 'preview_image' => '',
                 'style' => __('Light / Professional', 'ensemble'),
-                'best_for' => __('Conferences, congresses, business events', 'ensemble'),
+                'best_for' => __('Conferences, seminars, business events', 'ensemble'),
                 'requires_pro' => false,
                 'supports_modes' => false,
                 'default_mode' => 'light',
                 'features' => array(
                     __('Navy & Copper color scheme', 'ensemble'),
-                    __('Elegant Playfair Display headings', 'ensemble'),
-                    __('Agenda/Timeline with breaks', 'ensemble'),
-                    __('Speaker grid & detailed profiles', 'ensemble'),
-                    __('Animated statistics counter', 'ensemble'),
-                    __('Scroll animations', 'ensemble'),
+                    __('Elegant Playfair Display typography', 'ensemble'),
+                    __('Agenda-style session layouts', 'ensemble'),
+                    __('Speaker grid with bios', 'ensemble'),
+                    __('Glassmorphism effects', 'ensemble'),
+                    __('Animated statistics counters', 'ensemble'),
                 ),
                 'layouts' => array(
                     'event_card' => 'kongress',
                     'artist_card' => 'kongress',
                     'location_card' => 'kongress',
+                    'hero_slide' => 'kongress',
                     'calendar_event' => 'kongress_teaser',
                     'event_single' => 'kongress_single',
                     'artist_single' => 'kongress_single',
                     'location_single' => 'kongress_single',
                 ),
             ),
+            
+            // ========================================
+            // BRISTOL CITY FESTIVAL
+            // ========================================
+            'bristol' => array(
+                'name' => __('Bristol City Festival', 'ensemble'),
+                'description' => __('Urban festival vibes with geometric accents, spray-paint textures, and vibrant coral/cyan colors. Full dark/light mode support with playful skewed elements.', 'ensemble'),
+                'preview_image' => $plugin_url . 'assets/images/layouts/bristol-preview.jpg',
+                'style' => __('Urban / Festival', 'ensemble'),
+                'best_for' => __('City festivals, street art events, urban culture', 'ensemble'),
+                'requires_pro' => false,
+                'supports_modes' => true,  // Has dark/light toggle!
+                'default_mode' => 'dark',
+                'features' => array(
+                    __('Dark/Light mode toggle', 'ensemble'),
+                    __('Geometric accent shapes', 'ensemble'),
+                    __('Spray-paint texture overlay', 'ensemble'),
+                    __('Skewed badges & buttons', 'ensemble'),
+                    __('Vibrant coral/cyan color scheme', 'ensemble'),
+                    __('Space Grotesk + Inter typography', 'ensemble'),
+                ),
+                'layouts' => array(
+                    'event_card' => 'bristol',
+                    'artist_card' => 'bristol',
+                    'location_card' => 'bristol',
+                    'hero_slide' => 'bristol',
+                    'calendar_event' => 'bristol_teaser',
+                    'event_single' => 'bristol_single',
+                    'artist_single' => 'bristol_single',
+                    'location_single' => 'bristol_single',
+                ),
+            ),
+            
         );
         
         // Allow filtering for Template Park or custom sets
@@ -433,36 +512,37 @@ class ES_Layout_Sets {
     }
     
     /**
- * Get detailed data for a specific layout set
- * 
- * @param string $set_id
- * @return array|null
- */
-public static function get_set_data($set_id) {
-    $sets = self::get_sets();
-    
-    if (!isset($sets[$set_id])) {
-        return null;
-    }
-    
-    $set = $sets[$set_id];
-    
-    // Add path if not present
-    if (!isset($set['path'])) {
-        // Check if it's a custom template
-        if (strpos($set_id, 'custom_') === 0) {
-            $slug = str_replace('custom_', '', $set_id);
-            $upload_dir = wp_upload_dir();
-            $set['path'] = $upload_dir['basedir'] . '/ensemble-templates/custom-' . $slug;
-        } else {
-            // Built-in set
-            $set['path'] = ENSEMBLE_PLUGIN_DIR . 'templates/layouts/' . $set_id;
+     * Get detailed data for a specific layout set
+     * 
+     * @param string $set_id
+     * @return array|null
+     */
+    public static function get_set_data($set_id) {
+        $sets = self::get_sets();
+        
+        if (!isset($sets[$set_id])) {
+            return null;
         }
+        
+        $set = $sets[$set_id];
+        
+        // Add path if not present
+        if (!isset($set['path'])) {
+            // Check if it's a custom template
+            if (strpos($set_id, 'custom_') === 0) {
+                $slug = str_replace('custom_', '', $set_id);
+                $upload_dir = wp_upload_dir();
+                $set['path'] = $upload_dir['basedir'] . '/ensemble-templates/custom-' . $slug;
+            } else {
+                // Built-in set
+                $set['path'] = ENSEMBLE_PLUGIN_DIR . 'templates/layouts/' . $set_id;
+            }
+        }
+        
+        return $set;
     }
     
-    return $set;
 }
 
-
-
-}
+// Initialize layout helpers on WordPress init
+add_action('init', array('ES_Layout_Sets', 'init'), 5);

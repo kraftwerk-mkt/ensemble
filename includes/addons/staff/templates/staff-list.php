@@ -4,6 +4,7 @@
  * 
  * @package Ensemble
  * @subpackage Addons/Staff
+ * @version 1.1.0
  * 
  * Variables:
  * @var array $staff    Array of staff members
@@ -15,33 +16,53 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$show_email = isset($atts['show_email']) && $atts['show_email'] === 'yes';
-$show_phone = isset($atts['show_phone']) && $atts['show_phone'] === 'yes';
-$show_position = isset($atts['show_position']) && $atts['show_position'] === 'yes';
-$show_department = isset($atts['show_department']) && $atts['show_department'] === 'yes';
-$show_office_hours = isset($atts['show_office_hours']) && $atts['show_office_hours'] === 'yes';
-$show_social = isset($atts['show_social']) && $atts['show_social'] === 'yes';
+// Helper function to check show_* attributes (handles both 'yes'/'no' strings and booleans)
+if (!function_exists('es_staff_show_attr')) {
+    function es_staff_show_attr($atts, $key, $default = true) {
+        if (!isset($atts[$key])) {
+            return $default;
+        }
+        $value = $atts[$key];
+        if (is_string($value)) {
+            return in_array(strtolower($value), array('yes', '1', 'true'), true);
+        }
+        return (bool) $value;
+    }
+}
+
+// Parse display options from attributes
+$show_image        = es_staff_show_attr($atts, 'show_image', true);
+$show_email        = es_staff_show_attr($atts, 'show_email', true);
+$show_phone        = es_staff_show_attr($atts, 'show_phone', true);
+$show_position     = es_staff_show_attr($atts, 'show_position', true);
+$show_department   = es_staff_show_attr($atts, 'show_department', true);
+$show_office_hours = es_staff_show_attr($atts, 'show_office_hours', false);
+$show_social       = es_staff_show_attr($atts, 'show_social', false);
+$show_responsibility = es_staff_show_attr($atts, 'show_responsibility', false);
+$show_excerpt      = es_staff_show_attr($atts, 'show_excerpt', false);
 ?>
 
 <div class="es-staff-list-wrapper">
     <div class="es-staff-list">
         <?php foreach ($staff as $person) : ?>
             <article class="es-staff-list-item" itemscope itemtype="https://schema.org/Person">
-                <div class="es-staff-list-item__image">
-                    <?php if ($person['featured_image']) : ?>
-                        <a href="<?php echo esc_url($person['permalink']); ?>">
-                            <img src="<?php echo esc_url($person['featured_image']); ?>" 
-                                 alt="<?php echo esc_attr($person['name']); ?>"
-                                 itemprop="image">
-                        </a>
-                    <?php else : ?>
-                        <a href="<?php echo esc_url($person['permalink']); ?>" class="es-staff-list-item__placeholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                            </svg>
-                        </a>
-                    <?php endif; ?>
-                </div>
+                <?php if ($show_image) : ?>
+                    <div class="es-staff-list-item__image">
+                        <?php if ($person['featured_image']) : ?>
+                            <a href="<?php echo esc_url($person['permalink']); ?>">
+                                <img src="<?php echo esc_url($person['featured_image']); ?>" 
+                                     alt="<?php echo esc_attr($person['name']); ?>"
+                                     itemprop="image">
+                            </a>
+                        <?php else : ?>
+                            <a href="<?php echo esc_url($person['permalink']); ?>" class="es-staff-list-item__placeholder">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
                 
                 <div class="es-staff-list-item__content">
                     <div class="es-staff-list-item__header">
@@ -58,7 +79,7 @@ $show_social = isset($atts['show_social']) && $atts['show_social'] === 'yes';
                         <?php endif; ?>
                     </div>
                     
-                    <?php if (($show_department && !empty($person['department'])) || !empty($person['responsibility'])) : ?>
+                    <?php if (($show_department && !empty($person['department'])) || ($show_responsibility && !empty($person['responsibility']))) : ?>
                         <div class="es-staff-list-item__meta">
                             <?php if ($show_department && !empty($person['department'])) : ?>
                                 <span class="es-staff-list-item__department">
@@ -66,7 +87,7 @@ $show_social = isset($atts['show_social']) && $atts['show_social'] === 'yes';
                                 </span>
                             <?php endif; ?>
                             
-                            <?php if (!empty($person['responsibility'])) : ?>
+                            <?php if ($show_responsibility && !empty($person['responsibility'])) : ?>
                                 <span class="es-staff-list-item__responsibility">
                                     <?php echo esc_html($person['responsibility']); ?>
                                 </span>
@@ -83,7 +104,7 @@ $show_social = isset($atts['show_social']) && $atts['show_social'] === 'yes';
                         </div>
                     <?php endif; ?>
                     
-                    <?php if (!empty($person['excerpt'])) : ?>
+                    <?php if ($show_excerpt && !empty($person['excerpt'])) : ?>
                         <p class="es-staff-list-item__excerpt" itemprop="description">
                             <?php echo esc_html($person['excerpt']); ?>
                         </p>
@@ -126,8 +147,8 @@ $show_social = isset($atts['show_social']) && $atts['show_social'] === 'yes';
                                 </a>
                             <?php endif; ?>
                             <?php if (!empty($person['twitter'])) : ?>
-                                <a href="<?php echo esc_url($person['twitter']); ?>" target="_blank" rel="noopener noreferrer" title="Twitter">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M22.46 6c-.85.38-1.78.64-2.75.76 1-.6 1.76-1.55 2.12-2.68-.93.55-1.96.95-3.06 1.17-.88-.94-2.13-1.53-3.51-1.53-2.66 0-4.81 2.16-4.81 4.81 0 .38.04.75.13 1.1-4-.2-7.58-2.11-9.96-5.02-.42.72-.66 1.56-.66 2.46 0 1.68.85 3.16 2.14 4.02-.79-.02-1.53-.24-2.18-.6v.06c0 2.35 1.67 4.31 3.88 4.76-.4.1-.83.16-1.27.16-.31 0-.62-.03-.92-.08.63 1.96 2.45 3.39 4.61 3.43-1.69 1.32-3.83 2.1-6.15 2.1-.4 0-.8-.02-1.19-.07 2.19 1.4 4.78 2.22 7.57 2.22 9.07 0 14.02-7.52 14.02-14.02 0-.21 0-.43-.01-.64.96-.69 1.79-1.56 2.45-2.55z"/></svg>
+                                <a href="<?php echo esc_url($person['twitter']); ?>" target="_blank" rel="noopener noreferrer" title="Twitter / X">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                                 </a>
                             <?php endif; ?>
                         </div>

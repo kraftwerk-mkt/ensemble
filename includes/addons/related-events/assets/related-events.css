@@ -75,7 +75,7 @@
     border-radius: var(--ensemble-card-radius, 12px);
     overflow: hidden;
     box-shadow: var(--ensemble-card-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-related-event-card:hover {
@@ -100,7 +100,7 @@
     width: 100%;
     height: 100%;
     object-fit: var(--ensemble-card-image-fit, cover);
-    transition: transform 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-related-event-card:hover .es-related-event-image img {
@@ -134,7 +134,7 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%);
     transform: translateY(100%);
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     z-index: 1;
 }
 
@@ -149,7 +149,7 @@
     font-size: var(--ensemble-body-size, 1rem);
     font-weight: var(--ensemble-heading-weight, 600);
     line-height: var(--ensemble-line-height-heading, 1.4);
-    color: #fff;
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-related-event-overlay .es-related-event-meta {
@@ -184,7 +184,7 @@
 .es-related-event-title a {
     color: var(--ensemble-text, #1f2937);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-related-event-title a:hover {
@@ -209,7 +209,7 @@
 }
 
 .es-related-event-meta .dashicons {
-    font-size: 14px;
+    font-size: var(--ensemble-small-size, 14px);
     width: 14px;
     height: 14px;
     color: var(--ensemble-text-secondary, #9ca3af);
@@ -343,12 +343,12 @@
 
 .es-related-layout-slider::-webkit-scrollbar-track {
     background: var(--ensemble-muted-bg, #f1f1f1);
-    border-radius: 3px;
+    border-radius: var(--ensemble-badge-radius, 4px);
 }
 
 .es-related-layout-slider::-webkit-scrollbar-thumb {
     background: var(--ensemble-text-secondary, #888);
-    border-radius: 3px;
+    border-radius: var(--ensemble-badge-radius, 4px);
 }
 
 .es-related-layout-slider::-webkit-scrollbar-thumb:hover {

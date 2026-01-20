@@ -129,6 +129,9 @@ if ($start_date && $end_date && $end_date !== $start_date) {
 
 // Badge
 $badge_label = !empty($event['badge_label']) ? $event['badge_label'] : '';
+
+// Gallery from Wizard
+$has_gallery = !empty($event['gallery']) || (function_exists('ensemble_has_addon_hook') && ensemble_has_addon_hook('gallery_area'));
 ?>
 
 <article class="es-kongress-single es-layout-kongress" id="es-event-<?php echo esc_attr($event_id); ?>">
@@ -509,6 +512,17 @@ $badge_label = !empty($event['badge_label']) ? $event['badge_label'] : '';
                             <rect x="4" y="6" width="16" height="12" rx="2"/>
                         </svg>
                         <span>Tickets</span>
+                    </button>
+                    <?php endif; ?>
+                    
+                    <?php if ($has_gallery): ?>
+                    <button class="es-kongress-tab" data-tab="gallery" role="tab" aria-selected="false" aria-controls="tab-gallery">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21,15 16,10 5,21"/>
+                        </svg>
+                        <span><?php _e('Gallery', 'ensemble'); ?></span>
                     </button>
                     <?php endif; ?>
                 </nav>
@@ -973,6 +987,22 @@ $badge_label = !empty($event['badge_label']) ? $event['badge_label'] : '';
                             // Hook: Ticket Area (Ticket Addon)
                             if (function_exists('ensemble_ticket_area')) {
                                 ensemble_ticket_area($event_id);
+                            }
+                            
+                            // Hook: Reservation Form (Reservations Pro Addon)
+                            do_action('ensemble_reservation_section', $event_id, $event);
+                            ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <!-- TAB: GALLERY -->
+                    <?php if ($has_gallery): ?>
+                    <div class="es-kongress-tab-panel" id="tab-gallery" role="tabpanel">
+                        <div class="es-kongress-gallery-wrapper">
+                            <?php 
+                            if (function_exists('ensemble_gallery_area')) {
+                                ensemble_gallery_area($event_id, $event['gallery'] ?: array());
                             }
                             ?>
                         </div>

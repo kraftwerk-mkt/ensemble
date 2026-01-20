@@ -1,6 +1,8 @@
 <?php
 /**
  * Import Events Template
+ * 
+ * USES: admin-unified.css for all styles
  *
  * @package Ensemble
  */
@@ -18,13 +20,15 @@ $is_pro = function_exists('ensemble_is_pro') && ensemble_is_pro();
     
     <?php if (!$is_pro): ?>
     <!-- Pro Required Gate -->
-    <div class="es-pro-gate" style="background: var(--es-surface, #2c2c2c); border: 1px solid var(--es-border, #404040); border-radius: 12px; padding: 40px; text-align: center; margin: 20px 0;">
-        <div style="font-size: 48px; margin-bottom: 20px;">🔒</div>
-        <h2 style="margin: 0 0 10px; color: var(--es-text, #e0e0e0);"><?php _e('Pro Feature', 'ensemble'); ?></h2>
-        <p style="color: var(--es-text-secondary, #a0a0a0); max-width: 400px; margin: 0 auto 20px;">
+    <div class="es-pro-gate">
+        <div class="es-pro-gate-icon">
+            <span class="dashicons dashicons-lock"></span>
+        </div>
+        <h2><?php _e('Pro Feature', 'ensemble'); ?></h2>
+        <p>
             <?php _e('Der Import von Events aus iCal-Feeds und Dateien ist ein Pro-Feature. Upgrade um diese Funktion freizuschalten.', 'ensemble'); ?>
         </p>
-        <a href="<?php echo admin_url('admin.php?page=ensemble-settings&tab=license'); ?>" class="button button-primary button-hero" style="background: linear-gradient(135deg, #f59e0b, #d97706); border: none;">
+        <a href="<?php echo admin_url('admin.php?page=ensemble-settings&tab=license'); ?>" class="button button-primary button-hero es-btn-upgrade">
             <?php _e('Upgrade auf Pro', 'ensemble'); ?>
         </a>
     </div>
@@ -164,7 +168,7 @@ $is_pro = function_exists('ensemble_is_pro') && ensemble_is_pro();
                 
                 <div class="es-form-actions">
                     <button type="button" id="es-back-to-source-btn" class="button button-large">
-                        <?php _e('← Back', 'ensemble'); ?>
+                        <?php _e('Back', 'ensemble'); ?>
                     </button>
                     <button type="button" id="es-import-selected-btn" class="button button-primary button-large">
                         <?php _e('Import Selected Events', 'ensemble'); ?>

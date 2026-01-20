@@ -25,22 +25,19 @@ class ES_Assets {
         
         // Base admin styles
         wp_enqueue_style(
-            'ensemble-admin',
-            ENSEMBLE_PLUGIN_URL . 'assets/css/admin.css',
-            array(),
-            ENSEMBLE_VERSION,
-            'all'
-        );
-        
-        // Unified Admin Styles - Single Source of Truth
-        // Contains: Buttons, Toggle Switches, Layout, Cards, etc.
-        wp_enqueue_style(
-            'ensemble-admin-unified',
-            ENSEMBLE_PLUGIN_URL . 'assets/css/admin-unified.css',
-            array('ensemble-admin'),
-            ENSEMBLE_VERSION,
-            'all'
-        );
+        'ensemble-admin-unified',
+        ENSEMBLE_PLUGIN_URL . 'assets/css/admin-unified.css',
+        array(),
+        ENSEMBLE_VERSION
+    );
+    
+    // (Wizard-spezifisch)
+    wp_enqueue_style(
+        'ensemble-admin',
+        ENSEMBLE_PLUGIN_URL . 'assets/css/admin.css',
+        array('ensemble-admin-unified'),  // ← Abhängigkeit!
+        ENSEMBLE_VERSION
+    );
         
         // Unified Toggle Component - Single Source of Truth for all toggles
         wp_enqueue_style(
@@ -393,6 +390,40 @@ class ES_Assets {
      * Enqueue frontend styles
      */
     public function enqueue_frontend_styles() {
+        
+        // =============================================
+        // SELECTIVE LOADING (NEW - via ES_CSS_Loader)
+        // =============================================
+        if (class_exists('ES_CSS_Loader') && ES_CSS_Loader::is_enabled()) {
+            // ES_CSS_Loader handles everything:
+            // - Base CSS (auto-loaded)
+            // - Shortcode CSS (on-demand via ES_CSS_Loader::enqueue())
+            // - Layout CSS (auto-detected)
+            
+            // Only need to register slider styles here for manual enqueueing
+            wp_register_style(
+                'ensemble-slider',
+                ENSEMBLE_PLUGIN_URL . 'assets/css/ensemble-slider.css',
+                array('ensemble-components'),
+                ENSEMBLE_VERSION,
+                'all'
+            );
+            
+            wp_register_script(
+                'ensemble-slider',
+                ENSEMBLE_PLUGIN_URL . 'assets/js/ensemble-slider.js',
+                array(),
+                ENSEMBLE_VERSION,
+                true
+            );
+            
+            return; // ES_CSS_Loader handles the rest
+        }
+        
+        // =============================================
+        // LEGACY LOADING (Fallback)
+        // =============================================
+        
         // 1. BASE CSS - Variablen & Utility Classes
         wp_enqueue_style(
             'ensemble-base',
@@ -402,7 +433,7 @@ class ES_Assets {
             'all'
         );
         
-        // 2. Shortcode CSS (Legacy Styles für Backwards Compatibility)
+        // 2. Shortcode CSS (Legacy - alle Styles)
         wp_enqueue_style(
             'ensemble-shortcodes',
             ENSEMBLE_PLUGIN_URL . 'assets/css/shortcodes.css',
@@ -411,7 +442,7 @@ class ES_Assets {
             'all'
         );
         
-        // 2.1 Additional Layout Styles (v2.8.0)
+        // 2.1 Additional Layout Styles
         wp_enqueue_style(
             'ensemble-layouts',
             ENSEMBLE_PLUGIN_URL . 'assets/css/ensemble-layouts.css',
@@ -420,7 +451,7 @@ class ES_Assets {
             'all'
         );
         
-        // 2.2 Slider Styles (v2.8.0) - conditionally enqueued by ES_Slider_Renderer
+        // 2.2 Slider Styles - conditionally enqueued
         wp_register_style(
             'ensemble-slider',
             ENSEMBLE_PLUGIN_URL . 'assets/css/ensemble-slider.css',
@@ -429,7 +460,6 @@ class ES_Assets {
             'all'
         );
         
-        // 2.3 Slider JS (v2.8.0) - conditionally enqueued by ES_Slider_Renderer
         wp_register_script(
             'ensemble-slider',
             ENSEMBLE_PLUGIN_URL . 'assets/js/ensemble-slider.js',
@@ -449,19 +479,9 @@ class ES_Assets {
                 if (file_exists($style_path)) {
                     // Convert path to URL
                     if (defined('ENSEMBLE_PLUGIN_DIR') && strpos($style_path, ENSEMBLE_PLUGIN_DIR) === 0) {
-                        // Plugin path
-                        $style_url = str_replace(
-                            ENSEMBLE_PLUGIN_DIR,
-                            ENSEMBLE_PLUGIN_URL,
-                            $style_path
-                        );
+                        $style_url = str_replace(ENSEMBLE_PLUGIN_DIR, ENSEMBLE_PLUGIN_URL, $style_path);
                     } else {
-                        // Upload/custom path
-                        $style_url = str_replace(
-                            WP_CONTENT_DIR,
-                            WP_CONTENT_URL,
-                            $style_path
-                        );
+                        $style_url = str_replace(WP_CONTENT_DIR, WP_CONTENT_URL, $style_path);
                     }
                     
                     wp_enqueue_style(
@@ -486,14 +506,12 @@ class ES_Assets {
                             $js_url,
                             array(),
                             ENSEMBLE_VERSION,
-                            true // In footer
+                            true
                         );
                     }
                 }
             }
         }
-        
-        // 4. Custom Design CSS via ES_CSS_Generator (wird inline hinzugefügt)
     }
     
     /**

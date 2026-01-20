@@ -14,15 +14,15 @@
    ============================================================ */
 :root {
     /* Core Colors - Fire on Darkness */
-    --kinky-bg: #0a0a0f;
+    --kinky-bg: var(--ensemble-bg, #0a0a0f);
     --kinky-bg-gradient: linear-gradient(180deg, #0a0a0f 0%, #0d0d18 50%, #0a0a0f 100%);
-    --kinky-card-bg: #0f0f14;
-    --kinky-card-border: #1a1a22;
-    --kinky-text: #ffffff;
-    --kinky-text-muted: #ffffff;
-    --kinky-primary: #cc2222;
-    --kinky-secondary: #ff6633;
-    --kinky-hover: #ff4444;
+    --kinky-card-bg: var(--ensemble-card-bg, #0f0f14);
+    --kinky-card-border: var(--ensemble-card-border, #1a1a22);
+    --kinky-text: var(--ensemble-text, #ffffff);
+    --kinky-text-muted: var(--ensemble-text-secondary, #ffffff);
+    --kinky-primary: var(--ensemble-primary, #cc2222);
+    --kinky-secondary: var(--ensemble-secondary, #ff6633);
+    --kinky-hover: var(--ensemble-button-hover-bg, #ff4444);
     
     /* Fire Glow Effects */
     --kinky-glow: 0 0 30px rgba(204, 34, 34, 0.3);
@@ -138,8 +138,8 @@
 
 .es-kinky-date-day {
     font-family: var(--kinky-font-body);
-    font-size: 28px;
-    font-weight: 700;
+    font-size: var(--ensemble-h2-size, 28px);
+    font-weight: var(--ensemble-heading-weight, 700);
     line-height: 1;
     color: var(--kinky-text);
 }
@@ -153,8 +153,8 @@
 
 .es-kinky-date-month {
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--kinky-primary);
@@ -166,8 +166,8 @@
     top: 16px;
     left: 16px;
     font-family: var(--kinky-font-body);
-    font-size: 10px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     padding: 6px 12px;
@@ -177,7 +177,7 @@
 }
 
 .es-kinky-status-soldout {
-    background: #1a1a22;
+    background: var(--kinky-card-border);
     border: 1px solid var(--kinky-text-muted);
     color: var(--kinky-text-muted);
 }
@@ -190,9 +190,9 @@
 }
 
 .es-kinky-status-postponed {
-    background: #332200;
+    background: var(--ensemble-warning-bg, #332200);
     border: none;
-    color: #ffaa33;
+    color: var(--ensemble-warning, #ffaa33);
 }
 
 /* Content Area */
@@ -205,8 +205,8 @@
 .es-kinky-genre {
     display: inline-block;
     font-family: var(--kinky-font-body);
-    font-size: 10px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--kinky-primary);
@@ -216,13 +216,13 @@
 /* Title - Elegant */
 .es-kinky-title {
     font-family: var(--kinky-font-heading);
-    font-size: 22px;
-    font-weight: 400;
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     line-height: 1.3;
     color: var(--kinky-text);
     margin: 0 0 12px;
-    transition: color 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-kinky-card:hover .es-kinky-title {
@@ -236,8 +236,8 @@
     flex-wrap: wrap;
     gap: 8px;
     font-family: var(--kinky-font-body);
-    font-size: 13px;
-    font-weight: 300;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     color: var(--kinky-text-muted);
 }
 
@@ -257,8 +257,8 @@
 .es-kinky-price {
     display: inline-block;
     font-family: var(--kinky-font-body);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     letter-spacing: 0.05em;
     color: var(--kinky-secondary);
     margin-top: 12px;
@@ -306,8 +306,8 @@
 
 .es-kinky-artist-name {
     font-family: var(--kinky-font-heading);
-    font-size: 20px;
-    font-weight: 400;
+    font-size: var(--ensemble-h4-size, 20px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     color: var(--kinky-text);
     margin: 0 0 6px;
@@ -315,8 +315,8 @@
 
 .es-kinky-artist-role {
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -355,8 +355,8 @@
 
 .es-kinky-location-name {
     font-family: var(--kinky-font-heading);
-    font-size: 20px;
-    font-weight: 400;
+    font-size: var(--ensemble-h4-size, 20px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     color: var(--kinky-text);
     margin: 0 0 8px;
@@ -364,8 +364,8 @@
 
 .es-kinky-location-address {
     font-family: var(--kinky-font-body);
-    font-size: 14px;
-    font-weight: 300;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     color: var(--kinky-text-muted);
 }
 
@@ -429,8 +429,8 @@
 
 .es-kinky-hero-date {
     font-family: var(--kinky-font-body);
-    font-size: 13px;
-    font-weight: 700;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--kinky-primary);
@@ -440,7 +440,7 @@
 .es-kinky-hero-title {
     font-family: var(--kinky-font-heading);
     font-size: clamp(36px, 7vw, 64px);
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
     
     line-height: 1.1;
     color: var(--kinky-text);
@@ -450,8 +450,8 @@
 
 .es-kinky-hero-location {
     font-family: var(--kinky-font-body);
-    font-size: 16px;
-    font-weight: 300;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-body-weight, 400);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -465,8 +465,8 @@
     justify-content: center;
     gap: 8px;
     font-family: var(--kinky-font-body);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     text-decoration: none;
@@ -475,7 +475,7 @@
     color: var(--kinky-text);
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-kinky-button:hover {
@@ -510,7 +510,7 @@
 /* Title with italic style */
 .es-homepage-events__title {
     
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
     letter-spacing: 0.02em;
     text-transform: none;
 }
@@ -518,7 +518,7 @@
 /* Date in fire red */
 .es-homepage-events--minimal .es-homepage-events__date {
     color: var(--kinky-primary);
-    font-weight: 700;
+    font-weight: var(--ensemble-heading-weight, 700);
 }
 
 /* Event names with subtle hover glow */
@@ -537,7 +537,7 @@
 
 .es-hero__title {
     
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
     text-shadow: 0 0 60px rgba(204, 34, 34, 0.4);
 }
 
@@ -556,8 +556,8 @@
 /* Subtitle style (like "FREEDOM OF LUST") */
 .es-kinky-subtitle {
     font-family: var(--kinky-font-body);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -566,8 +566,8 @@
 /* Floor/Area labels (like "MAINFLOOR", "BASEMENT") */
 .es-kinky-floor-label {
     font-family: var(--kinky-font-body);
-    font-size: 18px;
-    font-weight: 700;
+    font-size: var(--ensemble-lg-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--kinky-primary);
@@ -576,8 +576,8 @@
 
 .es-kinky-floor-desc {
     font-family: var(--kinky-font-body);
-    font-size: 13px;
-    font-weight: 300;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -590,8 +590,8 @@
     justify-content: center;
     gap: 8px 16px;
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -616,11 +616,11 @@
     }
     
     .es-kinky-date-day {
-        font-size: 24px;
+        font-size: var(--ensemble-h3-size, 24px);
     }
     
     .es-kinky-title {
-        font-size: 18px;
+        font-size: var(--ensemble-lg-size, 18px);
     }
     
     .es-kinky-content {
@@ -702,8 +702,8 @@
 .es-kinky-hero-status {
     display: inline-block;
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.2em;
     text-transform: uppercase;
     padding: 8px 20px;
@@ -715,8 +715,8 @@
 .es-kinky-hero-badge {
     display: inline-block;
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     padding: 6px 16px;
@@ -730,7 +730,7 @@
     display: block;
     font-family: var(--kinky-font-heading);
     font-size: clamp(24px, 4vw, 36px);
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
     
     letter-spacing: 0.05em;
     color: var(--kinky-primary);
@@ -788,8 +788,8 @@
 
 .es-kinky-section-title {
     font-family: var(--kinky-font-heading);
-    font-size: 28px;
-    font-weight: 400;
+    font-size: var(--ensemble-h2-size, 28px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     color: var(--kinky-text);
     margin: 0 0 24px;
@@ -797,8 +797,8 @@
 
 .es-kinky-prose {
     font-family: var(--kinky-font-body);
-    font-size: 16px;
-    font-weight: 300;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-body-weight, 400);
     line-height: 1.8;
     color: var(--kinky-text-muted);
 }
@@ -843,8 +843,8 @@
 
 .es-kinky-info-label {
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -852,21 +852,21 @@
 
 .es-kinky-info-value {
     font-family: var(--kinky-font-heading);
-    font-size: 18px;
-    font-weight: 400;
+    font-size: var(--ensemble-lg-size, 18px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     color: var(--kinky-text);
 }
 
 .es-kinky-info-price {
-    font-size: 24px;
+    font-size: var(--ensemble-h3-size, 24px);
     color: var(--kinky-secondary);
 }
 
 .es-kinky-info-link {
     color: var(--kinky-text);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-kinky-info-link:hover {
@@ -875,15 +875,15 @@
 
 .es-kinky-info-sub {
     font-family: var(--kinky-font-body);
-    font-size: 14px;
-    font-weight: 300;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     color: var(--kinky-text-muted);
 }
 
 .es-kinky-info-hint {
     font-family: var(--kinky-font-body);
-    font-size: 13px;
-    font-weight: 300;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     color: var(--kinky-text-muted);
     opacity: 0.7;
@@ -894,8 +894,8 @@
     display: block;
     width: 100%;
     font-family: var(--kinky-font-body);
-    font-size: 12px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     text-align: center;
@@ -905,7 +905,7 @@
     color: var(--kinky-text);
     border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     margin-top: 20px;
 }
 
@@ -937,7 +937,7 @@
 .es-kinky-ticket-price {
     display: block;
     font-family: var(--kinky-font-heading);
-    font-size: 28px;
+    font-size: var(--ensemble-h2-size, 28px);
     
     color: var(--kinky-secondary);
     margin-bottom: 8px;
@@ -945,7 +945,7 @@
 
 .es-kinky-ticket-note {
     display: block;
-    font-size: 13px;
+    font-size: var(--ensemble-small-size, 14px);
     color: var(--kinky-text-muted);
     margin-bottom: 16px;
 }
@@ -961,7 +961,7 @@
     background: var(--kinky-card-bg);
     border: 1px solid var(--kinky-card-border);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-kinky-artist-card:hover {
@@ -993,8 +993,8 @@
 .es-kinky-artist-card .es-kinky-artist-name {
     display: block;
     font-family: var(--kinky-font-heading);
-    font-size: 15px;
-    font-weight: 500;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-body-weight, 400);
     letter-spacing: 0.02em;
     text-transform: uppercase;
     color: var(--kinky-text);
@@ -1009,8 +1009,8 @@
 .es-kinky-artist-card .es-kinky-artist-role {
     display: block;
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--kinky-text-muted);
@@ -1019,7 +1019,7 @@
 .es-kinky-artist-card .es-kinky-artist-time {
     display: block;
     font-family: var(--kinky-font-body);
-    font-size: 12px;
+    font-size: var(--ensemble-xs-size, 12px);
     color: var(--kinky-primary);
     margin-top: 4px;
 }
@@ -1027,7 +1027,7 @@
 .es-kinky-artist-card .es-kinky-artist-references {
     display: block;
     font-family: var(--kinky-font-body);
-    font-size: 11px;
+    font-size: var(--ensemble-xs-size, 12px);
     color: var(--kinky-text-muted);
     margin-top: 2px;
 }
@@ -1035,8 +1035,8 @@
 .es-kinky-artist-card .es-kinky-artist-genre {
     display: block;
     font-family: var(--kinky-font-body);
-    font-size: 10px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--kinky-secondary);
@@ -1064,8 +1064,8 @@
 
 .es-kinky-venue-title {
     font-family: var(--kinky-font-heading);
-    font-size: 20px;
-    font-weight: 400;
+    font-size: var(--ensemble-h4-size, 20px);
+    font-weight: var(--ensemble-body-weight, 400);
     
     color: var(--kinky-secondary);
     margin: 0;
@@ -1087,8 +1087,8 @@
 
 .es-kinky-genre-tag {
     font-family: var(--kinky-font-body);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 6px 14px;
@@ -1103,7 +1103,7 @@
     background: rgba(204, 34, 34, 0.08);
     border-left: 3px solid var(--kinky-primary);
     font-family: var(--kinky-font-body);
-    font-size: 14px;
+    font-size: var(--ensemble-small-size, 14px);
     line-height: 1.7;
     color: var(--kinky-text-muted);
 }
@@ -1155,7 +1155,7 @@
     }
     
     .es-kinky-hero-date {
-        font-size: 20px;
+        font-size: var(--ensemble-h4-size, 20px);
         line-height: 1;
     }
     
@@ -1176,7 +1176,7 @@
     }
     
     .es-kinky-section-title {
-        font-size: 24px;
+        font-size: var(--ensemble-h3-size, 24px);
     }
     
     .es-kinky-artists-grid {
@@ -1198,11 +1198,11 @@
     }
     
     .es-kinky-artist-card .es-kinky-artist-name {
-        font-size: 12px;
+        font-size: var(--ensemble-xs-size, 12px);
     }
     
     .es-kinky-artist-card .es-kinky-artist-time {
-        font-size: 10px;
+        font-size: var(--ensemble-xs-size, 12px);
     }
     
     .es-kinky-artist-card .es-kinky-artist-info {

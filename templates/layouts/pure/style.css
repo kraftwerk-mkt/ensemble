@@ -592,8 +592,27 @@ body.es-mode-dark {
 .es-layout-pure .ensemble-artists-list,
 .es-layout-pure .ensemble-locations-list {
     display: grid;
-    grid-template-columns: repeat(var(--grid-columns, 3), 1fr);
+    grid-template-columns: repeat(var(--pure-grid-columns, 3), 1fr);
     gap: var(--pure-card-gap);
+}
+
+/* Respect shortcode columns attribute */
+.es-layout-pure .ensemble-events-grid.ensemble-columns-2,
+.es-layout-pure .ensemble-artists-list.ensemble-columns-2,
+.es-layout-pure .ensemble-locations-list.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.es-layout-pure .ensemble-events-grid.ensemble-columns-3,
+.es-layout-pure .ensemble-artists-list.ensemble-columns-3,
+.es-layout-pure .ensemble-locations-list.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.es-layout-pure .ensemble-events-grid.ensemble-columns-4,
+.es-layout-pure .ensemble-artists-list.ensemble-columns-4,
+.es-layout-pure .ensemble-locations-list.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
 }
 
 @media (max-width: 1024px) {
@@ -681,26 +700,26 @@ body.es-mode-dark {
     display: inline-flex;
     align-items: center;
     padding: 6px 14px;
-    font-size: 12px;
+    font-size: var(--ensemble-xs-size, 12px);
     font-weight: var(--pure-weight-medium);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     background: var(--pure-accent);
     color: var(--pure-bg);
     white-space: nowrap;
 }
 
 .es-pure-event-badge.es-badge-highlight {
-    background: #e74c3c;
+    background: var(--ensemble-error, #e74c3c);
 }
 
 .es-pure-event-badge.es-badge-new {
-    background: #27ae60;
+    background: var(--ensemble-success, #27ae60);
 }
 
 .es-pure-event-badge.es-badge-special {
-    background: #9b59b6;
+    background: var(--ensemble-accent, #9b59b6);
 }
 
 /* External Link Button */
@@ -871,13 +890,13 @@ body.es-mode-dark {
 .es-pure-genre-tag {
     display: inline-block;
     padding: 4px 12px;
-    font-size: 12px;
+    font-size: var(--ensemble-xs-size, 12px);
     font-weight: var(--pure-weight-medium);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     background: var(--pure-border);
     color: var(--pure-text);
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
 }
 
 .es-pure-venue-group {
@@ -914,13 +933,13 @@ body.es-mode-dark {
 .es-pure-venue-genre {
     display: inline-block;
     padding: 3px 10px;
-    font-size: 11px;
+    font-size: var(--ensemble-xs-size, 12px);
     font-weight: var(--pure-weight-medium);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     background: var(--pure-primary);
     color: var(--pure-bg);
-    border-radius: 3px;
+    border-radius: var(--ensemble-badge-radius, 4px);
 }
 
 
@@ -1233,7 +1252,7 @@ body.es-mode-dark {
     font-size: clamp(2rem, 5vw, var(--pure-h1));
     font-weight: var(--pure-weight-medium);
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-layout-pure .es-hero-slide__meta {
@@ -1252,13 +1271,13 @@ body.es-mode-dark {
 
 .es-layout-pure .es-hero-slide__btn--primary {
     background: transparent;
-    color: #ffffff;
-    border: 1px solid #ffffff;
+    color: var(--ensemble-button-text, #ffffff);
+    border: 1px solid var(--ensemble-button-text, #ffffff);
 }
 
 .es-layout-pure .es-hero-slide__btn--primary:hover {
-    background: #ffffff;
-    color: #111111;
+    background: var(--ensemble-card-bg, #ffffff);
+    color: var(--ensemble-text, #111111);
 }
 
 .es-layout-pure .es-hero-slide__btn--secondary {
@@ -1270,15 +1289,15 @@ body.es-mode-dark {
 /* Slider Arrows */
 .es-layout-pure .es-hero-slider .es-slider__arrow {
     background: transparent;
-    color: #ffffff;
+    color: var(--ensemble-button-text, #ffffff);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 0;
 }
 
 .es-layout-pure .es-hero-slider .es-slider__arrow:hover {
-    background: #ffffff;
-    color: #111111;
-    border-color: #ffffff;
+    background: var(--ensemble-card-bg, #ffffff);
+    color: var(--ensemble-text, #111111);
+    border-color: var(--ensemble-button-text, #ffffff);
 }
 
 /* Slider Dots */
@@ -1294,7 +1313,7 @@ body.es-mode-dark {
 }
 
 .es-layout-pure .es-hero-slider .es-slider__dot--active {
-    background: #ffffff;
+    background: var(--ensemble-card-bg, #ffffff);
 }
 
 @media (max-width: 768px) {

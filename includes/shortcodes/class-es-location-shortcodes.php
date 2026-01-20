@@ -1,58 +1,83 @@
 <?php
 /**
- * Ensemble Location Shortcodes
- *
- * Handles all location-related shortcodes including location lists, grids,
- * and single location displays.
- *
+ * Location Shortcodes Class
+ * 
+ * Handles all location-related shortcodes with full display options.
+ * Uses Layout-Set templates when available.
+ * 
  * @package Ensemble
- * @subpackage Shortcodes
- * @since 3.0.0
+ * @version 2.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (!defined('ABSPATH')) {
+    exit;
 }
 
-/**
- * Location Shortcodes class.
- *
- * @since 3.0.0
- */
-class ES_Location_Shortcodes extends ES_Shortcode_Base {
-
-	/**
-	 * Register location-related shortcodes.
-	 *
-	 * @return void
-	 */
-	public function register_shortcodes() {
-		add_shortcode( 'ensemble_locations', array( $this, 'locations_list_shortcode' ) );
-		add_shortcode( 'ensemble_location', array( $this, 'single_location_shortcode' ) );
-	}
-
+class ES_Location_Shortcodes {
+    
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        // Shortcodes werden über register_shortcodes() registriert
+        // wenn von ES_Shortcodes aufgerufen
+        
+        // Ensure Slider Renderer is initialized for slider layout
+        if (class_exists('ES_Slider_Renderer')) {
+            ES_Slider_Renderer::init();
+        }
+    }
+    
+    /**
+     * Register shortcodes
+     * Called by ES_Shortcodes main class
+     */
+    public function register_shortcodes() {
+        add_shortcode('ensemble_locations', array($this, 'locations_list_shortcode'));
+        add_shortcode('ensemble_location', array($this, 'single_location_shortcode'));
+    }
+    
+    /**
+     * Locations List Shortcode
+     * 
+     * @param array $atts Shortcode attributes
+     * @return string HTML output
+     */
     public function locations_list_shortcode($atts) {
-        // Parse attributes
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('locations');
+        }
+        
+        // Parse attributes with ALL display options
         $atts = shortcode_atts(array(
-            'layout' => 'grid',           // grid, list, slider, cards
-            'columns' => '3',             // 2, 3, 4 (nur für grid)
-            'limit' => '12',              // Anzahl Locations
-            'orderby' => 'title',         // title, date, menu_order
-            'order' => 'ASC',             // ASC, DESC
-            'type' => '',                 // Location Type slug
-            'show_image' => 'true',       // Bild anzeigen
-            'show_address' => 'true',     // Adresse anzeigen
-            'show_description' => 'true', // Description anzeigen
-            'show_events' => 'false',     // Kommende Events anzeigen
-            'show_link' => 'true',        // Link zur Location
-            'link_text' => 'View Location', // Link Text
+            // Layout
+            'layout'           => 'grid',
+            'columns'          => '3',
+            'limit'            => '12',
+            'orderby'          => 'title',
+            'order'            => 'ASC',
+            'type'             => '',
+            
+            // Display Options - ALL from Location Manager
+            'show_image'       => 'true',
+            'show_name'        => 'true',
+            'show_type'        => 'true',
+            'show_address'     => 'true',
+            'show_capacity'    => 'false',
+            'show_events'      => 'false',
+            'show_description' => 'false',
+            'show_social'      => 'false',
+            'show_link'        => 'true',
+            'link_text'        => __('View Location', 'ensemble'),
+            
             // Slider options
-            'autoplay' => 'false',
-            'autoplay_speed' => '5000',
-            'loop' => 'false',
-            'dots' => 'true',
-            'arrows' => 'true',
-            'gap' => '24',
+            'autoplay'         => 'false',
+            'autoplay_speed'   => '5000',
+            'loop'             => 'false',
+            'dots'             => 'true',
+            'arrows'           => 'true',
+            'gap'              => '24',
         ), $atts, 'ensemble_locations');
         
         // Sanitize
@@ -62,12 +87,6 @@ class ES_Location_Shortcodes extends ES_Shortcode_Base {
         $orderby = sanitize_key($atts['orderby']);
         $order = strtoupper($atts['order']) === 'DESC' ? 'DESC' : 'ASC';
         $type = sanitize_text_field($atts['type']);
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        $link_text = sanitize_text_field($atts['link_text']);
         
         // Slider options
         $autoplay = filter_var($atts['autoplay'], FILTER_VALIDATE_BOOLEAN);
@@ -85,20 +104,20 @@ class ES_Location_Shortcodes extends ES_Shortcode_Base {
         
         // Query args
         $args = array(
-            'post_type' => 'ensemble_location',
+            'post_type'      => 'ensemble_location',
             'posts_per_page' => $limit,
-            'orderby' => $orderby,
-            'order' => $order,
-            'post_status' => 'publish',
+            'orderby'        => $orderby,
+            'order'          => $order,
+            'post_status'    => 'publish',
         );
         
         // Type filter
         if ($type) {
             $args['tax_query'] = array(
                 array(
-                    'taxonomy' => 'location_type',
-                    'field' => 'slug',
-                    'terms' => $type,
+                    'taxonomy' => 'ensemble_location_type',
+                    'field'    => 'slug',
+                    'terms'    => explode(',', $type),
                 ),
             );
         }
@@ -118,15 +137,40 @@ class ES_Location_Shortcodes extends ES_Shortcode_Base {
         // ========================================
         if ($is_slider_layout && class_exists('ES_Slider_Renderer')):
             
+            // Ensure slider assets are loaded
+            // If we're past wp_head, enqueue for footer
+            $plugin_url = defined('ENSEMBLE_PLUGIN_URL') ? ENSEMBLE_PLUGIN_URL : plugins_url('/', dirname(__FILE__));
+            $version = defined('ENSEMBLE_VERSION') ? ENSEMBLE_VERSION : '2.9.0';
+            
+            // Register if not yet registered
+            if (!wp_style_is('ensemble-slider', 'registered')) {
+                wp_register_style('ensemble-slider', $plugin_url . 'assets/css/ensemble-slider.css', array(), $version);
+                wp_register_script('ensemble-slider', $plugin_url . 'assets/js/ensemble-slider.js', array(), $version, true);
+            }
+            
+            // Enqueue - if wp_head already done, these will go to footer
+            wp_enqueue_style('ensemble-slider');
+            wp_enqueue_script('ensemble-slider');
+            
+            // Fallback: If styles weren't loaded in head, add them inline
+            if (did_action('wp_head') && !wp_style_is('ensemble-slider', 'done')) {
+                add_action('wp_footer', function() use ($plugin_url, $version) {
+                    if (!wp_style_is('ensemble-slider', 'done')) {
+                        echo '<link rel="stylesheet" href="' . esc_url($plugin_url . 'assets/css/ensemble-slider.css?ver=' . $version) . '" />';
+                        echo '<script src="' . esc_url($plugin_url . 'assets/js/ensemble-slider.js?ver=' . $version) . '"></script>';
+                    }
+                }, 5);
+            }
+            
             $slider_options = array(
-                'slides_to_show' => $columns,
+                'slides_to_show'   => $columns,
                 'slides_to_scroll' => 1,
-                'autoplay' => $autoplay,
-                'autoplay_speed' => $autoplay_speed,
-                'loop' => $loop,
-                'dots' => $show_dots,
-                'arrows' => $show_arrows,
-                'gap' => $gap,
+                'autoplay'         => $autoplay,
+                'autoplay_speed'   => $autoplay_speed,
+                'loop'             => $loop,
+                'dots'             => $show_dots,
+                'arrows'           => $show_arrows,
+                'gap'              => $gap,
             );
             
             echo ES_Slider_Renderer::render_wrapper_start('slider', $slider_options, 'locations');
@@ -137,27 +181,74 @@ class ES_Location_Shortcodes extends ES_Shortcode_Base {
                 $location_id = get_the_ID();
                 
                 echo ES_Slider_Renderer::render_slide_start($slide_index);
-                
-                if ($layout === 'cards') {
-                    $this->render_location_card_item($location_id, $atts);
-                } else {
-                    $this->render_location_grid_item($location_id, $atts);
-                }
-                
+                $this->render_location_grid_item($location_id, $atts);
                 echo ES_Slider_Renderer::render_slide_end();
+                
                 $slide_index++;
             }
             
             echo ES_Slider_Renderer::render_wrapper_end();
+        
+        // ========================================
+        // SLIDER FALLBACK (CSS-only horizontal scroll)
+        // ========================================
+        elseif ($is_slider_layout):
+            
+            $slider_id = 'ensemble-location-slider-' . uniqid();
+            ?>
+            <div id="<?php echo esc_attr($slider_id); ?>" class="ensemble-locations-slider-fallback" style="position: relative;">
+                <div class="ensemble-slider-track" style="display: flex; gap: <?php echo esc_attr($gap); ?>px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; padding-bottom: 10px;">
+                    <?php
+                    while ($locations_query->have_posts()) {
+                        $locations_query->the_post();
+                        $location_id = get_the_ID();
+                        ?>
+                        <div class="ensemble-slider-slide" style="flex: 0 0 calc(<?php echo (100 / $columns); ?>% - <?php echo ($gap * ($columns - 1) / $columns); ?>px); scroll-snap-align: start; min-width: 280px;">
+                            <?php $this->render_location_grid_item($location_id, $atts); ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+                <?php if ($show_arrows): ?>
+                <button class="ensemble-slider-prev" onclick="document.querySelector('#<?php echo esc_js($slider_id); ?> .ensemble-slider-track').scrollBy({left: -300, behavior: 'smooth'})" style="position: absolute; left: -20px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--ensemble-card-bg, #fff); border: 1px solid var(--ensemble-card-border, #e0e0e0); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="ensemble-slider-next" onclick="document.querySelector('#<?php echo esc_js($slider_id); ?> .ensemble-slider-track').scrollBy({left: 300, behavior: 'smooth'})" style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; background: var(--ensemble-card-bg, #fff); border: 1px solid var(--ensemble-card-border, #e0e0e0); box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+                <?php endif; ?>
+            </div>
+            <style>
+                .ensemble-locations-slider-fallback .ensemble-slider-track::-webkit-scrollbar { height: 6px; }
+                .ensemble-locations-slider-fallback .ensemble-slider-track::-webkit-scrollbar-track { background: var(--ensemble-surface, #f0f0f0); border-radius: 3px; }
+                .ensemble-locations-slider-fallback .ensemble-slider-track::-webkit-scrollbar-thumb { background: var(--ensemble-primary, #333); border-radius: 3px; }
+                @media (max-width: 768px) {
+                    .ensemble-locations-slider-fallback .ensemble-slider-prev,
+                    .ensemble-locations-slider-fallback .ensemble-slider-next { display: none !important; }
+                }
+            </style>
+            <?php
             
         else:
         // ========================================
         // STANDARD GRID / LIST / CARDS LAYOUT
         // ========================================
         
-        $container_class = 'ensemble-locations-list ensemble-layout-' . $layout;
-        if (in_array($layout, array('grid', 'cards'))) {
-            $container_class .= ' ensemble-columns-' . $columns;
+        // Check if using Kongress layout set for correct CSS class
+        $active_set = '';
+        if (class_exists('ES_Layout_Sets')) {
+            $active_set = ES_Layout_Sets::get_active_set();
+        }
+        
+        // Use Kongress-specific grid class if that layout is active
+        if ($active_set === 'kongress' && $layout === 'grid') {
+            $container_class = 'es-kongress-locations-grid';
+        } else {
+            $container_class = 'ensemble-locations-list ensemble-layout-' . $layout;
+            if (in_array($layout, array('grid', 'cards'))) {
+                $container_class .= ' ensemble-columns-' . $columns;
+            }
         }
         
         echo '<div class="' . esc_attr($container_class) . '">';
@@ -186,716 +277,281 @@ class ES_Location_Shortcodes extends ES_Shortcode_Base {
     
     /**
      * Render Location Grid Item
+     * Uses template from Layout-Set if available
      */
     private function render_location_grid_item($location_id, $atts) {
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        $link_text = sanitize_text_field($atts['link_text']);
-        
-        $location_post = get_post($location_id);
-        
-        // Get address (try ACF first, then meta)
-        $address = '';
-        if (function_exists('get_field')) {
-            $address = get_field('location_address', $location_id);
-        }
-        if (empty($address)) {
-            $address = get_post_meta($location_id, 'location_address', true);
-        }
-        
-        // Get city (try ACF first, then meta)
-        $city = '';
-        if (function_exists('get_field')) {
-            $city = get_field('location_city', $location_id);
-        }
-        if (empty($city)) {
-            $city = get_post_meta($location_id, 'location_city', true);
-        }
-        
-        $type_terms = get_the_terms($location_id, 'location_type');
-        
-        // Get external link (try ACF first, then meta)
-        $external_url = '';
-        if (function_exists('get_field')) {
-            $external_url = get_field('location_website', $location_id);
-        }
-        if (empty($external_url)) {
-            $external_url = get_post_meta($location_id, 'location_website', true);
-        }
-        $location_permalink = !empty($external_url) ? $external_url : get_permalink($location_id);
-        $link_target = !empty($external_url) ? '_blank' : '_self';
-        
         // Try to load template from active Layout-Set
         if (class_exists('ES_Layout_Sets') && class_exists('ES_Template_Loader')) {
             $active_set = ES_Layout_Sets::get_active_set();
             $template_path = ES_Template_Loader::locate_template('location-card.php', $active_set);
             
             if ($template_path && file_exists($template_path)) {
-                // Prepare location data for template
-                $location = array(
-                    'id' => $location_id,
-                    'name' => $location_post->post_title,
-                    'title' => $location_post->post_title,
-                    'permalink' => $location_permalink,
-                    'link_target' => $link_target,
-                    'image' => get_the_post_thumbnail_url($location_id, 'large'),
-                    'featured_image' => get_the_post_thumbnail_url($location_id, 'large'),
-                    'address' => $address,
-                    'city' => $city,
-                    'type' => ($type_terms && !is_wp_error($type_terms)) ? $type_terms[0]->name : '',
-                    'excerpt' => $location_post->post_excerpt,
-                );
-                
                 $shortcode_atts = $atts;
                 include $template_path;
                 return;
             }
         }
         
-        // Fallback: Default template
-        ?>
-        <div class="ensemble-location-card">
-            
-            <?php if ($show_image): ?>
-            <div class="ensemble-location-image">
-                <?php if (has_post_thumbnail($location_id)): ?>
-                    <a href="<?php echo get_permalink($location_id); ?>">
-                        <?php echo get_the_post_thumbnail($location_id, 'medium'); ?>
-                    </a>
-                <?php else: ?>
-                    <div class="ensemble-location-placeholder">
-                        <span class="dashicons dashicons-location"></span>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <?php endif; ?>
-            
-            <div class="ensemble-location-content">
-                
-                <h3 class="ensemble-location-title">
-                    <a href="<?php echo get_permalink($location_id); ?>">
-                        <?php echo esc_html($location_post->post_title); ?>
-                    </a>
-                </h3>
-                
-                <?php if ($type_terms && !is_wp_error($type_terms)): ?>
-                <div class="ensemble-location-type">
-                    <?php echo esc_html($type_terms[0]->name); ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_address && ($address || $city)): ?>
-                <div class="ensemble-location-address">
-                    <span class="dashicons dashicons-location-alt"></span>
-                    <?php if ($address): ?>
-                        <span><?php echo esc_html($address); ?></span>
-                    <?php endif; ?>
-                    <?php if ($city): ?>
-                        <span><?php echo esc_html($city); ?></span>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_description && $location_post->post_excerpt): ?>
-                <div class="ensemble-location-description">
-                    <?php echo wpautop(wp_trim_words($location_post->post_excerpt, 20)); ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_events): ?>
-                    <?php $this->render_location_upcoming_events($location_id); ?>
-                <?php endif; ?>
-                
-                <?php if ($show_link): ?>
-                <div class="ensemble-location-actions">
-                    <a href="<?php echo get_permalink($location_id); ?>" 
-                       class="ensemble-btn ensemble-btn-secondary">
-                        <?php echo esc_html($link_text); ?>
-                    </a>
-                </div>
-                <?php endif; ?>
-                
-            </div>
-            
-        </div>
-        <?php
+        // Fallback: Default template with Designer variables
+        $this->render_location_fallback($location_id, $atts);
     }
     
     /**
      * Render Location List Item
      */
     private function render_location_list_item($location_id, $atts) {
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        $link_text = sanitize_text_field($atts['link_text']);
+        // Parse display options
+        $show_image       = !isset($atts['show_image']) || filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
+        $show_name        = !isset($atts['show_name']) || filter_var($atts['show_name'], FILTER_VALIDATE_BOOLEAN);
+        $show_type        = !isset($atts['show_type']) || filter_var($atts['show_type'], FILTER_VALIDATE_BOOLEAN);
+        $show_address     = !isset($atts['show_address']) || filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
+        $show_capacity    = isset($atts['show_capacity']) && filter_var($atts['show_capacity'], FILTER_VALIDATE_BOOLEAN);
+        $show_events      = isset($atts['show_events']) && filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
+        $show_description = isset($atts['show_description']) && filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
+        $show_link        = !isset($atts['show_link']) || filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
+        $link_text        = isset($atts['link_text']) ? $atts['link_text'] : __('View Location', 'ensemble');
         
-        $location = get_post($location_id);
-        $address = get_post_meta($location_id, 'es_location_address', true);
-        $city = get_post_meta($location_id, 'es_location_city', true);
-        $type_terms = get_the_terms($location_id, 'location_type');
+        $location_post = get_post($location_id);
+        $permalink = get_permalink($location_id);
+        
+        // Get address & city
+        $address = get_post_meta($location_id, 'location_address', true);
+        $city = get_post_meta($location_id, 'location_city', true);
+        $capacity = get_post_meta($location_id, 'location_capacity', true);
+        
+        // Location types
+        $type_text = '';
+        $location_types = get_the_terms($location_id, 'ensemble_location_type');
+        if ($location_types && !is_wp_error($location_types)) {
+            $type_text = $location_types[0]->name;
+        }
+        
+        // Event count
+        $events_count = 0;
+        if (function_exists('ensemble_get_location_event_count')) {
+            $events_count = ensemble_get_location_event_count($location_id, true);
+        }
         ?>
-        <div class="ensemble-location-list-item">
-            
-            <?php if ($show_image): ?>
-            <div class="ensemble-location-thumb">
-                <?php if (has_post_thumbnail($location_id)): ?>
-                    <a href="<?php echo get_permalink($location_id); ?>">
-                        <?php echo get_the_post_thumbnail($location_id, 'thumbnail'); ?>
-                    </a>
-                <?php else: ?>
-                    <div class="ensemble-location-placeholder-small">
-                        <span class="dashicons dashicons-location"></span>
-                    </div>
-                <?php endif; ?>
+        <div class="ensemble-location-list-item" style="display: flex; gap: 20px; padding: 20px; background: var(--ensemble-card-bg); border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border); border-radius: var(--ensemble-card-radius, 8px); margin-bottom: 16px;">
+            <?php if ($show_image && has_post_thumbnail($location_id)): ?>
+            <div class="ensemble-location-list-image" style="flex-shrink: 0; width: 120px; height: 120px; border-radius: var(--ensemble-card-radius, 8px); overflow: hidden;">
+                <img src="<?php echo get_the_post_thumbnail_url($location_id, 'medium'); ?>" alt="<?php echo esc_attr($location_post->post_title); ?>" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
             <?php endif; ?>
             
-            <div class="ensemble-location-list-content">
-                
-                <div class="ensemble-location-header">
-                    <h4 class="ensemble-location-title">
-                        <a href="<?php echo get_permalink($location_id); ?>">
-                            <?php echo esc_html($location->post_title); ?>
-                        </a>
-                    </h4>
-                    
-                    <?php if ($type_terms && !is_wp_error($type_terms)): ?>
-                    <span class="ensemble-location-type"><?php echo esc_html($type_terms[0]->name); ?></span>
-                    <?php endif; ?>
-                </div>
-                
-                <?php if ($show_address && ($address || $city)): ?>
-                <div class="ensemble-location-address-compact">
-                    <span class="dashicons dashicons-location-alt"></span>
-                    <?php 
-                    $addr_parts = array_filter(array($address, $city));
-                    echo esc_html(implode(', ', $addr_parts));
-                    ?>
+            <div class="ensemble-location-list-content" style="flex: 1; min-width: 0;">
+                <?php if ($show_type && $type_text): ?>
+                <div style="font-size: var(--ensemble-xs-size, 11px); color: var(--ensemble-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 4px;">
+                    <?php echo esc_html($type_text); ?>
                 </div>
                 <?php endif; ?>
                 
-                <?php if ($show_description && $location->post_excerpt): ?>
-                <div class="ensemble-location-description">
-                    <?php echo wpautop(wp_trim_words($location->post_excerpt, 30)); ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_events): ?>
-                    <?php $this->render_location_upcoming_events($location_id); ?>
-                <?php endif; ?>
-                
-            </div>
-            
-            <?php if ($show_link): ?>
-            <div class="ensemble-location-list-action">
-                <a href="<?php echo get_permalink($location_id); ?>" 
-                   class="ensemble-btn ensemble-btn-secondary">
-                    <?php echo esc_html($link_text); ?>
-                </a>
-            </div>
-            <?php endif; ?>
-            
-        </div>
-        <?php
-    }
-    
-    /**
-     * Render Location Card Item (larger cards with more details)
-     */
-    private function render_location_card_item($location_id, $atts) {
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        $link_text = sanitize_text_field($atts['link_text']);
-        
-        $location = get_post($location_id);
-        $address = get_post_meta($location_id, 'es_location_address', true);
-        $city = get_post_meta($location_id, 'es_location_city', true);
-        $type_terms = get_the_terms($location_id, 'location_type');
-        $capacity = get_post_meta($location_id, 'es_location_capacity', true);
-        ?>
-        <div class="ensemble-location-card ensemble-location-card--large">
-            <?php if ($show_image): ?>
-            <div class="ensemble-location-image-large">
-                <?php if (has_post_thumbnail($location_id)): ?>
-                    <a href="<?php echo get_permalink($location_id); ?>">
-                        <?php echo get_the_post_thumbnail($location_id, 'large'); ?>
-                    </a>
-                    <?php if ($type_terms && !is_wp_error($type_terms)): ?>
-                    <span class="ensemble-location-type-badge"><?php echo esc_html($type_terms[0]->name); ?></span>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <div class="ensemble-location-placeholder-large">
-                        <span class="dashicons dashicons-location"></span>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <?php endif; ?>
-            
-            <div class="ensemble-location-card-content">
-                <h3 class="ensemble-location-title">
-                    <a href="<?php echo get_permalink($location_id); ?>"><?php echo esc_html($location->post_title); ?></a>
-                </h3>
-                
-                <?php if ($show_address && ($address || $city)): ?>
-                <div class="ensemble-location-address">
-                    <span class="dashicons dashicons-location-alt"></span>
-                    <span><?php echo esc_html(implode(', ', array_filter(array($address, $city)))); ?></span>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($capacity): ?>
-                <div class="ensemble-location-capacity">
-                    <span class="dashicons dashicons-groups"></span>
-                    <span><?php printf(__('Capacity: %s', 'ensemble'), esc_html($capacity)); ?></span>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_description && $location->post_excerpt): ?>
-                <div class="ensemble-location-description"><?php echo wp_trim_words($location->post_excerpt, 20, '...'); ?></div>
-                <?php endif; ?>
-                
-                <?php if ($show_link): ?>
-                <a href="<?php echo get_permalink($location_id); ?>" class="ensemble-btn ensemble-btn-primary">
-                    <?php echo esc_html($link_text); ?>
-                </a>
-                <?php endif; ?>
-            </div>
-        </div>
-        <?php
-    }
-    
-    /**
-        // Query upcoming events for this location
-        $args = array(
-            'post_type' => ensemble_get_post_type(),
-            'posts_per_page' => 3,
-            'post_status' => 'publish',
-            'meta_query' => array(
-                array(
-                    'key' => 'es_event_location',
-                    'value' => $location_id,
-                    'compare' => '=',
-                ),
-                array(
-                    'key' => 'es_event_start_date',
-                    'value' => date('Y-m-d'),
-                    'compare' => '>=',
-                    'type' => 'DATE',
-                ),
-            ),
-            'meta_key' => 'es_event_start_date',
-            'orderby' => 'meta_value',
-            'order' => 'ASC',
-        );
-        
-        $events_query = new WP_Query($args);
-        
-        if (!$events_query->have_posts()) {
-            return;
-        }
-        
-        echo '<div class="ensemble-location-events">';
-        echo '<h5>' . __('Upcoming Events', 'ensemble') . '</h5>';
-        echo '<ul class="ensemble-events-mini-list">';
-        
-        while ($events_query->have_posts()) {
-            $events_query->the_post();
-            $event_id = get_the_ID();
-            $start_date = $this->get_event_meta($event_id, 'start_date');
-            
-            echo '<li>';
-            echo '<a href="' . get_permalink($event_id) . '">';
-            echo '<span class="ensemble-event-date">' . date_i18n('M j', strtotime($start_date)) . '</span>';
-            echo '<span class="ensemble-event-name">' . get_the_title() . '</span>';
-            echo '</a>';
-            echo '</li>';
-        }
-        
-        echo '</ul>';
-        echo '</div>';
-        
-        wp_reset_postdata();
-    }
-    
-    // =========================================
-    // GALLERY SHORTCODE
-    // =========================================
-    
-    /**
-     * Gallery Shortcode
-     * 
-     * Displays a gallery with images
-     * 
-     * Usage: 
-     * [ensemble_gallery id="123"]
-     * [ensemble_gallery id="123" columns="4" layout="masonry"]
-     * [ensemble_gallery event="456"]
-     * [ensemble_gallery artist="789"]
-     * 
-     * @param array $atts Shortcode attributes
-     * @return string HTML output
-     */
-    public function single_location_shortcode($atts) {
-        // Parse attributes
-        $atts = shortcode_atts(array(
-            'id' => 0,                      // Location Post ID (required)
-            'layout' => 'card',             // card, compact, full
-            'show_image' => 'true',         // Show featured image
-            'show_address' => 'true',       // Show address
-            'show_description' => 'true',   // Show description
-            'show_events' => 'true',        // Show upcoming events
-            'show_link' => 'true',          // Show "View Location" link
-            'link_text' => 'View Location', // Link button text
-            'template' => '',               // Template name
-        ), $atts, 'ensemble_location');
-        
-        // Sanitize
-        $location_id = absint($atts['id']);
-        $layout = sanitize_key($atts['layout']);
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        $link_text = sanitize_text_field($atts['link_text']);
-        $template = $this->get_effective_template($atts['template']);
-        
-        // Apply template if specified
-        $this->apply_shortcode_template($template);
-        
-        // Validate location ID
-        if (!$location_id) {
-            return '<div class="ensemble-error">Location ID is required</div>';
-        }
-        
-        // Get location post
-        $location = get_post($location_id);
-        
-        if (!$location || $location->post_type !== 'ensemble_location') {
-            return '<div class="ensemble-error">Location not found</div>';
-        }
-        
-        // Get location meta
-        $location_data = array(
-            'address' => get_post_meta($location_id, 'es_location_address', true),
-            'city' => get_post_meta($location_id, 'es_location_city', true),
-            'zip' => get_post_meta($location_id, 'es_location_zip', true),
-            'country' => get_post_meta($location_id, 'es_location_country', true),
-            'phone' => get_post_meta($location_id, 'es_location_phone', true),
-            'email' => get_post_meta($location_id, 'es_location_email', true),
-            'website' => get_post_meta($location_id, 'es_location_website', true),
-        );
-        
-        // Build HTML based on layout
-        ob_start();
-        
-        switch ($layout) {
-            case 'compact':
-                $this->render_single_location_compact($location, $location_data, $atts);
-                break;
-                
-            case 'full':
-                $this->render_single_location_full($location, $location_data, $atts);
-                break;
-                
-            case 'card':
-            default:
-                $this->render_single_location_card($location, $location_data, $atts);
-                break;
-        }
-        
-        return ob_get_clean();
-    }
-    
-    /**
-     * Render Single Location Card Layout
-     */
-    private function render_single_location_card($location_post, $data, $atts) {
-        // Try to load template from active Layout-Set
-        if (class_exists('ES_Layout_Sets') && class_exists('ES_Template_Loader')) {
-            $active_set = ES_Layout_Sets::get_active_set();
-            $template_path = ES_Template_Loader::locate_template('location-card.php', $active_set);
-            
-            if ($template_path && file_exists($template_path)) {
-                // Convert shortcode data to template format
-                $location = array(
-                    'id' => $location_post->ID,
-                    'title' => $location_post->post_title,
-                    'permalink' => get_permalink($location_post->ID),
-                    'featured_image' => get_the_post_thumbnail_url($location_post->ID, 'large'),
-                    'address' => $data['address'] ?? '',
-                    'city' => $data['city'] ?? '',
-                    'zip' => $data['zip'] ?? '',
-                    'country' => $data['country'] ?? '',
-                    'phone' => $data['phone'] ?? '',
-                    'website' => $data['website'] ?? '',
-                    'capacity' => $data['capacity'] ?? '',
-                    'excerpt' => $location_post->post_excerpt,
-                    'event_count' => 0, // TODO: Calculate if needed
-                );
-                
-                // Also pass shortcode attributes for template flexibility
-                $shortcode_atts = $atts;
-                
-                // Load the template
-                include $template_path;
-                return;
-            }
-        }
-        
-        // Fallback: Hardcoded layout (old system)
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        
-        $type_terms = get_the_terms($location_post->ID, 'location_type');
-        ?>
-        <div class="ensemble-single-location ensemble-layout-card">
-            
-            <?php if ($show_image): ?>
-            <div class="ensemble-location-image">
-                <?php if (has_post_thumbnail($location_post->ID)): ?>
-                    <?php echo get_the_post_thumbnail($location_post->ID, 'large'); ?>
-                <?php else: ?>
-                    <div class="ensemble-location-placeholder">
-                        <span class="dashicons dashicons-location"></span>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <?php endif; ?>
-            
-            <div class="ensemble-location-content">
-                
-                <h3 class="ensemble-location-title">
+                <?php if ($show_name): ?>
+                <h3 style="font-family: var(--ensemble-font-heading); font-size: var(--ensemble-lg-size, 18px); font-weight: var(--ensemble-heading-weight, 700); margin: 0 0 8px 0; color: var(--ensemble-text);">
                     <?php echo esc_html($location_post->post_title); ?>
                 </h3>
+                <?php endif; ?>
                 
-                <?php if ($type_terms && !is_wp_error($type_terms)): ?>
-                <div class="ensemble-location-type">
-                    <?php echo esc_html($type_terms[0]->name); ?>
+                <?php if ($show_address && ($address || $city)): ?>
+                <div style="display: flex; align-items: center; gap: 6px; font-size: var(--ensemble-small-size, 14px); color: var(--ensemble-text-secondary); margin-bottom: 8px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 14px; height: 14px; flex-shrink: 0;">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span><?php echo esc_html(trim($address . ($address && $city ? ', ' : '') . $city)); ?></span>
                 </div>
                 <?php endif; ?>
                 
-                <?php if ($show_address && ($data['address'] || $data['city'])): ?>
-                <div class="ensemble-location-info">
-                    <div class="ensemble-info-item">
-                        <span class="dashicons dashicons-location-alt"></span>
-                        <div>
-                            <?php if ($data['address']): ?>
-                                <div><?php echo esc_html($data['address']); ?></div>
-                            <?php endif; ?>
-                            <?php if ($data['city'] || $data['zip']): ?>
-                                <div>
-                                    <?php echo esc_html($data['zip'] . ' ' . $data['city']); ?>
-                                </div>
-                            <?php endif; ?>
-                            <?php if ($data['country']): ?>
-                                <div><?php echo esc_html($data['country']); ?></div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    
-                    <?php if ($data['phone']): ?>
-                    <div class="ensemble-info-item">
-                        <span class="dashicons dashicons-phone"></span>
-                        <a href="tel:<?php echo esc_attr($data['phone']); ?>">
-                            <?php echo esc_html($data['phone']); ?>
-                        </a>
-                    </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+                    <?php if ($show_capacity && $capacity): ?>
+                    <span style="font-size: var(--ensemble-small-size, 14px); color: var(--ensemble-text-secondary);">
+                        <?php printf(__('Capacity: %s', 'ensemble'), esc_html($capacity)); ?>
+                    </span>
                     <?php endif; ?>
                     
-                    <?php if ($data['website']): ?>
-                    <div class="ensemble-info-item">
-                        <span class="dashicons dashicons-admin-site"></span>
-                        <a href="<?php echo esc_url($data['website']); ?>" target="_blank" rel="noopener">
-                            <?php _e('Visit Website', 'ensemble'); ?>
-                        </a>
-                    </div>
+                    <?php if ($show_events && $events_count > 0): ?>
+                    <span style="font-size: var(--ensemble-small-size, 14px); color: var(--ensemble-text-secondary);">
+                        <?php printf(_n('%d Event', '%d Events', $events_count, 'ensemble'), $events_count); ?>
+                    </span>
                     <?php endif; ?>
                 </div>
-                <?php endif; ?>
                 
                 <?php if ($show_description && $location_post->post_excerpt): ?>
-                <div class="ensemble-location-description">
-                    <?php echo wpautop($location_post->post_excerpt); ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_events): ?>
-                    <?php $this->render_location_upcoming_events($location->ID); ?>
-                <?php endif; ?>
-                
-                <?php if ($show_link): ?>
-                <div class="ensemble-location-actions">
-                    <a href="<?php echo get_permalink($location->ID); ?>" 
-                       class="ensemble-btn ensemble-btn-primary">
-                        <?php echo esc_html($atts['link_text']); ?>
-                    </a>
-                </div>
-                <?php endif; ?>
-                
-            </div>
-            
-        </div>
-        <?php
-    }
-    
-    /**
-     * Render Single Location Compact Layout
-     */
-    private function render_single_location_compact($location, $data, $atts) {
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
-        ?>
-        <div class="ensemble-single-location ensemble-layout-compact">
-            
-            <div class="ensemble-compact-header">
-                <h4 class="ensemble-location-title">
-                    <?php echo esc_html($location->post_title); ?>
-                </h4>
-                
-                <?php if ($show_address && ($data['address'] || $data['city'])): ?>
-                <div class="ensemble-compact-address">
-                    <span class="dashicons dashicons-location-alt"></span>
-                    <?php 
-                    $addr_parts = array_filter(array($data['address'], $data['city']));
-                    echo esc_html(implode(', ', $addr_parts));
-                    ?>
+                <div style="font-size: var(--ensemble-small-size, 14px); color: var(--ensemble-text-secondary); margin-top: 8px;">
+                    <?php echo esc_html(wp_trim_words($location_post->post_excerpt, 20)); ?>
                 </div>
                 <?php endif; ?>
             </div>
             
             <?php if ($show_link): ?>
-            <a href="<?php echo get_permalink($location->ID); ?>" class="ensemble-compact-link">
-                <?php echo esc_html($atts['link_text']); ?> →
-            </a>
+            <div style="flex-shrink: 0; display: flex; align-items: center;">
+                <a href="<?php echo esc_url($permalink); ?>" style="display: inline-block; padding: var(--ensemble-button-padding-v, 10px) var(--ensemble-button-padding-h, 20px); background: var(--ensemble-button-bg); color: var(--ensemble-button-text); font-size: var(--ensemble-button-font-size, 14px); font-weight: var(--ensemble-button-weight, 600); border-radius: var(--ensemble-button-radius, 4px); text-decoration: none; transition: all 0.3s ease;">
+                    <?php echo esc_html($link_text); ?>
+                </a>
+            </div>
             <?php endif; ?>
-            
         </div>
         <?php
     }
     
     /**
-     * Render Single Location Full Layout
+     * Render Location Card Item (Large)
      */
-    private function render_single_location_full($location, $data, $atts) {
-        $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
-        $show_address = filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
-        $show_description = filter_var($atts['show_description'], FILTER_VALIDATE_BOOLEAN);
-        $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
+    private function render_location_card_item($location_id, $atts) {
+        $show_image = !isset($atts['show_image']) || filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
+        $show_link = !isset($atts['show_link']) || filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
+        $link_text = isset($atts['link_text']) ? $atts['link_text'] : __('View Location', 'ensemble');
         
-        $type_terms = get_the_terms($location->ID, 'location_type');
+        $location_post = get_post($location_id);
+        $permalink = get_permalink($location_id);
+        $address = get_post_meta($location_id, 'location_address', true);
+        $city = get_post_meta($location_id, 'location_city', true);
         ?>
-        <div class="ensemble-single-location ensemble-layout-full">
-            
-            <?php if ($show_image && has_post_thumbnail($location->ID)): ?>
-            <div class="ensemble-location-header-image">
-                <?php echo get_the_post_thumbnail($location->ID, 'full'); ?>
+        <div class="ensemble-location-card ensemble-location-card--large" style="background: var(--ensemble-card-bg); border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border); border-radius: var(--ensemble-card-radius, 8px); overflow: hidden; box-shadow: var(--ensemble-card-shadow); transition: all 0.3s ease;">
+            <?php if ($show_image): ?>
+            <div class="ensemble-location-portrait" style="aspect-ratio: 16/9; overflow: hidden;">
+                <?php if (has_post_thumbnail($location_id)): ?>
+                    <a href="<?php echo esc_url($permalink); ?>">
+                        <img src="<?php echo get_the_post_thumbnail_url($location_id, 'large'); ?>" alt="<?php echo esc_attr($location_post->post_title); ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                    </a>
+                <?php else: ?>
+                    <div style="width: 100%; height: 100%; background: var(--ensemble-placeholder-bg, #f0f0f0); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ensemble-placeholder-icon, #999)" stroke-width="1" style="width: 64px; height: 64px;">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
             
-            <div class="ensemble-location-full-content">
+            <div class="ensemble-location-info" style="padding: var(--ensemble-card-padding, 20px);">
+                <h3 style="font-family: var(--ensemble-font-heading); font-size: var(--ensemble-lg-size, 18px); font-weight: var(--ensemble-heading-weight, 700); margin: 0 0 8px 0;">
+                    <a href="<?php echo esc_url($permalink); ?>" style="color: var(--ensemble-text); text-decoration: none;">
+                        <?php echo esc_html($location_post->post_title); ?>
+                    </a>
+                </h3>
                 
-                <h2 class="ensemble-location-title">
-                    <?php echo esc_html($location->post_title); ?>
-                </h2>
-                
-                <?php if ($type_terms && !is_wp_error($type_terms)): ?>
-                <div class="ensemble-location-type-large">
-                    <?php echo esc_html($type_terms[0]->name); ?>
+                <?php if ($address || $city): ?>
+                <div style="font-size: var(--ensemble-small-size, 14px); color: var(--ensemble-text-secondary); margin-bottom: 16px;">
+                    <?php echo esc_html(trim($address . ($address && $city ? ', ' : '') . $city)); ?>
                 </div>
                 <?php endif; ?>
                 
-                <?php if ($show_address): ?>
-                <div class="ensemble-location-info-grid">
-                    
-                    <?php if ($data['address'] || $data['city']): ?>
-                    <div class="ensemble-info-box">
-                        <div class="ensemble-info-icon">
-                            <span class="dashicons dashicons-location-alt"></span>
-                        </div>
-                        <div class="ensemble-info-content">
-                            <label><?php _e('Address', 'ensemble'); ?></label>
-                            <div>
-                                <?php if ($data['address']): ?>
-                                    <div><?php echo esc_html($data['address']); ?></div>
-                                <?php endif; ?>
-                                <?php if ($data['zip'] || $data['city']): ?>
-                                    <div><?php echo esc_html(trim($data['zip'] . ' ' . $data['city'])); ?></div>
-                                <?php endif; ?>
-                                <?php if ($data['country']): ?>
-                                    <div><?php echo esc_html($data['country']); ?></div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($data['phone']): ?>
-                    <div class="ensemble-info-box">
-                        <div class="ensemble-info-icon">
-                            <span class="dashicons dashicons-phone"></span>
-                        </div>
-                        <div class="ensemble-info-content">
-                            <label><?php _e('Phone', 'ensemble'); ?></label>
-                            <strong><a href="tel:<?php echo esc_attr($data['phone']); ?>"><?php echo esc_html($data['phone']); ?></a></strong>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($data['email']): ?>
-                    <div class="ensemble-info-box">
-                        <div class="ensemble-info-icon">
-                            <span class="dashicons dashicons-email"></span>
-                        </div>
-                        <div class="ensemble-info-content">
-                            <label><?php _e('Email', 'ensemble'); ?></label>
-                            <strong><a href="mailto:<?php echo esc_attr($data['email']); ?>"><?php echo esc_html($data['email']); ?></a></strong>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                    <?php if ($data['website']): ?>
-                    <div class="ensemble-info-box">
-                        <div class="ensemble-info-icon">
-                            <span class="dashicons dashicons-admin-site"></span>
-                        </div>
-                        <div class="ensemble-info-content">
-                            <label><?php _e('Website', 'ensemble'); ?></label>
-                            <strong><a href="<?php echo esc_url($data['website']); ?>" target="_blank" rel="noopener"><?php _e('Visit Website', 'ensemble'); ?></a></strong>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                    
-                </div>
+                <?php if ($show_link): ?>
+                <a href="<?php echo esc_url($permalink); ?>" style="display: inline-block; padding: var(--ensemble-button-padding-v, 10px) var(--ensemble-button-padding-h, 20px); background: var(--ensemble-button-bg); color: var(--ensemble-button-text); font-size: var(--ensemble-button-font-size, 14px); font-weight: var(--ensemble-button-weight, 600); border-radius: var(--ensemble-button-radius, 4px); text-decoration: none;">
+                    <?php echo esc_html($link_text); ?>
+                </a>
                 <?php endif; ?>
-                
-                <?php if ($show_description): ?>
-                <div class="ensemble-location-description-full">
-                    <?php echo wpautop($location->post_content); ?>
-                </div>
-                <?php endif; ?>
-                
-                <?php if ($show_events): ?>
-                <div class="ensemble-location-events-full">
-                    <?php $this->render_location_upcoming_events($location->ID); ?>
-                </div>
-                <?php endif; ?>
-                
             </div>
-            
         </div>
         <?php
     }
     
+    /**
+     * Fallback Render for Grid Item
+     */
+    private function render_location_fallback($location_id, $atts) {
+        $show_image       = !isset($atts['show_image']) || filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
+        $show_name        = !isset($atts['show_name']) || filter_var($atts['show_name'], FILTER_VALIDATE_BOOLEAN);
+        $show_type        = !isset($atts['show_type']) || filter_var($atts['show_type'], FILTER_VALIDATE_BOOLEAN);
+        $show_address     = !isset($atts['show_address']) || filter_var($atts['show_address'], FILTER_VALIDATE_BOOLEAN);
+        $show_link        = !isset($atts['show_link']) || filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
+        
+        $location_post = get_post($location_id);
+        $permalink = get_permalink($location_id);
+        $address = get_post_meta($location_id, 'location_address', true);
+        $city = get_post_meta($location_id, 'location_city', true);
+        
+        $type_text = '';
+        $location_types = get_the_terms($location_id, 'ensemble_location_type');
+        if ($location_types && !is_wp_error($location_types)) {
+            $type_text = $location_types[0]->name;
+        }
+        ?>
+        <div class="ensemble-location-card" style="background: var(--ensemble-card-bg); border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border); border-radius: var(--ensemble-card-radius, 8px); overflow: hidden; box-shadow: var(--ensemble-card-shadow); transition: all 0.3s ease;">
+            <?php if ($show_image): ?>
+            <div style="height: 180px; overflow: hidden;">
+                <?php if (has_post_thumbnail($location_id)): ?>
+                    <?php if ($show_link): ?><a href="<?php echo esc_url($permalink); ?>"><?php endif; ?>
+                        <img src="<?php echo get_the_post_thumbnail_url($location_id, 'medium'); ?>" alt="<?php echo esc_attr($location_post->post_title); ?>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php if ($show_link): ?></a><?php endif; ?>
+                <?php else: ?>
+                    <div style="width: 100%; height: 100%; background: var(--ensemble-placeholder-bg, #f0f0f0); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ensemble-placeholder-icon, #999)" stroke-width="1" style="width: 48px; height: 48px;">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+            
+            <div style="padding: var(--ensemble-card-padding, 16px);">
+                <?php if ($show_type && $type_text): ?>
+                <div style="font-size: var(--ensemble-xs-size, 11px); color: var(--ensemble-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">
+                    <?php echo esc_html($type_text); ?>
+                </div>
+                <?php endif; ?>
+                
+                <?php if ($show_name): ?>
+                <h3 style="font-family: var(--ensemble-font-heading); font-size: var(--ensemble-lg-size, 18px); font-weight: var(--ensemble-heading-weight, 700); margin: 0 0 12px 0;">
+                    <?php if ($show_link): ?><a href="<?php echo esc_url($permalink); ?>" style="color: var(--ensemble-text); text-decoration: none;"><?php endif; ?>
+                        <?php echo esc_html($location_post->post_title); ?>
+                    <?php if ($show_link): ?></a><?php endif; ?>
+                </h3>
+                <?php endif; ?>
+                
+                <?php if ($show_address && ($address || $city)): ?>
+                <div style="display: flex; align-items: flex-start; gap: 8px; font-size: var(--ensemble-small-size, 14px); color: var(--ensemble-text-secondary); line-height: 1.4;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; color: var(--ensemble-primary);">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span><?php echo esc_html(trim($address . ($address && $city ? ', ' : '') . $city)); ?></span>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+    
+    /**
+     * Single Location Shortcode
+     */
+    public function single_location_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('locations');
+        }
+        
+        $atts = shortcode_atts(array(
+            'id' => 0,
+        ), $atts, 'ensemble_location');
+        
+        $location_id = absint($atts['id']);
+        
+        if (!$location_id) {
+            return '<div class="ensemble-error">' . __('Please specify a location ID.', 'ensemble') . '</div>';
+        }
+        
+        $location = get_post($location_id);
+        if (!$location || $location->post_type !== 'ensemble_location') {
+            return '<div class="ensemble-error">' . __('Location not found.', 'ensemble') . '</div>';
+        }
+        
+        ob_start();
+        $this->render_location_grid_item($location_id, array(
+            'show_image'       => 'true',
+            'show_name'        => 'true',
+            'show_type'        => 'true',
+            'show_address'     => 'true',
+            'show_capacity'    => 'true',
+            'show_events'      => 'true',
+            'show_description' => 'true',
+            'show_social'      => 'true',
+            'show_link'        => 'true',
+        ));
+        return ob_get_clean();
+    }
 }

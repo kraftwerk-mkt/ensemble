@@ -8,6 +8,20 @@
  * @package Ensemble
  * @subpackage Addons/Staff
  * @since 2.7.0
+ * @version 1.2.0
+ * 
+ * Changes in 1.2.0:
+ * - Complete Abstract Management System with database storage
+ * - Admin dashboard for viewing/managing submissions
+ * - Status tracking: Submitted, In Review, Accepted, Rejected, Revision Requested
+ * - Email notifications: Staff, Submitter confirmation, Admin CC
+ * - Status change notifications to submitters
+ * 
+ * Changes in 1.1.0:
+ * - Added show_image, show_responsibility, show_excerpt attributes to shortcode
+ * - Fixed CSS variables to use Designer system fallback chain
+ * - Templates now respect all show_* attributes correctly
+ * - Added class attribute for custom CSS classes
  */
 
 if (!defined('ABSPATH')) {
@@ -32,7 +46,7 @@ class ES_Staff_Addon extends ES_Addon_Base {
      * Add-on version
      * @var string
      */
-    protected $version = '1.0.0';
+    protected $version = '1.2.0';
     
     /**
      * Staff Manager instance
@@ -41,13 +55,36 @@ class ES_Staff_Addon extends ES_Addon_Base {
     private $staff_manager;
     
     /**
+     * Abstract Manager instance
+     * @var ES_Abstract_Manager
+     */
+    private $abstract_manager;
+    
+    /**
+     * Abstract Email Handler instance
+     * @var ES_Abstract_Emails
+     */
+    private $email_handler;
+    
+    /**
      * Initialize add-on
      */
     protected function init() {
         // Load dependencies
         require_once $this->get_addon_path() . 'includes/class-staff-manager.php';
+        require_once $this->get_addon_path() . 'includes/class-abstract-manager.php';
+        require_once $this->get_addon_path() . 'includes/class-abstract-emails.php';
         
         $this->staff_manager = new ES_Staff_Manager();
+        $this->abstract_manager = new ES_Abstract_Manager();
+        
+        // Initialize email handler with settings
+        $settings = $this->get_settings();
+        $this->email_handler = new ES_Abstract_Emails(array(
+            'send_confirmation'  => isset($settings['send_confirmation']) ? $settings['send_confirmation'] : true,
+            'send_admin_copy'    => isset($settings['send_admin_copy']) ? $settings['send_admin_copy'] : true,
+            'admin_email'        => isset($settings['admin_email']) ? $settings['admin_email'] : get_option('admin_email'),
+        ));
     }
     
     /**
@@ -55,12 +92,20 @@ class ES_Staff_Addon extends ES_Addon_Base {
      */
     protected function register_hooks() {
         // Post type and taxonomy registration
-        add_action('init', array($this, 'register_post_type'), 5);
-        add_action('init', array($this, 'register_taxonomies'), 5);
+        // Check if init already fired (addon loaded late)
+        if (did_action('init')) {
+            $this->register_post_type();
+            $this->register_taxonomies();
+        } else {
+            add_action('init', array($this, 'register_post_type'), 5);
+            add_action('init', array($this, 'register_taxonomies'), 5);
+        }
         
         // Admin
         add_action('admin_menu', array($this, 'add_admin_menu'), 25);
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
+        add_action('admin_init', array($this, 'handle_flush_rewrite'));
+        add_action('admin_notices', array($this, 'maybe_show_flush_notice'));
         
         // Frontend
         add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
@@ -74,10 +119,16 @@ class ES_Staff_Addon extends ES_Addon_Base {
         add_action('wp_ajax_es_search_staff', array($this, 'ajax_search_staff'));
         add_action('wp_ajax_es_bulk_assign_staff_department', array($this, 'ajax_bulk_assign_department'));
         add_action('wp_ajax_es_bulk_remove_staff_department', array($this, 'ajax_bulk_remove_department'));
+        add_action('wp_ajax_es_copy_staff', array($this, 'ajax_copy_staff'));
         
         // Abstract upload AJAX (public)
         add_action('wp_ajax_es_submit_abstract', array($this, 'ajax_submit_abstract'));
         add_action('wp_ajax_nopriv_es_submit_abstract', array($this, 'ajax_submit_abstract'));
+        
+        // Abstract management AJAX (admin)
+        add_action('wp_ajax_es_get_abstract', array($this, 'ajax_get_abstract'));
+        add_action('wp_ajax_es_delete_abstract', array($this, 'ajax_delete_abstract'));
+        add_action('wp_ajax_es_update_abstract_status', array($this, 'ajax_update_abstract_status'));
         
         // Shortcodes
         add_shortcode('ensemble_staff', array($this, 'shortcode_staff'));
@@ -113,6 +164,9 @@ class ES_Staff_Addon extends ES_Addon_Base {
         $singular = $this->get_staff_label(false);
         $plural = $this->get_staff_label(true);
         
+        // Use fixed slug to avoid rewrite issues when labels change
+        $rewrite_slug = apply_filters('ensemble_staff_rewrite_slug', 'staff');
+        
         register_post_type('ensemble_staff', array(
             'labels' => array(
                 'name'               => $plural,
@@ -126,15 +180,100 @@ class ES_Staff_Addon extends ES_Addon_Base {
                 'not_found'          => sprintf(__('No %s found', 'ensemble'), strtolower($plural)),
                 'not_found_in_trash' => sprintf(__('No %s found in trash', 'ensemble'), strtolower($plural)),
             ),
-            'public'             => true,
-            'has_archive'        => true,
-            'show_in_menu'       => false,
-            'show_ui'            => true,
-            'show_in_rest'       => true,
-            'supports'           => array('title', 'editor', 'thumbnail', 'custom-fields'),
-            'rewrite'            => array('slug' => sanitize_title($plural)),
-            'menu_icon'          => 'dashicons-businessperson',
+            'public'              => true,
+            'publicly_queryable'  => true,  // Explicitly set
+            'show_ui'             => true,
+            'show_in_menu'        => false,
+            'show_in_rest'        => true,
+            'has_archive'         => true,
+            'supports'            => array('title', 'editor', 'thumbnail', 'custom-fields'),
+            'rewrite'             => array(
+                'slug'       => $rewrite_slug,
+                'with_front' => false,
+            ),
+            'menu_icon'           => 'dashicons-businessperson',
+            'capability_type'     => 'post',
+            'map_meta_cap'        => true,
         ));
+    }
+    
+    /**
+     * Activation hook - flush rewrite rules
+     * Call this when addon is activated
+     */
+    public function on_activation() {
+        $this->register_post_type();
+        $this->register_taxonomies();
+        flush_rewrite_rules();
+    }
+    
+    /**
+     * Handle manual flush rewrite rules
+     */
+    public function handle_flush_rewrite() {
+        if (!isset($_GET['es_flush_staff_rewrite']) || !current_user_can('manage_options')) {
+            return;
+        }
+        
+        if (!wp_verify_nonce($_GET['_wpnonce'], 'es_flush_staff_rewrite')) {
+            return;
+        }
+        
+        flush_rewrite_rules();
+        
+        // Redirect back without the flush parameter
+        wp_redirect(remove_query_arg(array('es_flush_staff_rewrite', '_wpnonce')));
+        exit;
+    }
+    
+    /**
+     * Show admin notice if permalinks might need flushing
+     */
+    public function maybe_show_flush_notice() {
+        // Only show on staff admin page
+        $screen = get_current_screen();
+        if (!$screen || strpos($screen->id, 'ensemble-staff') === false) {
+            return;
+        }
+        
+        // Check if we just flushed
+        if (isset($_GET['es_flushed'])) {
+            echo '<div class="notice notice-success is-dismissible"><p>';
+            _e('Permalinks have been refreshed.', 'ensemble');
+            echo '</p></div>';
+            return;
+        }
+        
+        // Check if staff posts exist but rewrite rules might be stale
+        $staff_count = wp_count_posts('ensemble_staff');
+        if (empty($staff_count->publish)) {
+            return;
+        }
+        
+        // Get a sample staff post and check if permalink works
+        $sample = get_posts(array(
+            'post_type' => 'ensemble_staff',
+            'posts_per_page' => 1,
+            'post_status' => 'publish',
+        ));
+        
+        if (!empty($sample)) {
+            $permalink = get_permalink($sample[0]->ID);
+            // If permalink still uses ?p= format, suggest flush
+            if (strpos($permalink, '?p=') !== false || strpos($permalink, '&p=') !== false) {
+                $flush_url = wp_nonce_url(
+                    add_query_arg('es_flush_staff_rewrite', '1'),
+                    'es_flush_staff_rewrite'
+                );
+                
+                echo '<div class="notice notice-warning"><p>';
+                printf(
+                    __('Staff permalinks are not working correctly. <a href="%s">Click here to fix</a> or go to Settings → Permalinks and save.', 'ensemble'),
+                    esc_url($flush_url)
+                );
+                echo '</p></div>';
+            }
+        }
     }
     
     /**
@@ -194,6 +333,15 @@ class ES_Staff_Addon extends ES_Addon_Base {
     }
     
     /**
+     * Get addon URL
+     * 
+     * @return string
+     */
+    public function get_addon_url() {
+        return plugin_dir_url(__FILE__);
+    }
+    
+    /**
      * Add admin menu
      */
     public function add_admin_menu() {
@@ -208,6 +356,50 @@ class ES_Staff_Addon extends ES_Addon_Base {
             'ensemble-staff',
             array($this, 'render_admin_page')
         );
+        
+        // Add Abstracts submenu
+        add_submenu_page(
+            'ensemble',
+            __('Abstracts', 'ensemble'),
+            __('Abstracts', 'ensemble'),
+            'manage_options',
+            'ensemble-abstracts',
+            array($this, 'render_abstracts_page')
+        );
+    }
+    
+    /**
+     * Render abstracts management page
+     */
+    public function render_abstracts_page() {
+        $current_status = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : '';
+        $current_staff = isset($_GET['staff']) ? absint($_GET['staff']) : 0;
+        
+        $query_args = array(
+            'posts_per_page' => 50,
+        );
+        
+        if ($current_status) {
+            $query_args['status'] = $current_status;
+        }
+        
+        if ($current_staff) {
+            $query_args['staff_id'] = $current_staff;
+        }
+        
+        $abstracts = $this->abstract_manager->get_abstracts($query_args);
+        $counts = $this->abstract_manager->get_counts($current_staff);
+        $staff_list = $this->staff_manager->get_all_staff();
+        
+        $abstract_manager = $this->abstract_manager;
+        
+        // Wrap in standard admin container
+        echo '<div class="wrap es-admin-wrap">';
+        echo '<h1>' . esc_html__('Abstract Submissions', 'ensemble') . '</h1>';
+        
+        include $this->get_addon_path() . 'templates/abstracts-page.php';
+        
+        echo '</div>';
     }
     
     /**
@@ -596,6 +788,95 @@ class ES_Staff_Addon extends ES_Addon_Base {
     }
     
     /**
+     * AJAX: Copy staff member
+     * 
+     * @since 1.3.0
+     */
+    public function ajax_copy_staff() {
+        check_ajax_referer('ensemble_staff_nonce', 'nonce');
+        
+        if (!current_user_can('edit_posts')) {
+            wp_send_json_error(array('message' => __('Permission denied', 'ensemble')));
+            return;
+        }
+        
+        $staff_id = isset($_POST['staff_id']) ? intval($_POST['staff_id']) : 0;
+        
+        if (!$staff_id) {
+            wp_send_json_error(array('message' => __('Invalid staff ID', 'ensemble')));
+            return;
+        }
+        
+        // Get original staff post
+        $original_post = get_post($staff_id);
+        if (!$original_post || $original_post->post_type !== 'ensemble_staff') {
+            wp_send_json_error(array('message' => __('Staff not found', 'ensemble')));
+            return;
+        }
+        
+        // Create new post with copied data
+        $new_post_data = array(
+            'post_title'   => $original_post->post_title . ' (' . __('Copy', 'ensemble') . ')',
+            'post_content' => $original_post->post_content,
+            'post_type'    => 'ensemble_staff',
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+        );
+        
+        $new_staff_id = wp_insert_post($new_post_data);
+        
+        if (is_wp_error($new_staff_id)) {
+            wp_send_json_error(array('message' => __('Failed to create copy', 'ensemble')));
+            return;
+        }
+        
+        // Copy featured image
+        $thumbnail_id = get_post_thumbnail_id($staff_id);
+        if ($thumbnail_id) {
+            set_post_thumbnail($new_staff_id, $thumbnail_id);
+        }
+        
+        // Copy taxonomies (departments, etc.)
+        $taxonomies = get_object_taxonomies($original_post->post_type);
+        foreach ($taxonomies as $taxonomy) {
+            $terms = wp_get_object_terms($staff_id, $taxonomy, array('fields' => 'ids'));
+            if (!is_wp_error($terms) && !empty($terms)) {
+                wp_set_object_terms($new_staff_id, $terms, $taxonomy);
+            }
+        }
+        
+        // Copy ALL post meta fields
+        global $wpdb;
+        $meta_data = $wpdb->get_results($wpdb->prepare(
+            "SELECT meta_key, meta_value FROM {$wpdb->postmeta} WHERE post_id = %d",
+            $staff_id
+        ));
+        
+        foreach ($meta_data as $meta) {
+            // Skip WordPress internal meta fields
+            if (in_array($meta->meta_key, array('_edit_lock', '_edit_last', '_wp_old_slug'))) {
+                continue;
+            }
+            add_post_meta($new_staff_id, $meta->meta_key, maybe_unserialize($meta->meta_value));
+        }
+        
+        // If ACF is active, ensure proper field copying
+        if (function_exists('get_fields')) {
+            $fields = get_fields($staff_id);
+            if ($fields) {
+                foreach ($fields as $field_name => $field_value) {
+                    update_field($field_name, $field_value, $new_staff_id);
+                }
+            }
+        }
+        
+        wp_send_json_success(array(
+            'message'  => sprintf(__('%s copied successfully!', 'ensemble'), $this->get_staff_label(false)),
+            'staff_id' => $new_staff_id
+        ));
+    }
+    
+    /**
      * AJAX: Submit abstract
      */
     public function ajax_submit_abstract() {
@@ -624,8 +905,10 @@ class ES_Staff_Addon extends ES_Addon_Base {
         }
         
         // Handle file upload
+        $attachment_id = 0;
         $attachment_url = '';
-        if (!empty($_FILES['abstract_file'])) {
+        
+        if (!empty($_FILES['abstract_file']) && $_FILES['abstract_file']['size'] > 0) {
             $allowed_types = $staff['abstract_types'];
             $max_size = $staff['abstract_max_size'] * 1024 * 1024; // Convert to bytes
             
@@ -669,47 +952,140 @@ class ES_Staff_Addon extends ES_Addon_Base {
             }
             
             $attachment_url = $upload['url'];
+            
+            // Create attachment in media library
+            $attachment_data = array(
+                'post_mime_type' => $upload['type'],
+                'post_title'     => sanitize_file_name($file['name']),
+                'post_content'   => '',
+                'post_status'    => 'inherit'
+            );
+            
+            $attachment_id = wp_insert_attachment($attachment_data, $upload['file']);
         }
         
-        // Send email notification
-        $to = $staff['email'];
-        $subject = sprintf(__('[Abstract Submission] %s', 'ensemble'), $title);
+        // Save to database
+        $submission_data = array(
+            'staff_id'       => $staff_id,
+            'name'           => $name,
+            'email'          => $email,
+            'title'          => $title,
+            'message'        => $message,
+            'attachment_id'  => $attachment_id,
+            'attachment_url' => $attachment_url,
+        );
         
-        $body = sprintf(__("New abstract submission received:\n\n", 'ensemble'));
-        $body .= sprintf(__("Name: %s\n", 'ensemble'), $name);
-        $body .= sprintf(__("Email: %s\n", 'ensemble'), $email);
-        $body .= sprintf(__("Title: %s\n\n", 'ensemble'), $title);
+        $abstract_id = $this->abstract_manager->create_submission($submission_data);
         
-        if (!empty($message)) {
-            $body .= sprintf(__("Message:\n%s\n\n", 'ensemble'), $message);
+        if (is_wp_error($abstract_id)) {
+            wp_send_json_error(array('message' => $abstract_id->get_error_message()));
         }
         
-        if (!empty($attachment_url)) {
-            $body .= sprintf(__("Attachment: %s\n", 'ensemble'), $attachment_url);
-        }
-        
-        $headers = array('Content-Type: text/plain; charset=UTF-8');
-        $headers[] = sprintf('Reply-To: %s <%s>', $name, $email);
-        
-        $sent = wp_mail($to, $subject, $body, $headers);
-        
-        if (!$sent) {
-            wp_send_json_error(array('message' => __('Failed to send submission. Please try again.', 'ensemble')));
-        }
+        // Send email notifications
+        $this->email_handler->send_staff_notification($submission_data, $staff);
+        $this->email_handler->send_confirmation_email($submission_data, $staff);
+        $this->email_handler->send_admin_copy($submission_data, $staff);
         
         // Fire action for extensions
         do_action('ensemble_abstract_submitted', array(
-            'staff_id'   => $staff_id,
-            'name'       => $name,
-            'email'      => $email,
-            'title'      => $title,
-            'message'    => $message,
-            'attachment' => $attachment_url,
+            'abstract_id' => $abstract_id,
+            'staff_id'    => $staff_id,
+            'name'        => $name,
+            'email'       => $email,
+            'title'       => $title,
+            'message'     => $message,
+            'attachment'  => $attachment_url,
         ));
         
         wp_send_json_success(array(
-            'message' => __('Thank you! Your submission has been received.', 'ensemble'),
+            'message' => __('Thank you! Your submission has been received. You will receive a confirmation email shortly.', 'ensemble'),
         ));
+    }
+    
+    /**
+     * AJAX: Get abstract details
+     */
+    public function ajax_get_abstract() {
+        check_ajax_referer('es_abstract_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => __('Permission denied', 'ensemble')));
+        }
+        
+        $abstract_id = isset($_POST['abstract_id']) ? absint($_POST['abstract_id']) : 0;
+        
+        if (!$abstract_id) {
+            wp_send_json_error(array('message' => __('Invalid abstract ID', 'ensemble')));
+        }
+        
+        $abstract = $this->abstract_manager->get_abstract($abstract_id);
+        
+        if (!$abstract) {
+            wp_send_json_error(array('message' => __('Abstract not found', 'ensemble')));
+        }
+        
+        wp_send_json_success($abstract);
+    }
+    
+    /**
+     * AJAX: Delete abstract
+     */
+    public function ajax_delete_abstract() {
+        check_ajax_referer('es_abstract_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => __('Permission denied', 'ensemble')));
+        }
+        
+        $abstract_id = isset($_POST['abstract_id']) ? absint($_POST['abstract_id']) : 0;
+        
+        if (!$abstract_id) {
+            wp_send_json_error(array('message' => __('Invalid abstract ID', 'ensemble')));
+        }
+        
+        $result = $this->abstract_manager->delete_abstract($abstract_id);
+        
+        if ($result) {
+            wp_send_json_success(array('message' => __('Submission deleted', 'ensemble')));
+        } else {
+            wp_send_json_error(array('message' => __('Failed to delete submission', 'ensemble')));
+        }
+    }
+    
+    /**
+     * AJAX: Update abstract status
+     */
+    public function ajax_update_abstract_status() {
+        check_ajax_referer('es_abstract_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => __('Permission denied', 'ensemble')));
+        }
+        
+        $abstract_id = isset($_POST['abstract_id']) ? absint($_POST['abstract_id']) : 0;
+        $status = isset($_POST['status']) ? sanitize_text_field($_POST['status']) : '';
+        $note = isset($_POST['note']) ? sanitize_textarea_field($_POST['note']) : '';
+        
+        if (!$abstract_id || !$status) {
+            wp_send_json_error(array('message' => __('Invalid request', 'ensemble')));
+        }
+        
+        $result = $this->abstract_manager->update_status($abstract_id, $status, $note);
+        
+        if ($result) {
+            wp_send_json_success(array('message' => __('Status updated', 'ensemble')));
+        } else {
+            wp_send_json_error(array('message' => __('Failed to update status', 'ensemble')));
+        }
+    }
+    
+    /**
+     * Get abstract manager
+     * 
+     * @return ES_Abstract_Manager
+     */
+    public function get_abstract_manager() {
+        return $this->abstract_manager;
     }
     
     // =========================================================================
@@ -719,6 +1095,8 @@ class ES_Staff_Addon extends ES_Addon_Base {
     /**
      * Shortcode: Staff list/grid
      * 
+     * Usage: [ensemble_staff layout="grid" columns="3" show_email="yes" ...]
+     * 
      * @param array $atts
      * @return string
      */
@@ -727,19 +1105,30 @@ class ES_Staff_Addon extends ES_Addon_Base {
         $settings = $this->get_settings();
         
         $atts = shortcode_atts(array(
-            'layout'            => !empty($settings['default_layout']) ? $settings['default_layout'] : 'grid',
-            'columns'           => !empty($settings['default_columns']) ? $settings['default_columns'] : 3,
-            'department'        => '',
-            'ids'               => '',
-            'limit'             => -1,
-            'orderby'           => 'menu_order',
-            'order'             => 'ASC',
-            'show_email'        => !empty($settings['show_email']) ? 'yes' : 'no',
-            'show_phone'        => !empty($settings['show_phone']) ? 'yes' : 'no',
-            'show_position'     => !empty($settings['show_position']) ? 'yes' : 'no',
-            'show_department'   => !empty($settings['show_department']) ? 'yes' : 'no',
-            'show_office_hours' => !empty($settings['show_office_hours']) ? 'yes' : 'no',
-            'show_social'       => !empty($settings['show_social_links']) ? 'yes' : 'no',
+            // Layout options
+            'layout'              => !empty($settings['default_layout']) ? $settings['default_layout'] : 'grid',
+            'columns'             => !empty($settings['default_columns']) ? $settings['default_columns'] : 3,
+            
+            // Query options
+            'department'          => '',
+            'ids'                 => '',
+            'limit'               => -1,
+            'orderby'             => 'menu_order',
+            'order'               => 'ASC',
+            
+            // Display toggles - use 'yes'/'no' for shortcode compatibility
+            'show_image'          => 'yes', // Always show by default
+            'show_email'          => !empty($settings['show_email']) ? 'yes' : 'no',
+            'show_phone'          => !empty($settings['show_phone']) ? 'yes' : 'no',
+            'show_position'       => !empty($settings['show_position']) ? 'yes' : 'no',
+            'show_department'     => !empty($settings['show_department']) ? 'yes' : 'no',
+            'show_office_hours'   => !empty($settings['show_office_hours']) ? 'yes' : 'no',
+            'show_social'         => !empty($settings['show_social_links']) ? 'yes' : 'no',
+            'show_responsibility' => 'no', // Off by default (can be verbose)
+            'show_excerpt'        => 'no', // Off by default
+            
+            // Custom class
+            'class'               => '',
         ), $atts, 'ensemble_staff');
         
         $args = array(

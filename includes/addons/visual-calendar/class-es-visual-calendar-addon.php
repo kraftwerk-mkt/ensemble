@@ -488,18 +488,3 @@ class ES_Visual_Calendar_Addon extends ES_Addon_Base {
         return $sanitized;
     }
 }
-
-/**
- * Register the add-on with Ensemble
- */
-ES_Addon_Manager::register_addon('visual-calendar', array(
-    'name'          => __('Visual Calendar Pro', 'ensemble'),
-    'description'   => __('Beautiful photo-based calendar grid with event images as backgrounds. Perfect for clubs, festivals, and visual-focused event displays.', 'ensemble'),
-    'version'       => '1.0.0',
-    'author'        => 'Kraftwerk Marketing',
-    'requires_pro'  => true,
-    'class'         => 'ES_Visual_Calendar_Addon',
-    'icon'          => 'dashicons-format-gallery',
-    'settings_page' => true,
-    'has_frontend'  => true,
-));

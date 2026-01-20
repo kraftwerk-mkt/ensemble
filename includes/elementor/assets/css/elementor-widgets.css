@@ -1,0 +1,222 @@
+/**
+ * Ensemble Elementor Widget Styles
+ * 
+ * Custom style classes for per-widget overrides.
+ * These work alongside the global Designer CSS variables.
+ *
+ * @package Ensemble
+ * @since 3.0.0
+ */
+
+/* ===========================================
+   Base Widget Wrapper
+   =========================================== */
+.ensemble-elementor-widget {
+	/* Inherit all global variables by default */
+}
+
+/* Custom mode - scoped variables take precedence */
+.ensemble-elementor-widget.es-custom-styles {
+	/* Variables set via Elementor selectors */
+}
+
+/* ===========================================
+   Shadow Classes
+   =========================================== */
+.ensemble-elementor-widget.es-shadow-none .ensemble-event-card,
+.ensemble-elementor-widget.es-shadow-none .ensemble-artist-card,
+.ensemble-elementor-widget.es-shadow-none .ensemble-location-card,
+.ensemble-elementor-widget.es-shadow-none .es-kongress-session-card,
+.ensemble-elementor-widget.es-shadow-none .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-shadow-none .es-kongress-location-card {
+	box-shadow: none !important;
+}
+
+.ensemble-elementor-widget.es-shadow-light .ensemble-event-card,
+.ensemble-elementor-widget.es-shadow-light .ensemble-artist-card,
+.ensemble-elementor-widget.es-shadow-light .ensemble-location-card,
+.ensemble-elementor-widget.es-shadow-light .es-kongress-session-card,
+.ensemble-elementor-widget.es-shadow-light .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-shadow-light .es-kongress-location-card {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.ensemble-elementor-widget.es-shadow-medium .ensemble-event-card,
+.ensemble-elementor-widget.es-shadow-medium .ensemble-artist-card,
+.ensemble-elementor-widget.es-shadow-medium .ensemble-location-card,
+.ensemble-elementor-widget.es-shadow-medium .es-kongress-session-card,
+.ensemble-elementor-widget.es-shadow-medium .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-shadow-medium .es-kongress-location-card {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ensemble-elementor-widget.es-shadow-heavy .ensemble-event-card,
+.ensemble-elementor-widget.es-shadow-heavy .ensemble-artist-card,
+.ensemble-elementor-widget.es-shadow-heavy .ensemble-location-card,
+.ensemble-elementor-widget.es-shadow-heavy .es-kongress-session-card,
+.ensemble-elementor-widget.es-shadow-heavy .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-shadow-heavy .es-kongress-location-card {
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ===========================================
+   Hover Effect Classes
+   =========================================== */
+
+/* No hover */
+.ensemble-elementor-widget.es-hover-none .ensemble-event-card:hover,
+.ensemble-elementor-widget.es-hover-none .ensemble-artist-card:hover,
+.ensemble-elementor-widget.es-hover-none .ensemble-location-card:hover,
+.ensemble-elementor-widget.es-hover-none .es-kongress-session-card:hover,
+.ensemble-elementor-widget.es-hover-none .es-kongress-speaker-card:hover,
+.ensemble-elementor-widget.es-hover-none .es-kongress-location-card:hover {
+	transform: none !important;
+	box-shadow: inherit !important;
+}
+
+/* Lift hover */
+.ensemble-elementor-widget.es-hover-lift .ensemble-event-card,
+.ensemble-elementor-widget.es-hover-lift .ensemble-artist-card,
+.ensemble-elementor-widget.es-hover-lift .ensemble-location-card,
+.ensemble-elementor-widget.es-hover-lift .es-kongress-session-card,
+.ensemble-elementor-widget.es-hover-lift .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-hover-lift .es-kongress-location-card {
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ensemble-elementor-widget.es-hover-lift .ensemble-event-card:hover,
+.ensemble-elementor-widget.es-hover-lift .ensemble-artist-card:hover,
+.ensemble-elementor-widget.es-hover-lift .ensemble-location-card:hover,
+.ensemble-elementor-widget.es-hover-lift .es-kongress-session-card:hover,
+.ensemble-elementor-widget.es-hover-lift .es-kongress-speaker-card:hover,
+.ensemble-elementor-widget.es-hover-lift .es-kongress-location-card:hover {
+	transform: translateY(-4px) !important;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Glow hover */
+.ensemble-elementor-widget.es-hover-glow .ensemble-event-card,
+.ensemble-elementor-widget.es-hover-glow .ensemble-artist-card,
+.ensemble-elementor-widget.es-hover-glow .ensemble-location-card,
+.ensemble-elementor-widget.es-hover-glow .es-kongress-session-card,
+.ensemble-elementor-widget.es-hover-glow .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-hover-glow .es-kongress-location-card {
+	transition: box-shadow 0.3s ease;
+}
+
+.ensemble-elementor-widget.es-hover-glow .ensemble-event-card:hover,
+.ensemble-elementor-widget.es-hover-glow .ensemble-artist-card:hover,
+.ensemble-elementor-widget.es-hover-glow .ensemble-location-card:hover,
+.ensemble-elementor-widget.es-hover-glow .es-kongress-session-card:hover,
+.ensemble-elementor-widget.es-hover-glow .es-kongress-speaker-card:hover,
+.ensemble-elementor-widget.es-hover-glow .es-kongress-location-card:hover {
+	box-shadow: 0 0 20px rgba(var(--ensemble-primary-rgb, 102, 126, 234), 0.4) !important;
+}
+
+/* Border hover */
+.ensemble-elementor-widget.es-hover-border .ensemble-event-card,
+.ensemble-elementor-widget.es-hover-border .ensemble-artist-card,
+.ensemble-elementor-widget.es-hover-border .ensemble-location-card,
+.ensemble-elementor-widget.es-hover-border .es-kongress-session-card,
+.ensemble-elementor-widget.es-hover-border .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-hover-border .es-kongress-location-card {
+	transition: border-color 0.3s ease;
+	border: 2px solid transparent;
+}
+
+.ensemble-elementor-widget.es-hover-border .ensemble-event-card:hover,
+.ensemble-elementor-widget.es-hover-border .ensemble-artist-card:hover,
+.ensemble-elementor-widget.es-hover-border .ensemble-location-card:hover,
+.ensemble-elementor-widget.es-hover-border .es-kongress-session-card:hover,
+.ensemble-elementor-widget.es-hover-border .es-kongress-speaker-card:hover,
+.ensemble-elementor-widget.es-hover-border .es-kongress-location-card:hover {
+	border-color: var(--ensemble-primary, #667eea) !important;
+}
+
+/* ===========================================
+   CSS Variable Mappings
+   (Applied when custom styles are active)
+   =========================================== */
+.ensemble-elementor-widget.es-custom-styles .ensemble-event-card,
+.ensemble-elementor-widget.es-custom-styles .ensemble-artist-card,
+.ensemble-elementor-widget.es-custom-styles .ensemble-location-card,
+.ensemble-elementor-widget.es-custom-styles .es-kongress-session-card,
+.ensemble-elementor-widget.es-custom-styles .es-kongress-speaker-card,
+.ensemble-elementor-widget.es-custom-styles .es-kongress-location-card {
+	background: var(--ensemble-card-bg, #ffffff);
+	border-color: var(--ensemble-card-border, #e2e8f0);
+	border-radius: var(--ensemble-card-radius, 12px);
+	padding: var(--ensemble-card-padding, 25px);
+}
+
+.ensemble-elementor-widget.es-custom-styles .ensemble-event-card img,
+.ensemble-elementor-widget.es-custom-styles .ensemble-artist-card img,
+.ensemble-elementor-widget.es-custom-styles .ensemble-location-card img {
+	height: var(--ensemble-image-height, 200px);
+	border-radius: var(--ensemble-image-radius, 8px);
+}
+
+.ensemble-elementor-widget.es-custom-styles h1,
+.ensemble-elementor-widget.es-custom-styles h2,
+.ensemble-elementor-widget.es-custom-styles h3,
+.ensemble-elementor-widget.es-custom-styles h4 {
+	font-size: var(--ensemble-heading-size);
+	font-weight: var(--ensemble-heading-weight, 700);
+}
+
+.ensemble-elementor-widget.es-custom-styles p,
+.ensemble-elementor-widget.es-custom-styles span {
+	font-size: var(--ensemble-body-size);
+}
+
+.ensemble-elementor-widget.es-custom-styles small {
+	font-size: var(--ensemble-small-size);
+}
+
+.ensemble-elementor-widget.es-custom-styles .ensemble-events-grid,
+.ensemble-elementor-widget.es-custom-styles .ensemble-artists-grid,
+.ensemble-elementor-widget.es-custom-styles .ensemble-locations-grid {
+	gap: var(--ensemble-grid-gap, 24px);
+}
+
+.ensemble-elementor-widget.es-custom-styles .ensemble-btn,
+.ensemble-elementor-widget.es-custom-styles .es-btn,
+.ensemble-elementor-widget.es-custom-styles button {
+	background: var(--ensemble-button-bg);
+	color: var(--ensemble-button-text);
+	border-radius: var(--ensemble-button-radius);
+	padding: var(--ensemble-button-padding-v) var(--ensemble-button-padding-h);
+}
+
+.ensemble-elementor-widget.es-custom-styles .ensemble-btn:hover,
+.ensemble-elementor-widget.es-custom-styles .es-btn:hover,
+.ensemble-elementor-widget.es-custom-styles button:hover {
+	background: var(--ensemble-button-hover-bg);
+}
+
+/* ===========================================
+   Dark Mode Support
+   =========================================== */
+.es-mode-dark .ensemble-elementor-widget.es-hover-glow .ensemble-event-card:hover,
+.es-mode-dark .ensemble-elementor-widget.es-hover-glow .ensemble-artist-card:hover,
+.es-mode-dark .ensemble-elementor-widget.es-hover-glow .ensemble-location-card:hover {
+	box-shadow: 0 0 25px rgba(129, 140, 248, 0.5) !important;
+}
+
+.es-mode-dark .ensemble-elementor-widget.es-shadow-light .ensemble-event-card,
+.es-mode-dark .ensemble-elementor-widget.es-shadow-light .ensemble-artist-card,
+.es-mode-dark .ensemble-elementor-widget.es-shadow-light .ensemble-location-card {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+}
+
+.es-mode-dark .ensemble-elementor-widget.es-shadow-medium .ensemble-event-card,
+.es-mode-dark .ensemble-elementor-widget.es-shadow-medium .ensemble-artist-card,
+.es-mode-dark .ensemble-elementor-widget.es-shadow-medium .ensemble-location-card {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+.es-mode-dark .ensemble-elementor-widget.es-shadow-heavy .ensemble-event-card,
+.es-mode-dark .ensemble-elementor-widget.es-shadow-heavy .ensemble-artist-card,
+.es-mode-dark .ensemble-elementor-widget.es-shadow-heavy .ensemble-location-card {
+	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+}

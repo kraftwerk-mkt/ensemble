@@ -2,16 +2,17 @@
 /**
  * Ensemble Gallery Pro Add-on
  * 
- * Advanced gallery functionality for events
- * - Multiple layouts: Grid, Masonry, Carousel, Justified, Filmstrip
+ * Advanced gallery functionality for events, artists, and locations
+ * - Multiple layouts: Grid, Masonry, Carousel, Filmstrip
  * - Lightbox with touch/swipe support
- * - Video support (YouTube, Vimeo)
- * - Image captions
- * - Fullscreen mode
+ * - Video support (YouTube, Vimeo, Self-hosted)
+ * - Integration with Gallery Manager (linked galleries)
+ * - Support for Events, Artists, and Locations
  *
  * @package Ensemble
  * @subpackage Addons
  * @since 2.0.0
+ * @updated 3.0.0 - Added video support, artist/location integration
  */
 
 // Exit if accessed directly
@@ -26,7 +27,7 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
      */
     protected $slug = 'gallery-pro';
     protected $name = 'Gallery Pro';
-    protected $version = '1.1.0';
+    protected $version = '3.0.0';
     
     /**
      * Available layouts
@@ -50,10 +51,16 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     );
     
     /**
+     * Supported video extensions
+     * @var array
+     */
+    private $video_extensions = array('mp4', 'webm', 'ogg', 'mov', 'm4v');
+    
+    /**
      * Initialize add-on
      */
     protected function init() {
-        $this->log('Gallery Pro add-on initialized');
+        $this->log('Gallery Pro add-on initialized (v3.0 with video support)');
     }
     
     /**
@@ -63,8 +70,16 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
         // Frontend hooks
         add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
         
-        // Template hooks - überschreibt die Standard-Gallery im Single-Event Template
+        // Template hooks - Events
         $this->register_template_hook('ensemble_gallery_area', array($this, 'render_event_gallery'), 10);
+        
+        // Template hooks - Artists
+        $this->register_template_hook('ensemble_artist_gallery_area', array($this, 'render_artist_gallery'), 10);
+        add_action('ensemble_artist_after_content', array($this, 'render_artist_gallery_fallback'), 20);
+        
+        // Template hooks - Locations
+        $this->register_template_hook('ensemble_location_gallery_area', array($this, 'render_location_gallery'), 10);
+        add_action('ensemble_location_after_content', array($this, 'render_location_gallery_fallback'), 20);
         
         // Admin hooks
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
@@ -72,12 +87,13 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
         // AJAX handlers
         add_action('wp_ajax_es_gallery_get_media', array($this, 'ajax_get_media'));
         add_action('wp_ajax_nopriv_es_gallery_get_media', array($this, 'ajax_get_media'));
+        add_action('wp_ajax_es_gallery_get_video_info', array($this, 'ajax_get_video_info'));
         
         // Shortcodes
         add_shortcode('ensemble_gallery', array($this, 'shortcode_gallery'));
         add_shortcode('ensemble_gallery_pro', array($this, 'shortcode_gallery'));
         
-        // Register REST API endpoints for gallery data
+        // Register REST API endpoints
         add_action('rest_api_init', array($this, 'register_rest_routes'));
     }
     
@@ -85,19 +101,22 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
      * Enqueue frontend assets
      */
     public function enqueue_frontend_assets() {
-        // Check if we're on an event page
+        // Check if we're on a relevant page
         $post_type = function_exists('ensemble_get_post_type') ? ensemble_get_post_type() : 'ensemble_event';
-        $is_event_page = is_singular($post_type);
+        $is_relevant_page = is_singular($post_type) || 
+                            is_singular('ensemble_artist') || 
+                            is_singular('ensemble_location') ||
+                            is_singular('ensemble_gallery');
         
         // Also check for posts with ensemble_category
-        if (!$is_event_page && is_singular('post')) {
+        if (!$is_relevant_page && is_singular('post')) {
             $terms = get_the_terms(get_the_ID(), 'ensemble_category');
             if ($terms && !is_wp_error($terms)) {
-                $is_event_page = true;
+                $is_relevant_page = true;
             }
         }
         
-        if (!$is_event_page && !$this->has_gallery_shortcode()) {
+        if (!$is_relevant_page && !$this->has_gallery_shortcode()) {
             return;
         }
         
@@ -169,11 +188,11 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
             'strings'       => array(
                 'loading'     => __('Loading gallery...', 'ensemble'),
                 'noImages'    => __('No images available', 'ensemble'),
-                'prev'        => __('Vorheriges', 'ensemble'),
+                'prev'        => __('Previous', 'ensemble'),
                 'next'        => __('Next', 'ensemble'),
                 'close'       => __('Close', 'ensemble'),
-                'fullscreen'  => __('Vollbild', 'ensemble'),
-                'slideOf'     => __('von', 'ensemble'),
+                'fullscreen'  => __('Fullscreen', 'ensemble'),
+                'slideOf'     => __('of', 'ensemble'),
             ),
         ));
     }
@@ -206,7 +225,6 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     
     /**
      * Check if current page has gallery shortcode
-     * 
      * @return bool
      */
     private function has_gallery_shortcode() {
@@ -217,104 +235,75 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     
     /**
      * Render event gallery
-     * Called via template hook 'ensemble_gallery_area'
-     * 
      * @param int $event_id
-     * @param array $existing_gallery Gallery data from template (optional)
+     * @param array $existing_gallery
      */
     public function render_event_gallery($event_id, $existing_gallery = array()) {
-        // Prevent infinite loops
-        static $rendering = array();
-        if (isset($rendering[$event_id])) {
+        $this->render_entity_gallery('event', $event_id, $existing_gallery);
+    }
+    
+    /**
+     * Render artist gallery
+     * @param int $artist_id
+     */
+    public function render_artist_gallery($artist_id) {
+        $this->render_entity_gallery('artist', $artist_id);
+    }
+    
+    /**
+     * Render artist gallery fallback (if no template hook)
+     */
+    public function render_artist_gallery_fallback() {
+        if (!is_singular('ensemble_artist')) {
             return;
         }
-        $rendering[$event_id] = true;
+        $this->render_entity_gallery('artist', get_the_ID());
+    }
+    
+    /**
+     * Render location gallery
+     * @param int $location_id
+     */
+    public function render_location_gallery($location_id) {
+        $this->render_entity_gallery('location', $location_id);
+    }
+    
+    /**
+     * Render location gallery fallback (if no template hook)
+     */
+    public function render_location_gallery_fallback() {
+        if (!is_singular('ensemble_location')) {
+            return;
+        }
+        $this->render_entity_gallery('location', get_the_ID());
+    }
+    
+    /**
+     * Render gallery for any entity type
+     * @param string $entity_type 'event', 'artist', or 'location'
+     * @param int $entity_id
+     * @param array $existing_gallery Optional existing gallery data
+     */
+    private function render_entity_gallery($entity_type, $entity_id, $existing_gallery = array()) {
+        // Prevent infinite loops
+        static $rendering = array();
+        $key = "{$entity_type}_{$entity_id}";
+        if (isset($rendering[$key])) {
+            return;
+        }
+        $rendering[$key] = true;
         
         // Check display settings
         if (function_exists('ensemble_show_addon') && !ensemble_show_addon('gallery')) {
-            unset($rendering[$event_id]);
+            unset($rendering[$key]);
             return;
         }
         
-        // Ensure existing_gallery is an array
-        if (!is_array($existing_gallery)) {
-            $existing_gallery = array();
-        }
-        
-        // Nutze existierende Gallery-Daten aus dem Template oder lade neu
-        if (!empty($existing_gallery)) {
-            // Konvertiere das Template-Format in unser Format
-            $gallery = array('items' => array());
-            foreach ($existing_gallery as $image) {
-                // Skip invalid entries
-                if (empty($image)) {
-                    continue;
-                }
-                
-                // Check if $image is an array or an ID
-                if (is_numeric($image)) {
-                    // Es ist eine Bild-ID - lade die Bild-Daten
-                    $image_id = intval($image);
-                    if ($image_id <= 0) continue;
-                    
-                    $image_url = wp_get_attachment_url($image_id);
-                    if (empty($image_url)) continue;
-                    
-                    $image_data = array(
-                        'type'        => 'image',
-                        'id'          => $image_id,
-                        'url'         => $image_url ?: '',
-                        'thumb'       => wp_get_attachment_image_url($image_id, 'medium') ?: $image_url,
-                        'large'       => wp_get_attachment_image_url($image_id, 'large') ?: $image_url,
-                        'full'        => $image_url ?: '',
-                        'alt'         => get_post_meta($image_id, '_wp_attachment_image_alt', true) ?: '',
-                        'title'       => get_the_title($image_id) ?: '',
-                        'caption'     => wp_get_attachment_caption($image_id) ?: '',
-                        'description' => '',
-                        'width'       => 0,
-                        'height'      => 0,
-                    );
-                } elseif (is_array($image)) {
-                    // Es ist bereits ein Array mit Bild-Daten
-                    $image_data = array(
-                        'type'        => 'image',
-                        'id'          => $image['id'] ?? $image['ID'] ?? 0,
-                        'url'         => $image['url'] ?? $image['URL'] ?? '',
-                        'thumb'       => $image['medium'] ?? $image['sizes']['medium'] ?? $image['thumb'] ?? $image['url'] ?? '',
-                        'large'       => $image['large'] ?? $image['sizes']['large'] ?? $image['url'] ?? '',
-                        'full'        => $image['full'] ?? $image['url'] ?? '',
-                        'alt'         => $image['alt'] ?? '',
-                        'title'       => $image['title'] ?? '',
-                        'caption'     => $image['caption'] ?? '',
-                        'description' => '',
-                        'width'       => 0,
-                        'height'      => 0,
-                    );
-                    
-                    // Skip if no URL
-                    if (empty($image_data['url']) && empty($image_data['full'])) {
-                        continue;
-                    }
-                } else {
-                    // Unbekanntes Format - überspringen
-                    continue;
-                }
-                
-                $gallery['items'][] = $image_data;
-            }
-            
-            // Additionally load videos (if available)
-            $videos = $this->get_event_videos($event_id);
-            if (!empty($videos)) {
-                $gallery['items'] = array_merge($gallery['items'], $videos);
-            }
-        } else {
-            // Lade komplett neu
-            $gallery = $this->get_event_gallery($event_id);
-        }
+        // Get gallery data
+        $gallery = $this->get_entity_gallery($entity_type, $entity_id, $existing_gallery);
         
         if (empty($gallery['items'])) {
-            unset($rendering[$event_id]);
+            unset($rendering[$key]);
             return;
         }
         
@@ -322,14 +311,22 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
         $columns = $this->get_setting('default_columns', 4);
         $show_captions = $this->get_setting('show_captions', true);
         
-        // Render mit Section-Wrapper (wie im Original-Template)
+        // Section title based on entity type
+        $section_titles = array(
+            'event'    => __('Gallery', 'ensemble'),
+            'artist'   => __('Gallery', 'ensemble'),
+            'location' => __('Gallery', 'ensemble'),
+        );
+        $section_title = $section_titles[$entity_type] ?? __('Gallery', 'ensemble');
+        
+        // Render with section wrapper
         $show_header = !function_exists('ensemble_show_addon_header') || ensemble_show_addon_header('gallery');
         ?>
         <div class="es-section es-gallery-section es-gallery-pro-section">
             <?php if ($show_header): ?>
             <h2 class="es-section-title">
                 <span class="dashicons dashicons-format-gallery"></span>
-                <?php _e('Gallery', 'ensemble'); ?>
+                <?php echo esc_html($section_title); ?>
             </h2>
             <?php endif; ?>
             <?php
@@ -338,27 +335,121 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
                 'columns'       => $columns,
                 'show_captions' => $show_captions,
                 'lightbox'      => true,
-                'event_id'      => $event_id,
+                'event_id'      => $entity_id,
+                'entity_type'   => $entity_type,
             ));
             ?>
         </div>
         <?php
         
-        unset($rendering[$event_id]);
+        unset($rendering[$key]);
     }
     
     /**
-     * Get event videos
-     * 
-     * @param int $event_id
+     * Get gallery data for any entity type
+     * @param string $entity_type
+     * @param int $entity_id
+     * @param array $existing_gallery
      * @return array
      */
-    private function get_event_videos($event_id) {
+    private function get_entity_gallery($entity_type, $entity_id, $existing_gallery = array()) {
+        $gallery = array(
+            'items' => array(),
+        );
+        
+        // Ensure existing_gallery is an array
+        if (!is_array($existing_gallery)) {
+            $existing_gallery = array();
+        }
+        
+        // 1. Process existing/inline gallery data
+        if (!empty($existing_gallery)) {
+            foreach ($existing_gallery as $image) {
+                $item = $this->normalize_image_item($image);
+                if ($item) {
+                    $gallery['items'][] = $item;
+                }
+            }
+        } else {
+            // Load from meta/ACF
+            $gallery['items'] = $this->load_entity_gallery($entity_type, $entity_id);
+        }
+        
+        // 2. Load videos for this entity
+        $videos = $this->get_entity_videos($entity_type, $entity_id);
+        if (!empty($videos)) {
+            $gallery['items'] = array_merge($gallery['items'], $videos);
+        }
+        
+        return $gallery;
+    }
+    
+    /**
+     * Load gallery from entity meta/ACF
+     * @param string $entity_type
+     * @param int $entity_id
+     * @return array
+     */
+    private function load_entity_gallery($entity_type, $entity_id) {
+        $items = array();
+        
+        // Try ACF gallery field
+        if (function_exists('get_field')) {
+            $acf_gallery = get_field('gallery', $entity_id);
+            
+            if (!empty($acf_gallery)) {
+                foreach ($acf_gallery as $image) {
+                    $item = $this->format_acf_image($image);
+                    if ($item) {
+                        $items[] = $item;
+                    }
+                }
+            }
+        }
+        
+        // Fallback to native meta
+        if (empty($items)) {
+            $meta_key = $entity_type . '_gallery';
+            if ($entity_type === 'event') {
+                $meta_key = 'event_gallery';
+            }
+            
+            $native_gallery = get_post_meta($entity_id, $meta_key, true);
+            
+            if (!empty($native_gallery) && is_array($native_gallery)) {
+                foreach ($native_gallery as $item) {
+                    $formatted = $this->normalize_image_item($item);
+                    if ($formatted) {
+                        $items[] = $formatted;
+                    }
+                }
+            }
+        }
+        
+        // Fallback to attached media
+        if (empty($items)) {
+            $attachments = get_attached_media('image', $entity_id);
+            
+            foreach ($attachments as $attachment) {
+                $items[] = $this->format_attachment_item($attachment->ID);
+            }
+        }
+        
+        return $items;
+    }
+    
+    /**
+     * Get videos for entity
+     * @param string $entity_type
+     * @param int $entity_id
+     * @return array
+     */
+    private function get_entity_videos($entity_type, $entity_id) {
         $videos = array();
         
         // Try ACF videos field
         if (function_exists('get_field')) {
-            $acf_videos = get_field('videos', $event_id);
+            $acf_videos = get_field('videos', $entity_id);
             if (!empty($acf_videos)) {
                 foreach ($acf_videos as $video) {
                     $video_item = $this->format_video_item($video);
@@ -371,7 +462,12 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
         
         // Fallback to meta
         if (empty($videos)) {
-            $meta_videos = get_post_meta($event_id, 'event_videos', true);
+            $meta_key = $entity_type . '_videos';
+            if ($entity_type === 'event') {
+                $meta_key = 'event_videos';
+            }
+            
+            $meta_videos = get_post_meta($entity_id, $meta_key, true);
             if (!empty($meta_videos) && is_array($meta_videos)) {
                 foreach ($meta_videos as $video) {
                     $video_item = $this->format_video_item($video);
@@ -386,133 +482,73 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     }
     
     /**
-     * Render gallery HTML
-     * 
-     * @param array $gallery
-     * @param array $args
-     * @return string
+     * Normalize image item from various formats
+     * @param mixed $image
+     * @return array|false
      */
-    public function render_gallery($gallery, $args = array()) {
-        $defaults = array(
-            'layout'        => 'grid',
-            'columns'       => 4,
-            'show_captions' => true,
-            'lightbox'      => true,
-            'event_id'      => 0,
-            'class'         => '',
-            'max_items'     => 0,
-        );
-        
-        $args = wp_parse_args($args, $defaults);
-        $items = $gallery['items'] ?? array();
-        
-        if (empty($items)) {
-            return '';
+    private function normalize_image_item($image) {
+        if (empty($image)) {
+            return false;
         }
         
-        // Limit items if needed
-        if ($args['max_items'] > 0) {
-            $items = array_slice($items, 0, $args['max_items']);
+        if (is_numeric($image)) {
+            return $this->format_attachment_item(intval($image));
         }
         
-        return $this->load_template('gallery-' . $args['layout'], array(
-            'items'         => $items,
-            'gallery_id'    => 'es-gallery-' . ($args['event_id'] ?: uniqid()),
-            'columns'       => $args['columns'],
-            'show_captions' => $args['show_captions'],
-            'lightbox'      => $args['lightbox'],
-            'extra_class'   => $args['class'],
-            'layout'        => $args['layout'],
-        ));
+        if (is_array($image)) {
+            // Check if it's a video item
+            if (!empty($image['video_url']) || !empty($image['type']) && $image['type'] === 'video') {
+                return $this->format_video_item($image);
+            }
+            
+            // Image array
+            $id = $image['id'] ?? $image['ID'] ?? 0;
+            $url = $image['url'] ?? $image['URL'] ?? '';
+            
+            if (empty($url) && $id) {
+                $url = wp_get_attachment_url($id);
+            }
+            
+            if (empty($url)) {
+                return false;
+            }
+            
+            return array(
+                'type'        => 'image',
+                'id'          => $id,
+                'url'         => $url,
+                'thumb'       => $image['medium'] ?? $image['sizes']['medium'] ?? $image['thumb'] ?? $url,
+                'large'       => $image['large'] ?? $image['sizes']['large'] ?? $url,
+                'full'        => $image['full'] ?? $url,
+                'alt'         => $image['alt'] ?? '',
+                'title'       => $image['title'] ?? '',
+                'caption'     => $image['caption'] ?? '',
+                'description' => $image['description'] ?? '',
+                'width'       => $image['width'] ?? 0,
+                'height'      => $image['height'] ?? 0,
+            );
+        }
+        
+        return false;
     }
     
     /**
-     * Get event gallery data
-     * 
-     * @param int $event_id
-     * @return array
-     */
-    public function get_event_gallery($event_id) {
-        $gallery = array(
-            'items' => array(),
-            'title' => '',
-        );
-        
-        // Try ACF gallery field first
-        if (function_exists('get_field')) {
-            $acf_gallery = get_field('gallery', $event_id);
-            
-            if (!empty($acf_gallery)) {
-                foreach ($acf_gallery as $image) {
-                    $gallery['items'][] = $this->format_image_item($image);
-                }
-            }
-            
-            // Check for videos field
-            $videos = get_field('videos', $event_id);
-            if (!empty($videos)) {
-                foreach ($videos as $video) {
-                    $video_item = $this->format_video_item($video);
-                    if ($video_item) {
-                        $gallery['items'][] = $video_item;
-                    }
-                }
-            }
-        }
-        
-        // Fallback to native meta
-        if (empty($gallery['items'])) {
-            $native_gallery = get_post_meta($event_id, 'event_gallery', true);
-            
-            if (!empty($native_gallery)) {
-                if (is_array($native_gallery)) {
-                    foreach ($native_gallery as $item) {
-                        if (is_numeric($item)) {
-                            $attachment = get_post($item);
-                            if ($attachment) {
-                                $gallery['items'][] = $this->format_attachment_item($item);
-                            }
-                        } elseif (is_array($item)) {
-                            if (!empty($item['video_url'])) {
-                                $video_item = $this->format_video_item($item);
-                                if ($video_item) {
-                                    $gallery['items'][] = $video_item;
-                                }
-                            } else {
-                                $gallery['items'][] = $item;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Get attached media as fallback
-        if (empty($gallery['items'])) {
-            $attachments = get_attached_media('image', $event_id);
-            
-            foreach ($attachments as $attachment) {
-                $gallery['items'][] = $this->format_attachment_item($attachment->ID);
-            }
-        }
-        
-        return $gallery;
-    }
-    
-    /**
-     * Format ACF image to gallery item
-     * 
+     * Format ACF image
      * @param array $image
      * @return array
      */
-    private function format_image_item($image) {
+    private function format_acf_image($image) {
+        if (!is_array($image) || empty($image['url'])) {
+            return false;
+        }
+        
         return array(
             'type'        => 'image',
             'id'          => $image['ID'] ?? 0,
-            'url'         => $image['url'] ?? '',
+            'url'         => $image['url'],
             'thumb'       => $image['sizes']['medium'] ?? $image['url'],
             'large'       => $image['sizes']['large'] ?? $image['url'],
-            'full'        => $image['url'] ?? '',
+            'full'        => $image['url'],
             'alt'         => $image['alt'] ?? '',
             'title'       => $image['title'] ?? '',
             'caption'     => $image['caption'] ?? '',
@@ -523,33 +559,39 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     }
     
     /**
-     * Format attachment ID to gallery item
-     * 
+     * Format attachment item
      * @param int $attachment_id
-     * @return array
+     * @return array|false
      */
     private function format_attachment_item($attachment_id) {
         $attachment = get_post($attachment_id);
+        if (!$attachment) {
+            return false;
+        }
+        
+        $url = wp_get_attachment_url($attachment_id);
+        if (!$url) {
+            return false;
+        }
         
         return array(
             'type'        => 'image',
             'id'          => $attachment_id,
-            'url'         => wp_get_attachment_url($attachment_id),
-            'thumb'       => wp_get_attachment_image_url($attachment_id, 'medium'),
-            'large'       => wp_get_attachment_image_url($attachment_id, 'large'),
-            'full'        => wp_get_attachment_url($attachment_id),
+            'url'         => $url,
+            'thumb'       => wp_get_attachment_image_url($attachment_id, 'medium') ?: $url,
+            'large'       => wp_get_attachment_image_url($attachment_id, 'large') ?: $url,
+            'full'        => $url,
             'alt'         => get_post_meta($attachment_id, '_wp_attachment_image_alt', true),
-            'title'       => $attachment ? $attachment->post_title : '',
-            'caption'     => $attachment ? $attachment->post_excerpt : '',
-            'description' => $attachment ? $attachment->post_content : '',
+            'title'       => $attachment->post_title,
+            'caption'     => $attachment->post_excerpt,
+            'description' => $attachment->post_content,
             'width'       => 0,
             'height'      => 0,
         );
     }
     
     /**
-     * Format video to gallery item
-     * 
+     * Format video item
      * @param mixed $video
      * @return array|false
      */
@@ -557,13 +599,15 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
         $video_url = '';
         $title = '';
         $thumb = '';
+        $attachment_id = 0;
         
         if (is_string($video)) {
             $video_url = $video;
         } elseif (is_array($video)) {
             $video_url = $video['url'] ?? $video['video_url'] ?? '';
             $title = $video['title'] ?? '';
-            $thumb = $video['thumbnail'] ?? '';
+            $thumb = $video['thumbnail'] ?? $video['thumb'] ?? '';
+            $attachment_id = $video['attachment_id'] ?? 0;
         }
         
         if (empty($video_url)) {
@@ -578,34 +622,44 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
         
         // Get thumbnail if not provided
         if (empty($thumb)) {
-            $thumb = $this->get_video_thumbnail($video_data['provider'], $video_data['id']);
+            $thumb = $this->get_video_thumbnail($video_data['provider'], $video_data['id'], $attachment_id);
         }
         
         return array(
-            'type'        => 'video',
-            'provider'    => $video_data['provider'],
-            'video_id'    => $video_data['id'],
-            'url'         => $video_url,
-            'embed_url'   => $video_data['embed_url'],
-            'thumb'       => $thumb,
-            'title'       => $title,
-            'caption'     => '',
-            'description' => '',
+            'type'          => 'video',
+            'provider'      => $video_data['provider'],
+            'video_id'      => $video_data['id'],
+            'url'           => $video_url,
+            'embed_url'     => $video_data['embed_url'],
+            'thumb'         => $thumb,
+            'title'         => $title,
+            'caption'       => '',
+            'description'   => '',
+            'attachment_id' => $attachment_id,
         );
     }
     
     /**
-     * Parse video URL to get provider and ID
-     * 
+     * Parse video URL
      * @param string $url
      * @return array|false
      */
     private function parse_video_url($url) {
+        // Check for self-hosted video
+        if ($this->is_local_video($url)) {
+            return array(
+                'provider'  => 'local',
+                'id'        => md5($url),
+                'embed_url' => $url,
+            );
+        }
+        
         // YouTube patterns
         $youtube_patterns = array(
             '/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/',
             '/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/',
             '/youtu\.be\/([a-zA-Z0-9_-]+)/',
+            '/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/',
         );
         
         foreach ($youtube_patterns as $pattern) {
@@ -638,70 +692,158 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     }
     
     /**
+     * Check if URL is a local video
+     * @param string $url
+     * @return bool
+     */
+    private function is_local_video($url) {
+        $ext = strtolower(pathinfo(parse_url($url, PHP_URL_PATH), PATHINFO_EXTENSION));
+        return in_array($ext, $this->video_extensions);
+    }
+    
+    /**
      * Get video thumbnail
-     * 
      * @param string $provider
      * @param string $video_id
+     * @param int $attachment_id
      * @return string
      */
-    private function get_video_thumbnail($provider, $video_id) {
+    private function get_video_thumbnail($provider, $video_id, $attachment_id = 0) {
         if ($provider === 'youtube') {
             return "https://img.youtube.com/vi/{$video_id}/hqdefault.jpg";
         }
         
         if ($provider === 'vimeo') {
-            // Vimeo requires API call, use placeholder or cached value
             $cached = get_transient("es_vimeo_thumb_{$video_id}");
             if ($cached) {
                 return $cached;
             }
             
-            // Fallback placeholder
+            // Try Vimeo API
+            $response = wp_remote_get("https://vimeo.com/api/v2/video/{$video_id}.json");
+            if (!is_wp_error($response)) {
+                $body = json_decode(wp_remote_retrieve_body($response), true);
+                if (!empty($body[0]['thumbnail_large'])) {
+                    $thumb = $body[0]['thumbnail_large'];
+                    set_transient("es_vimeo_thumb_{$video_id}", $thumb, DAY_IN_SECONDS);
+                    return $thumb;
+                }
+            }
+            
             return '';
+        }
+        
+        if ($provider === 'local') {
+            if ($attachment_id) {
+                $poster = get_post_meta($attachment_id, '_video_poster', true);
+                if ($poster) {
+                    return $poster;
+                }
+            }
+            
+            // Return placeholder
+            return ENSEMBLE_PLUGIN_URL . 'assets/images/video-placeholder.svg';
         }
         
         return '';
     }
     
     /**
+     * Render gallery HTML
+     * @param array $gallery
+     * @param array $args
+     * @return string
+     */
+    public function render_gallery($gallery, $args = array()) {
+        $defaults = array(
+            'layout'        => 'grid',
+            'columns'       => 4,
+            'show_captions' => true,
+            'lightbox'      => true,
+            'event_id'      => 0,
+            'entity_type'   => 'event',
+            'class'         => '',
+            'max_items'     => 0,
+        );
+        
+        $args = wp_parse_args($args, $defaults);
+        $items = $gallery['items'] ?? array();
+        
+        if (empty($items)) {
+            return '';
+        }
+        
+        // Limit items if needed
+        if ($args['max_items'] > 0) {
+            $items = array_slice($items, 0, $args['max_items']);
+        }
+        
+        return $this->load_template('gallery-' . $args['layout'], array(
+            'items'         => $items,
+            'gallery_id'    => 'es-gallery-' . ($args['event_id'] ?: uniqid()),
+            'columns'       => $args['columns'],
+            'show_captions' => $args['show_captions'],
+            'lightbox'      => $args['lightbox'],
+            'extra_class'   => $args['class'],
+            'layout'        => $args['layout'],
+            'entity_type'   => $args['entity_type'],
+        ));
+    }
+    
+    /**
      * Shortcode handler
-     * 
      * @param array $atts
      * @return string
      */
     public function shortcode_gallery($atts) {
         $atts = shortcode_atts(array(
+            'id'           => 0,          // Gallery Manager ID
             'event'        => 0,
-            'event_id'     => 0, // alias
+            'event_id'     => 0,
+            'artist'       => 0,
+            'artist_id'    => 0,
+            'location'     => 0,
+            'location_id'  => 0,
             'layout'       => $this->get_setting('default_layout', 'grid'),
             'columns'      => $this->get_setting('default_columns', 4),
             'captions'     => $this->get_setting('show_captions', true),
             'lightbox'     => true,
             'max'          => 0,
             'class'        => '',
-            'ids'          => '', // comma-separated attachment IDs
+            'ids'          => '',
         ), $atts, 'ensemble_gallery');
         
-        // Get event ID
-        $event_id = intval($atts['event'] ?: $atts['event_id']);
+        $gallery = array('items' => array());
+        $entity_type = 'event';
+        $entity_id = 0;
         
-        if (!$event_id) {
-            $event_id = get_the_ID();
-        }
-        
-        // Custom IDs mode
+        // Priority: Custom IDs > Artist > Location > Event > Current Post
         if (!empty($atts['ids'])) {
+            // Custom attachment IDs
             $ids = array_map('intval', explode(',', $atts['ids']));
-            $gallery = array('items' => array());
-            
             foreach ($ids as $id) {
-                $attachment = get_post($id);
-                if ($attachment && wp_attachment_is_image($id)) {
-                    $gallery['items'][] = $this->format_attachment_item($id);
+                $item = $this->format_attachment_item($id);
+                if ($item) {
+                    $gallery['items'][] = $item;
                 }
             }
+        } elseif (!empty($atts['artist']) || !empty($atts['artist_id'])) {
+            $entity_type = 'artist';
+            $entity_id = intval($atts['artist'] ?: $atts['artist_id']);
+            $gallery = $this->get_entity_gallery('artist', $entity_id);
+        } elseif (!empty($atts['location']) || !empty($atts['location_id'])) {
+            $entity_type = 'location';
+            $entity_id = intval($atts['location'] ?: $atts['location_id']);
+            $gallery = $this->get_entity_gallery('location', $entity_id);
         } else {
-            $gallery = $this->get_event_gallery($event_id);
+            $entity_type = 'event';
+            $entity_id = intval($atts['event'] ?: $atts['event_id']);
+            
+            if (!$entity_id) {
+                $entity_id = get_the_ID();
+            }
+            
+            $gallery = $this->get_entity_gallery('event', $entity_id);
         }
         
         if (empty($gallery['items'])) {
@@ -713,7 +855,8 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
             'columns'       => intval($atts['columns']),
             'show_captions' => filter_var($atts['captions'], FILTER_VALIDATE_BOOLEAN),
             'lightbox'      => filter_var($atts['lightbox'], FILTER_VALIDATE_BOOLEAN),
-            'event_id'      => $event_id,
+            'event_id'      => $entity_id,
+            'entity_type'   => $entity_type,
             'class'         => sanitize_html_class($atts['class']),
             'max_items'     => intval($atts['max']),
         ));
@@ -725,26 +868,66 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     public function ajax_get_media() {
         check_ajax_referer('ensemble_gallery_pro', 'nonce');
         
-        $event_id = isset($_POST['event_id']) ? intval($_POST['event_id']) : 0;
+        $entity_type = isset($_POST['entity_type']) ? sanitize_text_field($_POST['entity_type']) : 'event';
+        $entity_id = isset($_POST['entity_id']) ? intval($_POST['entity_id']) : 0;
         
-        if (!$event_id) {
-            wp_send_json_error(array('message' => __('Event ID erforderlich', 'ensemble')));
+        if (!$entity_id) {
+            // Fallback to event_id for backwards compatibility
+            $entity_id = isset($_POST['event_id']) ? intval($_POST['event_id']) : 0;
         }
         
-        $gallery = $this->get_event_gallery($event_id);
+        if (!$entity_id) {
+            wp_send_json_error(array('message' => __('Entity ID required', 'ensemble')));
+        }
+        
+        $gallery = $this->get_entity_gallery($entity_type, $entity_id);
         
         wp_send_json_success($gallery);
+    }
+    
+    /**
+     * AJAX: Get video info (for admin preview)
+     */
+    public function ajax_get_video_info() {
+        check_ajax_referer('ensemble_gallery_pro', 'nonce');
+        
+        $url = isset($_POST['url']) ? esc_url_raw($_POST['url']) : '';
+        
+        if (empty($url)) {
+            wp_send_json_error(array('message' => __('URL required', 'ensemble')));
+        }
+        
+        $video_data = $this->parse_video_url($url);
+        
+        if (!$video_data) {
+            wp_send_json_error(array('message' => __('Invalid video URL', 'ensemble')));
+        }
+        
+        $thumb = $this->get_video_thumbnail($video_data['provider'], $video_data['id']);
+        
+        wp_send_json_success(array(
+            'provider'  => $video_data['provider'],
+            'video_id'  => $video_data['id'],
+            'embed_url' => $video_data['embed_url'],
+            'thumbnail' => $thumb,
+        ));
     }
     
     /**
      * Register REST API routes
      */
     public function register_rest_routes() {
-        register_rest_route('ensemble/v1', '/gallery/(?P<id>\d+)', array(
+        register_rest_route('ensemble/v1', '/gallery/(?P<type>event|artist|location)/(?P<id>\d+)', array(
             'methods'             => 'GET',
             'callback'            => array($this, 'rest_get_gallery'),
             'permission_callback' => '__return_true',
             'args'                => array(
+                'type' => array(
+                    'required'          => true,
+                    'validate_callback' => function($param) {
+                        return in_array($param, array('event', 'artist', 'location'));
+                    },
+                ),
                 'id' => array(
                     'required'          => true,
                     'validate_callback' => function($param) {
@@ -757,20 +940,20 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     
     /**
      * REST API: Get gallery
-     * 
      * @param WP_REST_Request $request
      * @return WP_REST_Response
      */
     public function rest_get_gallery($request) {
-        $event_id = $request->get_param('id');
-        $gallery = $this->get_event_gallery($event_id);
+        $entity_type = $request->get_param('type');
+        $entity_id = $request->get_param('id');
+        
+        $gallery = $this->get_entity_gallery($entity_type, $entity_id);
         
         return new WP_REST_Response($gallery, 200);
     }
     
     /**
      * Render settings page
-     * 
      * @return string
      */
     public function render_settings() {
@@ -783,7 +966,6 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     
     /**
      * Sanitize settings
-     * 
      * @param array $settings
      * @return array
      */
@@ -840,7 +1022,6 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     
     /**
      * Get available layouts
-     * 
      * @return array
      */
     public function get_layouts() {
@@ -849,7 +1030,6 @@ class ES_Gallery_Pro_Addon extends ES_Addon_Base {
     
     /**
      * Get layout icon SVG
-     * 
      * @param string $layout
      * @return string
      */

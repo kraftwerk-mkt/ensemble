@@ -1,10 +1,11 @@
 <?php
 /**
- * Single Artist Template - Noir Elegance
- * Full-width dark mode, minimal and refined
+ * Single Artist Template - Bristol City Festival
+ * Urban festival style with all addon hooks
  *
  * @package Ensemble
- * @version 3.1.0
+ * @layout Bristol City Festival
+ * @version 1.0.0
  */
 
 if (!defined('ABSPATH')) exit;
@@ -31,36 +32,36 @@ $social_links = array(
 $has_social = !empty(array_filter($social_links));
 ?>
 
-<div class="es-noir-single es-noir-artist">
+<div class="es-bristol es-bristol-single es-bristol-artist">
     
     <?php ensemble_before_artist($artist_id); ?>
     
     <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
     
     <!-- Hero -->
-    <header class="es-noir-hero es-noir-hero-artist">
+    <header class="es-bristol-single-hero es-bristol-single-hero-artist">
         <?php if (has_post_thumbnail()): ?>
-        <div class="es-noir-hero-media">
+        <div class="es-bristol-single-hero-media">
             <?php the_post_thumbnail('full'); ?>
-            <div class="es-noir-hero-overlay"></div>
+            <div class="es-bristol-single-hero-overlay"></div>
         </div>
         <?php endif; ?>
         
-        <div class="es-noir-hero-content">
+        <div class="es-bristol-single-hero-content">
             
             <?php if ($artist['genre']): ?>
-            <span class="es-noir-hero-genre"><?php echo esc_html($artist['genre']); ?></span>
+            <span class="es-bristol-single-hero-genre"><?php echo esc_html($artist['genre']); ?></span>
             <?php endif; ?>
             
-            <h1 class="es-noir-hero-title"><?php the_title(); ?></h1>
+            <h1 class="es-bristol-single-hero-title"><?php the_title(); ?></h1>
             
             <?php if ($artist['origin']): ?>
-            <span class="es-noir-hero-origin"><?php echo esc_html($artist['origin']); ?></span>
+            <div class="es-bristol-single-hero-meta"><?php echo esc_html($artist['origin']); ?></div>
             <?php endif; ?>
             
             <!-- Social Links -->
             <?php if ($has_social): ?>
-            <div class="es-noir-hero-social">
+            <div class="es-bristol-single-hero-social">
                 <?php if ($artist['spotify']): ?>
                 <a href="<?php echo esc_url($artist['spotify']); ?>" target="_blank" rel="noopener" title="Spotify">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
@@ -101,17 +102,17 @@ $has_social = !empty(array_filter($social_links));
     </header>
     
     <!-- Content -->
-    <div class="es-noir-body">
-        <div class="es-noir-container">
+    <div class="es-bristol-body">
+        <div class="es-bristol-container">
             
             <?php ensemble_artist_social_section($artist_id, $social_links); ?>
             
             <!-- Bio -->
             <?php if (get_the_content()): ?>
-            <section class="es-noir-section es-noir-bio">
+            <section class="es-bristol-section es-bristol-bio">
                 <?php ensemble_before_artist_content($artist_id); ?>
-                <h2 class="es-noir-section-title"><?php _e('Biografie', 'ensemble'); ?></h2>
-                <div class="es-noir-prose es-noir-prose-wide">
+                <h2 class="es-bristol-section-title"><?php _e('Biography', 'ensemble'); ?></h2>
+                <div class="es-bristol-prose">
                     <?php the_content(); ?>
                 </div>
                 <?php ensemble_after_artist_bio($artist_id); ?>
@@ -120,20 +121,20 @@ $has_social = !empty(array_filter($social_links));
             
             <?php ensemble_artist_meta($artist_id, array('genre' => $artist['genre'], 'references' => $artist['references'], 'origin' => $artist['origin'])); ?>
             
-            <!-- References -->
+            <!-- References / Quote -->
             <?php if ($artist['references']): ?>
-            <section class="es-noir-section es-noir-references">
-                <blockquote class="es-noir-quote">
+            <section class="es-bristol-section es-bristol-references">
+                <blockquote class="es-bristol-quote">
                     <?php echo esc_html($artist['references']); ?>
                 </blockquote>
             </section>
             <?php endif; ?>
             
-            <!-- Gallery -->
+            <!-- Gallery Hook -->
             <?php 
             if (ensemble_has_addon_hook('artist_gallery')) {
-                echo '<section class="es-noir-section es-noir-gallery">';
-                echo '<h2 class="es-noir-section-title">' . __('Gallery', 'ensemble') . '</h2>';
+                echo '<section class="es-bristol-section es-bristol-gallery">';
+                echo '<h2 class="es-bristol-section-title">' . __('Gallery', 'ensemble') . '</h2>';
                 ensemble_artist_gallery($artist_id);
                 echo '</section>';
             }
@@ -141,28 +142,28 @@ $has_social = !empty(array_filter($social_links));
             
             <!-- Events -->
             <?php if ($upcoming_events->have_posts()): ?>
-            <section class="es-noir-section es-noir-events">
-                <h2 class="es-noir-section-title"><?php _e('Kommende Auftritte', 'ensemble'); ?></h2>
+            <section class="es-bristol-section es-bristol-events">
+                <h2 class="es-bristol-section-title"><?php _e('Upcoming Shows', 'ensemble'); ?></h2>
                 
                 <?php ensemble_artist_events($artist_id); ?>
                 
-                <div class="es-noir-event-list">
+                <div class="es-bristol-event-list">
                     <?php while ($upcoming_events->have_posts()): $upcoming_events->the_post(); 
                         $evt = es_load_event_data(get_the_ID());
                         $evt_timestamp = strtotime($evt['date']);
                     ?>
-                    <a href="<?php echo esc_url($evt['permalink']); ?>" class="es-noir-event-row">
-                        <time class="es-noir-event-date">
-                            <span class="es-noir-event-day"><?php echo date_i18n('d', $evt_timestamp); ?></span>
-                            <span class="es-noir-event-month"><?php echo date_i18n('M', $evt_timestamp); ?></span>
+                    <a href="<?php echo esc_url($evt['permalink']); ?>" class="es-bristol-event-row">
+                        <time class="es-bristol-event-date">
+                            <span class="es-bristol-event-day"><?php echo date_i18n('d', $evt_timestamp); ?></span>
+                            <span class="es-bristol-event-month"><?php echo date_i18n('M', $evt_timestamp); ?></span>
                         </time>
-                        <div class="es-noir-event-info">
+                        <div class="es-bristol-event-info">
                             <h4><?php echo esc_html($evt['title']); ?></h4>
                             <?php if ($evt['location']): ?>
                                 <span><?php echo esc_html($evt['location']['name']); ?></span>
                             <?php endif; ?>
                         </div>
-                        <span class="es-noir-event-arrow">
+                        <span class="es-bristol-event-arrow">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M5 12h14M12 5l7 7-7 7"/>
                             </svg>
@@ -191,5 +192,39 @@ $has_social = !empty(array_filter($social_links));
     <?php ensemble_after_artist($artist_id, $artist); ?>
     
 </div>
+
+<!-- Theme Toggle -->
+<button class="es-bristol-theme-toggle" onclick="toggleBristolTheme()" aria-label="Toggle theme">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+    </svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+</button>
+
+<script>
+function toggleBristolTheme() {
+    const root = document.querySelector('.es-bristol');
+    if (root) {
+        root.classList.toggle('es-mode-light');
+        localStorage.setItem('es-bristol-theme', root.classList.contains('es-mode-light') ? 'light' : 'dark');
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const saved = localStorage.getItem('es-bristol-theme');
+    if (saved === 'light') {
+        document.querySelector('.es-bristol')?.classList.add('es-mode-light');
+    }
+});
+</script>
 
 <?php get_footer(); ?>

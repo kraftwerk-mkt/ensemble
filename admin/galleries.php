@@ -3,6 +3,7 @@
  * Gallery Manager Template
  *
  * @package Ensemble
+ * @since 3.0.0 - Video Support added
  */
 
 // Exit if accessed directly
@@ -10,29 +11,25 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Enqueue required scripts and styles
-wp_enqueue_media();
-wp_enqueue_script('jquery-ui-sortable');
-wp_enqueue_style('es-manager', ENSEMBLE_PLUGIN_URL . 'assets/css/manager.css', array(), ENSEMBLE_VERSION);
-
 $manager = new ES_Gallery_Manager();
 
-// Get categories for filter
-$categories = get_terms(array(
-    'taxonomy'   => 'ensemble_gallery_category',
-    'hide_empty' => false,
-));
+// Get dynamic labels
+$gallery_singular = __('Gallery', 'ensemble');
+$gallery_plural = __('Galleries', 'ensemble');
+$artist_label = class_exists('ES_Label_System') ? ES_Label_System::get_label('artist', false) : __('Artist', 'ensemble');
+$location_label = class_exists('ES_Label_System') ? ES_Label_System::get_label('location', false) : __('Location', 'ensemble');
+$event_label = class_exists('ES_Label_System') ? ES_Label_System::get_label('event', false) : __('Event', 'ensemble');
 
-// Get events for linking
+// Get available events, artists, locations for linking
+$event_post_type = function_exists('ensemble_get_post_type') ? ensemble_get_post_type() : 'ensemble_event';
 $events = get_posts(array(
-    'post_type'      => ensemble_get_post_type(),
+    'post_type'      => $event_post_type,
     'posts_per_page' => -1,
     'orderby'        => 'title',
     'order'          => 'ASC',
-    'post_status'    => 'publish',
+    'post_status'    => array('publish', 'draft'),
 ));
 
-// Get artists for linking
 $artists = get_posts(array(
     'post_type'      => 'ensemble_artist',
     'posts_per_page' => -1,
@@ -41,7 +38,6 @@ $artists = get_posts(array(
     'post_status'    => 'publish',
 ));
 
-// Get locations for linking
 $locations = get_posts(array(
     'post_type'      => 'ensemble_location',
     'posts_per_page' => -1,
@@ -50,978 +46,962 @@ $locations = get_posts(array(
     'post_status'    => 'publish',
 ));
 
-// Get labels
-$artist_label = ES_Label_System::get_label('artist', false);
-$location_label = ES_Label_System::get_label('location', false);
-$event_label = ES_Label_System::get_label('event', false);
+// Get categories
+$categories = get_terms(array(
+    'taxonomy'   => 'ensemble_gallery_category',
+    'hide_empty' => false,
+));
+if (is_wp_error($categories)) {
+    $categories = array();
+}
+
+// Nonce for AJAX
+$ajax_nonce = wp_create_nonce('ensemble_ajax');
 ?>
 
 <div class="wrap es-manager-wrap es-galleries-wrap">
-    <h1><?php _e('Galleries', 'ensemble'); ?></h1>
+    <h1><?php echo esc_html($gallery_plural); ?> Manager</h1>
     
     <div class="es-manager-container">
         
         <!-- Toolbar -->
-        <div class="es-manager-toolbar">
-            <div class="es-toolbar-left">
-                <div class="es-search-box">
-                    <input type="text" id="es-gallery-search" placeholder="<?php _e('Search galleries...', 'ensemble'); ?>">
-                    <button id="es-gallery-search-btn" class="button"><?php _e('Search', 'ensemble'); ?></button>
+        <div class="es-wizard-toolbar es-gallery-toolbar">
+            <div class="es-toolbar-row es-toolbar-main-row">
+                <div class="es-filter-search">
+                    <input type="text" 
+                           id="es-gallery-search" 
+                           class="es-search-input" 
+                           placeholder="<?php printf(__('Search %s...', 'ensemble'), strtolower($gallery_plural)); ?>">
+                    <span class="es-search-icon"><span class="dashicons dashicons-search"></span></span>
                 </div>
                 
-                <?php if (!empty($categories) && !is_wp_error($categories)): ?>
-                <select id="es-gallery-category-filter" class="es-filter-select">
-                    <option value=""><?php _e('All Categories', 'ensemble'); ?></option>
-                    <?php foreach ($categories as $cat): ?>
-                        <option value="<?php echo esc_attr($cat->term_id); ?>">
-                            <?php echo esc_html($cat->name); ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-                <?php endif; ?>
-            </div>
-            
-            <div class="es-toolbar-right">
-                <button id="es-bulk-delete-btn" class="button" style="display: none;">
-                    <?php _e('Delete Selected', 'ensemble'); ?>
-                </button>
+                <span class="es-toolbar-divider"></span>
+                
+                <div class="es-bulk-actions-inline" id="es-bulk-actions">
+                    <span class="es-bulk-selected-count" id="es-selected-count" style="display:none;"></span>
+                    <select id="es-bulk-action-select">
+                        <option value=""><?php _e('Bulk Actions', 'ensemble'); ?></option>
+                        <option value="delete"><?php _e('Delete', 'ensemble'); ?></option>
+                    </select>
+                    <button id="es-apply-bulk-action" class="button">
+                        <span class="dashicons dashicons-yes"></span>
+                    </button>
+                </div>
+                
+                <div class="es-toolbar-spacer"></div>
+                
+                <div class="es-view-toggle">
+                    <button class="es-view-btn active" data-view="grid" title="<?php _e('Grid View', 'ensemble'); ?>">
+                        <span class="dashicons dashicons-grid-view"></span>
+                    </button>
+                    <button class="es-view-btn" data-view="list" title="<?php _e('List View', 'ensemble'); ?>">
+                        <span class="dashicons dashicons-list-view"></span>
+                    </button>
+                </div>
+                
+                <span id="es-gallery-count" class="es-item-count"></span>
+                
                 <button id="es-create-gallery-btn" class="button button-primary">
-                    <?php _e('Add New Gallery', 'ensemble'); ?>
+                    <span class="dashicons dashicons-plus-alt2"></span>
+                    <?php printf(__('Add %s', 'ensemble'), $gallery_singular); ?>
                 </button>
             </div>
         </div>
         
-        <!-- View Toggle -->
-        <div class="es-view-toggle">
-            <button class="es-view-btn active" data-view="grid">
-                <span class="dashicons dashicons-grid-view"></span>
-                <?php _e('Grid', 'ensemble'); ?>
-            </button>
-            <button class="es-view-btn" data-view="list">
-                <span class="dashicons dashicons-list-view"></span>
-                <?php _e('List', 'ensemble'); ?>
-            </button>
-        </div>
-        
-        <!-- Galleries List/Grid -->
-        <div id="es-galleries-container" class="es-items-container">
-            <div class="es-loading"><?php _e('Loading galleries...', 'ensemble'); ?></div>
+        <!-- Galleries Container -->
+        <div id="es-galleries-container" class="es-items-container es-view-grid">
+            <div class="es-loading"><?php _e('Loading...', 'ensemble'); ?></div>
         </div>
         
     </div>
     
     <!-- Gallery Modal -->
     <div id="es-gallery-modal" class="es-modal" style="display: none;">
-        <div class="es-modal-content es-modal-large">
+        <div class="es-modal-content es-modal-large es-modal-scrollable">
             <span class="es-modal-close">&times;</span>
             
-            <h2 id="es-modal-title"><?php _e('Add New Gallery', 'ensemble'); ?></h2>
+            <div class="es-modal-header">
+                <h2 id="es-modal-title"><?php printf(__('Add New %s', 'ensemble'), $gallery_singular); ?></h2>
+            </div>
             
             <form id="es-gallery-form" class="es-manager-form">
-                
                 <input type="hidden" id="es-gallery-id" name="gallery_id" value="">
                 
-                <div class="es-form-grid">
+                <div class="es-form-sections">
                     
-                    <!-- Left Column -->
-                    <div class="es-form-column">
-                        
-                        <div class="es-form-section">
-                            <h3><?php _e('Basic Information', 'ensemble'); ?></h3>
-                            
-                            <div class="es-form-row">
-                                <label for="es-gallery-title"><?php _e('Gallery Title', 'ensemble'); ?> *</label>
-                                <input type="text" id="es-gallery-title" name="title" required placeholder="<?php _e('e.g. Summer Festival 2024 Photos', 'ensemble'); ?>">
+                    <!-- Basic Info -->
+                    <div class="es-form-section">
+                        <div class="es-form-row">
+                            <div class="es-form-field es-form-field-large">
+                                <label for="es-gallery-title"><?php _e('Title', 'ensemble'); ?> <span class="required">*</span></label>
+                                <input type="text" id="es-gallery-title" name="title" required>
                             </div>
-                            
-                            <div class="es-form-row">
+                        </div>
+                        
+                        <div class="es-form-row">
+                            <div class="es-form-field">
                                 <label for="es-gallery-description"><?php _e('Description', 'ensemble'); ?></label>
-                                <textarea id="es-gallery-description" name="description" rows="3" placeholder="<?php _e('Optional description for this gallery...', 'ensemble'); ?>"></textarea>
-                            </div>
-                            
-                            <?php if (!empty($categories) && !is_wp_error($categories)): ?>
-                            <div class="es-form-row">
-                                <label><?php _e('Category', 'ensemble'); ?></label>
-                                <div class="es-pill-group" id="es-gallery-category-pills">
-                                    <?php foreach ($categories as $cat): ?>
-                                        <label class="es-pill">
-                                            <input type="checkbox" name="categories[]" value="<?php echo esc_attr($cat->term_id); ?>">
-                                            <span><?php echo esc_html($cat->name); ?></span>
-                                        </label>
-                                    <?php endforeach; ?>
-                                </div>
-                                <p class="es-field-help">
-                                    <a href="<?php echo admin_url('edit-tags.php?taxonomy=ensemble_gallery_category&post_type=ensemble_gallery'); ?>" target="_blank">
-                                        <?php _e('+ Manage categories', 'ensemble'); ?>
-                                    </a>
-                                </p>
-                            </div>
-                            <?php endif; ?>
-                        </div>
-                        
-                        <div class="es-form-section">
-                            <h3><?php _e('Link to Content', 'ensemble'); ?></h3>
-                            <p class="es-field-help" style="margin-top: 0;">
-                                <?php _e('Optional: Connect this gallery to an event, artist, or location.', 'ensemble'); ?>
-                            </p>
-                            
-                            <div class="es-form-row">
-                                <label for="es-gallery-linked-event"><?php echo esc_html($event_label); ?></label>
-                                <select id="es-gallery-linked-event" name="linked_event">
-                                    <option value=""><?php _e('— Not linked —', 'ensemble'); ?></option>
-                                    <?php foreach ($events as $event): ?>
-                                        <option value="<?php echo esc_attr($event->ID); ?>">
-                                            <?php echo esc_html($event->post_title); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            
-                            <div class="es-form-row">
-                                <label for="es-gallery-linked-artist"><?php echo esc_html($artist_label); ?></label>
-                                <select id="es-gallery-linked-artist" name="linked_artist">
-                                    <option value=""><?php _e('— Not linked —', 'ensemble'); ?></option>
-                                    <?php foreach ($artists as $artist): ?>
-                                        <option value="<?php echo esc_attr($artist->ID); ?>">
-                                            <?php echo esc_html($artist->post_title); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            
-                            <div class="es-form-row">
-                                <label for="es-gallery-linked-location"><?php echo esc_html($location_label); ?></label>
-                                <select id="es-gallery-linked-location" name="linked_location">
-                                    <option value=""><?php _e('— Not linked —', 'ensemble'); ?></option>
-                                    <?php foreach ($locations as $location): ?>
-                                        <option value="<?php echo esc_attr($location->ID); ?>">
-                                            <?php echo esc_html($location->post_title); ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
+                                <textarea id="es-gallery-description" name="description" rows="3"></textarea>
                             </div>
                         </div>
                         
-                        <div class="es-form-section">
-                            <h3><?php _e('Display Settings', 'ensemble'); ?></h3>
+                        <div class="es-form-row es-form-row-3col">
+                            <div class="es-form-field">
+                                <label for="es-gallery-category"><?php _e('Category', 'ensemble'); ?></label>
+                                <select id="es-gallery-category" name="categories[]" multiple>
+                                    <?php foreach ($categories as $cat) : ?>
+                                        <option value="<?php echo esc_attr($cat->term_id); ?>"><?php echo esc_html($cat->name); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                             
-                            <div class="es-form-row">
-                                <label for="es-gallery-layout"><?php _e('Default Layout', 'ensemble'); ?></label>
+                            <div class="es-form-field">
+                                <label for="es-gallery-layout"><?php _e('Layout', 'ensemble'); ?></label>
                                 <select id="es-gallery-layout" name="layout">
                                     <option value="grid"><?php _e('Grid', 'ensemble'); ?></option>
                                     <option value="masonry"><?php _e('Masonry', 'ensemble'); ?></option>
-                                    <option value="slider"><?php _e('Slider', 'ensemble'); ?></option>
+                                    <option value="carousel"><?php _e('Carousel', 'ensemble'); ?></option>
+                                    <option value="filmstrip"><?php _e('Filmstrip', 'ensemble'); ?></option>
                                 </select>
                             </div>
                             
-                            <div class="es-form-row">
+                            <div class="es-form-field">
                                 <label for="es-gallery-columns"><?php _e('Columns', 'ensemble'); ?></label>
-                                <select id="es-gallery-columns" name="columns">
-                                    <option value="2">2</option>
-                                    <option value="3" selected>3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            
-                            <div class="es-form-row">
-                                <label class="es-checkbox-inline">
-                                    <input type="checkbox" id="es-gallery-lightbox" name="lightbox" value="1" checked>
-                                    <span><?php _e('Enable Lightbox', 'ensemble'); ?></span>
-                                </label>
+                                <input type="number" id="es-gallery-columns" name="columns" value="4" min="2" max="8">
                             </div>
                         </div>
-                        
                     </div>
                     
-                    <!-- Right Column -->
-                    <div class="es-form-column">
+                    <!-- Link Section -->
+                    <div class="es-form-section">
+                        <h3 class="es-form-section-title">
+                            <span class="dashicons dashicons-admin-links"></span>
+                            <?php _e('Link to', 'ensemble'); ?>
+                        </h3>
+                        <p class="es-form-section-desc"><?php _e('Link this gallery to an event, artist, or location.', 'ensemble'); ?></p>
                         
-                        <div class="es-form-section">
-                            <h3><?php _e('Gallery Images', 'ensemble'); ?></h3>
+                        <div class="es-form-row es-form-row-3col">
+                            <div class="es-form-field">
+                                <label><span class="dashicons dashicons-calendar-alt"></span> <?php echo esc_html($event_label); ?></label>
+                                <select id="es-gallery-linked-event" name="linked_event">
+                                    <option value=""><?php _e('— None —', 'ensemble'); ?></option>
+                                    <?php foreach ($events as $event) : ?>
+                                        <option value="<?php echo esc_attr($event->ID); ?>"><?php echo esc_html($event->post_title); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                             
-                            <div class="es-form-row">
-                                <div id="es-gallery-images-container">
-                                    <div class="es-gallery-upload-zone">
-                                        <button type="button" id="es-add-gallery-images-btn" class="button button-large">
-                                            <span class="dashicons dashicons-images-alt2"></span>
-                                            <?php _e('Add Images', 'ensemble'); ?>
-                                        </button>
-                                        <p class="es-drop-hint"><?php _e('or drag & drop images here', 'ensemble'); ?></p>
-                                    </div>
-                                    <div id="es-gallery-images-preview" class="es-gallery-preview"></div>
-                                    <input type="hidden" id="es-gallery-image-ids" name="image_ids" value="">
-                                </div>
-                                <small class="es-field-help"><?php _e('Drag images to reorder. Click × to remove.', 'ensemble'); ?></small>
+                            <div class="es-form-field">
+                                <label><span class="dashicons dashicons-admin-users"></span> <?php echo esc_html($artist_label); ?></label>
+                                <select id="es-gallery-linked-artist" name="linked_artist">
+                                    <option value=""><?php _e('— None —', 'ensemble'); ?></option>
+                                    <?php foreach ($artists as $artist) : ?>
+                                        <option value="<?php echo esc_attr($artist->ID); ?>"><?php echo esc_html($artist->post_title); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            
+                            <div class="es-form-field">
+                                <label><span class="dashicons dashicons-location"></span> <?php echo esc_html($location_label); ?></label>
+                                <select id="es-gallery-linked-location" name="linked_location">
+                                    <option value=""><?php _e('— None —', 'ensemble'); ?></option>
+                                    <?php foreach ($locations as $location) : ?>
+                                        <option value="<?php echo esc_attr($location->ID); ?>"><?php echo esc_html($location->post_title); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                         </div>
+                    </div>
+                    
+                    <!-- Images Section -->
+                    <div class="es-form-section">
+                        <h3 class="es-form-section-title">
+                            <span class="dashicons dashicons-format-image"></span>
+                            <?php _e('Images', 'ensemble'); ?>
+                        </h3>
                         
-                        <div class="es-form-section">
-                            <h3><?php _e('Cover Image', 'ensemble'); ?></h3>
-                            <p class="es-field-help" style="margin-top: 0;">
-                                <?php _e('Optional custom cover. If not set, the first gallery image is used.', 'ensemble'); ?>
-                            </p>
+                        <div class="es-gallery-media-container">
+                            <div class="es-gallery-images-grid" id="es-gallery-images-grid"></div>
                             
-                            <div class="es-form-row">
-                                <div id="es-gallery-cover-container">
-                                    <button type="button" id="es-upload-cover-btn" class="button">
-                                        <span class="dashicons dashicons-format-image"></span>
-                                        <?php _e('Select Cover Image', 'ensemble'); ?>
-                                    </button>
-                                    <div id="es-gallery-cover-preview"></div>
-                                    <input type="hidden" id="es-gallery-cover-id" name="featured_image_id" value="">
-                                </div>
+                            <div class="es-gallery-upload-zone" id="es-gallery-upload-zone">
+                                <span class="dashicons dashicons-upload"></span>
+                                <p><?php _e('Drop images here or click to upload', 'ensemble'); ?></p>
                             </div>
+                            
+                            <button type="button" class="button es-add-images-btn">
+                                <span class="dashicons dashicons-plus-alt2"></span>
+                                <?php _e('Add Images', 'ensemble'); ?>
+                            </button>
                         </div>
+                        <input type="hidden" name="image_ids" id="es-gallery-image-ids" value="">
+                    </div>
+                    
+                    <!-- Videos Section -->
+                    <div class="es-form-section">
+                        <h3 class="es-form-section-title">
+                            <span class="dashicons dashicons-video-alt3"></span>
+                            <?php _e('Videos', 'ensemble'); ?>
+                        </h3>
+                        <p class="es-form-section-desc"><?php _e('Add YouTube, Vimeo, or self-hosted videos.', 'ensemble'); ?></p>
                         
-                        <div class="es-form-section" id="es-gallery-stats" style="display: none;">
-                            <h3><?php _e('Statistics', 'ensemble'); ?></h3>
-                            
-                            <div class="es-stat-item">
-                                <span class="es-stat-label"><?php _e('Images:', 'ensemble'); ?></span>
-                                <span class="es-stat-value" id="es-gallery-image-count">0</span>
-                            </div>
-                            
-                            <div class="es-stat-item">
-                                <span class="es-stat-label"><?php _e('Created:', 'ensemble'); ?></span>
-                                <span class="es-stat-value" id="es-gallery-created">-</span>
-                            </div>
-                            
-                            <div class="es-stat-item">
-                                <span class="es-stat-label"><?php _e('Last Modified:', 'ensemble'); ?></span>
-                                <span class="es-stat-value" id="es-gallery-modified">-</span>
-                            </div>
+                        <div class="es-gallery-videos-list" id="es-gallery-videos-list"></div>
+                        
+                        <div class="es-video-add-row">
+                            <input type="url" id="es-new-video-url" placeholder="<?php esc_attr_e('Paste YouTube, Vimeo, or video URL...', 'ensemble'); ?>">
+                            <button type="button" class="button es-add-video-btn">
+                                <span class="dashicons dashicons-plus-alt2"></span>
+                                <?php _e('Add Video', 'ensemble'); ?>
+                            </button>
                         </div>
-                        
-                        <div class="es-form-section">
-                            <h3><?php _e('Shortcode', 'ensemble'); ?></h3>
-                            <div id="es-gallery-shortcode-preview" style="display: none;">
-                                <code class="es-shortcode-display" id="es-gallery-shortcode"></code>
-                                <button type="button" class="button es-copy-shortcode" data-target="es-gallery-shortcode">
-                                    <?php _e('Copy', 'ensemble'); ?>
-                                </button>
-                            </div>
-                            <p class="es-field-help" id="es-gallery-shortcode-hint">
-                                <?php _e('Shortcode will be available after saving.', 'ensemble'); ?>
-                            </p>
-                        </div>
-                        
+                        <p class="es-field-hint">
+                            <?php _e('Supported:', 'ensemble'); ?> 
+                            <code>youtube.com</code>, <code>youtu.be</code>, <code>vimeo.com</code>, <code>.mp4</code>, <code>.webm</code>
+                        </p>
+                        <input type="hidden" name="videos" id="es-gallery-videos-data" value="[]">
                     </div>
                     
                 </div>
                 
-                <div class="es-form-actions">
-                    <button type="submit" class="button button-primary button-large">
+                <div class="es-modal-footer">
+                    <button type="button" class="button es-modal-cancel"><?php _e('Cancel', 'ensemble'); ?></button>
+                    <button type="submit" class="button button-primary">
+                        <span class="dashicons dashicons-saved"></span>
                         <?php _e('Save Gallery', 'ensemble'); ?>
                     </button>
-                    <button type="button" class="es-modal-close-btn button button-large">
-                        <?php _e('Cancel', 'ensemble'); ?>
-                    </button>
-                    <button type="button" id="es-delete-gallery-btn" class="button button-link-delete" style="display: none;">
-                        <?php _e('Delete Gallery', 'ensemble'); ?>
-                    </button>
                 </div>
-                
             </form>
-            
         </div>
     </div>
-    
-    <!-- Success/Error Messages -->
-    <div id="es-message" class="es-message" style="display: none;"></div>
-    
 </div>
 
+<!-- Templates -->
+<script type="text/html" id="tmpl-es-gallery-card">
+    <div class="es-item-card es-gallery-card" data-id="{{ data.id }}">
+        <div class="es-card-select">
+            <input type="checkbox" class="es-select-item" data-id="{{ data.id }}">
+        </div>
+        <div class="es-card-thumbnail es-gallery-thumbnail">
+            <# if (data.featured_image) { #>
+                <img src="{{ data.featured_image }}" alt="">
+            <# } else if (data.images && data.images.length) { #>
+                <img src="{{ data.images[0].url }}" alt="">
+            <# } else { #>
+                <div class="es-card-placeholder"><span class="dashicons dashicons-format-gallery"></span></div>
+            <# } #>
+            <div class="es-gallery-counts">
+                <# if (data.image_count > 0) { #>
+                    <span class="es-count-badge"><span class="dashicons dashicons-format-image"></span> {{ data.image_count }}</span>
+                <# } #>
+                <# if (data.video_count > 0) { #>
+                    <span class="es-count-badge es-count-video"><span class="dashicons dashicons-video-alt3"></span> {{ data.video_count }}</span>
+                <# } #>
+            </div>
+            <# if (data.source_type) { #>
+                <span class="es-source-badge es-source-{{ data.source_type }}">{{ data.source_label }}</span>
+            <# } #>
+        </div>
+        <div class="es-card-content">
+            <h3 class="es-card-title">{{ data.title }}</h3>
+            <# if (data.category) { #>
+                <div class="es-card-meta">{{ data.category }}</div>
+            <# } #>
+            <div class="es-gallery-links">
+                <# if (data.linked_event) { #>
+                    <span class="es-link-tag es-link-event"><span class="dashicons dashicons-calendar-alt"></span> {{ data.linked_event.title }}</span>
+                <# } #>
+                <# if (data.linked_artist) { #>
+                    <span class="es-link-tag es-link-artist"><span class="dashicons dashicons-admin-users"></span> {{ data.linked_artist.title }}</span>
+                <# } #>
+                <# if (data.linked_location) { #>
+                    <span class="es-link-tag es-link-location"><span class="dashicons dashicons-location"></span> {{ data.linked_location.title }}</span>
+                <# } #>
+            </div>
+        </div>
+        <div class="es-card-actions">
+            <button type="button" class="es-btn-icon es-edit-item" data-id="{{ data.id }}" title="<?php _e('Edit', 'ensemble'); ?>">
+                <span class="dashicons dashicons-edit"></span>
+            </button>
+            <button type="button" class="es-btn-icon es-delete-item" data-id="{{ data.id }}" title="<?php _e('Delete', 'ensemble'); ?>">
+                <span class="dashicons dashicons-trash"></span>
+            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="tmpl-es-gallery-row">
+    <div class="es-item-row" data-id="{{ data.id }}">
+        <div class="es-row-select"><input type="checkbox" class="es-select-item" data-id="{{ data.id }}"></div>
+        <div class="es-row-thumbnail">
+            <# if (data.featured_image || (data.images && data.images.length)) { #>
+                <img src="{{ data.featured_image || data.images[0].url }}" alt="">
+            <# } else { #>
+                <span class="dashicons dashicons-format-gallery"></span>
+            <# } #>
+        </div>
+        <div class="es-row-title">{{ data.title }}</div>
+        <div class="es-row-meta">
+            <# if (data.image_count > 0) { #>{{ data.image_count }} <?php _e('images', 'ensemble'); ?><# } #>
+            <# if (data.video_count > 0) { #>, {{ data.video_count }} <?php _e('videos', 'ensemble'); ?><# } #>
+        </div>
+        <div class="es-row-links">
+            <# if (data.linked_event) { #><span class="es-link-tag es-link-event">{{ data.linked_event.title }}</span><# } #>
+            <# if (data.linked_artist) { #><span class="es-link-tag es-link-artist">{{ data.linked_artist.title }}</span><# } #>
+            <# if (data.linked_location) { #><span class="es-link-tag es-link-location">{{ data.linked_location.title }}</span><# } #>
+        </div>
+        <div class="es-row-actions">
+            <button type="button" class="es-btn-icon es-edit-item" data-id="{{ data.id }}"><span class="dashicons dashicons-edit"></span></button>
+            <button type="button" class="es-btn-icon es-delete-item" data-id="{{ data.id }}"><span class="dashicons dashicons-trash"></span></button>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="tmpl-es-image-item">
+    <div class="es-media-item es-image-item" data-id="{{ data.id }}">
+        <img src="{{ data.url }}" alt="">
+        <button type="button" class="es-media-remove"><span class="dashicons dashicons-no-alt"></span></button>
+        <span class="es-media-drag"><span class="dashicons dashicons-move"></span></span>
+    </div>
+</script>
+
+<script type="text/html" id="tmpl-es-video-item">
+    <div class="es-video-item" data-index="{{ data.index }}">
+        <div class="es-video-thumb">
+            <# if (data.thumbnail) { #>
+                <img src="{{ data.thumbnail }}" alt="">
+            <# } else { #>
+                <span class="dashicons dashicons-video-alt3"></span>
+            <# } #>
+            <span class="es-video-provider es-provider-{{ data.provider }}">{{ data.provider }}</span>
+        </div>
+        <div class="es-video-info">
+            <input type="text" class="es-video-title-input" value="{{ data.title }}" placeholder="<?php esc_attr_e('Video title (optional)', 'ensemble'); ?>">
+            <span class="es-video-url-display">{{ data.url }}</span>
+        </div>
+        <button type="button" class="es-video-remove"><span class="dashicons dashicons-no-alt"></span></button>
+    </div>
+</script>
+
 <style>
-/* Gallery Preview Grid */
-.es-gallery-preview {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+/* Gallery Manager Specific Styles */
+.es-galleries-wrap .es-gallery-thumbnail {
+    position: relative;
+    aspect-ratio: 16/10;
+    background: #f0f0f1;
+}
+.es-gallery-counts {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    display: flex;
+    gap: 6px;
+}
+.es-count-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 4px 8px;
+    background: rgba(0,0,0,0.75);
+    color: #fff;
+    font-size: 11px;
+    border-radius: 4px;
+}
+.es-count-badge .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+.es-source-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 3px;
+    background: #3858e9;
+    color: #fff;
+}
+.es-source-event { background: #2e7d32; }
+.es-source-artist { background: #1565c0; }
+.es-source-location { background: #e65100; }
+
+.es-gallery-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+.es-link-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    background: #f0f0f1;
+    color: #50575e;
+}
+.es-link-tag .dashicons {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+}
+.es-link-event { background: #e8f5e9; color: #2e7d32; }
+.es-link-artist { background: #e3f2fd; color: #1565c0; }
+.es-link-location { background: #fff3e0; color: #e65100; }
+
+/* Form Section */
+.es-form-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+.es-form-section:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+.es-form-section-title {
+    display: flex;
+    align-items: center;
     gap: 8px;
-    margin-top: 15px;
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+.es-form-section-desc {
+    margin: 0 0 15px;
+    color: #646970;
+    font-size: 13px;
+}
+.es-form-row-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+@media (max-width: 782px) {
+    .es-form-row-3col { grid-template-columns: 1fr; }
 }
 
-.es-gallery-preview-item {
+/* Media Container */
+.es-gallery-media-container {
+    border: 2px dashed #c3c4c7;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    min-height: 120px;
+}
+.es-gallery-images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 10px;
+}
+.es-gallery-upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    color: #646970;
+    text-align: center;
+}
+.es-gallery-upload-zone .dashicons {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+.es-gallery-images-grid:not(:empty) ~ .es-gallery-upload-zone { display: none; }
+.es-gallery-images-grid:empty ~ .es-add-images-btn { display: none; }
+
+.es-media-item {
     position: relative;
     aspect-ratio: 1;
-    border-radius: var(--ensemble-card-radius, 8px);
+    border-radius: 6px;
     overflow: hidden;
-    background: #f0f0f0;
+    cursor: grab;
 }
-
-.es-gallery-preview-item img {
+.es-media-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-
-.es-gallery-preview-item .es-remove-image {
+.es-media-remove {
     position: absolute;
     top: 4px;
     right: 4px;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
     background: rgba(0,0,0,0.7);
     color: #fff;
-    border: none;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.15s;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.2s;
 }
-
-.es-gallery-preview-item:hover .es-remove-image {
-    opacity: 1;
-}
-
-.es-gallery-preview-item.sortable-ghost {
-    opacity: 0.4;
-}
-
-/* Sortable placeholder */
-.es-sortable-placeholder {
-    background: #e0e0e0;
-    border: 2px dashed #ccc;
-    border-radius: var(--ensemble-card-radius, 8px);
-    aspect-ratio: 1;
-}
-
-/* Drag handle */
-.es-gallery-preview-item .es-drag-handle {
+.es-media-item:hover .es-media-remove { opacity: 1; }
+.es-media-drag {
     position: absolute;
     bottom: 4px;
     left: 4px;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     background: rgba(0,0,0,0.5);
     color: #fff;
     border-radius: 4px;
-    cursor: move;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.15s;
 }
+.es-media-item:hover .es-media-drag { opacity: 1; }
 
-.es-gallery-preview-item:hover .es-drag-handle {
-    opacity: 1;
+/* Videos */
+.es-gallery-videos-list {
+    margin-bottom: 15px;
 }
-
-/* Drag & drop zone */
-#es-gallery-images-container {
-    border: 2px dashed transparent;
-    border-radius: 8px;
-    transition: all 0.2s;
+.es-video-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 10px;
-    margin: -10px;
+    background: #f6f7f7;
+    border: 1px solid #dcdcde;
+    border-radius: 6px;
+    margin-bottom: 8px;
 }
-
-#es-gallery-images-container.es-drag-over {
-    border-color: var(--es-primary, #0073aa);
-    background: rgba(0, 115, 170, 0.05);
-}
-
-/* Shortcode display */
-.es-shortcode-display {
-    display: block;
-    padding: 10px 12px;
-    background: #f5f5f5;
-    border: 1px solid #ddd;
+.es-video-thumb {
+    position: relative;
+    width: 100px;
+    height: 56px;
+    flex-shrink: 0;
     border-radius: 4px;
-    font-family: monospace;
-    font-size: 13px;
-    margin-bottom: 10px;
-    word-break: break-all;
-}
-
-/* Filter select */
-.es-filter-select {
-    margin-left: 10px;
-}
-
-/* Upload zone */
-.es-gallery-upload-zone {
-    text-align: center;
-    padding: 20px;
-    border: 2px dashed var(--es-border, #ddd);
-    border-radius: 8px;
-    background: var(--es-background, #f9f9f9);
-    transition: all 0.2s;
-}
-
-.es-gallery-upload-zone:hover,
-#es-gallery-images-container.es-drag-over .es-gallery-upload-zone {
-    border-color: var(--es-primary, #0073aa);
-    background: rgba(0, 115, 170, 0.05);
-}
-
-.es-drop-hint {
-    margin: 10px 0 0;
-    color: var(--es-text-secondary, #666);
-    font-size: 13px;
-}
-
-/* Upload progress */
-.es-upload-progress {
+    overflow: hidden;
+    background: #1d2327;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px;
-    background: #e8f4fc;
-    border-radius: 4px;
-    margin-top: 10px;
-    color: #0073aa;
-    font-size: 13px;
+    color: #646970;
 }
-
-.es-upload-progress .spinner {
-    margin: 0;
+.es-video-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.es-video-provider {
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+    padding: 2px 6px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 3px;
+    background: #50575e;
+}
+.es-provider-youtube { background: #ff0000; }
+.es-provider-vimeo { background: #1ab7ea; }
+.es-provider-local { background: #50575e; }
+.es-video-info {
+    flex: 1;
+    min-width: 0;
+}
+.es-video-title-input {
+    width: 100%;
+    margin-bottom: 4px;
+}
+.es-video-url-display {
+    display: block;
+    font-size: 11px;
+    color: #646970;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.es-video-remove {
+    padding: 6px;
+    border: none;
+    background: transparent;
+    color: #646970;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.es-video-remove:hover {
+    background: #fcecec;
+    color: #d63638;
+}
+.es-video-add-row {
+    display: flex;
+    gap: 10px;
+}
+.es-video-add-row input {
+    flex: 1;
+}
+.es-field-hint {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #646970;
+}
+.es-field-hint code {
+    padding: 2px 5px;
+    background: #f0f0f1;
+    border-radius: 3px;
 }
 </style>
 
 <script>
 jQuery(document).ready(function($) {
-    var currentGalleryId = 0;
-    var imageIds = [];
+    const nonce = '<?php echo esc_js($ajax_nonce); ?>';
     
-    // Load galleries
-    function loadGalleries() {
-        $('#es-galleries-container').html('<div class="es-loading"><?php _e('Loading galleries...', 'ensemble'); ?></div>');
+    const GalleryManager = {
+        galleries: [],
+        images: [],
+        videos: [],
+        currentView: 'grid',
         
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'es_get_galleries',
-                nonce: '<?php echo wp_create_nonce('ensemble_ajax'); ?>'
-            },
-            success: function(response) {
+        init: function() {
+            this.bindEvents();
+            this.loadGalleries();
+            this.initSortable();
+        },
+        
+        bindEvents: function() {
+            $('#es-create-gallery-btn').on('click', () => this.openModal());
+            $('.es-modal-close, .es-modal-cancel').on('click', () => this.closeModal());
+            $('#es-gallery-form').on('submit', (e) => this.saveGallery(e));
+            $(document).on('click', '.es-edit-item', (e) => this.editGallery(e));
+            $(document).on('click', '.es-delete-item', (e) => this.deleteGallery(e));
+            $(document).on('click', '.es-add-images-btn, .es-gallery-upload-zone', () => this.openMediaLibrary());
+            $(document).on('click', '.es-media-remove', (e) => this.removeImage(e));
+            $(document).on('click', '.es-add-video-btn', () => this.addVideo());
+            $('#es-new-video-url').on('keypress', (e) => { if (e.which === 13) { e.preventDefault(); this.addVideo(); }});
+            $(document).on('click', '.es-video-remove', (e) => this.removeVideo(e));
+            $(document).on('change', '.es-video-title-input', (e) => this.updateVideoTitle(e));
+            $('.es-view-btn').on('click', (e) => this.toggleView(e));
+            $('#es-gallery-search').on('input', this.debounce(() => this.filterGalleries(), 300));
+            $(document).on('change', '.es-select-item', () => this.updateSelection());
+            $('#es-apply-bulk-action').on('click', () => this.applyBulkAction());
+        },
+        
+        initSortable: function() {
+            $('#es-gallery-images-grid').sortable({
+                items: '.es-media-item',
+                tolerance: 'pointer',
+                update: () => this.updateImageOrder()
+            });
+        },
+        
+        loadGalleries: function() {
+            $('#es-galleries-container').html('<div class="es-loading"><?php _e('Loading...', 'ensemble'); ?></div>');
+            
+            $.post(ajaxurl, { action: 'ensemble_get_galleries', nonce: nonce }, (response) => {
                 if (response.success) {
-                    renderGalleries(response.data);
+                    this.galleries = response.data || [];
+                    this.renderGalleries();
                 } else {
-                    $('#es-galleries-container').html('<div class="es-no-items"><?php _e('No galleries found.', 'ensemble'); ?></div>');
+                    $('#es-galleries-container').html('<div class="es-empty-state"><p><?php _e('Error loading galleries', 'ensemble'); ?></p></div>');
                 }
-            }
-        });
-    }
-    
-    // Render galleries grid
-    function renderGalleries(galleries) {
-        if (!galleries || galleries.length === 0) {
-            $('#es-galleries-container').html(
-                '<div class="es-empty-state">' +
-                    '<div class="es-empty-state-icon"><span class="dashicons dashicons-format-gallery"></span></div>' +
-                    '<h3><?php _e('No galleries yet', 'ensemble'); ?></h3>' +
-                    '<p><?php _e('Create your first gallery to get started!', 'ensemble'); ?></p>' +
-                    '<button class="button button-primary" onclick="jQuery(\'#es-create-gallery-btn\').click();">' +
-                        '<?php _e('Add New Gallery', 'ensemble'); ?>' +
-                    '</button>' +
-                '</div>'
-            );
-            return;
-        }
+            }).fail(() => {
+                $('#es-galleries-container').html('<div class="es-empty-state"><p><?php _e('Error loading galleries', 'ensemble'); ?></p></div>');
+            });
+        },
         
-        // Use manager.css classes
-        $('#es-galleries-container').removeClass('es-list-view').addClass('es-grid-view');
-        
-        var html = '';
-        
-        galleries.forEach(function(gallery) {
-            var coverImage = gallery.featured_image || (gallery.images && gallery.images[0] ? gallery.images[0].url : '');
-            var imageCount = gallery.image_count || 0;
+        renderGalleries: function() {
+            const $container = $('#es-galleries-container');
+            const tmpl = this.currentView === 'grid' ? wp.template('es-gallery-card') : wp.template('es-gallery-row');
             
-            html += '<div class="es-item-card" data-id="' + gallery.id + '">';
-            html += '<input type="checkbox" class="es-item-checkbox" data-id="' + gallery.id + '">';
-            
-            if (coverImage) {
-                html += '<img src="' + coverImage + '" alt="" class="es-item-image">';
-            } else {
-                html += '<div class="es-item-image no-image"><span class="dashicons dashicons-format-gallery"></span></div>';
-            }
-            
-            html += '<div class="es-item-body">';
-            html += '<div class="es-item-info">';
-            html += '<h3 class="es-item-title">' + escapeHtml(gallery.title) + '</h3>';
-            html += '<div class="es-item-meta">';
-            html += '<div class="es-item-meta-item">';
-            html += '<span class="dashicons dashicons-images-alt2"></span>';
-            html += '<span>' + imageCount + ' <?php _e('Images', 'ensemble'); ?></span>';
-            html += '</div>';
-            if (gallery.category) {
-                html += '<div class="es-item-meta-item">';
-                html += '<span class="dashicons dashicons-category"></span>';
-                html += '<span>' + escapeHtml(gallery.category) + '</span>';
-                html += '</div>';
-            }
-            html += '</div>'; // .es-item-meta
-            html += '</div>'; // .es-item-info
-            html += '<div class="es-item-actions">';
-            html += '<button class="button es-edit-btn" data-id="' + gallery.id + '"><?php _e('Edit', 'ensemble'); ?></button>';
-            if (gallery.slug) {
-                html += '<a href="<?php echo home_url('/gallery/'); ?>' + gallery.slug + '/" target="_blank" class="button"><?php _e('View', 'ensemble'); ?></a>';
-            }
-            html += '</div>'; // .es-item-actions
-            html += '</div>'; // .es-item-body
-            html += '</div>'; // .es-item-card
-        });
-        
-        $('#es-galleries-container').html(html);
-        
-        // Attach click handlers
-        attachCardHandlers();
-    }
-    
-    // Attach card click handlers
-    function attachCardHandlers() {
-        $('.es-item-card').off('click').on('click', function(e) {
-            if ($(e.target).is('input, button, a') || $(e.target).closest('button, a').length) {
+            if (!this.galleries.length) {
+                $container.html(`
+                    <div class="es-empty-state">
+                        <span class="dashicons dashicons-format-gallery"></span>
+                        <h3><?php _e('No galleries yet', 'ensemble'); ?></h3>
+                        <p><?php _e('Create your first gallery to showcase images and videos.', 'ensemble'); ?></p>
+                        <button type="button" class="button button-primary" onclick="jQuery('#es-create-gallery-btn').click()">
+                            <?php _e('Create Gallery', 'ensemble'); ?>
+                        </button>
+                    </div>
+                `);
                 return;
             }
-            var id = $(this).data('id');
-            loadGallery(id);
-        });
+            
+            $container.removeClass('es-view-grid es-view-list').addClass('es-view-' + this.currentView);
+            $container.html(this.galleries.map(g => tmpl(g)).join(''));
+            $('#es-gallery-count').text(this.galleries.length + ' <?php _e('galleries', 'ensemble'); ?>');
+        },
         
-        $('.es-edit-btn').off('click').on('click', function(e) {
-            e.stopPropagation();
-            var id = $(this).data('id');
-            loadGallery(id);
-        });
-    }
-    
-    // Escape HTML helper
-    function escapeHtml(text) {
-        if (!text) return '';
-        var div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-    
-    // Open modal for new gallery
-    $('#es-create-gallery-btn').on('click', function() {
-        currentGalleryId = 0;
-        imageIds = [];
-        $('#es-gallery-form')[0].reset();
-        $('#es-gallery-id').val('');
-        $('#es-modal-title').text('<?php _e('Add New Gallery', 'ensemble'); ?>');
-        $('#es-delete-gallery-btn').hide();
-        $('#es-gallery-stats').hide();
-        $('#es-gallery-images-preview').empty();
-        $('#es-gallery-cover-preview').empty();
-        $('#es-gallery-shortcode-preview').hide();
-        $('#es-gallery-shortcode-hint').show();
-        $('#es-gallery-modal').fadeIn(200);
-    });
-    
-    // Load single gallery
-    function loadGallery(id) {
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'es_get_gallery',
-                gallery_id: id,
-                nonce: '<?php echo wp_create_nonce('ensemble_ajax'); ?>'
-            },
-            success: function(response) {
-                if (response.success) {
-                    populateForm(response.data);
-                    $('#es-gallery-modal').fadeIn(200);
-                }
+        openModal: function(data) {
+            this.resetForm();
+            if (data) {
+                this.loadGalleryData(data);
+                $('#es-modal-title').text('<?php printf(__('Edit %s', 'ensemble'), $gallery_singular); ?>');
+            } else {
+                $('#es-modal-title').text('<?php printf(__('Add New %s', 'ensemble'), $gallery_singular); ?>');
             }
-        });
-    }
-    
-    // Populate form with gallery data
-    function populateForm(gallery) {
-        currentGalleryId = gallery.id;
-        $('#es-gallery-id').val(gallery.id);
-        $('#es-gallery-title').val(gallery.title);
-        $('#es-gallery-description').val(gallery.description);
-        $('#es-gallery-layout').val(gallery.layout);
-        $('#es-gallery-columns').val(gallery.columns);
-        $('#es-gallery-lightbox').prop('checked', gallery.lightbox);
+            $('#es-gallery-modal').fadeIn(200);
+        },
         
-        // Set linked items
-        $('#es-gallery-linked-event').val(gallery.linked_event ? gallery.linked_event.id : '');
-        $('#es-gallery-linked-artist').val(gallery.linked_artist ? gallery.linked_artist.id : '');
-        $('#es-gallery-linked-location').val(gallery.linked_location ? gallery.linked_location.id : '');
+        closeModal: function() {
+            $('#es-gallery-modal').fadeOut(200);
+        },
         
-        // Set categories
-        $('input[name="categories[]"]').prop('checked', false);
-        if (gallery.categories) {
-            gallery.categories.forEach(function(cat) {
-                $('input[name="categories[]"][value="' + cat.id + '"]').prop('checked', true);
-            });
-        }
+        resetForm: function() {
+            this.images = [];
+            this.videos = [];
+            $('#es-gallery-form')[0].reset();
+            $('#es-gallery-id').val('');
+            this.renderImages();
+            this.renderVideos();
+        },
         
-        // Set images
-        imageIds = [];
-        var imagesHtml = '';
-        if (gallery.images) {
-            gallery.images.forEach(function(img) {
-                imageIds.push(img.id);
-                imagesHtml += '<div class="es-gallery-preview-item" data-id="' + img.id + '">';
-                imagesHtml += '<img src="' + img.url + '" alt="">';
-                imagesHtml += '<button type="button" class="es-remove-image">&times;</button>';
-                imagesHtml += '</div>';
-            });
-        }
-        $('#es-gallery-images-preview').html(imagesHtml);
-        $('#es-gallery-image-ids').val(imageIds.join(','));
-        
-        // Set cover image
-        if (gallery.featured_image_id) {
-            $('#es-gallery-cover-id').val(gallery.featured_image_id);
-            $('#es-gallery-cover-preview').html('<img src="' + gallery.featured_image + '" style="max-width: 150px; border-radius: 8px;">');
-        }
-        
-        // Stats
-        $('#es-gallery-image-count').text(gallery.image_count);
-        $('#es-gallery-created').text(gallery.created);
-        $('#es-gallery-modified').text(gallery.modified);
-        $('#es-gallery-stats').show();
-        
-        // Shortcode
-        $('#es-gallery-shortcode').text('[ensemble_gallery id="' + gallery.id + '"]');
-        $('#es-gallery-shortcode-preview').show();
-        $('#es-gallery-shortcode-hint').hide();
-        
-        $('#es-modal-title').text('<?php _e('Edit Gallery', 'ensemble'); ?>');
-        $('#es-delete-gallery-btn').show();
-    }
-    
-    // Add images
-    $('#es-add-gallery-images-btn').on('click', function(e) {
-        e.preventDefault();
-        
-        var frame = wp.media({
-            title: '<?php _e('Select Gallery Images', 'ensemble'); ?>',
-            button: { text: '<?php _e('Add to Gallery', 'ensemble'); ?>' },
-            multiple: true
-        });
-        
-        frame.on('select', function() {
-            var attachments = frame.state().get('selection').toJSON();
+        loadGalleryData: function(data) {
+            $('#es-gallery-id').val(data.id);
+            $('#es-gallery-title').val(data.title);
+            $('#es-gallery-description').val(data.description);
+            $('#es-gallery-layout').val(data.layout || 'grid');
+            $('#es-gallery-columns').val(data.columns || 4);
             
-            attachments.forEach(function(attachment) {
-                if (imageIds.indexOf(attachment.id) === -1) {
-                    imageIds.push(attachment.id);
-                    var thumbUrl = attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
-                    var html = '<div class="es-gallery-preview-item" data-id="' + attachment.id + '">';
-                    html += '<img src="' + thumbUrl + '" alt="">';
-                    html += '<button type="button" class="es-remove-image">&times;</button>';
-                    html += '</div>';
-                    $('#es-gallery-images-preview').append(html);
+            if (data.categories && data.categories.length) {
+                $('#es-gallery-category').val(data.categories.map(c => c.id));
+            }
+            
+            $('#es-gallery-linked-event').val(data.linked_event ? data.linked_event.id : '');
+            $('#es-gallery-linked-artist').val(data.linked_artist ? data.linked_artist.id : '');
+            $('#es-gallery-linked-location').val(data.linked_location ? data.linked_location.id : '');
+            
+            this.images = data.images || [];
+            this.videos = data.videos || [];
+            this.renderImages();
+            this.renderVideos();
+        },
+        
+        editGallery: function(e) {
+            e.preventDefault();
+            const id = $(e.currentTarget).data('id');
+            
+            $.post(ajaxurl, { action: 'ensemble_get_gallery', gallery_id: id, nonce: nonce }, (response) => {
+                if (response.success) {
+                    this.openModal(response.data);
                 }
             });
+        },
+        
+        saveGallery: function(e) {
+            e.preventDefault();
+            const $btn = $('#es-gallery-form button[type="submit"]').prop('disabled', true);
             
-            $('#es-gallery-image-ids').val(imageIds.join(','));
-        });
+            $.post(ajaxurl, {
+                action: 'ensemble_save_gallery',
+                nonce: nonce,
+                gallery_id: $('#es-gallery-id').val(),
+                title: $('#es-gallery-title').val(),
+                description: $('#es-gallery-description').val(),
+                categories: $('#es-gallery-category').val() || [],
+                layout: $('#es-gallery-layout').val(),
+                columns: $('#es-gallery-columns').val(),
+                linked_event: $('#es-gallery-linked-event').val(),
+                linked_artist: $('#es-gallery-linked-artist').val(),
+                linked_location: $('#es-gallery-linked-location').val(),
+                image_ids: this.images.map(i => i.id).join(','),
+                videos: JSON.stringify(this.videos)
+            }, (response) => {
+                $btn.prop('disabled', false);
+                if (response.success) {
+                    this.closeModal();
+                    this.loadGalleries();
+                } else {
+                    alert(response.data?.message || '<?php _e('Error saving', 'ensemble'); ?>');
+                }
+            });
+        },
         
-        frame.open();
-    });
-    
-    // Remove image
-    $(document).on('click', '.es-remove-image', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        var item = $(this).closest('.es-gallery-preview-item');
-        var id = parseInt(item.data('id'));
+        deleteGallery: function(e) {
+            e.preventDefault();
+            if (!confirm('<?php _e('Delete this gallery?', 'ensemble'); ?>')) return;
+            
+            const id = $(e.currentTarget).data('id');
+            $.post(ajaxurl, { action: 'ensemble_delete_gallery', gallery_id: id, nonce: nonce }, (response) => {
+                if (response.success) {
+                    this.galleries = this.galleries.filter(g => g.id !== id);
+                    this.renderGalleries();
+                }
+            });
+        },
         
-        imageIds = imageIds.filter(function(imgId) {
-            return parseInt(imgId) !== id;
-        });
-        
-        item.remove();
-        $('#es-gallery-image-ids').val(imageIds.join(','));
-    });
-    
-    // Initialize sortable for gallery images
-    function initSortable() {
-        var $preview = $('#es-gallery-images-preview');
-        if ($preview.length === 0) return;
-        
-        if ($preview.hasClass('ui-sortable')) {
-            $preview.sortable('refresh');
-            return;
-        }
-        
-        $preview.sortable({
-            items: '.es-gallery-preview-item',
-            cursor: 'move',
-            opacity: 0.7,
-            placeholder: 'es-sortable-placeholder',
-            tolerance: 'pointer',
-            update: function(event, ui) {
-                imageIds = [];
-                $preview.find('.es-gallery-preview-item').each(function() {
-                    imageIds.push(parseInt($(this).data('id')));
+        openMediaLibrary: function() {
+            const frame = wp.media({
+                title: '<?php _e('Select Images', 'ensemble'); ?>',
+                button: { text: '<?php _e('Add to Gallery', 'ensemble'); ?>' },
+                multiple: true,
+                library: { type: 'image' }
+            });
+            
+            frame.on('select', () => {
+                frame.state().get('selection').toJSON().forEach(att => {
+                    if (!this.images.find(i => i.id === att.id)) {
+                        this.images.push({
+                            id: att.id,
+                            url: att.sizes?.medium?.url || att.url,
+                            full: att.url
+                        });
+                    }
                 });
-                $('#es-gallery-image-ids').val(imageIds.join(','));
-            }
-        });
-    }
-    
-    // Initialize on page load
-    initSortable();
-    
-    // Drag & drop upload zone
-    var $dropContainer = $('#es-gallery-images-container');
-    var $dropZone = $dropContainer.find('.es-gallery-upload-zone');
-    
-    // Prevent default drag behaviors on document
-    $(document).on('dragover drop', function(e) {
-        e.preventDefault();
-    });
-    
-    // Drag over
-    $dropContainer.on('dragover dragenter', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $dropZone.addClass('es-drag-over');
-    });
-    
-    // Drag leave
-    $dropContainer.on('dragleave', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Only remove class if we're leaving the container
-        var rect = $dropContainer[0].getBoundingClientRect();
-        if (e.originalEvent.clientX < rect.left || e.originalEvent.clientX > rect.right ||
-            e.originalEvent.clientY < rect.top || e.originalEvent.clientY > rect.bottom) {
-            $dropZone.removeClass('es-drag-over');
-        }
-    });
-    
-    // Drop handler
-    $dropContainer.on('drop', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $dropZone.removeClass('es-drag-over');
-        
-        var files = e.originalEvent.dataTransfer.files;
-        if (files && files.length > 0) {
-            handleFileUpload(files);
-        }
-    });
-    
-    // Handle file upload
-    function handleFileUpload(files) {
-        var imageFiles = Array.from(files).filter(function(file) {
-            return file.type.match('image.*');
-        });
-        
-        if (imageFiles.length === 0) {
-            alert('<?php _e('Please select image files only.', 'ensemble'); ?>');
-            return;
-        }
-        
-        // Show loading
-        var $loading = $('<div class="es-upload-progress"><span class="spinner is-active" style="float:none;"></span> <?php _e('Uploading', 'ensemble'); ?> <span class="count">0</span>/' + imageFiles.length + '</div>');
-        $dropZone.append($loading);
-        
-        var completed = 0;
-        
-        imageFiles.forEach(function(file, index) {
-            uploadSingleFile(file, function(id, url) {
-                completed++;
-                $loading.find('.count').text(completed);
-                
-                if (id && url) {
-                    addImageToPreview(id, url);
-                }
-                
-                if (completed >= imageFiles.length) {
-                    $loading.fadeOut(300, function() {
-                        $(this).remove();
-                    });
-                }
+                this.renderImages();
             });
-        });
-    }
-    
-    // Upload single file via WordPress media
-    function uploadSingleFile(file, callback) {
-        var formData = new FormData();
-        formData.append('async-upload', file);
-        formData.append('name', file.name);
-        formData.append('action', 'upload-attachment');
-        formData.append('_wpnonce', '<?php echo wp_create_nonce('media-form'); ?>');
+            frame.open();
+        },
         
-        $.ajax({
-            url: '<?php echo admin_url('async-upload.php'); ?>',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                if (response && response.success && response.data) {
-                    var data = response.data;
-                    var thumbUrl = data.sizes && data.sizes.thumbnail ? data.sizes.thumbnail.url : data.url;
-                    callback(data.id, thumbUrl);
-                } else {
-                    console.error('Upload response error:', response);
-                    callback(null, null);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Upload AJAX error:', error);
-                callback(null, null);
-            }
-        });
-    }
-    
-    // Add image to preview
-    function addImageToPreview(id, url) {
-        id = parseInt(id);
-        
-        // Check for duplicates
-        if (imageIds.indexOf(id) !== -1) return;
-        
-        imageIds.push(id);
-        
-        var html = '<div class="es-gallery-preview-item" data-id="' + id + '">' +
-            '<img src="' + url + '" alt="">' +
-            '<button type="button" class="es-remove-image" title="<?php _e('Remove', 'ensemble'); ?>">&times;</button>' +
-            '<span class="es-drag-handle dashicons dashicons-move" title="<?php _e('Drag to reorder', 'ensemble'); ?>"></span>' +
-            '</div>';
-        
-        $('#es-gallery-images-preview').append(html);
-        $('#es-gallery-image-ids').val(imageIds.join(','));
-        
-        // Refresh sortable
-        initSortable();
-    }
-    
-    // Upload cover image
-    $('#es-upload-cover-btn').on('click', function(e) {
-        e.preventDefault();
-        
-        var frame = wp.media({
-            title: '<?php _e('Select Cover Image', 'ensemble'); ?>',
-            button: { text: '<?php _e('Use as Cover', 'ensemble'); ?>' },
-            multiple: false
-        });
-        
-        frame.on('select', function() {
-            var attachment = frame.state().get('selection').first().toJSON();
-            var thumbUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
+        renderImages: function() {
+            const $grid = $('#es-gallery-images-grid').empty();
+            const tmpl = wp.template('es-image-item');
+            this.images.forEach(img => $grid.append(tmpl(img)));
+            $('#es-gallery-image-ids').val(this.images.map(i => i.id).join(','));
             
-            $('#es-gallery-cover-id').val(attachment.id);
-            $('#es-gallery-cover-preview').html('<img src="' + thumbUrl + '" style="max-width: 150px; border-radius: 8px;">');
-        });
+            if (this.images.length) {
+                $('.es-gallery-upload-zone').hide();
+                $('.es-add-images-btn').show();
+            } else {
+                $('.es-gallery-upload-zone').show();
+                $('.es-add-images-btn').hide();
+            }
+        },
         
-        frame.open();
-    });
-    
-    // Save gallery
-    $('#es-gallery-form').on('submit', function(e) {
-        e.preventDefault();
+        removeImage: function(e) {
+            e.preventDefault();
+            const id = $(e.currentTarget).closest('.es-media-item').data('id');
+            this.images = this.images.filter(i => i.id !== id);
+            this.renderImages();
+        },
         
-        var formData = {
-            action: 'es_save_gallery',
-            nonce: '<?php echo wp_create_nonce('ensemble_ajax'); ?>',
-            gallery_id: $('#es-gallery-id').val(),
-            title: $('#es-gallery-title').val(),
-            description: $('#es-gallery-description').val(),
-            layout: $('#es-gallery-layout').val(),
-            columns: $('#es-gallery-columns').val(),
-            lightbox: $('#es-gallery-lightbox').is(':checked') ? 1 : 0,
-            linked_event: $('#es-gallery-linked-event').val(),
-            linked_artist: $('#es-gallery-linked-artist').val(),
-            linked_location: $('#es-gallery-linked-location').val(),
-            featured_image_id: $('#es-gallery-cover-id').val(),
-            image_ids: imageIds
-        };
+        updateImageOrder: function() {
+            const order = [];
+            $('#es-gallery-images-grid .es-media-item').each(function() {
+                const id = $(this).data('id');
+                const img = GalleryManager.images.find(i => i.id === id);
+                if (img) order.push(img);
+            });
+            this.images = order;
+            $('#es-gallery-image-ids').val(this.images.map(i => i.id).join(','));
+        },
         
-        // Get categories
-        var categories = [];
-        $('input[name="categories[]"]:checked').each(function() {
-            categories.push($(this).val());
-        });
-        formData.categories = categories;
+        addVideo: function() {
+            const url = $('#es-new-video-url').val().trim();
+            if (!url) return;
+            
+            const video = this.parseVideoUrl(url);
+            if (!video) {
+                alert('<?php _e('Invalid video URL', 'ensemble'); ?>');
+                return;
+            }
+            
+            this.videos.push(video);
+            this.renderVideos();
+            $('#es-new-video-url').val('');
+        },
         
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                if (response.success) {
-                    $('#es-gallery-modal').fadeOut(200);
-                    loadGalleries();
-                    showMessage('<?php _e('Gallery saved successfully!', 'ensemble'); ?>', 'success');
-                } else {
-                    showMessage(response.data.message || '<?php _e('Error saving gallery', 'ensemble'); ?>', 'error');
+        parseVideoUrl: function(url) {
+            let provider = 'local', id = '', thumbnail = '';
+            
+            // YouTube
+            let match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+            if (match) {
+                provider = 'youtube';
+                id = match[1];
+                thumbnail = 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
+            }
+            
+            // Vimeo
+            if (!match) {
+                match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+                if (match) {
+                    provider = 'vimeo';
+                    id = match[1];
                 }
             }
-        });
-    });
-    
-    // Delete gallery
-    $('#es-delete-gallery-btn').on('click', function() {
-        if (!confirm('<?php _e('Are you sure you want to delete this gallery?', 'ensemble'); ?>')) {
-            return;
+            
+            // Local video
+            if (!match && url.match(/\.(mp4|webm|ogg|mov|m4v)$/i)) {
+                provider = 'local';
+            }
+            
+            if (!match && provider === 'local' && !url.match(/\.(mp4|webm|ogg|mov|m4v)$/i)) {
+                return null;
+            }
+            
+            return { url: url, title: '', provider: provider, thumbnail: thumbnail };
+        },
+        
+        renderVideos: function() {
+            const $list = $('#es-gallery-videos-list').empty();
+            const tmpl = wp.template('es-video-item');
+            this.videos.forEach((v, i) => {
+                v.index = i;
+                $list.append(tmpl(v));
+            });
+            $('#es-gallery-videos-data').val(JSON.stringify(this.videos));
+        },
+        
+        removeVideo: function(e) {
+            const idx = $(e.currentTarget).closest('.es-video-item').data('index');
+            this.videos.splice(idx, 1);
+            this.renderVideos();
+        },
+        
+        updateVideoTitle: function(e) {
+            const idx = $(e.target).closest('.es-video-item').data('index');
+            this.videos[idx].title = $(e.target).val();
+            $('#es-gallery-videos-data').val(JSON.stringify(this.videos));
+        },
+        
+        toggleView: function(e) {
+            const view = $(e.currentTarget).data('view');
+            $('.es-view-btn').removeClass('active');
+            $(e.currentTarget).addClass('active');
+            this.currentView = view;
+            this.renderGalleries();
+        },
+        
+        filterGalleries: function() {
+            const q = $('#es-gallery-search').val().toLowerCase();
+            const filtered = q ? this.galleries.filter(g => 
+                g.title.toLowerCase().includes(q) || (g.category && g.category.toLowerCase().includes(q))
+            ) : this.galleries;
+            
+            const $container = $('#es-galleries-container');
+            const tmpl = this.currentView === 'grid' ? wp.template('es-gallery-card') : wp.template('es-gallery-row');
+            $container.html(filtered.length ? filtered.map(g => tmpl(g)).join('') : '<div class="es-empty-state"><p><?php _e('No galleries found', 'ensemble'); ?></p></div>');
+        },
+        
+        updateSelection: function() {
+            const count = $('.es-select-item:checked').length;
+            $('#es-selected-count').text(count + ' <?php _e('selected', 'ensemble'); ?>').toggle(count > 0);
+        },
+        
+        applyBulkAction: function() {
+            const action = $('#es-bulk-action-select').val();
+            const ids = [];
+            $('.es-select-item:checked').each(function() { ids.push($(this).data('id')); });
+            
+            if (!action || !ids.length) return;
+            
+            if (action === 'delete' && confirm('<?php _e('Delete selected galleries?', 'ensemble'); ?>')) {
+                $.post(ajaxurl, { action: 'ensemble_bulk_delete_galleries', gallery_ids: ids, nonce: nonce }, () => this.loadGalleries());
+            }
+        },
+        
+        debounce: function(fn, ms) {
+            let t;
+            return function(...args) { clearTimeout(t); t = setTimeout(() => fn.apply(this, args), ms); };
         }
-        
-        $.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            data: {
-                action: 'es_delete_gallery',
-                gallery_id: currentGalleryId,
-                nonce: '<?php echo wp_create_nonce('ensemble_ajax'); ?>'
-            },
-            success: function(response) {
-                if (response.success) {
-                    $('#es-gallery-modal').fadeOut(200);
-                    loadGalleries();
-                    showMessage('<?php _e('Gallery deleted.', 'ensemble'); ?>', 'success');
-                }
-            }
-        });
-    });
+    };
     
-    // Close modal
-    $('.es-modal-close, .es-modal-close-btn').on('click', function() {
-        $('#es-gallery-modal').fadeOut(200);
-    });
-    
-    // Search
-    $('#es-gallery-search-btn').on('click', function() {
-        var search = $('#es-gallery-search').val();
-        // Implement search
-    });
-    
-    // Copy shortcode
-    $(document).on('click', '.es-copy-shortcode', function() {
-        var target = $(this).data('target');
-        var text = $('#' + target).text();
-        navigator.clipboard.writeText(text);
-        $(this).text('<?php _e('Copied!', 'ensemble'); ?>');
-        setTimeout(function() {
-            $('.es-copy-shortcode').text('<?php _e('Copy', 'ensemble'); ?>');
-        }, 2000);
-    });
-    
-    // Show message
-    function showMessage(text, type) {
-        var $msg = $('#es-message');
-        $msg.removeClass('success error').addClass(type).text(text).fadeIn(200);
-        setTimeout(function() {
-            $msg.fadeOut(200);
-        }, 3000);
-    }
-    
-    // Initial load
-    loadGalleries();
+    GalleryManager.init();
 });
 </script>

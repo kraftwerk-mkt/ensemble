@@ -36,6 +36,12 @@ if (!defined('ABSPATH')) exit;
                     <span class="dashicons dashicons-location"></span>
                     <?php _e('Locations', 'ensemble'); ?>
                 </button>
+                <?php if (post_type_exists('ensemble_staff')): ?>
+                <button class="es-picker-tab" data-tab="staff">
+                    <span class="dashicons dashicons-businessperson"></span>
+                    <?php echo esc_html(ES_Label_System::get_label('staff', true)); ?>
+                </button>
+                <?php endif; ?>
             </div>
             
             <!-- Events Picker -->
@@ -82,6 +88,25 @@ if (!defined('ABSPATH')) exit;
                     <div class="es-loading"><?php _e('Loading...', 'ensemble'); ?></div>
                 </div>
             </div>
+            
+            <!-- Staff Picker -->
+            <?php if (post_type_exists('ensemble_staff')): 
+                $staff_plural = ES_Label_System::get_label('staff', true);
+            ?>
+            <div class="es-picker-content" data-content="staff">
+                <div class="es-picker-search">
+                    <input type="text" 
+                           id="staff-search" 
+                           class="es-search-input" 
+                           placeholder="<?php printf(__('Search %s...', 'ensemble'), strtolower($staff_plural)); ?>">
+                    <span class="dashicons dashicons-search"></span>
+                </div>
+                
+                <div class="es-picker-results" id="staff-results">
+                    <div class="es-loading"><?php _e('Loading...', 'ensemble'); ?></div>
+                </div>
+            </div>
+            <?php endif; ?>
             
         </div>
 

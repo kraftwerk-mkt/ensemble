@@ -11,6 +11,7 @@
  * - ES_Artist_Shortcodes: Artist-related shortcodes
  * - ES_Location_Shortcodes: Location-related shortcodes
  * - ES_Calendar_Shortcode: Calendar shortcode
+ * - ES_Countdown_Shortcode: Countdown timer shortcode
  * - ES_Utility_Shortcodes: Gallery, demo, and layout switcher
  * - ES_Shortcodes_Assets: Style and script enqueuing
  *
@@ -69,6 +70,13 @@ class ES_Shortcodes {
 	private $calendar = null;
 
 	/**
+	 * Countdown shortcode instance.
+	 *
+	 * @var ES_Countdown_Shortcode|null
+	 */
+	private $countdown = null;
+
+	/**
 	 * Utility shortcodes instance.
 	 *
 	 * @var ES_Utility_Shortcodes|null
@@ -118,6 +126,7 @@ class ES_Shortcodes {
 		require_once $shortcodes_dir . 'class-es-artist-shortcodes.php';
 		require_once $shortcodes_dir . 'class-es-location-shortcodes.php';
 		require_once $shortcodes_dir . 'class-es-calendar-shortcode.php';
+		require_once $shortcodes_dir . 'class-es-countdown-shortcode.php';
 		require_once $shortcodes_dir . 'class-es-shortcodes-assets.php';
 	}
 
@@ -132,6 +141,7 @@ class ES_Shortcodes {
 		$this->artists   = new ES_Artist_Shortcodes();
 		$this->locations = new ES_Location_Shortcodes();
 		$this->calendar  = new ES_Calendar_Shortcode();
+		$this->countdown = new ES_Countdown_Shortcode();
 		$this->utilities = new ES_Utility_Shortcodes();
 		$this->assets    = new ES_Shortcodes_Assets();
 
@@ -152,6 +162,7 @@ class ES_Shortcodes {
 		$this->artists->register_shortcodes();
 		$this->locations->register_shortcodes();
 		$this->calendar->register_shortcodes();
+		$this->countdown->register_shortcodes();
 		$this->utilities->register_shortcodes();
 	}
 
@@ -189,6 +200,15 @@ class ES_Shortcodes {
 	 */
 	public function calendar() {
 		return $this->calendar;
+	}
+
+	/**
+	 * Get countdown shortcode handler.
+	 *
+	 * @return ES_Countdown_Shortcode
+	 */
+	public function countdown() {
+		return $this->countdown;
 	}
 
 	/**
@@ -292,6 +312,16 @@ class ES_Shortcodes {
 	 */
 	public function calendar_shortcode( $atts ) {
 		return $this->calendar->calendar_shortcode( $atts );
+	}
+
+	/**
+	 * Countdown shortcode - backward compatibility.
+	 *
+	 * @param array $atts Shortcode attributes.
+	 * @return string HTML output.
+	 */
+	public function countdown_shortcode( $atts ) {
+		return $this->countdown->countdown_shortcode( $atts );
 	}
 
 	/**

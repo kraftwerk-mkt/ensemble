@@ -30,16 +30,25 @@ $dept_plural = $addon ? $addon->get_department_label(true) : __('Departments', '
 $settings = wp_parse_args($settings, array(
     'default_layout'        => 'grid',
     'default_columns'       => 3,
+    'show_image'            => true,
     'show_email'            => true,
     'show_phone'            => true,
     'show_position'         => true,
     'show_department'       => true,
+    'show_responsibility'   => false,
+    'show_office_hours'     => false,
+    'show_social_links'     => false,
+    'show_excerpt'          => false,
     'auto_display_events'   => false,
     'event_position'        => 'after_content',
     'event_title'           => __('Contact Persons', 'ensemble'),
     'auto_display_locations'=> false,
     'location_position'     => 'after_content',
     'location_title'        => __('Contact Persons', 'ensemble'),
+    // Email notification settings
+    'send_confirmation'     => true,
+    'send_admin_copy'       => true,
+    'admin_email'           => get_option('admin_email'),
 ));
 ?>
 
@@ -76,6 +85,14 @@ $settings = wp_parse_args($settings, array(
         <div class="es-settings-toggles">
             <label class="es-settings-toggle">
                 <span class="es-settings-toggle__switch">
+                    <input type="checkbox" name="show_image" value="1" <?php checked(!isset($settings['show_image']) || $settings['show_image']); ?>>
+                    <span class="es-settings-toggle__track"></span>
+                </span>
+                <span class="es-settings-toggle__label"><?php _e('Show photo/image', 'ensemble'); ?></span>
+            </label>
+            
+            <label class="es-settings-toggle">
+                <span class="es-settings-toggle__switch">
                     <input type="checkbox" name="show_email" value="1" <?php checked($settings['show_email']); ?>>
                     <span class="es-settings-toggle__track"></span>
                 </span>
@@ -108,6 +125,14 @@ $settings = wp_parse_args($settings, array(
             
             <label class="es-settings-toggle">
                 <span class="es-settings-toggle__switch">
+                    <input type="checkbox" name="show_responsibility" value="1" <?php checked(!empty($settings['show_responsibility'])); ?>>
+                    <span class="es-settings-toggle__track"></span>
+                </span>
+                <span class="es-settings-toggle__label"><?php _e('Show responsibility', 'ensemble'); ?></span>
+            </label>
+            
+            <label class="es-settings-toggle">
+                <span class="es-settings-toggle__switch">
                     <input type="checkbox" name="show_office_hours" value="1" <?php checked(!empty($settings['show_office_hours'])); ?>>
                     <span class="es-settings-toggle__track"></span>
                 </span>
@@ -120,6 +145,14 @@ $settings = wp_parse_args($settings, array(
                     <span class="es-settings-toggle__track"></span>
                 </span>
                 <span class="es-settings-toggle__label"><?php _e('Show social media links', 'ensemble'); ?></span>
+            </label>
+            
+            <label class="es-settings-toggle">
+                <span class="es-settings-toggle__switch">
+                    <input type="checkbox" name="show_excerpt" value="1" <?php checked(!empty($settings['show_excerpt'])); ?>>
+                    <span class="es-settings-toggle__track"></span>
+                </span>
+                <span class="es-settings-toggle__label"><?php _e('Show bio excerpt', 'ensemble'); ?></span>
             </label>
         </div>
     </div>
@@ -201,6 +234,64 @@ $settings = wp_parse_args($settings, array(
         </div>
     </div>
     
+    <!-- Email Notifications -->
+    <div class="es-settings-section">
+        <h4 class="es-settings-section__title"><?php _e('Email Notifications', 'ensemble'); ?></h4>
+        <p class="es-settings-section__desc"><?php _e('Configure email notifications for abstract submissions.', 'ensemble'); ?></p>
+        
+        <div class="es-settings-row">
+            <div class="es-settings-field">
+                <label class="es-checkbox-field">
+                    <input type="checkbox" 
+                           name="send_confirmation" 
+                           id="staff_send_confirmation"
+                           value="1" 
+                           <?php checked($settings['send_confirmation'] ?? true); ?>>
+                    <span><?php _e('Send confirmation email to submitter', 'ensemble'); ?></span>
+                </label>
+                <span class="es-settings-field__hint"><?php _e('Automatically send a confirmation when someone submits an abstract.', 'ensemble'); ?></span>
+            </div>
+        </div>
+        
+        <div class="es-settings-row">
+            <div class="es-settings-field">
+                <label class="es-checkbox-field">
+                    <input type="checkbox" 
+                           name="send_admin_copy" 
+                           id="staff_send_admin_copy"
+                           value="1" 
+                           <?php checked($settings['send_admin_copy'] ?? true); ?>>
+                    <span><?php _e('Send copy to admin', 'ensemble'); ?></span>
+                </label>
+                <span class="es-settings-field__hint"><?php _e('Send a copy of all abstract submissions to the admin email.', 'ensemble'); ?></span>
+            </div>
+        </div>
+        
+        <div class="es-settings-row">
+            <div class="es-settings-field">
+                <label class="es-settings-field__label" for="staff_admin_email">
+                    <?php _e('Admin Email', 'ensemble'); ?>
+                </label>
+                <input type="email" 
+                       name="admin_email" 
+                       id="staff_admin_email"
+                       value="<?php echo esc_attr($settings['admin_email'] ?? get_option('admin_email')); ?>"
+                       class="es-settings-field__input"
+                       placeholder="<?php echo esc_attr(get_option('admin_email')); ?>">
+                <span class="es-settings-field__hint"><?php _e('Email address for admin notifications. Leave empty to use site admin email.', 'ensemble'); ?></span>
+            </div>
+        </div>
+        
+        <div class="es-settings-row">
+            <div class="es-settings-field">
+                <a href="<?php echo esc_url(admin_url('admin.php?page=ensemble-abstracts')); ?>" class="button">
+                    <span class="dashicons dashicons-media-document" style="line-height: 1.4;"></span>
+                    <?php _e('View Abstract Submissions', 'ensemble'); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+    
     <!-- Shortcode Reference -->
     <div class="es-settings-section">
         <h4 class="es-settings-section__title"><?php _e('Shortcode Reference', 'ensemble'); ?></h4>
@@ -278,13 +369,28 @@ $settings = wp_parse_args($settings, array(
                             </tr>
                             <tr>
                                 <td><code>show_office_hours</code></td>
-                                <td><code>yes</code></td>
+                                <td><code>no</code></td>
                                 <td><?php _e('Show office hours: yes or no', 'ensemble'); ?></td>
                             </tr>
                             <tr>
                                 <td><code>show_social</code></td>
-                                <td><code>yes</code></td>
+                                <td><code>no</code></td>
                                 <td><?php _e('Show social media links: yes or no', 'ensemble'); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>show_image</code></td>
+                                <td><code>yes</code></td>
+                                <td><?php _e('Show photo/image: yes or no', 'ensemble'); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>show_responsibility</code></td>
+                                <td><code>no</code></td>
+                                <td><?php _e('Show responsibility text: yes or no', 'ensemble'); ?></td>
+                            </tr>
+                            <tr>
+                                <td><code>show_excerpt</code></td>
+                                <td><code>no</code></td>
+                                <td><?php _e('Show bio excerpt: yes or no', 'ensemble'); ?></td>
                             </tr>
                         </tbody>
                     </table>

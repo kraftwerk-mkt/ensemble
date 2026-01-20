@@ -1,0 +1,437 @@
+/**
+ * Ensemble Shortcodes - Locations
+ * 
+ * Styles for location-related shortcodes:
+ * - [ensemble_locations] - Locations Grid/List
+ * - Single Location components
+ * - Location Row component
+ * - Venue Header
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * DEPENDENCIES:
+ * - _base.css
+ * - _components.css
+ * 
+ * CONDITIONAL LOADING:
+ * Only loaded when location shortcodes are present on page.
+ */
+
+/* ============================================
+   LOCATIONS LIST WRAPPER
+   ============================================ */
+
+.ensemble-locations-list {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* ============================================
+   LOCATION TYPE BADGE
+   ============================================ */
+
+.ensemble-location-type {
+    display: inline-block;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 12px);
+    font-size: var(--ensemble-small-size, 14px);
+    margin-bottom: 12px;
+}
+
+/* ============================================
+   LOCATION ADDRESS
+   ============================================ */
+
+.ensemble-location-address {
+    margin: 12px 0;
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-body-size, 16px);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.ensemble-location-address .dashicons {
+    font-size: var(--ensemble-lg-size, 18px);
+    width: 18px;
+    height: 18px;
+    color: var(--ensemble-primary, #667eea);
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Clickable address link */
+.ensemble-location-address a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.ensemble-location-address a:hover {
+    color: var(--ensemble-primary, #667eea);
+    text-decoration: underline;
+}
+
+/* ============================================
+   LOCATION DESCRIPTION
+   ============================================ */
+
+.ensemble-location-description {
+    margin: 12px 0;
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-body-size, 16px);
+    line-height: var(--ensemble-line-height, 1.6);
+}
+
+.ensemble-location-description p {
+    margin: 0 0 12px 0;
+}
+
+.ensemble-location-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   LOCATION EVENTS (on card)
+   ============================================ */
+
+.ensemble-location-events {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.ensemble-location-events h5 {
+    margin: 0 0 12px 0;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-location-events ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ensemble-location-events li {
+    margin-bottom: 8px;
+}
+
+.ensemble-location-events a {
+    color: var(--ensemble-primary, #667eea);
+    text-decoration: none;
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+.ensemble-location-events a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   LOCATION LIST LAYOUT
+   Alternative to grid - horizontal cards
+   ============================================ */
+
+.ensemble-locations-list.ensemble-layout-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ensemble-locations-list.ensemble-layout-list .ensemble-location-card {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ensemble-locations-list.ensemble-layout-list .ensemble-location-image {
+    width: 120px;
+    height: 120px;
+    margin: 0;
+    margin-right: 20px;
+    border-radius: var(--ensemble-card-radius, 12px);
+    flex-shrink: 0;
+}
+
+.ensemble-locations-list.ensemble-layout-list .ensemble-location-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ============================================
+   SINGLE LOCATION
+   ============================================ */
+
+.ensemble-single-location {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* Header */
+.ensemble-single-location .ensemble-location-header {
+    margin-bottom: 24px;
+}
+
+/* Featured Image */
+.ensemble-single-location .ensemble-location-featured-image {
+    margin-bottom: 24px;
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+}
+
+.ensemble-single-location .ensemble-location-featured-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ============================================
+   LOCATION MAP
+   ============================================ */
+
+.ensemble-location-map {
+    margin: 24px 0;
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+}
+
+.ensemble-location-map iframe,
+.ensemble-location-map .es-map-container {
+    width: 100%;
+    height: 300px;
+    border: none;
+    display: block;
+}
+
+/* Map placeholder */
+.ensemble-location-map-placeholder {
+    width: 100%;
+    height: 300px;
+    background: var(--ensemble-placeholder-bg, var(--ensemble-surface, #ffffff));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--ensemble-text-muted, #a0aec0);
+}
+
+.ensemble-location-map-placeholder .dashicons {
+    font-size: var(--ensemble-hero-size, 72px);
+    width: 48px;
+    height: 48px;
+}
+
+/* ============================================
+   LOCATION CONTACT INFO
+   ============================================ */
+
+.ensemble-location-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.ensemble-location-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-location-contact-item .dashicons {
+    width: 18px;
+    height: 18px;
+    font-size: var(--ensemble-lg-size, 18px);
+    color: var(--ensemble-primary, #667eea);
+    flex-shrink: 0;
+}
+
+.ensemble-location-contact-item a {
+    color: var(--ensemble-primary, #667eea);
+    text-decoration: none;
+}
+
+.ensemble-location-contact-item a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   LOCATION AMENITIES / FEATURES
+   ============================================ */
+
+.ensemble-location-amenities {
+    margin: 16px 0;
+}
+
+.ensemble-location-amenities h4 {
+    margin: 0 0 12px 0;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-amenities-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ensemble-amenity-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 10px);
+    background: var(--ensemble-badge-bg, var(--ensemble-surface, #ffffff));
+    color: var(--ensemble-badge-text, var(--ensemble-text, #1a202c));
+    border-radius: var(--ensemble-badge-radius, 4px);
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+.ensemble-amenity-tag .dashicons {
+    width: 14px;
+    height: 14px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* ============================================
+   LOCATION CAPACITY
+   ============================================ */
+
+.ensemble-location-capacity {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-radius, 8px);
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-location-capacity .dashicons {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-location-capacity strong {
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+/* ============================================
+   VENUE HEADER (Custom names and genres)
+   ============================================ */
+
+.es-venue-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.es-venue-name {
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1a202c);
+    margin: 0;
+}
+
+.es-venue-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.es-venue-genre {
+    display: inline-block;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    font-size: var(--ensemble-xs-size, 12px);
+    border-radius: var(--ensemble-badge-radius, 20px);
+}
+
+/* ============================================
+   LOCATION CARD VARIANTS
+   ============================================ */
+
+/* Compact card */
+.ensemble-location-card--compact {
+    padding: 16px;
+}
+
+.ensemble-location-card--compact .ensemble-location-image img {
+    height: 150px;
+}
+
+/* Wide card (for featured locations) */
+.ensemble-location-card--wide {
+    flex-direction: row;
+}
+
+.ensemble-location-card--wide .ensemble-location-image {
+    width: 40%;
+    max-width: 300px;
+    margin: 0;
+    margin-right: 24px;
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+.ensemble-location-card--wide .ensemble-location-image img {
+    height: 200px;
+}
+
+.ensemble-location-card--wide .ensemble-location-content {
+    flex: 1;
+}
+
+/* ============================================
+   LOCATION HOURS
+   ============================================ */
+
+.ensemble-location-hours {
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-radius, 8px);
+}
+
+.ensemble-location-hours h4 {
+    margin: 0 0 12px 0;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ensemble-location-hours h4 .dashicons {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-hours-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+.ensemble-hours-day {
+    font-weight: var(--ensemble-body-weight, 400);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-hours-time {
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-hours-closed {
+    color: var(--ensemble-text-muted, #a0aec0);
+    font-style: italic;
+}

@@ -1,0 +1,353 @@
+/**
+ * Ensemble Shortcodes - Responsive Styles
+ * 
+ * Media queries for all shortcode components.
+ * Loaded after _base.css and _components.css.
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * BREAKPOINTS:
+ * - Desktop: > 1024px (default)
+ * - Tablet:  768px - 1024px
+ * - Mobile:  576px - 767px
+ * - Phone:   < 576px
+ * 
+ * ARCHITECTURE:
+ * - Uses Designer variables for responsive values where possible
+ * - grid-columns-tablet, grid-columns-mobile from Designer
+ */
+
+/* ============================================
+   TABLET (max-width: 1024px)
+   ============================================ */
+
+@media (max-width: 1024px) {
+    /* Grid columns reduce */
+    .ensemble-columns-3,
+    .ensemble-columns-4,
+    .ensemble-events-grid.ensemble-columns-3,
+    .ensemble-events-grid.ensemble-columns-4,
+    .ensemble-artists-list.ensemble-columns-3,
+    .ensemble-artists-list.ensemble-columns-4,
+    .ensemble-locations-list.ensemble-columns-3,
+    .ensemble-locations-list.ensemble-columns-4 {
+        grid-template-columns: repeat(var(--ensemble-grid-columns-tablet, 2), 1fr);
+    }
+    
+    /* Filter row stacks */
+    .ensemble-filter-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .ensemble-filter {
+        width: 100%;
+    }
+    
+    /* Section spacing reduces */
+    .ensemble-section {
+        margin: calc(var(--ensemble-section-spacing, 48px) * 0.75) 0;
+    }
+    
+    /* Location row adjusts */
+    [class*="-location-row"] {
+        gap: 16px;
+    }
+    
+    [class*="-location-row"] [class*="-location-image"] {
+        width: 120px;
+        min-width: 100px;
+    }
+}
+
+/* ============================================
+   MOBILE (max-width: 768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Container padding */
+    .ensemble-container {
+        padding: 0 16px;
+    }
+    
+    /* Force 2 columns on tablets */
+    .ensemble-events-grid,
+    .ensemble-artists-list,
+    .ensemble-locations-list,
+    .ensemble-events-grid.ensemble-layout-grid,
+    .ensemble-artists-list.ensemble-layout-grid,
+    .ensemble-locations-list.ensemble-layout-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--ensemble-grid-gap, 16px);
+    }
+    
+    /* Upcoming events stack */
+    .ensemble-upcoming-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .ensemble-upcoming-thumb {
+        width: 100%;
+        height: 160px;
+    }
+    
+    /* Lineup stacks */
+    .ensemble-lineup-event {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .ensemble-lineup-time {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    /* List layout cards stack */
+    .ensemble-artists-list.ensemble-layout-list .ensemble-artist-card,
+    .ensemble-locations-list.ensemble-layout-list .ensemble-location-card {
+        flex-direction: column;
+    }
+    
+    .ensemble-artists-list.ensemble-layout-list .ensemble-artist-image,
+    .ensemble-locations-list.ensemble-layout-list .ensemble-location-image {
+        width: 100%;
+        height: 200px;
+        margin: 0 0 16px 0;
+    }
+    
+    /* Location row stacks */
+    [class*="-location-row"] {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    [class*="-location-row"] [class*="-location-image"] {
+        width: 100%;
+        max-width: none;
+    }
+    
+    [class*="-location-row"] [class*="-location-image"] img {
+        max-height: 150px;
+    }
+    
+    /* Card padding reduces */
+    .ensemble-event-card,
+    .ensemble-artist-card,
+    .ensemble-location-card {
+        padding: calc(var(--ensemble-card-padding, 24px) * 0.75);
+    }
+    
+    /* Badges wrap better */
+    .ensemble-event-meta {
+        gap: 6px;
+    }
+    
+    .ensemble-meta-badge,
+    .ensemble-category-badge {
+        font-size: var(--ensemble-xs-size, 12px);
+        padding: 3px 10px;
+    }
+}
+
+/* ============================================
+   PHONE (max-width: 576px)
+   Single column layout
+   ============================================ */
+
+@media (max-width: 576px) {
+    /* Force single column */
+    .ensemble-events-grid,
+    .ensemble-artists-list,
+    .ensemble-locations-list,
+    .ensemble-columns-2,
+    .ensemble-columns-3,
+    .ensemble-columns-4,
+    .ensemble-events-grid.ensemble-columns-2,
+    .ensemble-events-grid.ensemble-columns-3,
+    .ensemble-events-grid.ensemble-columns-4,
+    .ensemble-events-grid.ensemble-layout-grid,
+    .ensemble-artists-list.ensemble-layout-grid,
+    .ensemble-locations-list.ensemble-layout-grid,
+    [class*="ensemble-events-grid"],
+    [class*="ensemble-artists-list"],
+    [class*="ensemble-locations-list"] {
+        grid-template-columns: var(--ensemble-grid-columns-mobile, 1fr);
+    }
+    
+    /* Section title smaller */
+    .ensemble-section-title {
+        font-size: calc(var(--ensemble-h2-size, 28px) * 0.85);
+    }
+    
+    /* Status banner adjusts */
+    .ensemble-event-status-banner {
+        padding: 10px 12px;
+        font-size: var(--ensemble-xs-size, 12px);
+    }
+}
+
+/* ============================================
+   SMALL PHONE (max-width: 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+    /* Typography scales down */
+    .ensemble-event-title,
+    .ensemble-artist-title,
+    .ensemble-location-title {
+        font-size: calc(var(--ensemble-h3-size, 24px) * 0.85);
+    }
+    
+    /* Buttons full width */
+    .ensemble-button,
+    .ensemble-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Button sizes adjust */
+    .ensemble-button,
+    .ensemble-btn {
+        padding: 10px 16px;
+        font-size: var(--ensemble-small-size, 14px);
+    }
+    
+    /* Meta items smaller */
+    .ensemble-meta-item {
+        font-size: calc(var(--ensemble-small-size, 14px) * 0.9);
+    }
+    
+    /* Card padding minimal */
+    .ensemble-event-card,
+    .ensemble-artist-card,
+    .ensemble-location-card {
+        padding: 16px;
+    }
+    
+    /* Image height reduces */
+    .ensemble-event-image img,
+    .ensemble-artist-image img,
+    .ensemble-location-image img {
+        height: calc(var(--ensemble-card-image-height, 200px) * 0.8);
+    }
+    
+    /* Genre tags wrap */
+    .ensemble-event-genres {
+        gap: 6px;
+    }
+    
+    .ensemble-genre-tag {
+        padding: 3px 8px;
+        font-size: var(--ensemble-xs-size, 12px);
+    }
+    
+    /* Price smaller */
+    .ensemble-price {
+        font-size: calc(var(--ensemble-price-size, 32px) * 0.75);
+    }
+}
+
+/* ============================================
+   PRINT MEDIA
+   ============================================ */
+
+@media print {
+    .ensemble-container {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .ensemble-events-grid,
+    .ensemble-artists-list,
+    .ensemble-locations-list {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .ensemble-event-card,
+    .ensemble-artist-card,
+    .ensemble-location-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid var(--ensemble-border, #e2e8f0);
+    }
+    
+    .ensemble-button,
+    .ensemble-btn {
+        display: none;
+    }
+    
+    .ensemble-event-image img,
+    .ensemble-artist-image img,
+    .ensemble-location-image img {
+        height: auto;
+        max-height: 150px;
+    }
+}
+
+/* ============================================
+   REDUCED MOTION
+   Accessibility: Respect user preferences
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .ensemble-event-card,
+    .ensemble-artist-card,
+    .ensemble-location-card,
+    .ensemble-button,
+    .ensemble-btn,
+    .ensemble-event-image img,
+    .ensemble-artist-image img,
+    .ensemble-location-image img,
+    .ensemble-genre-tag {
+        transition: none;
+    }
+    
+    .ensemble-event-card:hover,
+    .ensemble-artist-card:hover,
+    .ensemble-location-card:hover {
+        transform: none;
+    }
+    
+    .ensemble-event-card:hover .ensemble-event-image img,
+    .ensemble-artist-card:hover .ensemble-artist-image img,
+    .ensemble-location-card:hover .ensemble-location-image img {
+        transform: none;
+    }
+    
+    .ensemble-button:hover,
+    .ensemble-btn:hover {
+        transform: none;
+    }
+    
+    .ensemble-loading::after {
+        animation: none;
+    }
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   Accessibility: Enhanced visibility
+   ============================================ */
+
+@media (prefers-contrast: high) {
+    .ensemble-event-card,
+    .ensemble-artist-card,
+    .ensemble-location-card {
+        border-width: 2px;
+    }
+    
+    .ensemble-button,
+    .ensemble-btn {
+        border: 2px solid currentColor;
+    }
+    
+    .ensemble-meta-badge,
+    .ensemble-category-badge,
+    .ensemble-genre-tag {
+        border: 1px solid currentColor;
+    }
+}

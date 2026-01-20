@@ -1,0 +1,274 @@
+/* =============================================
+   ENSEMBLE COUNTDOWN STYLES
+   
+   All values use Designer CSS variables with fallbacks.
+   Countdown-specific variables can be added to Designer
+   for fine-grained control.
+   ============================================= */
+
+/* =============================================
+   CSS VARIABLE DEFINITIONS (defaults)
+   Add these to Designer for customization
+   ============================================= */
+.es-countdown {
+    /* Countdown-specific variables with fallbacks to Designer variables */
+    --es-countdown-bg: var(--ensemble-card-bg, #fff);
+    --es-countdown-border: var(--ensemble-card-border, #e0e0e0);
+    --es-countdown-radius: var(--ensemble-card-radius, 12px);
+    --es-countdown-padding: var(--ensemble-card-padding, 24px);
+    --es-countdown-shadow: var(--ensemble-card-shadow, none);
+    
+    --es-countdown-title-color: var(--ensemble-heading, #1a1a1a);
+    --es-countdown-title-size: 1.25rem;
+    --es-countdown-title-weight: var(--ensemble-heading-weight, 600);
+    
+    --es-countdown-date-color: var(--ensemble-text-muted, #6b7280);
+    --es-countdown-date-size: 0.875rem;
+    
+    --es-countdown-unit-bg: var(--ensemble-surface, #f8f9fa);
+    --es-countdown-unit-radius: 8px;
+    --es-countdown-unit-padding: 16px 12px;
+    --es-countdown-unit-min-width: 70px;
+    --es-countdown-unit-gap: 16px;
+    
+    --es-countdown-value-color: var(--ensemble-primary, #4f46e5);
+    --es-countdown-value-size: 2rem;
+    --es-countdown-value-weight: 700;
+    
+    --es-countdown-label-color: var(--ensemble-text-muted, #6b7280);
+    --es-countdown-label-size: 0.75rem;
+    
+    --es-countdown-link-bg: var(--ensemble-primary, #4f46e5);
+    --es-countdown-link-color: var(--ensemble-button-text, #fff);
+    --es-countdown-link-hover-bg: var(--ensemble-primary-dark, #4338ca);
+    --es-countdown-link-radius: var(--ensemble-button-radius, 8px);
+    --es-countdown-link-padding: 10px 20px;
+    
+    --es-countdown-expired-color: var(--ensemble-primary, #4f46e5);
+}
+
+/* =============================================
+   BASE COUNTDOWN
+   ============================================= */
+.es-countdown {
+    text-align: center;
+    padding: var(--es-countdown-padding);
+    background: var(--es-countdown-bg);
+    border-radius: var(--es-countdown-radius);
+    border: 1px solid var(--es-countdown-border);
+    box-shadow: var(--es-countdown-shadow);
+}
+
+.es-countdown__title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--es-countdown-title-size);
+    font-weight: var(--es-countdown-title-weight);
+    color: var(--es-countdown-title-color);
+    margin-bottom: 8px;
+    line-height: var(--ensemble-line-height-heading, 1.3);
+}
+
+.es-countdown__title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--ensemble-transition, 0.2s ease);
+}
+
+.es-countdown__title a:hover {
+    color: var(--ensemble-primary, #4f46e5);
+}
+
+.es-countdown__date {
+    font-size: var(--es-countdown-date-size);
+    color: var(--es-countdown-date-color);
+    margin-bottom: 20px;
+}
+
+.es-countdown__timer {
+    display: flex;
+    justify-content: center;
+    gap: var(--es-countdown-unit-gap);
+    margin: 20px 0;
+}
+
+.es-countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: var(--es-countdown-unit-min-width);
+    padding: var(--es-countdown-unit-padding);
+    background: var(--es-countdown-unit-bg);
+    border-radius: var(--es-countdown-unit-radius);
+    transition: transform var(--ensemble-transition, 0.2s ease);
+}
+
+.es-countdown__value {
+    font-size: var(--es-countdown-value-size);
+    font-weight: var(--es-countdown-value-weight);
+    line-height: 1;
+    color: var(--es-countdown-value-color);
+    font-variant-numeric: tabular-nums;
+}
+
+.es-countdown__label {
+    font-size: var(--es-countdown-label-size);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--es-countdown-label-color);
+    margin-top: 8px;
+}
+
+.es-countdown__expired {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--es-countdown-expired-color);
+    padding: 20px;
+}
+
+.es-countdown__action {
+    margin-top: 20px;
+}
+
+.es-countdown__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: var(--es-countdown-link-padding);
+    background: var(--es-countdown-link-bg);
+    color: var(--es-countdown-link-color);
+    border-radius: var(--es-countdown-link-radius);
+    text-decoration: none;
+    font-weight: var(--ensemble-button-weight, 500);
+    transition: all var(--ensemble-transition, 0.2s ease);
+}
+
+.es-countdown__link:hover {
+    background: var(--es-countdown-link-hover-bg);
+    transform: translateY(-1px);
+    color: var(--es-countdown-link-color);
+}
+
+.es-countdown__link svg {
+    transition: transform var(--ensemble-transition, 0.2s ease);
+}
+
+.es-countdown__link:hover svg {
+    transform: translateX(3px);
+}
+
+/* =============================================
+   STYLE: Minimal
+   ============================================= */
+.es-countdown--minimal {
+    --es-countdown-bg: transparent;
+    --es-countdown-border: transparent;
+    --es-countdown-padding: 0;
+    --es-countdown-shadow: none;
+    --es-countdown-unit-bg: transparent;
+    --es-countdown-unit-padding: 8px;
+    --es-countdown-unit-min-width: 50px;
+    --es-countdown-value-size: 1.5rem;
+}
+
+/* =============================================
+   STYLE: Compact
+   ============================================= */
+.es-countdown--compact {
+    --es-countdown-padding: 16px;
+    --es-countdown-unit-gap: 8px;
+    --es-countdown-unit-min-width: 50px;
+    --es-countdown-unit-padding: 10px 8px;
+    --es-countdown-value-size: 1.25rem;
+    --es-countdown-label-size: 0.625rem;
+}
+
+.es-countdown--compact .es-countdown__timer {
+    margin: 12px 0;
+}
+
+/* =============================================
+   STYLE: Hero
+   ============================================= */
+.es-countdown--hero {
+    /* Hero uses gradient background, so text must contrast */
+    --es-countdown-bg: linear-gradient(135deg, var(--ensemble-primary, #4f46e5), var(--ensemble-secondary, #7c3aed));
+    --es-countdown-border: transparent;
+    --es-countdown-padding: 40px;
+    --es-countdown-shadow: var(--ensemble-shadow-lg, 0 10px 25px rgba(0,0,0,0.15));
+    
+    /* Light text on dark gradient */
+    --es-countdown-title-color: var(--ensemble-text-on-primary, #fff);
+    --es-countdown-title-size: 1.75rem;
+    --es-countdown-date-color: var(--ensemble-text-on-primary-muted, rgba(255,255,255,0.8));
+    
+    /* Semi-transparent units */
+    --es-countdown-unit-bg: var(--ensemble-overlay-light, rgba(255,255,255,0.15));
+    
+    /* Light values and labels */
+    --es-countdown-value-color: var(--ensemble-text-on-primary, #fff);
+    --es-countdown-value-size: 2.5rem;
+    --es-countdown-label-color: var(--ensemble-text-on-primary-muted, rgba(255,255,255,0.8));
+    
+    --es-countdown-expired-color: var(--ensemble-text-on-primary, #fff);
+    
+    /* Inverted button */
+    --es-countdown-link-bg: var(--ensemble-text-on-primary, #fff);
+    --es-countdown-link-color: var(--ensemble-primary, #4f46e5);
+    --es-countdown-link-hover-bg: var(--ensemble-text-on-primary-muted, rgba(255,255,255,0.9));
+    
+    background: var(--es-countdown-bg);
+}
+
+.es-countdown--hero .es-countdown__unit {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.es-countdown--hero .es-countdown__title a {
+    color: var(--es-countdown-title-color);
+}
+
+.es-countdown--hero .es-countdown__title a:hover {
+    color: var(--ensemble-text-on-primary-muted, rgba(255,255,255,0.8));
+}
+
+/* =============================================
+   DARK MODE SUPPORT
+   ============================================= */
+.es-mode-dark .es-countdown,
+[data-theme="dark"] .es-countdown {
+    --es-countdown-bg: var(--ensemble-card-bg, #1f2937);
+    --es-countdown-border: var(--ensemble-card-border, #374151);
+    --es-countdown-title-color: var(--ensemble-heading, #f9fafb);
+    --es-countdown-date-color: var(--ensemble-text-muted, #9ca3af);
+    --es-countdown-unit-bg: var(--ensemble-surface, #374151);
+    --es-countdown-label-color: var(--ensemble-text-muted, #9ca3af);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 600px) {
+    .es-countdown {
+        --es-countdown-unit-gap: 8px;
+        --es-countdown-unit-min-width: 55px;
+        --es-countdown-unit-padding: 12px 8px;
+        --es-countdown-value-size: 1.5rem;
+        --es-countdown-label-size: 0.625rem;
+    }
+    
+    .es-countdown--hero {
+        --es-countdown-padding: 24px 16px;
+        --es-countdown-value-size: 1.75rem;
+        --es-countdown-title-size: 1.25rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .es-countdown {
+        --es-countdown-unit-min-width: 48px;
+        --es-countdown-unit-padding: 10px 6px;
+        --es-countdown-value-size: 1.25rem;
+        --es-countdown-label-size: 0.5rem;
+    }
+}

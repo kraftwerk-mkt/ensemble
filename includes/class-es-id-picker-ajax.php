@@ -33,7 +33,7 @@ class ES_ID_Picker_AJAX {
         $search = isset($_POST['search']) ? sanitize_text_field($_POST['search']) : '';
         
         // Validate type
-        if (!in_array($type, array('events', 'artists', 'locations'))) {
+        if (!in_array($type, array('events', 'artists', 'locations', 'staff'))) {
             wp_send_json_error(__('Invalid type', 'ensemble'));
         }
         
@@ -47,6 +47,9 @@ class ES_ID_Picker_AJAX {
                 break;
             case 'locations':
                 $data = $this->get_locations_data($search);
+                break;
+            case 'staff':
+                $data = $this->get_staff_data($search);
                 break;
         }
         
@@ -221,6 +224,72 @@ class ES_ID_Picker_AJAX {
         wp_reset_postdata();
         
         return $locations;
+    }
+    
+    /**
+     * Get staff data
+     * 
+     * @param string $search Search term
+     * @return array Staff data
+     */
+    private function get_staff_data($search = '') {
+        // Check if staff post type exists
+        if (!post_type_exists('ensemble_staff')) {
+            return array();
+        }
+        
+        $args = array(
+            'post_type' => 'ensemble_staff',
+            'post_status' => 'publish',
+            'posts_per_page' => 50,
+            'orderby' => 'title',
+            'order' => 'ASC',
+        );
+        
+        if (!empty($search)) {
+            $args['s'] = $search;
+        }
+        
+        $query = new WP_Query($args);
+        $staff = array();
+        
+        if ($query->have_posts()) {
+            while ($query->have_posts()) {
+                $query->the_post();
+                $staff_id = get_the_ID();
+                
+                // Get department for meta display
+                $departments = get_the_terms($staff_id, 'ensemble_department');
+                $meta_text = '';
+                
+                if ($departments && !is_wp_error($departments)) {
+                    $dept_names = array();
+                    foreach ($departments as $dept) {
+                        $dept_names[] = $dept->name;
+                    }
+                    $meta_text = implode(', ', $dept_names);
+                }
+                
+                // If no department, try to get position from meta
+                if (empty($meta_text)) {
+                    $position = get_post_meta($staff_id, '_es_staff_position', true);
+                    if (!empty($position)) {
+                        $meta_text = $position;
+                    }
+                }
+                
+                $staff[] = array(
+                    'id' => $staff_id,
+                    'title' => get_the_title(),
+                    'meta' => $meta_text,
+                    'edit_url' => admin_url('admin.php?page=ensemble-staff'),
+                );
+            }
+        }
+        
+        wp_reset_postdata();
+        
+        return $staff;
     }
 }
 

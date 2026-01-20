@@ -484,22 +484,65 @@
 }
 
 /* ===========================================
-   SPEAKER GRID
+   SPEAKER/ARTIST GRID - Column Classes
    =========================================== */
 
-.es-kongress-speakers-grid {
+/* Base Grid for Artists */
+.ensemble-artists-list.ensemble-layout-grid,
+.ensemble-artists-list.ensemble-layout-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: var(--ensemble-grid-gap, 24px);
+    align-items: stretch;
 }
 
+/* Column Classes */
+.ensemble-artists-list.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.ensemble-artists-list.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.ensemble-artists-list.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Responsive Grid */
 @media (max-width: 992px) {
-    .es-kongress-speakers-grid {
+    .ensemble-artists-list.ensemble-columns-3,
+    .ensemble-artists-list.ensemble-columns-4 {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 576px) {
+    .ensemble-artists-list.ensemble-columns-2,
+    .ensemble-artists-list.ensemble-columns-3,
+    .ensemble-artists-list.ensemble-columns-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ===========================================
+   SPEAKERS GRID
+   =========================================== */
+
+.es-kongress-speakers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+@media (max-width: 768px) {
+    .es-kongress-speakers-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
     .es-kongress-speakers-grid {
         grid-template-columns: 1fr;
     }
@@ -940,41 +983,126 @@
 .es-kongress-animate-delay-4 { transition-delay: 0.4s; }
 
 /* ===========================================
-   LOCATION SECTION
+   LOCATION GRID
    =========================================== */
 
-.es-kongress-location-block {
+.es-kongress-locations-grid {
     display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--ensemble-grid-gap, 24px);
+}
+
+@media (max-width: 992px) {
+    .es-kongress-locations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .es-kongress-locations-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Location Card */
+.es-kongress-location-card {
+    display: block;
+    background: var(--ensemble-card-bg);
+    border: var(--ensemble-card-border-width) solid var(--ensemble-card-border);
+    border-radius: var(--ensemble-card-radius);
+    overflow: hidden;
+    box-shadow: var(--ensemble-card-shadow);
+    transition: all 0.3s ease;
     text-decoration: none;
     color: inherit;
 }
 
-.es-kongress-location-image {
-    border-radius: var(--ensemble-card-radius);
+.es-kongress-location-card:hover {
+    transform: var(--ensemble-card-hover-transform);
+    box-shadow: var(--ensemble-card-hover-shadow);
+}
+
+.es-kongress-location-card-image {
+    height: 180px;
     overflow: hidden;
 }
 
-.es-kongress-location-image img {
+.es-kongress-location-card-image img {
     width: 100%;
-    height: 150px;
+    height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.es-kongress-location-info h3 {
+.es-kongress-location-card:hover .es-kongress-location-card-image img {
+    transform: scale(1.05);
+}
+
+.es-kongress-location-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--ensemble-placeholder-bg, #f0f0f0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ensemble-placeholder-icon, #999);
+}
+
+.es-kongress-location-card-content {
+    padding: var(--ensemble-card-padding);
+}
+
+.es-kongress-location-type {
+    font-size: var(--ensemble-xs-size);
+    color: var(--ensemble-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.es-kongress-location-name {
     font-family: var(--ensemble-font-heading);
     font-size: var(--ensemble-lg-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-heading-weight);
     color: var(--ensemble-text);
-    margin: 0 0 8px 0;
+    margin: 0 0 12px 0;
 }
 
-.es-kongress-location-address {
-    font-size: var(--ensemble-body-size);
+.es-kongress-location-address,
+.es-kongress-location-capacity,
+.es-kongress-location-events {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: var(--ensemble-small-size);
     color: var(--ensemble-text-secondary);
-    line-height: 1.5;
+    line-height: 1.4;
+    margin-bottom: 8px;
 }
+
+.es-kongress-location-address svg,
+.es-kongress-location-capacity svg,
+.es-kongress-location-events svg {
+    margin-top: 2px;
+    color: var(--ensemble-primary);
+    flex-shrink: 0;
+}
+
+.es-kongress-location-description {
+    font-size: var(--ensemble-small-size);
+    color: var(--ensemble-text-secondary);
+    line-height: 1.6;
+    margin-top: 12px;
+}
+
+.es-kongress-location-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
 
 /* ===========================================
    RESPONSIVE
@@ -1463,6 +1591,130 @@
 }
 
 /* ===========================================
+   LOCATION BLOCK (Venue Section)
+   =========================================== */
+
+.es-kongress-location-block {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    padding: 24px;
+    background: var(--ensemble-card-bg, #fff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    border: 1px solid var(--ensemble-divider, rgba(0,0,0,0.08));
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+.es-kongress-location-block:hover {
+    box-shadow: var(--ensemble-card-hover-shadow, 0 8px 24px rgba(0,0,0,0.1));
+    transform: translateY(-2px);
+}
+
+.es-kongress-location-image {
+    width: 200px;
+    height: 140px;
+    border-radius: var(--ensemble-radius-md, 8px);
+    overflow: hidden;
+    background: var(--ensemble-surface, #f5f5f5);
+}
+
+.es-kongress-location-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.es-kongress-location-block:hover .es-kongress-location-image img {
+    transform: scale(1.05);
+}
+
+.es-kongress-location-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.es-kongress-location-info h3 {
+    font-family: var(--ensemble-font-heading);
+    font-size: var(--ensemble-h3-size, 1.25rem);
+    font-weight: var(--ensemble-heading-weight, 600);
+    color: var(--ensemble-text);
+    margin: 0 0 8px 0;
+}
+
+.es-kongress-location-address {
+    font-size: var(--ensemble-body-size, 1rem);
+    color: var(--ensemble-text-secondary);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .es-kongress-location-block {
+        grid-template-columns: 1fr;
+    }
+    
+    .es-kongress-location-image {
+        width: 100%;
+        height: 180px;
+    }
+}
+
+/* ===========================================
+   GALLERY TAB
+   =========================================== */
+
+.es-kongress-gallery-wrapper {
+    padding: 0;
+}
+
+/* Override gallery addon styles for Kongress layout */
+.es-kongress-gallery-wrapper .es-gallery-grid,
+.es-kongress-gallery-wrapper .ensemble-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.es-kongress-gallery-wrapper .es-gallery-item,
+.es-kongress-gallery-wrapper .ensemble-gallery-item {
+    aspect-ratio: 1;
+    border-radius: var(--ensemble-radius-md, 8px);
+    overflow: hidden;
+}
+
+.es-kongress-gallery-wrapper .es-gallery-item img,
+.es-kongress-gallery-wrapper .ensemble-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.es-kongress-gallery-wrapper .es-gallery-item:hover img,
+.es-kongress-gallery-wrapper .ensemble-gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .es-kongress-gallery-wrapper .es-gallery-grid,
+    .es-kongress-gallery-wrapper .ensemble-gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .es-kongress-gallery-wrapper .es-gallery-grid,
+    .es-kongress-gallery-wrapper .ensemble-gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+}
+
+/* ===========================================
    CONTACTS SECTION (Staff Addon)
    =========================================== */
 
@@ -1662,4 +1914,471 @@
         justify-content: center;
         margin: 4px 0;
     }
+}
+/* =============================================================================
+   KONGRESS LAYOUT: FEATURED ARTIST OVERRIDES
+   
+   Anpassungen für das Featured Artist Layout im Kongress-Style:
+   1. Kein weißer Verlauf - nur dunkler Gradient von unten
+   2. Name und Text in Weiß
+   3. Events-Box und Social Icons mit dunklem/transparentem Hintergrund
+   4. Boxen nach oben positioniert
+   5. Thumbnails größer und quadratisch mit Namen
+   
+   Füge dies am Ende von layouts/kongress/style.css ein
+   ============================================================================= */
+
+/* ===========================================
+   HERO GRADIENT - Kein Weiß, nur dunkler Verlauf
+   =========================================== */
+
+.es-layout-kongress .es-featured-hero-gradient,
+.es-layout-kongress .es-featured-artist .es-featured-hero-gradient {
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.6) 30%,
+        rgba(0, 0, 0, 0.3) 50%,
+        rgba(0, 0, 0, 0.1) 70%,
+        transparent 100%
+    ) !important;
+}
+
+/* Seitlicher Gradient */
+.es-layout-kongress .es-featured-hero::before {
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(0, 0, 0, 0.3) 40%,
+        transparent 70%
+    ) !important;
+}
+
+/* ===========================================
+   HERO CONTENT - Nach oben positionieren
+   =========================================== */
+
+.es-layout-kongress .es-featured-hero-content {
+    align-items: flex-start !important;
+    padding-bottom: 180px !important; /* Platz für Slider unten */
+}
+
+.es-layout-kongress .es-featured-left {
+    margin-top: auto !important;
+    padding-bottom: 40px !important;
+}
+
+.es-layout-kongress .es-featured-right {
+    margin-top: auto !important;
+    padding-bottom: 40px !important;
+    align-self: flex-end !important;
+}
+
+/* ===========================================
+   TITLE - Weiß
+   =========================================== */
+
+.es-layout-kongress .es-featured-title {
+    color: #ffffff !important;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.es-layout-kongress .es-featured-origin {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* ===========================================
+   SOCIAL ICONS - Dunkler Hintergrund
+   =========================================== */
+
+.es-layout-kongress .es-featured-hero-social {
+    display: flex !important;
+    gap: 10px !important;
+}
+
+.es-layout-kongress .es-featured-hero-social .es-featured-social-icon,
+.es-layout-kongress .es-featured-social-icon {
+    width: 48px !important;
+    height: 48px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(0, 0, 0, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50% !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.es-layout-kongress .es-featured-hero-social .es-featured-social-icon:hover,
+.es-layout-kongress .es-featured-social-icon:hover {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-color: var(--ensemble-secondary, #B87333) !important;
+    color: var(--ensemble-secondary, #B87333) !important;
+    transform: translateY(-3px) !important;
+}
+
+.es-layout-kongress .es-featured-hero-social .es-featured-social-icon svg,
+.es-layout-kongress .es-featured-social-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+/* ===========================================
+   EVENTS BOX (Rechts) - Dunkler Hintergrund
+   =========================================== */
+
+.es-layout-kongress .es-featured-info-section {
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: var(--ensemble-card-radius, 12px) !important;
+    padding: 24px !important;
+    max-width: 320px !important;
+}
+
+.es-layout-kongress .es-featured-info-title {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: var(--ensemble-small-size, 0.875rem) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    margin-bottom: 16px !important;
+}
+
+.es-layout-kongress .es-featured-events-compact {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+}
+
+.es-layout-kongress .es-featured-event-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 12px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.es-layout-kongress .es-featured-event-row:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    transform: translateX(4px) !important;
+}
+
+.es-layout-kongress .es-featured-event-row h4 {
+    color: #ffffff !important;
+    font-size: var(--ensemble-base-size, 1rem) !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+}
+
+.es-layout-kongress .es-featured-event-date-small {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    min-width: 45px !important;
+    padding: 6px 8px !important;
+    background: var(--ensemble-secondary, #B87333) !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.es-layout-kongress .es-featured-event-date-small .day {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+}
+
+.es-layout-kongress .es-featured-event-date-small .month {
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    opacity: 0.9 !important;
+}
+
+/* ===========================================
+   MORE INFO BUTTON
+   =========================================== */
+
+.es-layout-kongress .es-featured-more-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 14px 24px !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    margin-top: 20px !important;
+}
+
+.es-layout-kongress .es-featured-more-btn:hover {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-color: var(--ensemble-secondary, #B87333) !important;
+    transform: translateY(-2px) !important;
+}
+
+.es-layout-kongress .es-featured-more-btn svg {
+    transition: transform 0.3s ease !important;
+}
+
+.es-layout-kongress .es-featured-more-btn:hover svg {
+    transform: translateX(4px) !important;
+}
+
+/* ===========================================
+   NAVIGATION ARROWS
+   =========================================== */
+
+.es-layout-kongress .es-featured-nav-btn {
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+}
+
+.es-layout-kongress .es-featured-nav-btn:hover {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ===========================================
+   THUMBNAIL SLIDER - Größer & Quadratisch
+   =========================================== */
+
+.es-layout-kongress .es-featured-slider-section {
+    padding: 20px 0 30px !important;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.7) 100%
+    ) !important;
+}
+
+/* Slider Container */
+.es-layout-kongress .es-featured-slider {
+    display: flex !important;
+    gap: 16px !important;
+    padding: 10px 20px !important;
+}
+
+/* Einzelne Thumbnail Items */
+.es-layout-kongress .es-featured-slider-item {
+    width: 120px !important;
+    flex-shrink: 0 !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Thumbnail Bild Container - QUADRATISCH */
+.es-layout-kongress .es-featured-slider-image {
+    width: 120px !important;
+    height: 120px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: var(--ensemble-card-radius, 12px) !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    background: var(--ensemble-card-bg, #1a1a1a);
+    border: 2px solid transparent;
+}
+
+.es-layout-kongress .es-featured-slider-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    transition: transform 0.4s ease;
+}
+
+/* Hover Effect */
+.es-layout-kongress .es-featured-slider-item:hover .es-featured-slider-image {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.es-layout-kongress .es-featured-slider-item:hover .es-featured-slider-image img {
+    transform: scale(1.1);
+}
+
+/* Active State */
+.es-layout-kongress .es-featured-slider-item.is-active .es-featured-slider-image {
+    border: 3px solid var(--ensemble-secondary, #B87333) !important;
+    box-shadow: 0 0 20px rgba(184, 115, 51, 0.4);
+}
+
+/* Placeholder */
+.es-layout-kongress .es-featured-slider-placeholder {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: var(--ensemble-placeholder-bg, #2a2a2a) !important;
+    color: var(--ensemble-placeholder-icon, rgba(255,255,255,0.3)) !important;
+}
+
+.es-layout-kongress .es-featured-slider-placeholder svg {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+/* Name unter den Thumbnails */
+.es-layout-kongress .es-featured-slider-item::after {
+    content: attr(title);
+    display: block;
+    margin-top: 10px;
+    font-size: var(--ensemble-small-size, 0.875rem);
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+}
+
+/* ===========================================
+   PANEL STYLING (Info-Panel rechts)
+   =========================================== */
+
+.es-layout-kongress .es-featured-panel {
+    background: var(--ensemble-card-bg, #ffffff) !important;
+}
+
+.es-layout-kongress .es-featured-panel-title {
+    color: var(--kongress-navy, var(--ensemble-primary, #1B2B4B)) !important;
+}
+
+.es-layout-kongress .es-featured-panel-close {
+    color: var(--ensemble-text-secondary, #666) !important;
+}
+
+.es-layout-kongress .es-featured-references {
+    border-left-color: var(--ensemble-secondary, #B87333) !important;
+    color: var(--ensemble-text-secondary, #666) !important;
+}
+
+.es-layout-kongress .es-featured-genre-tag {
+    background: var(--ensemble-surface, #f5f5f5) !important;
+    color: var(--ensemble-text, #1a1a1a) !important;
+}
+
+/* ===========================================
+   RESPONSIVE
+   =========================================== */
+
+@media (max-width: 992px) {
+    .es-layout-kongress .es-featured-hero-content {
+        padding-bottom: 160px !important;
+    }
+    
+    .es-layout-kongress .es-featured-slider-item {
+        width: 100px !important;
+    }
+    
+    .es-layout-kongress .es-featured-slider-image {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .es-layout-kongress .es-featured-slider-item::after {
+        font-size: var(--ensemble-xs-size, 0.75rem);
+        max-width: 100px;
+    }
+    
+    .es-layout-kongress .es-featured-info-section {
+        max-width: 280px !important;
+        padding: 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .es-layout-kongress .es-featured-hero-content {
+        flex-direction: column !important;
+        padding-bottom: 150px !important;
+    }
+    
+    .es-layout-kongress .es-featured-left,
+    .es-layout-kongress .es-featured-right {
+        padding-bottom: 20px !important;
+    }
+    
+    .es-layout-kongress .es-featured-info-section {
+        max-width: 100% !important;
+    }
+    
+    .es-layout-kongress .es-featured-hero-social .es-featured-social-icon {
+        width: 42px !important;
+        height: 42px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .es-layout-kongress .es-featured-hero-content {
+        padding-bottom: 140px !important;
+    }
+    
+    .es-layout-kongress .es-featured-slider-item {
+        width: 80px !important;
+    }
+    
+    .es-layout-kongress .es-featured-slider-image {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .es-layout-kongress .es-featured-slider-item::after {
+        font-size: 10px;
+        max-width: 80px;
+        margin-top: 6px;
+    }
+    
+    .es-layout-kongress .es-featured-slider-section {
+        padding: 15px 0 25px !important;
+    }
+    
+    .es-layout-kongress .es-featured-info-section {
+        padding: 16px !important;
+    }
+    
+    .es-layout-kongress .es-featured-event-row {
+        padding: 8px 10px !important;
+    }
+}
+
+/* ===========================================
+   DARK MODE
+   =========================================== */
+
+.es-mode-dark.es-layout-kongress .es-featured-panel,
+.es-mode-dark .es-layout-kongress .es-featured-panel {
+    background: var(--ensemble-card-bg, #1a1a1a) !important;
+}
+
+.es-mode-dark.es-layout-kongress .es-featured-panel-title,
+.es-mode-dark .es-layout-kongress .es-featured-panel-title {
+    color: var(--ensemble-text, #fafafa) !important;
+}
+
+.es-mode-dark.es-layout-kongress .es-featured-genre-tag,
+.es-mode-dark .es-layout-kongress .es-featured-genre-tag {
+    background: var(--ensemble-surface, #252525) !important;
+    color: var(--ensemble-text, #fafafa) !important;
 }

@@ -33,6 +33,11 @@ class ES_Utility_Shortcodes extends ES_Shortcode_Base {
 	}
 
     public function gallery_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('gallery');
+        }
+        
         // Parse attributes
         $atts = shortcode_atts(array(
             'id'        => 0,           // Gallery Post ID
@@ -260,6 +265,11 @@ class ES_Utility_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function layout_switcher_shortcode($atts) {
+        // Load CSS modules for demo
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue(['events', 'artists', 'locations']);
+        }
+        
         $atts = shortcode_atts(array(
             'style' => 'pills',       // dropdown, buttons, pills
             'default' => 'lovepop',
@@ -479,6 +489,11 @@ class ES_Utility_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function demo_page_shortcode($atts) {
+        // Load CSS modules for demo
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue(['events', 'artists', 'locations', 'calendar']);
+        }
+        
         $atts = shortcode_atts(array(
             'default' => 'lovepop',
             'sections' => 'hero,events,calendar',  // Comma-separated sections to show

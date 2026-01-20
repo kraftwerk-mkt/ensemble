@@ -893,7 +893,7 @@ if (!function_exists('es_field_enabled')) {
                                     <select id="es-break-type" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--es-border, #333); background: var(--es-surface-secondary, #2a2a2a); color: var(--es-text-primary, #fff);">
                                         <option value="coffee"><?php _e('☕ Coffee Break', 'ensemble'); ?></option>
                                         <option value="lunch"><?php _e('🍽️ Lunch', 'ensemble'); ?></option>
-                                        <option value="networking"><?php _e('🤝 Networking', 'ensemble'); ?></option>
+                                        <option value="networking"><?php _e('🤝 Networking', 'ensemble'); ?></option>
                                         <option value="registration"><?php _e('📋 Registration', 'ensemble'); ?></option>
                                         <option value="workshop"><?php _e('🛠️ Workshop', 'ensemble'); ?></option>
                                         <option value="panel"><?php _e('👥 Panel Discussion', 'ensemble'); ?></option>
@@ -1047,82 +1047,63 @@ if (!function_exists('es_field_enabled')) {
                     <!-- STEP 4: Tickets & Price -->
                     <div class="es-form-section" data-step="4" style="display: none;">
                         
-                        <!-- Tickets Card -->
+                        <?php 
+                        // Check if Tickets Pro is active - if so, hide the basic tickets card
+                        // as Tickets Pro provides its own card via the hook
+                        // DEBUG: NEW VERSION 2025-01-16 WITH EXTERNAL TICKETS CORE
+                        // IMPORTANT: Use is_addon_active(), not class_exists()!
+                        $tickets_pro_active = class_exists('ES_Addon_Manager') && ES_Addon_Manager::is_addon_active('tickets-pro');
+                        ?>
+                        <!-- DEBUG WIZARD V2: tickets_pro_active = <?php echo $tickets_pro_active ? 'TRUE' : 'FALSE'; ?> -->
+                        <!-- DEBUG WIZARD V2: ticket_url enabled = <?php echo es_field_enabled('ticket_url') ? 'TRUE' : 'FALSE'; ?> -->
+                        <?php
+                        // Only show basic Tickets Card if Tickets Pro is NOT active
+                        if (!$tickets_pro_active): 
+                        ?>
+                        <!-- External Tickets Card (Core - hidden when Tickets Pro is active) -->
                         <div class="es-form-card">
                             <div class="es-form-card-header">
                                 <div class="es-form-card-icon">
                                     <?php ES_Icons::icon('ticket'); ?>
                                 </div>
                                 <div class="es-form-card-title">
-                                    <h3><?php _e('Tickets', 'ensemble'); ?></h3>
-                                    <p class="es-form-card-desc"><?php _e('Manage ticket links and availability', 'ensemble'); ?></p>
+                                    <h3><?php _e('External Tickets', 'ensemble'); ?></h3>
+                                    <p class="es-form-card-desc"><?php _e('Link to external ticket provider', 'ensemble'); ?></p>
                                 </div>
                             </div>
                             <div class="es-form-card-body">
-                                <?php 
-                                // Tickets - unterschiedliche Anzeige je nach Add-on Status
-                                $tickets_addon_active = class_exists('ES_Addon_Manager') && ES_Addon_Manager::is_addon_active('tickets');
-                                
-                                if ($tickets_addon_active): 
-                                ?>
-                                <!-- Advanced Ticket Management (Add-on active) -->
-                                <div class="es-tickets-wizard-section">
-                                    <p class="description" style="margin-top: 0; margin-bottom: 15px;">
-                                        <span class="es-badge-addon" style="font-size: 10px; padding: 2px 8px; background: var(--es-primary); color: white; border-radius: 10px; margin-right: 8px;">Add-on</span>
-                                        <?php _e('Add multiple ticket links to external providers', 'ensemble'); ?>
-                                    </p>
-                                    
-                                    <input type="hidden" id="es-tickets-data" name="tickets_data" value="[]">
-                                    <input type="hidden" id="es-excluded-global-tickets" name="excluded_global_tickets" value="[]">
-                                    
-                                    <div class="es-tickets-wizard-list" id="es-tickets-wizard-list">
-                                        <!-- Tickets werden hier per JS eingefügt -->
-                                    </div>
-                                    
-                                    <div class="es-tickets-wizard-empty" id="es-tickets-wizard-empty">
-                                        <div class="es-empty-icon">
-                                            <?php ES_Icons::icon('ticket'); ?>
-                                        </div>
-                                        <p><?php _e('No tickets added yet', 'ensemble'); ?></p>
-                                        <p class="description"><?php _e('Add ticket links to external providers', 'ensemble'); ?></p>
-                                    </div>
-                                    
-                                    <button type="button" class="button es-add-ticket-wizard-btn" id="es-add-ticket-wizard-btn">
-                                        <?php ES_Icons::icon('plus'); ?>
-                                        <?php _e('Add Ticket', 'ensemble'); ?>
-                                    </button>
-                                </div>
-                                <?php else: ?>
-                                <!-- Einfache Ticket-Felder (Add-on nicht aktiv) -->
+                                <!-- Simple External Ticket Fields (Core) -->
                                 <?php if (es_field_enabled('ticket_url')): ?>
                                 <div class="es-form-row">
                                     <label for="es-event-ticket-url"><?php _e('Ticket URL', 'ensemble'); ?></label>
                                     <input type="url" 
                                            id="es-event-ticket-url" 
                                            name="event_ticket_url" 
-                                           placeholder="<?php _e('https://tickets.example.com/event-123', 'ensemble'); ?>">
+                                           placeholder="<?php _e('https://www.eventbrite.com/e/...', 'ensemble'); ?>">
                                     <p class="description">
-                                        <?php _e('Link to ticket sales or registration', 'ensemble'); ?>
-                                        <a href="<?php echo admin_url('admin.php?page=ensemble-addons'); ?>" style="margin-left: 8px;">
-                                            <?php _e('→ Tickets Add-on for advanced features', 'ensemble'); ?>
-                                        </a>
+                                        <?php _e('Link to ticket sales on external platforms (Eventbrite, RA, Eventim, etc.)', 'ensemble'); ?>
                                     </p>
                                 </div>
                                 <?php endif; ?>
                                 
                                 <?php if (es_field_enabled('button_text')): ?>
                                 <div class="es-form-row">
-                                    <label for="es-event-button-text"><?php _e('Button Text (optional)', 'ensemble'); ?></label>
+                                    <label for="es-event-button-text"><?php _e('Button Text', 'ensemble'); ?></label>
                                     <input type="text" 
                                            id="es-event-button-text" 
                                            name="event_button_text" 
-                                           placeholder="<?php _e('e.g., "Buy Tickets" or "Register Now"', 'ensemble'); ?>">
-                                    <p class="description"><?php printf(__('Custom text for the button in %s cards', 'ensemble'), strtolower($event_singular)); ?></p>
+                                           placeholder="<?php _e('Buy Tickets', 'ensemble'); ?>">
+                                    <p class="description"><?php _e('Text displayed on the ticket button', 'ensemble'); ?></p>
                                 </div>
                                 <?php endif; ?>
-                                <?php endif; ?>
+                                
+                                <p class="description" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--es-border, #e2e8f0); color: var(--es-text-muted, #888);">
+                                    <span class="dashicons dashicons-info-outline" style="font-size: 14px; width: 14px; height: 14px; vertical-align: middle;"></span>
+                                    <?php _e('For advanced ticket management with multiple categories, payment processing, and reservations, activate the Tickets Pro add-on.', 'ensemble'); ?>
+                                </p>
                             </div>
                         </div>
+                        <?php endif; // End !$tickets_pro_active ?>
                         
                         <!-- Pricing Card -->
                         <?php if (es_field_enabled('price')): ?>
@@ -1139,17 +1120,29 @@ if (!function_exists('es_field_enabled')) {
                             <div class="es-form-card-body">
                                 <div class="es-form-row">
                                     <label for="es-event-price"><?php _e('Price', 'ensemble'); ?></label>
-                                    <input type="text" id="es-event-price" name="event_price" placeholder="<?php _e('e.g., €10 or Free', 'ensemble'); ?>">
+                                    <input type="text" id="es-event-price" name="event_price" placeholder="<?php _e('e.g., â‚¬10 or Free', 'ensemble'); ?>">
                                 </div>
                                 
                                 <div class="es-form-row">
                                     <label for="es-event-price-note"><?php _e('Price Note (Fine Print)', 'ensemble'); ?></label>
-                                    <input type="text" id="es-event-price-note" name="event_price_note" placeholder="<?php _e('e.g., "incl. 1 drink" or "at the door €15"', 'ensemble'); ?>">
+                                    <input type="text" id="es-event-price-note" name="event_price_note" placeholder="<?php _e('e.g., "incl. 1 drink" or "at the door â‚¬15"', 'ensemble'); ?>">
                                     <p class="description"><?php _e('Additional info displayed below the price', 'ensemble'); ?></p>
-                                </div>
+                                   </div>
                             </div>
                         </div>
                         <?php endif; ?>
+                        
+                        <?php 
+                        /**
+                         * Hook: ensemble_wizard_tickets_cards
+                         * 
+                         * Allows addons to add cards to the Tickets & Price step.
+                         * Used by Booking Engine, Tickets Pro, etc.
+                         * 
+                         * @since 2.9.x
+                         */
+                        do_action('ensemble_wizard_tickets_cards');
+                        ?>
                     </div>
                     
                     <!-- STEP 5: Media -->
@@ -1241,17 +1234,13 @@ if (!function_exists('es_field_enabled')) {
                                 </div>
                             </div>
                             <div class="es-form-card-body">
-                                <div id="es-gallery-container" class="es-media-dropzone es-media-dropzone--gallery" data-type="gallery">
+                                <!-- Artist Manager Pattern: Button außerhalb, immer sichtbar -->
+                                <div id="es-gallery-container" class="es-gallery-upload-box">
+                                    <button type="button" id="es-upload-gallery-btn" class="es-upload-btn">
+                                        <span class="dashicons dashicons-images-alt2"></span>
+                                        <span><?php _e('Add Gallery Images', 'ensemble'); ?></span>
+                                    </button>
                                     <div id="es-gallery-preview" class="es-gallery-preview"></div>
-                                    <div class="es-dropzone-content">
-                                        <span class="dashicons dashicons-cloud-upload"></span>
-                                        <p><?php _e('Drag & drop images here', 'ensemble'); ?></p>
-                                        <p class="es-dropzone-or"><?php _e('or', 'ensemble'); ?></p>
-                                        <button type="button" id="es-upload-gallery-btn" class="button">
-                                            <span class="dashicons dashicons-images-alt2" style="margin-top: 3px;"></span>
-                                            <?php _e('Select from Media Library', 'ensemble'); ?>
-                                        </button>
-                                    </div>
                                     <input type="hidden" id="es-gallery-ids" name="gallery_ids" value="">
                                 </div>
                             </div>
@@ -1408,39 +1397,68 @@ if (!function_exists('es_field_enabled')) {
                                 <div id="es-reservation-options" class="es-conditional-section" style="display: none; margin-top: 15px; padding: 15px; background: var(--es-surface-secondary); border-radius: var(--es-radius); border: 1px solid var(--es-border);">
                                     
                                     <div class="es-form-row">
-                                        <label><strong><?php _e('Reservierungstypen', 'ensemble'); ?></strong></label>
-                                        <div class="es-checkbox-group" style="margin-top: 8px;">
-                                            <label class="es-checkbox">
-                                                <input type="checkbox" name="reservation_types[]" value="guestlist" checked>
+                                        <label><strong><?php _e('Reservierungstypen & Kontingente', 'ensemble'); ?></strong></label>
+                                        <p class="description" style="margin-bottom: 12px;"><?php _e('Aktiviere die gewünschten Typen und setze optionale Kontingente.', 'ensemble'); ?></p>
+                                        
+                                        <!-- Guestlist -->
+                                        <div class="es-reservation-type-row" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--es-surface-tertiary, rgba(255,255,255,0.05)); border-radius: 8px; margin-bottom: 8px;">
+                                            <label class="es-checkbox" style="flex: 0 0 160px;">
+                                                <input type="checkbox" name="reservation_types[]" value="guestlist" class="es-type-toggle" data-type="guestlist" checked>
                                                 <span class="es-checkbox-box"></span>
                                                 <span class="es-checkbox-label"><span class="dashicons dashicons-groups" style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;"></span><?php _e('Guestlist', 'ensemble'); ?></span>
                                             </label>
-                                            <label class="es-checkbox">
-                                                <input type="checkbox" name="reservation_types[]" value="table">
-                                                <span class="es-checkbox-box"></span>
-                                                <span class="es-checkbox-label"><span class="dashicons dashicons-networking" style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;"></span><?php _e('Tischreservierung', 'ensemble'); ?></span>
-                                            </label>
-                                            <label class="es-checkbox">
-                                                <input type="checkbox" name="reservation_types[]" value="vip">
+                                            <div class="es-capacity-field" data-for="guestlist" style="display: flex; align-items: center; gap: 8px;">
+                                                <input type="number" name="reservation_capacity_guestlist" id="es-capacity-guestlist" min="0" placeholder="∞" style="width: 80px;" title="<?php _e('Kontingent für Guestlist', 'ensemble'); ?>">
+                                                <span class="es-capacity-label" style="font-size: 12px; color: var(--es-text-muted);"><?php _e('Plätze', 'ensemble'); ?></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- VIP -->
+                                        <div class="es-reservation-type-row" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--es-surface-tertiary, rgba(255,255,255,0.05)); border-radius: 8px; margin-bottom: 8px;">
+                                            <label class="es-checkbox" style="flex: 0 0 160px;">
+                                                <input type="checkbox" name="reservation_types[]" value="vip" class="es-type-toggle" data-type="vip">
                                                 <span class="es-checkbox-box"></span>
                                                 <span class="es-checkbox-label"><span class="dashicons dashicons-star-filled" style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px; color: var(--es-warning);"></span><?php _e('VIP-Liste', 'ensemble'); ?></span>
                                             </label>
+                                            <div class="es-capacity-field" data-for="vip" style="display: none; align-items: center; gap: 8px;">
+                                                <input type="number" name="reservation_capacity_vip" id="es-capacity-vip" min="0" placeholder="∞" style="width: 80px;" title="<?php _e('Kontingent für VIP', 'ensemble'); ?>">
+                                                <span class="es-capacity-label" style="font-size: 12px; color: var(--es-text-muted);"><?php _e('Plätze', 'ensemble'); ?></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Table -->
+                                        <?php 
+                                        $floorplan_active = class_exists('ES_Addon_Manager') && ES_Addon_Manager::is_addon_active('floorplan');
+                                        ?>
+                                        <div class="es-reservation-type-row" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--es-surface-tertiary, rgba(255,255,255,0.05)); border-radius: 8px; margin-bottom: 8px; <?php echo !$floorplan_active ? 'opacity: 0.5;' : ''; ?>">
+                                            <label class="es-checkbox" style="flex: 0 0 160px;">
+                                                <input type="checkbox" name="reservation_types[]" value="table" class="es-type-toggle" data-type="table" <?php echo !$floorplan_active ? 'disabled' : ''; ?>>
+                                                <span class="es-checkbox-box"></span>
+                                                <span class="es-checkbox-label"><span class="dashicons dashicons-networking" style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px;"></span><?php _e('Tischreservierung', 'ensemble'); ?></span>
+                                            </label>
+                                            <?php if ($floorplan_active): ?>
+                                            <div class="es-capacity-field" data-for="table" style="display: none; align-items: center; gap: 8px;">
+                                                <input type="number" name="reservation_capacity_table" id="es-capacity-table" min="0" placeholder="∞" style="width: 80px;" title="<?php _e('Kontingent für Tische', 'ensemble'); ?>">
+                                                <span class="es-capacity-label" style="font-size: 12px; color: var(--es-text-muted);"><?php _e('Tische', 'ensemble'); ?></span>
+                                            </div>
+                                            <?php else: ?>
+                                            <span style="font-size: 11px; color: var(--es-text-muted);"><?php _e('Benötigt Floor Plan Addon', 'ensemble'); ?></span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                     
                                     <div class="es-form-row" style="margin-top: 15px;">
                                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                                             <div>
-                                                <label for="es-reservation-capacity"><?php _e('Max. Capacity', 'ensemble'); ?></label>
-                                                <input type="number" id="es-reservation-capacity" name="reservation_capacity" min="0" placeholder="<?php _e('Unbegrenzt', 'ensemble'); ?>" style="width: 100%;">
-                                                <p class="description"><?php _e('Leave empty for unlimited', 'ensemble'); ?></p>
-                                            </div>
-                                            <div>
                                                 <label for="es-reservation-deadline"><?php _e('Anmeldeschluss', 'ensemble'); ?></label>
                                                 <div style="display: flex; align-items: center; gap: 8px;">
                                                     <input type="number" id="es-reservation-deadline" name="reservation_deadline_hours" value="24" min="0" style="width: 80px;">
                                                     <span><?php _e('Stunden vor Event', 'ensemble'); ?></span>
                                                 </div>
+                                            </div>
+                                            <div>
+                                                <label for="es-max-guests"><?php _e('Max. Gäste pro Buchung', 'ensemble'); ?></label>
+                                                <input type="number" id="es-max-guests" name="reservation_max_guests" min="1" max="50" value="10" style="width: 80px;">
                                             </div>
                                         </div>
                                     </div>
@@ -1563,6 +1581,31 @@ jQuery(function($) {
         $('#es-reservation-options').show();
     }
     
+    // Toggle Capacity Fields based on Type Selection
+    $('.es-type-toggle').on('change', function() {
+        var type = $(this).data('type');
+        var $capacityField = $('.es-capacity-field[data-for="' + type + '"]');
+        
+        if ($(this).is(':checked')) {
+            $capacityField.css('display', 'flex');
+        } else {
+            $capacityField.hide();
+            $capacityField.find('input').val(''); // Clear value when unchecked
+        }
+    });
+    
+    // Initial state for capacity fields
+    $('.es-type-toggle').each(function() {
+        var type = $(this).data('type');
+        var $capacityField = $('.es-capacity-field[data-for="' + type + '"]');
+        
+        if ($(this).is(':checked')) {
+            $capacityField.css('display', 'flex');
+        } else {
+            $capacityField.hide();
+        }
+    });
+    
     // ====================================
     // BREAKS / TIMELINE FUNCTIONALITY
     // ====================================
@@ -1586,7 +1629,7 @@ jQuery(function($) {
         var typeIcons = {
             'coffee': '☕',
             'lunch': '🍽️',
-            'networking': '🤝',
+            'networking': '🤝',
             'registration': '📋',
             'workshop': '🛠️',
             'panel': '👥',

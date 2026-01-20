@@ -139,6 +139,12 @@ $artist_plural = ES_Label_System::get_label('artist', true);
             
             <div class="es-modal-header">
                 <h2 id="es-modal-title"><?php printf(__('Add New %s', 'ensemble'), $artist_singular); ?></h2>
+                <div class="es-modal-header-actions">
+                    <button type="button" id="es-copy-artist-btn" class="button" style="display: none;" title="<?php printf(esc_attr__('Copy %s', 'ensemble'), $artist_singular); ?>">
+                        <span class="dashicons dashicons-admin-page"></span>
+                        <?php _e('Copy', 'ensemble'); ?>
+                    </button>
+                </div>
             </div>
             
             <form id="es-artist-form" class="es-manager-form es-artist-form-redesign">
@@ -234,7 +240,7 @@ $artist_plural = ES_Label_System::get_label('artist', true);
                                 </div>
                                 <div class="es-form-row es-form-row-flex-1">
                                     <label for="es-artist-company"><?php _e('Organization / Company', 'ensemble'); ?></label>
-                                    <input type="text" id="es-artist-company" name="company" placeholder="<?php _e('e.g. Anthropic, TU München', 'ensemble'); ?>">
+                                    <input type="text" id="es-artist-company" name="company" placeholder="<?php _e('e.g. Anthropic, TU MÃ¼nchen', 'ensemble'); ?>">
                                 </div>
                             </div>
                             
@@ -524,7 +530,7 @@ $artist_plural = ES_Label_System::get_label('artist', true);
                         </tr>
                     </thead>
                     <tbody id="es-bulk-add-rows">
-                        <!-- Rows werden per JS hinzugefügt -->
+                        <!-- Rows werden per JS hinzugefÃ¼gt -->
                     </tbody>
                 </table>
             </div>
@@ -685,6 +691,44 @@ $artist_plural = ES_Label_System::get_label('artist', true);
     #es-bulk-quick-add-btn .es-icon {
         width: 16px;
         height: 16px;
+    }
+    
+    /* Modal Header with Actions */
+    #es-artist-modal .es-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    #es-artist-modal .es-modal-header-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    
+    #es-artist-modal .es-modal-header-actions .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 12px;
+    }
+    
+    #es-artist-modal .es-modal-header-actions .dashicons {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* Spin Animation for Copy Button */
+    .es-spin {
+        animation: es-spin 1s linear infinite;
+    }
+    
+    @keyframes es-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
     }
     </style>
     
@@ -912,7 +956,7 @@ $artist_plural = ES_Label_System::get_label('artist', true);
             <div class="es-form-row">
                 <label id="es-bulk-assign-label"><?php _e('Select', 'ensemble'); ?></label>
                 <select id="es-bulk-assign-value" style="width: 100%;">
-                    <!-- Options werden per JS gefüllt -->
+                    <!-- Options werden per JS gefÃ¼llt -->
                 </select>
             </div>
             
@@ -1693,6 +1737,67 @@ $artist_plural = ES_Label_System::get_label('artist', true);
                 setTimeout(function() {
                     updateBulkActionsVisibility();
                     applyFilters();
+                }, 100);
+            }
+        });
+        
+        // ==========================================
+        // COPY ARTIST
+        // ==========================================
+        
+        $('#es-copy-artist-btn').on('click', function() {
+            var artistId = $('#es-artist-id').val();
+            if (!artistId) return;
+            
+            if (!confirm('<?php printf(__('Copy this %s?', 'ensemble'), strtolower($artist_singular)); ?>')) {
+                return;
+            }
+            
+            var $btn = $(this);
+            var $icon = $btn.find('.dashicons');
+            $btn.prop('disabled', true);
+            $icon.removeClass('dashicons-admin-page').addClass('dashicons-update-alt es-spin');
+            
+            $.post(ajaxurl, {
+                action: 'es_copy_artist',
+                nonce: ensembleAjax.nonce,
+                artist_id: artistId
+            }, function(response) {
+                if (response.success) {
+                    // Reload list
+                    if (typeof loadArtists === 'function') {
+                        loadArtists();
+                    } else {
+                        location.reload();
+                    }
+                    // Close modal briefly, will reopen with new ID
+                    $('#es-artist-modal').fadeOut(200);
+                    setTimeout(function() {
+                        // Trigger edit for the new copy
+                        $('.es-item-card[data-artist-id="' + response.data.artist_id + '"]').trigger('click');
+                    }, 600);
+                } else {
+                    alert(response.data.message || '<?php _e('Error copying artist', 'ensemble'); ?>');
+                }
+            }).always(function() {
+                $btn.prop('disabled', false);
+                $icon.removeClass('dashicons-update-alt es-spin').addClass('dashicons-admin-page');
+            });
+        });
+        
+        // Show/Hide Copy Button based on Edit/Create mode
+        // Hook into modal open events
+        $(document).on('click', '#es-create-artist-btn', function() {
+            $('#es-copy-artist-btn').hide();
+        });
+        
+        // When editing (artist loaded into form), show copy button
+        $(document).ajaxComplete(function(event, xhr, settings) {
+            if (settings.data && settings.data.indexOf('es_get_artist') !== -1 && settings.data.indexOf('es_get_artists') === -1) {
+                setTimeout(function() {
+                    if ($('#es-artist-id').val()) {
+                        $('#es-copy-artist-btn').show();
+                    }
                 }, 100);
             }
         });

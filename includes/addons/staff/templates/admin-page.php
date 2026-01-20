@@ -100,6 +100,16 @@ $dept_plural = $this->get_department_label(true);
 #es-staff-modal .es-form-sections::-webkit-scrollbar-thumb:hover {
     background: var(--es-text-muted, #888);
 }
+
+/* Spin Animation for Copy Button */
+.es-spin {
+    animation: es-spin 1s linear infinite;
+}
+
+@keyframes es-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
 </style>
 
 <div class="wrap es-manager-wrap es-staff-wrap">
@@ -556,6 +566,9 @@ jQuery(document).ready(function($) {
                     '<button class="button es-edit-staff" data-id="' + person.id + '">' +
                         '<span class="dashicons dashicons-edit"></span> <?php _e('Edit', 'ensemble'); ?>' +
                     '</button>' +
+                    '<button class="es-icon-btn es-copy-staff" data-id="' + person.id + '" title="<?php _e('Copy', 'ensemble'); ?>">' +
+                        '<span class="dashicons dashicons-admin-page"></span>' +
+                    '</button>' +
                     '<button class="es-icon-btn es-icon-btn-danger es-delete-staff" data-id="' + person.id + '" title="<?php _e('Delete', 'ensemble'); ?>">' +
                         '<span class="dashicons dashicons-trash"></span>' +
                     '</button>' +
@@ -746,6 +759,52 @@ jQuery(document).ready(function($) {
                 } else {
                     $card.css('opacity', '1');
                 }
+            }
+        });
+    });
+    
+    // ==========================================
+    // COPY STAFF
+    // ==========================================
+    
+    $(document).on('click', '.es-copy-staff', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (!confirm('<?php printf(__('Copy this %s?', 'ensemble'), strtolower($staff_singular)); ?>')) return;
+        
+        var staffId = $(this).data('id');
+        var $btn = $(this);
+        var $icon = $btn.find('.dashicons');
+        
+        $btn.prop('disabled', true);
+        $icon.removeClass('dashicons-admin-page').addClass('dashicons-update-alt es-spin');
+        
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'es_copy_staff',
+                nonce: '<?php echo wp_create_nonce('ensemble_staff_nonce'); ?>',
+                staff_id: staffId
+            },
+            success: function(response) {
+                if (response.success) {
+                    loadStaff();
+                    // Open the copy for editing after list reloads
+                    setTimeout(function() {
+                        loadStaffForEdit(response.data.staff_id);
+                    }, 500);
+                } else {
+                    alert(response.data.message || '<?php _e('Error copying contact', 'ensemble'); ?>');
+                }
+            },
+            error: function() {
+                alert('<?php _e('Error copying contact', 'ensemble'); ?>');
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+                $icon.removeClass('dashicons-update-alt es-spin').addClass('dashicons-admin-page');
             }
         });
     });

@@ -9,47 +9,50 @@
  */
 
 /* ==========================================================================
-   CSS Variables
+   CSS Variables - Designer Integration
+   ==========================================================================
+   Uses --vc-* local variables with --ensemble-* Designer fallbacks.
+   Supports dark/light/auto color schemes.
    ========================================================================== */
 .es-visual-calendar {
-    --vc-bg: #0a0a0a;
-    --vc-surface: #111111;
-    --vc-surface-hover: #1a1a1a;
-    --vc-border: rgba(255, 255, 255, 0.08);
-    --vc-text: #ffffff;
-    --vc-text-muted: rgba(255, 255, 255, 0.6);
-    --vc-text-dim: rgba(255, 255, 255, 0.4);
-    --vc-primary: var(--ensemble-primary, #ffffff);
-    --vc-danger: #ef4444;
-    --vc-success: #22c55e;
-    --vc-warning: #f59e0b;
-    --vc-radius: 8px;
-    --vc-gap: 4px;
+    --vc-bg: var(--ensemble-bg, #0a0a0a);
+    --vc-surface: var(--ensemble-card-bg, #111111);
+    --vc-surface-hover: var(--ensemble-hover, #1a1a1a);
+    --vc-border: var(--ensemble-card-border, rgba(255, 255, 255, 0.08));
+    --vc-text: var(--ensemble-text, #ffffff);
+    --vc-text-muted: var(--ensemble-text-secondary, rgba(255, 255, 255, 0.6));
+    --vc-text-dim: var(--ensemble-text-muted, rgba(255, 255, 255, 0.4));
+    --vc-primary: var(--ensemble-primary, #667eea);
+    --vc-danger: var(--ensemble-error, #ef4444);
+    --vc-success: var(--ensemble-success, #22c55e);
+    --vc-warning: var(--ensemble-warning, #f59e0b);
+    --vc-radius: var(--ensemble-radius, 8px);
+    --vc-gap: var(--ensemble-grid-gap, 4px);
     --vc-cell-aspect: 1 / 1;
-    --vc-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --vc-transition: var(--ensemble-transition, 0.3s cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 /* Light Color Scheme */
 .es-vc-scheme-light {
-    --vc-bg: #f5f5f5;
-    --vc-surface: #ffffff;
-    --vc-surface-hover: #f0f0f0;
-    --vc-border: rgba(0, 0, 0, 0.1);
-    --vc-text: #1a1a1a;
-    --vc-text-muted: rgba(0, 0, 0, 0.6);
-    --vc-text-dim: rgba(0, 0, 0, 0.4);
+    --vc-bg: var(--ensemble-bg, #f5f5f5);
+    --vc-surface: var(--ensemble-card-bg, #ffffff);
+    --vc-surface-hover: var(--ensemble-hover, #f0f0f0);
+    --vc-border: var(--ensemble-card-border, rgba(0, 0, 0, 0.1));
+    --vc-text: var(--ensemble-text, #1a1a1a);
+    --vc-text-muted: var(--ensemble-text-secondary, rgba(0, 0, 0, 0.6));
+    --vc-text-dim: var(--ensemble-text-muted, rgba(0, 0, 0, 0.4));
 }
 
 /* Auto scheme - follows system preference */
 @media (prefers-color-scheme: light) {
     .es-vc-scheme-auto {
-        --vc-bg: #f5f5f5;
-        --vc-surface: #ffffff;
-        --vc-surface-hover: #f0f0f0;
-        --vc-border: rgba(0, 0, 0, 0.1);
-        --vc-text: #1a1a1a;
-        --vc-text-muted: rgba(0, 0, 0, 0.6);
-        --vc-text-dim: rgba(0, 0, 0, 0.4);
+        --vc-bg: var(--ensemble-bg, #f5f5f5);
+        --vc-surface: var(--ensemble-card-bg, #ffffff);
+        --vc-surface-hover: var(--ensemble-hover, #f0f0f0);
+        --vc-border: var(--ensemble-card-border, rgba(0, 0, 0, 0.1));
+        --vc-text: var(--ensemble-text, #1a1a1a);
+        --vc-text-muted: var(--ensemble-text-secondary, rgba(0, 0, 0, 0.6));
+        --vc-text-dim: var(--ensemble-text-muted, rgba(0, 0, 0, 0.4));
     }
 }
 
@@ -78,8 +81,8 @@
 
 .es-vc-title {
     margin: 0;
-    font-size: 24px;
-    font-weight: 700;
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 700);
     color: var(--vc-text);
     text-align: center;
     flex: 1;
@@ -123,8 +126,8 @@
 
 .es-vc-weekday {
     text-align: center;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
     color: var(--vc-text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -170,7 +173,7 @@
 /* Today highlight */
 .es-vc-cell.es-vc-today .es-vc-date-badge {
     background: var(--vc-primary);
-    color: #000;
+    color: var(--ensemble-text, #000000);
 }
 
 /* ==========================================================================
@@ -188,16 +191,16 @@
     height: 32px;
     padding: 0 8px;
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: 700;
-    color: #000;
+    border-radius: var(--ensemble-badge-radius, 4px);
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #000000);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .es-vc-scheme-light .es-vc-date-badge {
     background: rgba(0, 0, 0, 0.9);
-    color: #fff;
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 /* ==========================================================================
@@ -214,8 +217,8 @@
     align-items: center;
     justify-content: center;
     color: var(--vc-text-dim);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -277,15 +280,15 @@
 }
 
 .es-vc-event-time {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-button-weight, 600);
     color: rgba(255, 255, 255, 0.8);
 }
 
 .es-vc-event-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-button-text, #ffffff);
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -294,8 +297,8 @@
 }
 
 .es-vc-event-location {
-    font-size: 11px;
-    font-weight: 500;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
     color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -314,21 +317,21 @@
 .es-vc-status-badge {
     display: inline-block;
     padding: 6px 10px;
-    font-size: 10px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
 }
 
 .es-vc-sold-out {
     background: var(--vc-danger);
-    color: #fff;
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-vc-cancelled {
-    background: #6b7280;
-    color: #fff;
+    background: var(--ensemble-text-muted, #6b7280);
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 /* ==========================================================================
@@ -382,10 +385,10 @@
     padding: 8px 16px;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(8px);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
+    border-radius: var(--ensemble-button-radius, 8px);
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-button-text, #ffffff);
     text-transform: uppercase;
     letter-spacing: 1px;
     white-space: nowrap;
@@ -406,7 +409,7 @@
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: all 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     max-height: 300px;
     overflow-y: auto;
 }
@@ -440,7 +443,7 @@
 .es-vc-dropdown-thumb {
     width: 48px;
     height: 48px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     object-fit: cover;
     flex-shrink: 0;
 }
@@ -452,8 +455,8 @@
 
 .es-vc-dropdown-title {
     display: block;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
     color: var(--vc-text);
     white-space: nowrap;
     overflow: hidden;
@@ -462,19 +465,19 @@
 
 .es-vc-dropdown-time {
     display: block;
-    font-size: 12px;
+    font-size: var(--ensemble-xs-size, 12px);
     color: var(--vc-text-muted);
     margin-top: 2px;
 }
 
 .es-vc-dropdown-status {
     padding: 4px 8px;
-    font-size: 10px;
-    font-weight: 700;
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-heading-weight, 700);
     text-transform: uppercase;
     background: var(--vc-danger);
-    color: #fff;
-    border-radius: 4px;
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 4px);
     flex-shrink: 0;
 }
 
@@ -517,7 +520,7 @@
     }
     
     .es-vc-event-title {
-        font-size: 13px;
+        font-size: var(--ensemble-small-size, 14px);
     }
 }
 
@@ -527,7 +530,7 @@
     }
     
     .es-vc-title {
-        font-size: 18px;
+        font-size: var(--ensemble-lg-size, 18px);
     }
     
     .es-vc-nav {
@@ -536,13 +539,13 @@
     }
     
     .es-vc-weekday {
-        font-size: 11px;
+        font-size: var(--ensemble-xs-size, 12px);
     }
     
     .es-vc-date-badge {
         min-width: 28px;
         height: 28px;
-        font-size: 14px;
+        font-size: var(--ensemble-small-size, 14px);
         top: 4px;
         left: 4px;
     }
@@ -552,7 +555,7 @@
     }
     
     .es-vc-event-title {
-        font-size: 11px;
+        font-size: var(--ensemble-xs-size, 12px);
         -webkit-line-clamp: 1;
     }
     
@@ -563,7 +566,7 @@
     
     .es-vc-count-badge {
         padding: 6px 10px;
-        font-size: 10px;
+        font-size: var(--ensemble-xs-size, 12px);
     }
     
     /* Hide dropdown on mobile - link to day view instead */
@@ -579,22 +582,22 @@
     }
     
     .es-vc-cell {
-        border-radius: 4px;
+        border-radius: var(--ensemble-badge-radius, 4px);
     }
     
     .es-vc-date-badge {
         min-width: 24px;
         height: 24px;
-        font-size: 12px;
+        font-size: var(--ensemble-xs-size, 12px);
         padding: 0 4px;
     }
     
     .es-vc-no-events span {
-        font-size: 8px;
+        font-size: var(--ensemble-xs-size, 12px);
     }
     
     .es-vc-event-title {
-        font-size: 10px;
+        font-size: var(--ensemble-xs-size, 12px);
     }
 }
 
@@ -679,22 +682,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: var(--ensemble-radius, 8px);
     z-index: 3;
 }
 
 .es-vc-multi-day-badge {
     background: rgba(139, 92, 246, 0.9);
-    color: #fff;
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-vc-permanent-badge {
     background: rgba(16, 185, 129, 0.9);
-    color: #fff;
+    color: var(--ensemble-button-text, #ffffff);
 }
 
 .es-vc-type-badge .dashicons {
-    font-size: 16px;
+    font-size: var(--ensemble-body-size, 16px);
     width: 16px;
     height: 16px;
 }

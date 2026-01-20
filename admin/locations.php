@@ -24,6 +24,46 @@ $location_plural = ES_Label_System::get_label('location', true);
 $maps_addon_active = ensemble_is_addon_active('maps');
 ?>
 
+<style>
+/* Modal Header with Actions */
+#es-location-modal .es-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#es-location-modal .es-modal-header-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+#es-location-modal .es-modal-header-actions .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+}
+
+#es-location-modal .es-modal-header-actions .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Spin Animation for Copy Button */
+.es-spin {
+    animation: es-spin 1s linear infinite;
+}
+
+@keyframes es-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+
 <div class="wrap es-manager-wrap es-locations-wrap">
     <h1><?php echo esc_html($location_plural); ?> Manager</h1>
     
@@ -89,6 +129,12 @@ $maps_addon_active = ensemble_is_addon_active('maps');
             
             <div class="es-modal-header">
                 <h2 id="es-modal-title"><?php printf(__('Add New %s', 'ensemble'), $location_singular); ?></h2>
+                <div class="es-modal-header-actions">
+                    <button type="button" id="es-copy-location-btn" class="button" style="display: none;" title="<?php printf(esc_attr__('Copy %s', 'ensemble'), $location_singular); ?>">
+                        <span class="dashicons dashicons-admin-page"></span>
+                        <?php _e('Copy', 'ensemble'); ?>
+                    </button>
+                </div>
             </div>
             
             <form id="es-location-form" class="es-manager-form es-location-form-redesign">
@@ -179,7 +225,7 @@ $maps_addon_active = ensemble_is_addon_active('maps');
                         
                         <div class="es-form-card-body es-collapsible-content" id="es-venues-section" style="display: none;">
                             <div id="es-venues-list">
-                                <!-- Venues werden hier dynamisch hinzugefügt -->
+                                <!-- Venues werden hier dynamisch hinzugefÃ¼gt -->
                             </div>
                             
                             <button type="button" id="es-add-venue-btn" class="button">
@@ -315,7 +361,7 @@ $maps_addon_active = ensemble_is_addon_active('maps');
                                                class="es-time-input es-time-open" 
                                                name="opening_hours[<?php echo $day_key; ?>][open]" 
                                                placeholder="09:00">
-                                        <span class="es-time-separator">–</span>
+                                        <span class="es-time-separator">â€“</span>
                                         <input type="time" 
                                                class="es-time-input es-time-close" 
                                                name="opening_hours[<?php echo $day_key; ?>][close]" 
@@ -577,6 +623,68 @@ $maps_addon_active = ensemble_is_addon_active('maps');
             addNew: '<?php printf(esc_js(__('Add New %s', 'ensemble')), $location_singular); ?>',
             edit: '<?php printf(esc_js(__('Edit %s', 'ensemble')), $location_singular); ?>'
         };
+        
+        // ==========================================
+        // COPY LOCATION
+        // ==========================================
+        
+        $(document).ready(function() {
+            $('#es-copy-location-btn').on('click', function() {
+                var locationId = $('#es-location-id').val();
+                if (!locationId) return;
+                
+                if (!confirm('<?php printf(__('Copy this %s?', 'ensemble'), strtolower($location_singular)); ?>')) {
+                    return;
+                }
+                
+                var $btn = $(this);
+                var $icon = $btn.find('.dashicons');
+                $btn.prop('disabled', true);
+                $icon.removeClass('dashicons-admin-page').addClass('dashicons-update-alt es-spin');
+                
+                $.post(ajaxurl, {
+                    action: 'es_copy_location',
+                    nonce: ensembleAjax.nonce,
+                    location_id: locationId
+                }, function(response) {
+                    if (response.success) {
+                        // Reload list
+                        if (typeof loadLocations === 'function') {
+                            loadLocations();
+                        } else {
+                            location.reload();
+                        }
+                        // Close modal
+                        $('#es-location-modal').fadeOut(200);
+                        setTimeout(function() {
+                            // Trigger edit for the new copy
+                            $('.es-item-card[data-location-id="' + response.data.location_id + '"]').trigger('click');
+                        }, 600);
+                    } else {
+                        alert(response.data.message || '<?php _e('Error copying location', 'ensemble'); ?>');
+                    }
+                }).always(function() {
+                    $btn.prop('disabled', false);
+                    $icon.removeClass('dashicons-update-alt es-spin').addClass('dashicons-admin-page');
+                });
+            });
+            
+            // Show/Hide Copy Button based on Edit/Create mode
+            $(document).on('click', '#es-create-location-btn', function() {
+                $('#es-copy-location-btn').hide();
+            });
+            
+            // When editing (location loaded into form), show copy button
+            $(document).ajaxComplete(function(event, xhr, settings) {
+                if (settings.data && settings.data.indexOf('es_get_location') !== -1 && settings.data.indexOf('es_get_locations') === -1) {
+                    setTimeout(function() {
+                        if ($('#es-location-id').val()) {
+                            $('#es-copy-location-btn').show();
+                        }
+                    }, 100);
+                }
+            });
+        });
     })(jQuery);
     </script>
     

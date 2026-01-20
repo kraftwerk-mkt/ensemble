@@ -4,6 +4,7 @@
  * 
  * @package Ensemble
  * @subpackage Addons/Staff
+ * @version 1.1.0
  */
 
 if (!defined('ABSPATH')) {
@@ -12,8 +13,8 @@ if (!defined('ABSPATH')) {
 
 get_header();
 
-// Get staff data
-$staff_addon = ES_Addon_Manager::get_instance()->get_addon('staff');
+// Get staff data - use correct method
+$staff_addon = ES_Addon_Manager::is_addon_active('staff') ? ES_Addon_Manager::get_active_addon('staff') : null;
 $staff_manager = $staff_addon ? $staff_addon->get_staff_manager() : null;
 $staff = $staff_manager ? $staff_manager->get_staff(get_the_ID()) : null;
 
@@ -172,9 +173,9 @@ $staff_label = $staff_addon ? $staff_addon->get_staff_label(false) : __('Contact
                                    rel="noopener noreferrer"
                                    class="es-single-staff__social-link">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                                        <path d="M22.46 6c-.85.38-1.78.64-2.75.76 1-.6 1.76-1.55 2.12-2.68-.93.55-1.96.95-3.06 1.17-.88-.94-2.13-1.53-3.51-1.53-2.66 0-4.81 2.16-4.81 4.81 0 .38.04.75.13 1.1-4-.2-7.58-2.11-9.96-5.02-.42.72-.66 1.56-.66 2.46 0 1.68.85 3.16 2.14 4.02-.79-.02-1.53-.24-2.18-.6v.06c0 2.35 1.67 4.31 3.88 4.76-.4.1-.83.16-1.27.16-.31 0-.62-.03-.92-.08.63 1.96 2.45 3.39 4.61 3.43-1.69 1.32-3.83 2.1-6.15 2.1-.4 0-.8-.02-1.19-.07 2.19 1.4 4.78 2.22 7.57 2.22 9.07 0 14.02-7.52 14.02-14.02 0-.21 0-.43-.01-.64.96-.69 1.79-1.56 2.45-2.55z"/>
+                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                                     </svg>
-                                    Twitter
+                                    X / Twitter
                                 </a>
                             <?php endif; ?>
                         </div>

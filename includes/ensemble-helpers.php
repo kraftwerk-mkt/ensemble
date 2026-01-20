@@ -2429,8 +2429,8 @@ function ensemble_get_artist_event_count($artist_id, $upcoming_only = true, $use
         }
     }
     
-    // Build meta query for all possible meta key formats
-    $meta_query = array(
+    // Build artist meta query (OR - any of these keys)
+    $artist_query = array(
         'relation' => 'OR',
         // Legacy format: event_artist (single ID or serialized array)
         array(
@@ -2459,6 +2459,11 @@ function ensemble_get_artist_event_count($artist_id, $upcoming_only = true, $use
             'value'   => sprintf(':"%d"', $artist_id),
             'compare' => 'LIKE',
         ),
+        array(
+            'key'     => 'es_event_artist',
+            'value'   => sprintf('i:%d;', $artist_id),
+            'compare' => 'LIKE',
+        ),
         // ACF format (post object stores ID directly)
         array(
             'key'     => '_event_artist',
@@ -2467,13 +2472,12 @@ function ensemble_get_artist_event_count($artist_id, $upcoming_only = true, $use
         ),
     );
     
-    // Build date query for upcoming events
-    $date_query = array();
+    // Build meta query
     if ($upcoming_only) {
         $today = current_time('Y-m-d');
         
-        // We need to check multiple date meta keys
-        $meta_query[] = array(
+        // Date query (OR - any of these date keys)
+        $date_query = array(
             'relation' => 'OR',
             array(
                 'key'     => 'event_date',
@@ -2494,6 +2498,16 @@ function ensemble_get_artist_event_count($artist_id, $upcoming_only = true, $use
                 'type'    => 'DATE',
             ),
         );
+        
+        // Combine: Artist matches AND Date is upcoming
+        $meta_query = array(
+            'relation' => 'AND',
+            $artist_query,
+            $date_query,
+        );
+    } else {
+        // Only artist query, no date filter
+        $meta_query = $artist_query;
     }
     
     $args = array(
@@ -2545,8 +2559,8 @@ function ensemble_get_location_event_count($location_id, $upcoming_only = true, 
         }
     }
     
-    // Build meta query for all possible meta key formats
-    $meta_query = array(
+    // Build location meta query (OR - any of these keys)
+    $location_query = array(
         'relation' => 'OR',
         // Legacy format
         array(
@@ -2568,11 +2582,12 @@ function ensemble_get_location_event_count($location_id, $upcoming_only = true, 
         ),
     );
     
-    // Build date meta query for upcoming events
+    // Build meta query
     if ($upcoming_only) {
         $today = current_time('Y-m-d');
         
-        $meta_query[] = array(
+        // Date query (OR - any of these date keys)
+        $date_query = array(
             'relation' => 'OR',
             array(
                 'key'     => 'event_date',
@@ -2593,6 +2608,16 @@ function ensemble_get_location_event_count($location_id, $upcoming_only = true, 
                 'type'    => 'DATE',
             ),
         );
+        
+        // Combine: Location matches AND Date is upcoming
+        $meta_query = array(
+            'relation' => 'AND',
+            $location_query,
+            $date_query,
+        );
+    } else {
+        // Only location query, no date filter
+        $meta_query = $location_query;
     }
     
     $args = array(
@@ -2614,6 +2639,7 @@ function ensemble_get_location_event_count($location_id, $upcoming_only = true, 
     
     return $count;
 }
+
 
 /**
  * Clear artist event count cache

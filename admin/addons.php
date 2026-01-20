@@ -1,6 +1,10 @@
 <?php
 /**
  * Ensemble Add-ons Admin Page
+ * 
+ * USES: admin-unified.css for all styles
+ *
+ * @package Ensemble
  */
 
 // Exit if accessed directly
@@ -95,26 +99,28 @@ if (!defined('ABSPATH')) {
     </div>
 </div>
 
-<!-- Settings Modal -->
+<!-- Settings Modal (unified pattern) -->
 <div id="es-addon-settings-modal" class="es-modal" style="display:none;">
-    <div class="es-modal-overlay"></div>
-    <div class="es-modal-content">
+    <div class="es-modal-content es-modal-medium es-modal-scrollable">
+        <span class="es-modal-close">&times;</span>
+        
         <div class="es-modal-header">
             <h2 id="es-addon-settings-title"><?php _e('Add-on Einstellungen', 'ensemble'); ?></h2>
-            <button type="button" class="es-modal-close">
-                <span class="dashicons dashicons-no"></span>
-            </button>
         </div>
+        
         <div class="es-modal-body" id="es-addon-settings-body">
             <!-- Settings loaded dynamically -->
         </div>
-        <div class="es-modal-footer">
-            <button type="button" class="button button-secondary es-modal-cancel">
-                <?php _e('Cancel', 'ensemble'); ?>
-            </button>
-            <button type="button" class="button button-primary es-addon-save-settings">
-                <?php _e('Einstellungen speichern', 'ensemble'); ?>
-            </button>
+        
+        <div class="es-form-footer">
+            <div class="es-form-footer-right">
+                <button type="button" class="button es-modal-cancel">
+                    <?php _e('Cancel', 'ensemble'); ?>
+                </button>
+                <button type="button" class="button button-primary es-addon-save-settings">
+                    <?php _e('Einstellungen speichern', 'ensemble'); ?>
+                </button>
+            </div>
         </div>
     </div>
 </div>

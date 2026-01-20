@@ -1,8 +1,8 @@
 /**
  * Lovepop Layout Styles
  * 
- * Dark gradient background with magenta accents
- * Bold, impactful design with glowing borders
+ * Deep purple atmosphere with vibrant magenta accents
+ * Rich aubergine tones with neon pop energy
  * 
  * @package Ensemble
  * @version 2.0.0
@@ -22,26 +22,30 @@
 .es-lovepop-artist-card,
 .es-lovepop-location-card {
     /* Colors - prefer Dark Mode settings, fallback to Light Mode, then Lovepop defaults */
-    --lp-bg: var(--ensemble-dark-bg, var(--ensemble-bg, #0a0a0f));
-    --lp-card-bg: var(--ensemble-dark-card-bg, var(--ensemble-card-bg, rgba(20, 20, 35, 0.8)));
-    --lp-card-border: var(--ensemble-dark-card-border, var(--ensemble-card-border, rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3)));
+    --lp-bg: var(--ensemble-dark-bg, var(--ensemble-bg, #120a18));
+    --lp-card-bg: var(--ensemble-dark-card-bg, var(--ensemble-card-bg, #1e1228));
+    --lp-card-border: var(--ensemble-dark-card-border, var(--ensemble-card-border, rgba(224, 64, 251, 0.25)));
     --lp-text: var(--ensemble-dark-text, var(--ensemble-text, #ffffff));
     --lp-text-secondary: var(--ensemble-dark-text-secondary, var(--ensemble-text-secondary, #e0e0e0));
-    --lp-primary: var(--ensemble-dark-primary, var(--ensemble-primary, #e91e8c));
-    --lp-hover: var(--ensemble-dark-hover, var(--ensemble-hover, #ff4da6));
+    --lp-primary: var(--ensemble-dark-primary, var(--ensemble-primary, #e040fb));
+    --lp-hover: var(--ensemble-dark-hover, var(--ensemble-hover, #ea80fc));
     --lp-link: var(--ensemble-dark-link, var(--ensemble-link, var(--lp-primary)));
     
     /* Spacing & Radius - from Designer */
-    --lp-radius: var(--ensemble-card-radius, 12px);
+    --lp-radius: var(--ensemble-card-radius, 20px);
     --lp-card-padding: var(--ensemble-card-padding, 25px);
     --lp-card-gap: var(--ensemble-card-gap, 24px);
     --lp-section-spacing: var(--ensemble-section-spacing, 48px);
     --lp-card-border-width: var(--ensemble-card-border-width, 1px);
     
     /* Card Effects - from Designer */
-    --lp-card-shadow: var(--ensemble-card-shadow, 0 4px 6px rgba(0, 0, 0, 0.1));
-    --lp-card-hover-transform: var(--ensemble-card-hover-transform, translateY(-5px));
-    --lp-card-hover-shadow: var(--ensemble-card-hover-shadow, 0 10px 40px rgba(0, 0, 0, 0.2));
+    --lp-card-shadow: var(--ensemble-card-shadow, 0 8px 24px rgba(18, 10, 24, 0.6), 0 0 0 1px rgba(224, 64, 251, 0.15));
+    --lp-card-hover-transform: var(--ensemble-card-hover-transform, translateY(-10px) rotate(-0.5deg));
+    --lp-card-hover-shadow: var(--ensemble-card-hover-shadow, 0 25px 50px rgba(18, 10, 24, 0.7), 0 0 60px rgba(224, 64, 251, 0.35), 0 0 0 2px rgba(224, 64, 251, 0.5));
+    
+    /* Transitions - Bouncy und playful */
+    --lp-transition-fast: 0.2s ease-out;
+    --lp-transition-card: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     
     /* Typography - Fonts from Designer */
     --lp-font-heading: var(--ensemble-font-heading, 'Montserrat', sans-serif);
@@ -73,9 +77,9 @@
     --lp-btn-text: var(--ensemble-dark-button-text, var(--ensemble-button-text, #ffffff));
     --lp-btn-hover-bg: var(--ensemble-dark-button-hover-bg, var(--ensemble-button-hover-bg, var(--lp-hover)));
     --lp-btn-hover-text: var(--ensemble-dark-button-hover-text, var(--ensemble-button-hover-text, #ffffff));
-    --lp-btn-radius: var(--ensemble-button-radius, 8px);
+    --lp-btn-radius: var(--ensemble-button-radius, 50px);
     --lp-btn-padding-v: var(--ensemble-button-padding-v, 14px);
-    --lp-btn-padding-h: var(--ensemble-button-padding-h, 24px);
+    --lp-btn-padding-h: var(--ensemble-button-padding-h, 32px);
     --lp-btn-weight: var(--ensemble-button-weight, 600);
     --lp-btn-font-size: var(--ensemble-button-font-size, 16px);
     --lp-btn-border-width: var(--ensemble-button-border-width, 2px);
@@ -228,7 +232,7 @@ body:has(.es-lovepop-event) {
     font-family: var(--lp-font-body) !important;
     color: var(--lp-link, var(--lp-primary)) !important;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-layout a:not(.es-lovepop-btn):not(.es-lovepop-btn-ticket):not(.es-lovepop-btn-secondary):hover,
@@ -335,7 +339,7 @@ body:has(.es-lovepop-event) {
     font-weight: var(--lp-btn-weight) !important;
     font-size: var(--lp-btn-font-size) !important;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     width: 100%;
     text-align: center;
     display: block !important;
@@ -383,7 +387,7 @@ body:has(.es-lovepop-event) {
     padding: 12px 15px;
     background: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    border-radius: 6px;
+    border-radius: var(--ensemble-radius-sm, 6px);
     color: var(--lp-text) !important;
     font-size: var(--lp-body-size);
 }
@@ -408,7 +412,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-ticket-price {
     font-size: var(--lp-price-size);
-    font-weight: 800;
+    font-weight: var(--ensemble-heading-weight, 700);
     color: var(--lp-text);
     margin-bottom: 15px;
     text-shadow: 0 2px 10px color-mix(in srgb, var(--lp-primary) 30%, transparent);
@@ -428,7 +432,7 @@ body:has(.es-lovepop-event) {
     font-size: var(--lp-btn-font-size) !important;
     border-radius: var(--lp-btn-radius);
     border: var(--lp-btn-border-width) solid transparent;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     box-shadow: 0 4px 25px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -463,7 +467,7 @@ body:has(.es-lovepop-event) {
     font-size: var(--lp-btn-font-size) !important;
     border: var(--lp-btn-border-width) solid var(--lp-btn-bg);
     border-radius: var(--lp-btn-radius);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -507,12 +511,12 @@ body:has(.es-lovepop-event) {
 .es-lovepop-info-content {
     color: var(--lp-text-secondary, #a0a0b0);
     font-size: var(--lp-body-size, 16px) !important;
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 .es-lovepop-info-content p {
     font-size: var(--lp-body-size, 16px) !important;
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 .es-lovepop-info-content ul,
@@ -520,13 +524,13 @@ body:has(.es-lovepop-event) {
     margin: 15px 0;
     padding-left: 24px;
     font-size: var(--lp-body-size, 16px) !important;
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 .es-lovepop-info-content li {
     margin-bottom: 8px;
     font-size: var(--lp-body-size, 16px) !important;
-    font-weight: 400;
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 /* Event Genres Meta (über Line-Up wenn keine Venues) */
@@ -544,12 +548,12 @@ body:has(.es-lovepop-event) {
     padding: 6px 14px;
     background: color-mix(in srgb, var(--lp-primary) 15%, transparent);
     border: 1px solid color-mix(in srgb, var(--lp-primary) 30%, transparent);
-    border-radius: 20px;
+    border-radius: var(--ensemble-button-radius, 8px);
     font-size: var(--lp-small-size);
     color: var(--lp-text);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-weight: 500;
+    font-weight: var(--ensemble-body-weight, 400);
 }
 
 /* Catalog Section */
@@ -703,12 +707,12 @@ body:has(.es-lovepop-event) {
     color: var(--lp-text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
 }
 
 .es-lovepop-info-value {
     font-size: var(--lp-body-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     color: var(--lp-text);
 }
 
@@ -753,10 +757,10 @@ body:has(.es-lovepop-event) {
     background: #1877f2;
     color: #fff !important;
     text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
+    border-radius: var(--ensemble-radius-sm, 6px);
+    font-weight: var(--ensemble-button-weight, 600);
     font-size: var(--lp-meta-size);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-facebook-link:hover {
@@ -786,7 +790,7 @@ body:has(.es-lovepop-event) {
     border-radius: var(--lp-btn-radius);
     border: var(--lp-btn-border-width) solid transparent;
     margin-top: 20px;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     box-shadow: var(--lp-card-shadow);
 }
 
@@ -795,6 +799,10 @@ body:has(.es-lovepop-event) {
     color: var(--lp-btn-hover-text) !important;
     transform: var(--lp-card-hover-transform);
     box-shadow: var(--lp-card-hover-shadow);
+    
+    /* Transitions - Bouncy und playful */
+    --lp-transition-fast: 0.2s ease-out;
+    --lp-transition-card: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Section */
@@ -843,7 +851,7 @@ body:has(.es-lovepop-event) {
     padding: 15px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     display: block;
 }
 
@@ -868,7 +876,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-artist-info h4 {
     font-size: var(--lp-body-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     margin: 0 0 4px 0;
     color: var(--lp-text);
 }
@@ -892,7 +900,7 @@ body:has(.es-lovepop-event) {
     display: block;
     margin-top: 6px;
     font-size: var(--lp-label-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     color: var(--lp-primary);
 }
 
@@ -928,7 +936,7 @@ body:has(.es-lovepop-event) {
     padding: 3px 10px;
     background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
     border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3);
-    border-radius: 20px;
+    border-radius: var(--ensemble-button-radius, 8px);
     font-size: var(--lp-xs-size);
     color: var(--lp-text-secondary);
     text-transform: uppercase;
@@ -952,7 +960,7 @@ body:has(.es-lovepop-event) {
     border-radius: var(--ensemble-card-radius, 12px);
     overflow: hidden;
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     position: relative;
 }
 
@@ -983,7 +991,8 @@ body:has(.es-lovepop-event) {
 }
 
 .es-lovepop-card:hover .es-lovepop-card-media img {
-    transform: scale(1.05);
+    transform: scale(1.08) rotate(1deg);
+    filter: brightness(1.05) saturate(1.1);
 }
 
 .es-lovepop-card-media::after {
@@ -1027,7 +1036,7 @@ body:has(.es-lovepop-event) {
     font-weight: var(--lp-heading-weight);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     z-index: 2;
     box-shadow: 0 4px 15px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
 }
@@ -1043,9 +1052,9 @@ body:has(.es-lovepop-event) {
     background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
     border: 1px solid var(--lp-card-border);
     padding: 6px 12px;
-    border-radius: 6px;
+    border-radius: var(--ensemble-radius-sm, 6px);
     font-size: var(--lp-small-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     margin-bottom: 12px;
     color: var(--lp-primary-light);
 }
@@ -1088,7 +1097,7 @@ body:has(.es-lovepop-event) {
 .es-lovepop-meta-item::before {
     content: '•';
     color: var(--lp-primary);
-    font-weight: bold;
+    font-weight: var(--ensemble-heading-weight, 700);
 }
 
 .es-lovepop-price {
@@ -1099,7 +1108,7 @@ body:has(.es-lovepop-event) {
     color: var(--lp-text);
     font-size: var(--lp-meta-size);
     font-weight: var(--lp-heading-weight);
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
 }
 
 /* =====================================================
@@ -1107,12 +1116,73 @@ body:has(.es-lovepop-event) {
    Uses CSS variables from Designer for gap, columns, etc.
    ===================================================== */
 
-/* Event Grid - use designer gap setting */
+/* Event Grid - use designer settings */
 .es-lovepop-layout .ensemble-events-grid,
 .es-layout-lovepop .ensemble-events-grid,
 .es-lovepop-event .ensemble-events-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--lp-grid-columns, 3), 1fr);
     gap: var(--ensemble-card-gap, 24px);
     background: transparent !important;
+}
+
+/* Respect shortcode columns attribute */
+.es-lovepop-layout .ensemble-events-grid.ensemble-columns-2,
+.es-layout-lovepop .ensemble-events-grid.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.es-lovepop-layout .ensemble-events-grid.ensemble-columns-3,
+.es-layout-lovepop .ensemble-events-grid.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.es-lovepop-layout .ensemble-events-grid.ensemble-columns-4,
+.es-layout-lovepop .ensemble-events-grid.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Artists & Locations grids */
+.es-lovepop-layout .ensemble-artists-list,
+.es-layout-lovepop .ensemble-artists-list,
+.es-lovepop-layout .ensemble-locations-list,
+.es-layout-lovepop .ensemble-locations-list {
+    display: grid;
+    grid-template-columns: repeat(var(--lp-grid-columns, 3), 1fr);
+    gap: var(--ensemble-card-gap, 24px);
+}
+
+.es-lovepop-layout .ensemble-artists-list.ensemble-columns-2,
+.es-layout-lovepop .ensemble-artists-list.ensemble-columns-2,
+.es-lovepop-layout .ensemble-locations-list.ensemble-columns-2,
+.es-layout-lovepop .ensemble-locations-list.ensemble-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.es-lovepop-layout .ensemble-artists-list.ensemble-columns-3,
+.es-layout-lovepop .ensemble-artists-list.ensemble-columns-3,
+.es-lovepop-layout .ensemble-locations-list.ensemble-columns-3,
+.es-layout-lovepop .ensemble-locations-list.ensemble-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.es-lovepop-layout .ensemble-artists-list.ensemble-columns-4,
+.es-layout-lovepop .ensemble-artists-list.ensemble-columns-4,
+.es-lovepop-layout .ensemble-locations-list.ensemble-columns-4,
+.es-layout-lovepop .ensemble-locations-list.ensemble-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Responsive: 2 columns on tablet, 1 on mobile */
+@media (max-width: 1024px) {
+    .es-lovepop-layout .ensemble-events-grid,
+    .es-layout-lovepop .ensemble-events-grid,
+    .es-lovepop-layout .ensemble-artists-list,
+    .es-layout-lovepop .ensemble-artists-list,
+    .es-lovepop-layout .ensemble-locations-list,
+    .es-layout-lovepop .ensemble-locations-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* Grid Container - ensure transparent background */
@@ -1152,7 +1222,7 @@ body:has(.es-lovepop-event) {
 /* Slider wrapper gap */
 .es-lovepop-layout .es-slider,
 .es-layout-lovepop .es-slider {
-    --es-slide-gap: var(--ensemble-card-gap, 24px);
+    --ensemble-slide-gap: var(--ensemble-card-gap, 24px);
 }
 
 /* =====================================================
@@ -1170,6 +1240,10 @@ body:has(.es-lovepop-event) {
 .es-lovepop-card--overlay:hover {
     border-color: transparent;
     box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    
+    /* Transitions - Bouncy und playful */
+    --lp-transition-fast: 0.2s ease-out;
+    --lp-transition-card: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: var(--lp-card-hover-transform, translateY(-5px));
 }
 
@@ -1198,7 +1272,8 @@ body:has(.es-lovepop-event) {
 }
 
 .es-lovepop-card--overlay:hover .es-lovepop-card-bg img {
-    transform: scale(1.08);
+    transform: scale(1.1) rotate(0.5deg);
+    filter: brightness(1.05);
 }
 
 .es-lovepop-placeholder-bg {
@@ -1234,7 +1309,7 @@ body:has(.es-lovepop-event) {
     font-weight: var(--lp-heading-weight);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     z-index: 5;
     box-shadow: 0 4px 15px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
 }
@@ -1260,12 +1335,12 @@ body:has(.es-lovepop-event) {
     margin-bottom: 12px;
     opacity: 1;
     transform: translateY(0);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-card-day {
     font-size: var(--lp-h1-size);
-    font-weight: 800;
+    font-weight: var(--ensemble-heading-weight, 700);
     line-height: 1;
     color: var(--lp-text);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
@@ -1273,7 +1348,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-card-month {
     font-size: var(--lp-meta-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 2px;
     color: var(--lp-primary-light);
@@ -1282,12 +1357,12 @@ body:has(.es-lovepop-event) {
 /* Artists Display (hidden by default) */
 .es-lovepop-card-artists {
     font-size: var(--lp-small-size);
-    font-weight: 500;
+    font-weight: var(--ensemble-body-weight, 400);
     color: var(--lp-primary-light);
     margin-bottom: 12px;
     opacity: 0;
     transform: translateY(10px);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     max-height: 0;
     overflow: hidden;
 }
@@ -1437,7 +1512,7 @@ body:has(.es-lovepop-event) {
     font-weight: var(--lp-heading-weight);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     z-index: 3;
     box-shadow: 0 4px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4);
 }
@@ -1452,7 +1527,7 @@ body:has(.es-lovepop-event) {
     font-weight: var(--lp-heading-weight);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     margin-bottom: 15px;
     box-shadow: 0 4px 15px rgba(238, 90, 90, 0.4);
 }
@@ -1497,9 +1572,9 @@ body:has(.es-lovepop-event) {
     background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.2);
     border: 1px solid var(--lp-primary);
     padding: 10px 20px;
-    border-radius: 6px;
+    border-radius: var(--ensemble-radius-sm, 6px);
     font-size: var(--lp-meta-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     margin-bottom: 20px;
     backdrop-filter: blur(10px);
 }
@@ -1519,11 +1594,11 @@ body:has(.es-lovepop-event) {
 .es-lovepop-hero-cats span {
     background: rgba(255, 255, 255, 0.1);
     padding: 6px 12px;
-    border-radius: 4px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     font-size: var(--lp-label-size);
     text-transform: uppercase;
     letter-spacing: 1px;
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
 }
 
 .es-lovepop-hero-date .dashicons {
@@ -1533,7 +1608,7 @@ body:has(.es-lovepop-event) {
 .es-lovepop-hero-title {
     font-family: var(--lp-font-heading);
     font-size: var(--lp-hero-title-size);
-    font-weight: 800;
+    font-weight: var(--ensemble-heading-weight, 700);
     line-height: 1.05;
     text-transform: uppercase;
     letter-spacing: -2px;
@@ -1614,7 +1689,7 @@ body:has(.es-lovepop-event) {
     width: 4px;
     height: 24px;
     background: linear-gradient(180deg, var(--lp-primary), var(--lp-primary-dark));
-    border-radius: 2px;
+    border-radius: var(--ensemble-badge-radius, 4px);
     flex-shrink: 0;
 }
 
@@ -1637,8 +1712,8 @@ body:has(.es-lovepop-event) {
     padding: 20px 15px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
-    border-radius: 10px;
-    transition: all 0.3s ease;
+    border-radius: var(--ensemble-radius, 8px);
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-artist:hover {
@@ -1657,7 +1732,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-artist h3 {
     font-size: var(--lp-meta-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     margin: 0;
 }
 
@@ -1697,7 +1772,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-venue-title {
     font-size: var(--lp-meta-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--lp-primary);
@@ -1715,7 +1790,7 @@ body:has(.es-lovepop-event) {
     padding: 2px 8px;
     background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.1);
     border: 1px solid rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.25);
-    border-radius: 12px;
+    border-radius: var(--ensemble-card-radius, 12px);
     font-size: var(--lp-xs-size);
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
@@ -1755,10 +1830,10 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-gallery-item {
     aspect-ratio: 1;
-    border-radius: 8px;
+    border-radius: var(--ensemble-radius, 8px);
     overflow: hidden;
     border: 1px solid var(--lp-card-border);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-gallery-item:hover {
@@ -1815,7 +1890,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-meta-value {
     font-size: var(--lp-body-size);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
 }
 
 /* Ticket Area */
@@ -1829,7 +1904,7 @@ body:has(.es-lovepop-event) {
 
 .es-lovepop-ticket-price {
     font-size: var(--lp-price-size);
-    font-weight: 800;
+    font-weight: var(--ensemble-heading-weight, 700);
     color: var(--lp-primary-light);
     margin-bottom: 15px;
 }
@@ -1846,7 +1921,7 @@ body:has(.es-lovepop-event) {
     font-size: var(--lp-button-size);
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     box-shadow: 0 4px 20px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.3);
 }
 
@@ -1963,13 +2038,13 @@ body:has(.es-lovepop-event) {
     height: 44px;
     background: var(--lp-card-bg);
     border: 1px solid var(--lp-card-border);
-    border-radius: 8px;
+    border-radius: var(--ensemble-radius, 8px);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--lp-text);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     font-size: var(--lp-meta-size);
 }
 
@@ -1988,7 +2063,7 @@ body:has(.es-lovepop-event) {
     border-radius: var(--ensemble-card-radius, 12px);
     overflow: hidden;
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-entity-card:hover {
@@ -2016,7 +2091,8 @@ body:has(.es-lovepop-event) {
 }
 
 .es-lovepop-entity-card:hover .es-lovepop-entity-image img {
-    transform: scale(1.05);
+    transform: scale(1.08) rotate(1deg);
+    filter: brightness(1.05) saturate(1.1);
 }
 
 .es-lovepop-entity-content {
@@ -2065,7 +2141,7 @@ body:has(.es-lovepop-event) {
 .es-lovepop-artist-name,
 .es-lovepop-location-name {
     font-size: var(--lp-xl-size, 20px);
-    font-weight: 700;
+    font-weight: var(--ensemble-heading-weight, 700);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: var(--lp-text);
@@ -2076,7 +2152,7 @@ body:has(.es-lovepop-event) {
 .es-lovepop-artist-genres,
 .es-lovepop-location-city-wrap {
     font-size: var(--lp-lg-size, 18px);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--lp-primary-light, #ff6b9d);
@@ -2091,6 +2167,10 @@ body:has(.es-lovepop-event) {
 .es-lovepop-artist-card.es-lovepop-card--overlay:hover {
     border-color: transparent;
     box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    
+    /* Transitions - Bouncy und playful */
+    --lp-transition-fast: 0.2s ease-out;
+    --lp-transition-card: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: var(--lp-card-hover-transform, translateY(-5px));
 }
 
@@ -2099,12 +2179,13 @@ body:has(.es-lovepop-event) {
 }
 
 .es-lovepop-artist-card:hover .es-lovepop-card-bg img {
-    transform: scale(1.08);
+    transform: scale(1.1) rotate(0.5deg);
+    filter: brightness(1.05);
 }
 
 .es-lovepop-artist-genre {
     font-size: var(--lp-meta-size);
-    font-weight: 500;
+    font-weight: var(--ensemble-body-weight, 400);
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--lp-primary-light);
@@ -2126,6 +2207,10 @@ body:has(.es-lovepop-event) {
 .es-lovepop-location-card.es-lovepop-card--overlay:hover {
     border-color: transparent;
     box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    
+    /* Transitions - Bouncy und playful */
+    --lp-transition-fast: 0.2s ease-out;
+    --lp-transition-card: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: var(--lp-card-hover-transform, translateY(-5px));
 }
 
@@ -2134,12 +2219,13 @@ body:has(.es-lovepop-event) {
 }
 
 .es-lovepop-location-card:hover .es-lovepop-card-bg img {
-    transform: scale(1.08);
+    transform: scale(1.1) rotate(0.5deg);
+    filter: brightness(1.05);
 }
 
 .es-lovepop-location-city {
     font-size: var(--lp-meta-size);
-    font-weight: 500;
+    font-weight: var(--ensemble-body-weight, 400);
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--lp-primary-light);
@@ -2157,7 +2243,7 @@ body:has(.es-lovepop-event) {
     margin-bottom: 8px;
     opacity: 1;
     transform: translateY(0);
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 /* Hover: Meta fades, title stays */
@@ -2308,6 +2394,10 @@ body:has(.es-lovepop-event) {
 .es-lovepop-artist-card-full:hover {
     border-color: transparent;
     box-shadow: var(--lp-card-hover-shadow, 0 10px 50px rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.4));
+    
+    /* Transitions - Bouncy und playful */
+    --lp-transition-fast: 0.2s ease-out;
+    --lp-transition-card: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     transform: var(--lp-card-hover-transform, translateY(-5px));
 }
 
@@ -2331,7 +2421,8 @@ body:has(.es-lovepop-event) {
 }
 
 .es-lovepop-artist-card-full:hover .es-lovepop-card-image img {
-    transform: scale(1.08);
+    transform: scale(1.1) rotate(0.5deg);
+    filter: brightness(1.05);
 }
 
 /* Content Section */
@@ -2349,9 +2440,9 @@ body:has(.es-lovepop-event) {
     padding: 4px 12px;
     background: rgba(var(--ensemble-primary-rgb, 233, 30, 140), 0.15);
     border: 1px solid var(--lp-card-border);
-    border-radius: 20px;
+    border-radius: var(--ensemble-button-radius, 8px);
     font-size: var(--lp-sm-size, 12px);
-    font-weight: 600;
+    font-weight: var(--ensemble-button-weight, 600);
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--lp-primary-light);
@@ -2361,7 +2452,7 @@ body:has(.es-lovepop-event) {
 .es-lovepop-artist-card-full .es-lovepop-card-title {
     margin: 0;
     font-size: var(--lp-xl-size, 20px);
-    font-weight: 700;
+    font-weight: var(--ensemble-heading-weight, 700);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -2369,7 +2460,7 @@ body:has(.es-lovepop-event) {
 .es-lovepop-artist-card-full .es-lovepop-card-title a {
     color: var(--lp-text);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
 }
 
 .es-lovepop-artist-card-full .es-lovepop-card-title a:hover {
@@ -2402,7 +2493,7 @@ body:has(.es-lovepop-event) {
     text-transform: uppercase;
     letter-spacing: 1px;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: var(--ensemble-transition, all 0.3s ease);
     cursor: pointer;
 }
 
@@ -2790,17 +2881,17 @@ body:has(.es-lovepop-layout) {
     background: linear-gradient(135deg, var(--lp-primary, #e91e8c), var(--lp-secondary, #9b4dff));
     color: #fff;
     font-family: var(--lp-font-heading, "Figtree", sans-serif);
-    font-weight: 700;
-    font-size: 11px;
+    font-weight: var(--ensemble-heading-weight, 700);
+    font-size: var(--ensemble-xs-size, 12px);
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 8px 16px;
-    border-radius: 20px;
+    border-radius: var(--ensemble-button-radius, 8px);
 }
 
 .es-layout-lovepop .es-hero-slide__title {
     font-family: var(--ensemble-font-heading, "Montserrat", sans-serif);
-    font-weight: 800;
+    font-weight: var(--ensemble-heading-weight, 700);
     font-size: clamp(2rem, 5vw, 3.5rem);
     text-transform: uppercase;
 }
@@ -2814,7 +2905,7 @@ body:has(.es-lovepop-layout) {
 }
 
 .es-layout-lovepop .es-hero-slide__meta {
-    font-size: 14px;
+    font-size: var(--ensemble-small-size, 14px);
     color: var(--lp-text-secondary, #8a8a9a);
 }
 
@@ -2822,8 +2913,8 @@ body:has(.es-lovepop-layout) {
     background: linear-gradient(135deg, var(--lp-primary, #e91e8c), var(--lp-secondary, #9b4dff));
     color: #fff;
     font-family: var(--lp-font-heading, "Montserrat", sans-serif);
-    font-weight: 700;
-    font-size: 13px;
+    font-weight: var(--ensemble-heading-weight, 700);
+    font-size: var(--ensemble-small-size, 14px);
     letter-spacing: 0.05em;
     text-transform: uppercase;
     padding: 14px 28px;
@@ -2842,8 +2933,8 @@ body:has(.es-lovepop-layout) {
     color: var(--lp-text, #ffffff);
     border: 1px solid rgba(255, 255, 255, 0.2);
     font-family: var(--lp-font-heading, "Figtree", sans-serif);
-    font-weight: 600;
-    font-size: 13px;
+    font-weight: var(--ensemble-button-weight, 600);
+    font-size: var(--ensemble-small-size, 14px);
     letter-spacing: 0.05em;
     text-transform: uppercase;
     padding: 14px 28px;

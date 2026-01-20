@@ -36,7 +36,314 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
 		add_shortcode( 'ensemble_preview_events', array( $this, 'preview_events_shortcode' ) );
 	}
 
+    /**
+     * Get event meta data with fallback support for different meta key formats
+     * 
+     * @param int $event_id Event post ID
+     * @param string $field Field name (e.g. 'start_date', 'location', 'artist')
+     * @return mixed Meta value or empty string
+     */
+    protected function get_event_meta($event_id, $field) {
+        // Use centralized helper function if available
+        if (function_exists('ensemble_get_event_meta')) {
+            return ensemble_get_event_meta($event_id, $field);
+        }
+        
+        // Try multiple meta key formats
+        $possible_keys = array(
+            'es_event_' . $field,      // New format: es_event_start_date
+            'event_' . $field,          // Standard: event_start_date
+            '_event_' . $field,         // Private: _event_start_date
+            '_es_event_' . $field,      // Private new: _es_event_start_date
+        );
+        
+        foreach ($possible_keys as $key) {
+            $value = get_post_meta($event_id, $key, true);
+            if (!empty($value)) {
+                return $value;
+            }
+        }
+        
+        // Special handling for certain fields
+        if ($field === 'start_date' || $field === 'date') {
+            // Try ACF field
+            if (function_exists('get_field')) {
+                $value = get_field('event_date', $event_id);
+                if ($value) return $value;
+            }
+        }
+        
+        if ($field === 'location') {
+            // Try ACF relationship field
+            if (function_exists('get_field')) {
+                $value = get_field('event_location', $event_id);
+                if ($value) {
+                    return is_array($value) ? $value[0] : $value;
+                }
+            }
+        }
+        
+        if ($field === 'artist') {
+            // Try ACF relationship field
+            if (function_exists('get_field')) {
+                $value = get_field('event_artist', $event_id);
+                if ($value) {
+                    return is_array($value) ? $value[0] : $value;
+                }
+            }
+        }
+        
+        return '';
+    }
+    
+    /**
+     * Get all event data as array
+     * Uses the same methods as the templates for consistency
+     * 
+     * @param int $event_id Event post ID
+     * @return array Event data array
+     */
+    protected function get_event_data($event_id) {
+        // Get event status
+        $event_status = get_post_meta($event_id, '_event_status', true);
+        if (empty($event_status)) {
+            $event_status = get_post_status($event_id) === 'draft' ? 'draft' : 'publish';
+        }
+        
+        // Use ensemble_get_field if available (same as templates use)
+        if (function_exists('ensemble_get_field')) {
+            $start_date = ensemble_get_field('event_date', $event_id);
+            if (!$start_date) {
+                $start_date = ensemble_get_field('event_start_date', $event_id);
+            }
+            
+            $start_time = ensemble_get_field('event_time', $event_id);
+            if (!$start_time) {
+                $start_time = ensemble_get_field('event_start_time', $event_id);
+            }
+            
+            $end_date = ensemble_get_field('event_end_date', $event_id);
+            $end_time = ensemble_get_field('event_end_time', $event_id);
+            
+            $location_id = ensemble_get_field('event_location', $event_id);
+            $artist_id = ensemble_get_field('event_artist', $event_id);
+            $price = ensemble_get_field('event_price', $event_id);
+            $ticket_url = ensemble_get_field('event_ticket_url', $event_id);
+            
+            return array(
+                'start_date'  => $start_date,
+                'start_time'  => $start_time,
+                'end_date'    => $end_date,
+                'end_time'    => $end_time,
+                'location_id' => $location_id,
+                'artist_id'   => $artist_id,
+                'price'       => $price,
+                'ticket_url'  => $ticket_url,
+                'status'      => $event_status,
+            );
+        }
+        
+        // Fallback to get_event_meta
+        return array(
+            'start_date'  => $this->get_event_meta($event_id, 'start_date'),
+            'start_time'  => $this->get_event_meta($event_id, 'start_time'),
+            'end_date'    => $this->get_event_meta($event_id, 'end_date'),
+            'end_time'    => $this->get_event_meta($event_id, 'end_time'),
+            'location_id' => $this->get_event_meta($event_id, 'location'),
+            'artist_id'   => $this->get_event_meta($event_id, 'artist'),
+            'price'       => $this->get_event_meta($event_id, 'price'),
+            'ticket_url'  => $this->get_event_meta($event_id, 'ticket_url'),
+            'status'      => $event_status,
+        );
+    }
+    
+    /**
+     * Get the correct meta key for a field (for use in WP_Query)
+     * 
+     * @param string $field Field name (e.g. 'location', 'artist')
+     * @return string The meta key to use in queries
+     */
+    protected function get_meta_key_for_field($field) {
+        // Use centralized meta key management if available
+        if (class_exists('ES_Meta_Keys')) {
+            return ES_Meta_Keys::get($field);
+        }
+        
+        // Try to detect which meta key format is used
+        global $wpdb;
+        
+        $possible_keys = array(
+            'es_event_' . $field,
+            'event_' . $field,
+            '_event_' . $field,
+        );
+        
+        foreach ($possible_keys as $key) {
+            $exists = $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s LIMIT 1",
+                $key
+            ));
+            if ($exists) {
+                return $key;
+            }
+        }
+        
+        // Fallback
+        return 'event_' . $field;
+    }
+    
+    /**
+     * Get the date meta key used in the database
+     * 
+     * @return string Date meta key
+     */
+    protected function get_date_meta_key() {
+        // Check cache first
+        $cached = get_transient('ensemble_date_meta_key');
+        if ($cached !== false) {
+            return $cached;
+        }
+        
+        global $wpdb;
+        
+        $possible_keys = array(
+            'es_event_start_date',
+            'event_date',
+            'event_start_date',
+            '_event_date',
+            '_event_start_date',
+        );
+        
+        foreach ($possible_keys as $key) {
+            $exists = $wpdb->get_var($wpdb->prepare(
+                "SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_key = %s LIMIT 1",
+                $key
+            ));
+            if ($exists) {
+                set_transient('ensemble_date_meta_key', $key, HOUR_IN_SECONDS);
+                return $key;
+            }
+        }
+        
+        // Fallback
+        return 'event_date';
+    }
+    
+    /**
+     * Format date for display
+     * 
+     * @param string $start_date Start date
+     * @param string $end_date End date (optional)
+     * @return string Formatted date string
+     */
+    protected function format_date($start_date, $end_date = '') {
+        if (empty($start_date)) {
+            return '';
+        }
+        
+        $start_formatted = date_i18n(get_option('date_format'), strtotime($start_date));
+        
+        if (!empty($end_date) && $end_date !== $start_date) {
+            $end_formatted = date_i18n(get_option('date_format'), strtotime($end_date));
+            return $start_formatted . ' – ' . $end_formatted;
+        }
+        
+        return $start_formatted;
+    }
+    
+    /**
+     * Format date short version
+     * 
+     * @param string $date Date string
+     * @return string Short formatted date
+     */
+    protected function format_date_short($date) {
+        if (empty($date)) {
+            return '';
+        }
+        return date_i18n('j. M', strtotime($date));
+    }
+    
+    /**
+     * Format time for display
+     * 
+     * @param string $start_time Start time
+     * @param string $end_time End time (optional)
+     * @return string Formatted time string
+     */
+    protected function format_time($start_time, $end_time = '') {
+        if (empty($start_time)) {
+            return '';
+        }
+        
+        if (!empty($end_time) && $end_time !== $start_time) {
+            return esc_html($start_time) . ' – ' . esc_html($end_time);
+        }
+        
+        return esc_html($start_time);
+    }
+    
+    /**
+     * Apply template if specified in shortcode
+     * 
+     * @param string $template Template name from shortcode attribute
+     * @return void
+     */
+    protected function apply_shortcode_template($template) {
+        // Check if parent has this method
+        if (method_exists(get_parent_class($this), 'apply_shortcode_template')) {
+            return parent::apply_shortcode_template($template);
+        }
+        
+        if (empty($template) || !class_exists('ES_Design_Settings')) {
+            return;
+        }
+        
+        $current_template = ES_Design_Settings::get_active_template();
+        
+        // Only load if different from current
+        if ($template !== $current_template) {
+            ES_Design_Settings::load_template($template);
+            
+            // Regenerate CSS inline for this page
+            if (class_exists('ES_CSS_Generator')) {
+                $custom_css = ES_CSS_Generator::generate();
+                echo '<style id="ensemble-template-' . esc_attr($template) . '">' . $custom_css . '</style>';
+            }
+        }
+    }
+    
+    /**
+     * Get effective template from shortcode attribute or URL parameter
+     * 
+     * @param string $shortcode_template Template from shortcode attribute
+     * @return string Effective template to use
+     */
+    protected function get_effective_template($shortcode_template = '') {
+        // Check if parent has this method
+        if (method_exists(get_parent_class($this), 'get_effective_template')) {
+            return parent::get_effective_template($shortcode_template);
+        }
+        
+        // If explicit template in shortcode, use it
+        if (!empty($shortcode_template)) {
+            return sanitize_key($shortcode_template);
+        }
+        
+        // Check URL parameter
+        if (isset($_GET['es_layout']) && !empty($_GET['es_layout'])) {
+            return sanitize_key($_GET['es_layout']);
+        }
+        
+        return '';
+    }
+
     public function single_event_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('events');
+        }
+        
         // Parse attributes
         $atts = shortcode_atts(array(
             'id' => 0,                      // Event Post ID (required)
@@ -83,6 +390,23 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
         // Get event meta
         $event_data = $this->get_event_data($event_id);
         
+        // DEBUG OUTPUT - Shows in frontend when WP_DEBUG is true
+        // Remove or comment out after debugging
+        if (defined('WP_DEBUG') && WP_DEBUG && isset($_GET['ensemble_debug'])) {
+            echo '<div style="background:#ffe0e0;padding:10px;margin:10px 0;font-size:12px;font-family:monospace;">';
+            echo '<strong>Ensemble Single Event Debug:</strong><br>';
+            echo 'Event ID: ' . esc_html($event_id) . '<br>';
+            echo 'Post Type: ' . esc_html($event->post_type) . '<br>';
+            echo 'Title: ' . esc_html($event->post_title) . '<br>';
+            echo 'ensemble_get_field exists: ' . (function_exists('ensemble_get_field') ? 'YES' : 'NO') . '<br>';
+            echo 'ES_Layout_Sets exists: ' . (class_exists('ES_Layout_Sets') ? 'YES' : 'NO') . '<br>';
+            if (class_exists('ES_Layout_Sets')) {
+                echo 'Active Layout Set: ' . esc_html(ES_Layout_Sets::get_active_set()) . '<br>';
+            }
+            echo '<strong>Event Data:</strong><pre>' . esc_html(print_r($event_data, true)) . '</pre>';
+            echo '</div>';
+        }
+        
         // Build HTML based on layout
         ob_start();
         
@@ -113,30 +437,41 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
             $active_set = ES_Layout_Sets::get_active_set();
             $template_path = ES_Template_Loader::locate_template('event-card.php', $active_set);
             
+            // DEBUG: Uncomment to see template loading
+            // error_log('Ensemble - Active Set: ' . $active_set);
+            // error_log('Ensemble - Template Path: ' . ($template_path ?: 'NOT FOUND'));
+            
             if ($template_path && file_exists($template_path)) {
-                // Convert shortcode data to template format
-                $event = array(
-                    'id' => $event->ID,
-                    'title' => $event->post_title,
-                    'permalink' => get_permalink($event->ID),
-                    'featured_image' => get_the_post_thumbnail_url($event->ID, 'large'),
-                    'start_date' => $data['start_date'] ?? '',
-                    'end_date' => $data['end_date'] ?? '',
-                    'start_time' => $data['start_time'] ?? '',
-                    'end_time' => $data['end_time'] ?? '',
-                    'location' => $data['location_id'] ? get_the_title($data['location_id']) : '',
-                    'location_id' => $data['location_id'] ?? '',
-                    'excerpt' => $event->post_excerpt,
-                    'status' => $data['status'] ?? '',
-                    'price' => $data['price'] ?? '',
-                    'ticket_url' => $data['ticket_url'] ?? '',
-                );
+                // WICHTIG: $event_id setzen für das Template!
+                $event_id = $event->ID;
                 
-                // Also pass shortcode attributes for template flexibility
-                $shortcode_atts = $atts;
+                // WICHTIG: Setup post data für ACF und andere Funktionen die globale Post-Daten erwarten
+                global $post;
+                $original_post = $post;
+                $post = $event;
+                setup_postdata($event);
+                
+                // Shortcode Attribute als Booleans konvertieren für Template
+                $shortcode_atts = array(
+                    'show_image'    => filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN),
+                    'show_date'     => filter_var($atts['show_date'], FILTER_VALIDATE_BOOLEAN),
+                    'show_time'     => filter_var($atts['show_time'], FILTER_VALIDATE_BOOLEAN),
+                    'show_location' => filter_var($atts['show_location'], FILTER_VALIDATE_BOOLEAN),
+                    'show_artist'   => filter_var($atts['show_artist'], FILTER_VALIDATE_BOOLEAN),
+                    'show_excerpt'  => filter_var($atts['show_excerpt'], FILTER_VALIDATE_BOOLEAN),
+                    'show_link'     => filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN),
+                    'show_category' => true,
+                    'show_price'    => true,
+                    'link_text'     => $atts['link_text'] ?? __('View Event', 'ensemble'),
+                    'style'         => 'default',
+                );
                 
                 // Load the template
                 include $template_path;
+                
+                // Reset post data
+                $post = $original_post;
+                wp_reset_postdata();
                 return;
             }
         }
@@ -166,21 +501,21 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                 
                 <div class="ensemble-event-meta">
                     
-                    <?php if ($show_date && $data['start_date']): ?>
+                    <?php if ($show_date && !empty($data['start_date'])): ?>
                     <div class="ensemble-meta-item ensemble-date">
                         <span class="dashicons dashicons-calendar-alt"></span>
-                        <span><?php echo $this->format_date($data['start_date'], $data['end_date']); ?></span>
+                        <span><?php echo $this->format_date($data['start_date'], $data['end_date'] ?? ''); ?></span>
                     </div>
                     <?php endif; ?>
                     
-                    <?php if ($show_time && $data['start_time']): ?>
+                    <?php if ($show_time && !empty($data['start_time'])): ?>
                     <div class="ensemble-meta-item ensemble-time">
                         <span class="dashicons dashicons-clock"></span>
-                        <span><?php echo $this->format_time($data['start_time'], $data['end_time']); ?></span>
+                        <span><?php echo $this->format_time($data['start_time'], $data['end_time'] ?? ''); ?></span>
                     </div>
                     <?php endif; ?>
                     
-                    <?php if ($show_location && $data['location_id']): 
+                    <?php if ($show_location && !empty($data['location_id'])): 
                         $location = get_post($data['location_id']);
                         if ($location):
                     ?>
@@ -193,7 +528,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                     endif; 
                     ?>
                     
-                    <?php if ($show_artist && $data['artist_id']): 
+                    <?php if ($show_artist && !empty($data['artist_id'])): 
                         $artist = get_post($data['artist_id']);
                         if ($artist):
                     ?>
@@ -206,7 +541,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                     endif; 
                     ?>
                     
-                    <?php if ($data['price']): ?>
+                    <?php if (!empty($data['price'])): ?>
                     <div class="ensemble-meta-item ensemble-price">
                         <span class="dashicons dashicons-tickets-alt"></span>
                         <span><?php echo esc_html($data['price']); ?></span>
@@ -215,7 +550,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                     
                 </div>
                 
-                <?php if ($show_excerpt && $event->post_excerpt): ?>
+                <?php if ($show_excerpt && !empty($event->post_excerpt)): ?>
                 <div class="ensemble-event-excerpt">
                     <?php echo wpautop(esc_html($event->post_excerpt)); ?>
                 </div>
@@ -223,7 +558,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                 
                 <?php if ($show_link): ?>
                 <div class="ensemble-event-actions">
-                    <?php if ($data['ticket_url']): ?>
+                    <?php if (!empty($data['ticket_url'])): ?>
                     <a href="<?php echo esc_url($data['ticket_url']); ?>" 
                        class="ensemble-btn ensemble-btn-tickets" 
                        target="_blank" 
@@ -249,6 +584,47 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * Render Compact Layout
      */
     private function render_compact_layout($event, $data, $atts) {
+        // Try to load template from active Layout-Set
+        if (class_exists('ES_Layout_Sets') && class_exists('ES_Template_Loader')) {
+            $active_set = ES_Layout_Sets::get_active_set();
+            $template_path = ES_Template_Loader::locate_template('event-card.php', $active_set);
+            
+            if ($template_path && file_exists($template_path)) {
+                // WICHTIG: $event_id setzen für das Template!
+                $event_id = $event->ID;
+                
+                // WICHTIG: Setup post data für ACF und andere Funktionen
+                global $post;
+                $original_post = $post;
+                $post = $event;
+                setup_postdata($event);
+                
+                // Shortcode Attribute als Booleans + compact style
+                $shortcode_atts = array(
+                    'show_image'    => filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN),
+                    'show_date'     => filter_var($atts['show_date'], FILTER_VALIDATE_BOOLEAN),
+                    'show_time'     => filter_var($atts['show_time'], FILTER_VALIDATE_BOOLEAN),
+                    'show_location' => filter_var($atts['show_location'], FILTER_VALIDATE_BOOLEAN),
+                    'show_artist'   => filter_var($atts['show_artist'], FILTER_VALIDATE_BOOLEAN),
+                    'show_excerpt'  => false,
+                    'show_link'     => filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN),
+                    'show_category' => false,
+                    'show_price'    => false,
+                    'link_text'     => $atts['link_text'] ?? __('View Event', 'ensemble'),
+                    'style'         => 'compact',
+                );
+                
+                // Load the template
+                include $template_path;
+                
+                // Reset post data
+                $post = $original_post;
+                wp_reset_postdata();
+                return;
+            }
+        }
+        
+        // Fallback: Hardcoded layout
         $show_date = filter_var($atts['show_date'], FILTER_VALIDATE_BOOLEAN);
         $show_time = filter_var($atts['show_time'], FILTER_VALIDATE_BOOLEAN);
         $show_location = filter_var($atts['show_location'], FILTER_VALIDATE_BOOLEAN);
@@ -262,15 +638,15 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                 </h4>
                 
                 <div class="ensemble-compact-meta">
-                    <?php if ($show_date && $data['start_date']): ?>
+                    <?php if ($show_date && !empty($data['start_date'])): ?>
                         <span class="ensemble-date"><?php echo $this->format_date_short($data['start_date']); ?></span>
                     <?php endif; ?>
                     
-                    <?php if ($show_time && $data['start_time']): ?>
+                    <?php if ($show_time && !empty($data['start_time'])): ?>
                         <span class="ensemble-time"><?php echo esc_html($data['start_time']); ?></span>
                     <?php endif; ?>
                     
-                    <?php if ($show_location && $data['location_id']): 
+                    <?php if ($show_location && !empty($data['location_id'])): 
                         $location = get_post($data['location_id']);
                         if ($location):
                     ?>
@@ -296,6 +672,47 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * Render Full Layout
      */
     private function render_full_layout($event, $data, $atts) {
+        // Try to load template from active Layout-Set
+        if (class_exists('ES_Layout_Sets') && class_exists('ES_Template_Loader')) {
+            $active_set = ES_Layout_Sets::get_active_set();
+            $template_path = ES_Template_Loader::locate_template('event-card.php', $active_set);
+            
+            if ($template_path && file_exists($template_path)) {
+                // WICHTIG: $event_id setzen für das Template!
+                $event_id = $event->ID;
+                
+                // WICHTIG: Setup post data für ACF und andere Funktionen
+                global $post;
+                $original_post = $post;
+                $post = $event;
+                setup_postdata($event);
+                
+                // Shortcode Attribute als Booleans + featured style
+                $shortcode_atts = array(
+                    'show_image'    => filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN),
+                    'show_date'     => filter_var($atts['show_date'], FILTER_VALIDATE_BOOLEAN),
+                    'show_time'     => filter_var($atts['show_time'], FILTER_VALIDATE_BOOLEAN),
+                    'show_location' => filter_var($atts['show_location'], FILTER_VALIDATE_BOOLEAN),
+                    'show_artist'   => filter_var($atts['show_artist'], FILTER_VALIDATE_BOOLEAN),
+                    'show_excerpt'  => filter_var($atts['show_excerpt'], FILTER_VALIDATE_BOOLEAN),
+                    'show_link'     => filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN),
+                    'show_category' => true,
+                    'show_price'    => true,
+                    'link_text'     => $atts['link_text'] ?? __('View Event', 'ensemble'),
+                    'style'         => 'featured',
+                );
+                
+                // Load the template
+                include $template_path;
+                
+                // Reset post data
+                $post = $original_post;
+                wp_reset_postdata();
+                return;
+            }
+        }
+        
+        // Fallback: Hardcoded layout
         $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
         $show_date = filter_var($atts['show_date'], FILTER_VALIDATE_BOOLEAN);
         $show_time = filter_var($atts['show_time'], FILTER_VALIDATE_BOOLEAN);
@@ -319,31 +736,31 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                 
                 <div class="ensemble-event-meta-grid">
                     
-                    <?php if ($show_date && $data['start_date']): ?>
+                    <?php if ($show_date && !empty($data['start_date'])): ?>
                     <div class="ensemble-meta-box">
                         <div class="ensemble-meta-icon">
                             <span class="dashicons dashicons-calendar-alt"></span>
                         </div>
                         <div class="ensemble-meta-content">
                             <label><?php _e('Date', 'ensemble'); ?></label>
-                            <strong><?php echo $this->format_date($data['start_date'], $data['end_date']); ?></strong>
+                            <strong><?php echo $this->format_date($data['start_date'], $data['end_date'] ?? ''); ?></strong>
                         </div>
                     </div>
                     <?php endif; ?>
                     
-                    <?php if ($show_time && $data['start_time']): ?>
+                    <?php if ($show_time && !empty($data['start_time'])): ?>
                     <div class="ensemble-meta-box">
                         <div class="ensemble-meta-icon">
                             <span class="dashicons dashicons-clock"></span>
                         </div>
                         <div class="ensemble-meta-content">
                             <label><?php _e('Time', 'ensemble'); ?></label>
-                            <strong><?php echo $this->format_time($data['start_time'], $data['end_time']); ?></strong>
+                            <strong><?php echo $this->format_time($data['start_time'], $data['end_time'] ?? ''); ?></strong>
                         </div>
                     </div>
                     <?php endif; ?>
                     
-                    <?php if ($show_location && $data['location_id']): 
+                    <?php if ($show_location && !empty($data['location_id'])): 
                         $location = get_post($data['location_id']);
                         if ($location):
                     ?>
@@ -361,7 +778,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                     endif; 
                     ?>
                     
-                    <?php if ($show_artist && $data['artist_id']): 
+                    <?php if ($show_artist && !empty($data['artist_id'])): 
                         $artist = get_post($data['artist_id']);
                         if ($artist):
                     ?>
@@ -379,7 +796,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                     endif; 
                     ?>
                     
-                    <?php if ($data['price']): ?>
+                    <?php if (!empty($data['price'])): ?>
                     <div class="ensemble-meta-box">
                         <div class="ensemble-meta-icon">
                             <span class="dashicons dashicons-tickets-alt"></span>
@@ -399,7 +816,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                 
                 <?php if ($show_link): ?>
                 <div class="ensemble-event-actions-full">
-                    <?php if ($data['ticket_url']): ?>
+                    <?php if (!empty($data['ticket_url'])): ?>
                     <a href="<?php echo esc_url($data['ticket_url']); ?>" 
                        class="ensemble-btn ensemble-btn-tickets ensemble-btn-large" 
                        target="_blank" 
@@ -421,6 +838,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * Format date range
      */
     public function upcoming_events_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('events');
+        }
+        
         $atts = shortcode_atts(array(
             'limit' => '5',
             'show_countdown' => 'false',
@@ -598,6 +1020,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function lineup_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('lineup');
+        }
+        
         $atts = shortcode_atts(array(
             'event_id' => 0,
             'show_times' => 'false',
@@ -707,6 +1134,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function featured_events_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('events');
+        }
+        
         $atts = shortcode_atts(array(
             'limit' => '3',
             'layout' => 'grid', // grid, list, slider
@@ -866,6 +1298,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function events_grid_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('events');
+        }
+        
         $atts = shortcode_atts(array(
             // Layout
             'layout' => 'grid',           // grid, list, masonry, slider, hero, carousel
@@ -896,10 +1333,12 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
             
             // UI Elements
             'show_filters' => 'true',
+            'show_filter' => '',              // Alias for show_filters (Block compatibility)
             'show_search' => 'true',
             
             // Display Options
             'show_image' => '1',
+            'show_title' => '1',
             'show_date' => '1',
             'show_time' => '1',
             'show_location' => '1',
@@ -943,7 +1382,9 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
         $artist_filter = sanitize_text_field($atts['artist']);
         
         // UI - Disable filters automatically for slider layouts (they don't make sense there)
-        $show_filters = filter_var($atts['show_filters'], FILTER_VALIDATE_BOOLEAN);
+        // Support both show_filters and show_filter (Block uses singular)
+        $show_filters_attr = !empty($atts['show_filter']) ? $atts['show_filter'] : $atts['show_filters'];
+        $show_filters = filter_var($show_filters_attr, FILTER_VALIDATE_BOOLEAN);
         $show_search = filter_var($atts['show_search'], FILTER_VALIDATE_BOOLEAN);
         
         if ($is_slider_layout) {
@@ -953,6 +1394,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
         
         // Display options
         $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
+        $show_title = filter_var($atts['show_title'], FILTER_VALIDATE_BOOLEAN);
         $show_date = filter_var($atts['show_date'], FILTER_VALIDATE_BOOLEAN);
         $show_time = filter_var($atts['show_time'], FILTER_VALIDATE_BOOLEAN);
         $show_location_meta = filter_var($atts['show_location'], FILTER_VALIDATE_BOOLEAN);
@@ -1322,11 +1764,14 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                                 $event = $event_data;
                                 $shortcode_atts = array(
                                     'show_image' => $show_image,
+                                    'show_title' => $show_title,
                                     'show_date' => $show_date,
                                     'show_time' => $show_time,
                                     'show_location' => $show_location_meta,
                                     'show_price' => $show_price,
                                     'show_category' => $show_category,
+                                    'show_description' => $show_description,
+                                    'show_artists' => $show_artists,
                                 );
                                 $card_data_attributes = '';
                                 $card_index = $slide_index;
@@ -1335,6 +1780,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                                 // Fallback card
                                 $this->render_slider_event_card($event_data, array(
                                     'show_image' => $show_image,
+                                    'show_title' => $show_title,
                                     'show_date' => $show_date,
                                     'show_time' => $show_time,
                                     'show_location' => $show_location_meta,
@@ -1465,11 +1911,14 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                             // Pass shortcode attributes to template
                             $shortcode_atts = array(
                                 'show_image' => $show_image,
+                                'show_title' => $show_title,
                                 'show_date' => $show_date,
                                 'show_time' => $show_time,
                                 'show_location' => $show_location_meta,
                                 'show_price' => $show_price,
                                 'show_category' => $show_category,
+                                'show_description' => $show_description,
+                                'show_artists' => $show_artists,
                             );
                             
                             // $card_data_attributes and $card_index are available in template
@@ -1507,9 +1956,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                                     </div>
                                     <?php endif; ?>
                                     
+                                    <?php if ($show_title): ?>
                                     <h3 class="ensemble-event-title">
                                         <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                     </h3>
+                                    <?php endif; ?>
                                     
                                     <?php if ($show_description): ?>
                                     <div class="ensemble-event-excerpt">
@@ -1569,6 +2020,7 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
     private function render_slider_event_card($event, $options = array()) {
         $defaults = array(
             'show_image' => true,
+            'show_title' => true,
             'show_date' => true,
             'show_time' => true,
             'show_location' => true,
@@ -1606,9 +2058,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
                 </div>
                 <?php endif; ?>
                 
+                <?php if ($options['show_title']): ?>
                 <h3 class="ensemble-event-title">
                     <a href="<?php echo esc_url($event['permalink']); ?>"><?php echo esc_html($event['title']); ?></a>
                 </h3>
+                <?php endif; ?>
                 
                 <div class="ensemble-event-meta">
                     <?php if ($options['show_time'] && !empty($event['start_time'])): ?>
@@ -1640,6 +2094,11 @@ class ES_Event_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function preview_events_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('events');
+        }
+        
         $atts = shortcode_atts(array(
             'limit' => '-1',              // -1 = alle
             'title' => '',                // Überschrift (leer = "Vorschau")

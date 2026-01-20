@@ -1,0 +1,312 @@
+/**
+ * Ensemble Shortcodes - Artists
+ * 
+ * Styles for artist-related shortcodes:
+ * - [ensemble_artists] - Artists Grid/List
+ * - Single Artist components
+ * - Artist Card Hover Overlay
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * DEPENDENCIES:
+ * - _base.css
+ * - _components.css
+ * 
+ * CONDITIONAL LOADING:
+ * Only loaded when artist shortcodes are present on page.
+ */
+
+/* ============================================
+   ARTISTS LIST WRAPPER
+   ============================================ */
+
+.ensemble-artists-list {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* ============================================
+   ARTIST CARD - GENRE BADGE
+   ============================================ */
+
+.ensemble-artist-card .ensemble-artist-genre {
+    display: inline-block;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 12px);
+    font-size: var(--ensemble-small-size, 14px);
+    margin-bottom: 12px;
+}
+
+/* ============================================
+   ARTIST BIO
+   ============================================ */
+
+.ensemble-artist-bio {
+    margin: 12px 0;
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-body-size, 16px);
+    line-height: var(--ensemble-line-height, 1.6);
+}
+
+.ensemble-artist-bio p {
+    margin: 0 0 12px 0;
+}
+
+.ensemble-artist-bio p:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   ARTIST EVENTS (on card)
+   ============================================ */
+
+.ensemble-artist-events {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.ensemble-artist-events h5 {
+    margin: 0 0 12px 0;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-artist-events ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ensemble-artist-events li {
+    margin-bottom: 8px;
+}
+
+.ensemble-artist-events a {
+    color: var(--ensemble-primary, #667eea);
+    text-decoration: none;
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+.ensemble-artist-events a:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   ARTIST LIST LAYOUT
+   Alternative to grid - horizontal cards
+   ============================================ */
+
+.ensemble-artists-list.ensemble-layout-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ensemble-artists-list.ensemble-layout-list .ensemble-artist-card {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ensemble-artists-list.ensemble-layout-list .ensemble-artist-image {
+    width: 120px;
+    height: 120px;
+    margin: 0;
+    margin-right: 20px;
+    border-radius: var(--ensemble-card-radius, 12px);
+    flex-shrink: 0;
+}
+
+.ensemble-artists-list.ensemble-layout-list .ensemble-artist-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ============================================
+   SINGLE ARTIST
+   ============================================ */
+
+.ensemble-single-artist {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* Header */
+.ensemble-single-artist .ensemble-artist-header {
+    margin-bottom: 24px;
+}
+
+/* Featured Image */
+.ensemble-single-artist .ensemble-artist-featured-image {
+    margin-bottom: 24px;
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+}
+
+.ensemble-single-artist .ensemble-artist-featured-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ============================================
+   ARTIST CARD HOVER OVERLAY
+   Used in grid layouts
+   ============================================ */
+
+.es-artist-card-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.es-artist-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--ensemble-overlay-bg, linear-gradient(to top, rgba(31, 41, 55, 0.95) 0%, rgba(31, 41, 55, 0.85) 100%));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+}
+
+.es-artist-card:hover .es-artist-card-overlay {
+    opacity: 1;
+}
+
+.es-artist-card-preview {
+    color: var(--ensemble-overlay-text, #ffffff);
+    font-size: var(--ensemble-small-size, 14px);
+    line-height: 1.5;
+    margin-bottom: 10px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.es-artist-card-readmore {
+    color: var(--ensemble-overlay-text-secondary, var(--ensemble-secondary, #764ba2));
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+
+.es-artist-card-readmore:hover {
+    color: var(--ensemble-overlay-text, #ffffff);
+}
+
+/* ============================================
+   ARTIST CARD VARIANTS
+   ============================================ */
+
+/* Compact card */
+.ensemble-artist-card--compact {
+    padding: 16px;
+}
+
+.ensemble-artist-card--compact .ensemble-artist-image {
+    margin-bottom: 16px;
+}
+
+.ensemble-artist-card--compact .ensemble-artist-image img {
+    height: 150px;
+}
+
+/* Circle image variant */
+.ensemble-artist-card--circle .ensemble-artist-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto var(--ensemble-card-padding, 24px);
+}
+
+.ensemble-artist-card--circle .ensemble-artist-image img {
+    border-radius: 50%;
+    height: 100%;
+}
+
+.ensemble-artist-card--circle .ensemble-artist-content {
+    text-align: center;
+}
+
+/* ============================================
+   ARTIST SOCIAL ICONS
+   ============================================ */
+
+.ensemble-artist-social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.ensemble-artist-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--ensemble-surface, #ffffff);
+    border: 1px solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: 50%;
+    color: var(--ensemble-text, #1a202c);
+    text-decoration: none;
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-artist-social-icon:hover {
+    background: var(--ensemble-primary, #667eea);
+    border-color: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+.ensemble-artist-social-icon .dashicons {
+    width: 18px;
+    height: 18px;
+    font-size: var(--ensemble-lg-size, 18px);
+}
+
+/* ============================================
+   ARTIST ROLE/TYPE BADGE
+   ============================================ */
+
+.ensemble-artist-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 10px);
+    background: var(--ensemble-badge-bg, var(--ensemble-surface, #ffffff));
+    color: var(--ensemble-badge-text, var(--ensemble-text, #1a202c));
+    border-radius: var(--ensemble-badge-radius, 4px);
+    font-size: var(--ensemble-xs-size, 12px);
+    font-weight: var(--ensemble-body-weight, 400);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ensemble-artist-role--speaker {
+    background: var(--ensemble-badge-primary-bg, var(--ensemble-primary, #667eea));
+    color: var(--ensemble-badge-primary-text, #ffffff);
+}
+
+.ensemble-artist-role--performer {
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+.ensemble-artist-role--dj {
+    background: var(--ensemble-badge-warning-bg, #f59e0b);
+    color: var(--ensemble-badge-warning-text, #1a202c);
+}

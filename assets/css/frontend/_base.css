@@ -1,0 +1,361 @@
+/**
+ * Ensemble Shortcodes - Base Styles
+ * 
+ * Foundation styles loaded for ALL shortcodes.
+ * Defines containers, typography, and buttons.
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * ARCHITECTURE:
+ * - All styles use --ensemble-* Designer variables directly with fallbacks
+ * - No intermediary variable mapping
+ * - See CSS-ARCHITECTURE.md for complete variable reference
+ */
+
+/* ============================================
+   GLOBAL CONTAINER
+   ============================================ */
+
+.ensemble-container {
+    max-width: var(--ensemble-container-width, 1200px);
+    margin: 0 auto;
+    padding: 0 20px;
+    font-family: var(--ensemble-font-body, inherit);
+    color: var(--ensemble-text, #1a202c);
+    line-height: var(--ensemble-line-height, 1.6);
+}
+
+.ensemble-section {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* ============================================
+   NO RESULTS / ERROR STATES
+   ============================================ */
+
+.ensemble-no-results,
+.ensemble-error {
+    padding: 40px 20px;
+    text-align: center;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: 2px dashed var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    color: var(--ensemble-text-secondary, #718096);
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+.ensemble-no-results .dashicons,
+.ensemble-error .dashicons {
+    display: block;
+    font-size: var(--ensemble-hero-size, 72px);
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: var(--ensemble-text-muted, #a0aec0);
+}
+
+/* ============================================
+   TYPOGRAPHY - Headings
+   ============================================ */
+
+.ensemble-event-title,
+.ensemble-artist-title,
+.ensemble-location-title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h3-size, 24px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    line-height: var(--ensemble-line-height-heading, 1.2);
+    color: var(--ensemble-text, #1a202c);
+    margin: 0 0 12px 0;
+}
+
+.ensemble-event-title a,
+.ensemble-artist-title a,
+.ensemble-location-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.ensemble-event-title a:hover,
+.ensemble-artist-title a:hover,
+.ensemble-location-title a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* Section Titles */
+.ensemble-section-title {
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h2-size, 28px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    line-height: var(--ensemble-line-height-heading, 1.2);
+    color: var(--ensemble-text, #1a202c);
+    margin: 0 0 24px 0;
+}
+
+/* Subtitle */
+.ensemble-subtitle {
+    font-size: var(--ensemble-lg-size, 18px);
+    color: var(--ensemble-text-secondary, #718096);
+    margin: -16px 0 24px 0;
+}
+
+/* ============================================
+   TYPOGRAPHY - Body Text
+   ============================================ */
+
+.ensemble-description,
+.ensemble-excerpt {
+    font-size: var(--ensemble-body-size, 16px);
+    line-height: var(--ensemble-line-height, 1.6);
+    color: var(--ensemble-text-secondary, #718096);
+    margin: 0 0 16px 0;
+}
+
+.ensemble-meta-text {
+    font-size: var(--ensemble-meta-size, 14px);
+    color: var(--ensemble-text-muted, #a0aec0);
+}
+
+.ensemble-small-text {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+
+.ensemble-link,
+.ensemble-container a:not(.ensemble-button):not(.ensemble-btn) {
+    color: var(--ensemble-link, #667eea);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.ensemble-link:hover,
+.ensemble-container a:not(.ensemble-button):not(.ensemble-btn):hover {
+    color: var(--ensemble-hover, #5568d3);
+    text-decoration: underline;
+}
+
+/* ============================================
+   BUTTONS - Primary
+   ============================================ */
+
+.ensemble-button,
+.ensemble-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: var(--ensemble-button-padding-v, 12px) var(--ensemble-button-padding-h, 24px);
+    background: var(--ensemble-button-bg, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border: none;
+    border-radius: var(--ensemble-button-radius, 8px);
+    font-family: var(--ensemble-font-body, inherit);
+    font-size: var(--ensemble-button-font-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-button:hover,
+.ensemble-btn:hover {
+    background: var(--ensemble-button-hover-bg, #5568d3);
+    color: var(--ensemble-button-hover-text, #ffffff);
+    transform: translateY(-2px);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
+    text-decoration: none;
+}
+
+.ensemble-button:focus-visible,
+.ensemble-btn:focus-visible {
+    outline: var(--ensemble-focus-ring-width, 3px) solid var(--ensemble-focus-ring-color, var(--ensemble-primary, #667eea));
+    outline-offset: var(--ensemble-focus-ring-offset, 2px);
+}
+
+/* Button Variants */
+.ensemble-button-primary,
+.ensemble-btn--primary {
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+.ensemble-button-primary:hover,
+.ensemble-btn--primary:hover {
+    background: var(--ensemble-hover, #5568d3);
+}
+
+.ensemble-button-secondary,
+.ensemble-btn--secondary {
+    background: var(--ensemble-secondary, #764ba2);
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+/* ============================================
+   BUTTONS - Outline
+   ============================================ */
+
+.ensemble-button-outline,
+.ensemble-btn--outline {
+    background: transparent;
+    color: var(--ensemble-primary, #667eea);
+    border: var(--ensemble-button-border-width, 2px) solid var(--ensemble-primary, #667eea);
+}
+
+.ensemble-button-outline:hover,
+.ensemble-btn--outline:hover {
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   BUTTONS - Ghost (Text only)
+   ============================================ */
+
+.ensemble-button-ghost,
+.ensemble-btn--ghost {
+    background: transparent;
+    color: var(--ensemble-primary, #667eea);
+    padding: var(--ensemble-button-padding-v, 12px) 12px;
+}
+
+.ensemble-button-ghost:hover,
+.ensemble-btn--ghost:hover {
+    background: var(--ensemble-primary-light, rgba(102, 126, 234, 0.1));
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   BUTTONS - Sizes
+   ============================================ */
+
+.ensemble-button-sm,
+.ensemble-btn--sm {
+    padding: 8px 16px;
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+.ensemble-button-lg,
+.ensemble-btn--lg {
+    padding: 16px 32px;
+    font-size: var(--ensemble-lg-size, 18px);
+}
+
+.ensemble-button-block,
+.ensemble-btn--block {
+    display: flex;
+    width: 100%;
+}
+
+/* ============================================
+   BUTTONS - With Icons
+   ============================================ */
+
+.ensemble-button .dashicons,
+.ensemble-btn .dashicons {
+    font-size: var(--ensemble-lg-size, 18px);
+    width: 18px;
+    height: 18px;
+}
+
+.ensemble-button-sm .dashicons,
+.ensemble-btn--sm .dashicons {
+    font-size: var(--ensemble-body-size, 16px);
+    width: 16px;
+    height: 16px;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Text alignment */
+.ensemble-text-center {
+    text-align: center;
+}
+
+.ensemble-text-left {
+    text-align: left;
+}
+
+.ensemble-text-right {
+    text-align: right;
+}
+
+/* Visibility */
+.ensemble-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Spacing helpers */
+.ensemble-mb-0 { margin-bottom: 0; }
+.ensemble-mb-1 { margin-bottom: 8px; }
+.ensemble-mb-2 { margin-bottom: 16px; }
+.ensemble-mb-3 { margin-bottom: 24px; }
+.ensemble-mb-4 { margin-bottom: 32px; }
+
+.ensemble-mt-0 { margin-top: 0; }
+.ensemble-mt-1 { margin-top: 8px; }
+.ensemble-mt-2 { margin-top: 16px; }
+.ensemble-mt-3 { margin-top: 24px; }
+.ensemble-mt-4 { margin-top: 32px; }
+
+/* ============================================
+   LOADING STATE
+   ============================================ */
+
+.ensemble-loading {
+    position: relative;
+    min-height: 200px;
+}
+
+.ensemble-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--ensemble-loading-spinner-size, 40px);
+    height: var(--ensemble-loading-spinner-size, 40px);
+    margin: calc(var(--ensemble-loading-spinner-size, 40px) / -2) 0 0 calc(var(--ensemble-loading-spinner-size, 40px) / -2);
+    border: 3px solid var(--ensemble-card-border, #e2e8f0);
+    border-top-color: var(--ensemble-loading-spinner-color, var(--ensemble-primary, #667eea));
+    border-radius: 50%;
+    animation: ensemble-spin 0.8s linear infinite;
+}
+
+@keyframes ensemble-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   DARK MODE SUPPORT
+   ============================================
+   Dark mode is handled automatically by the Designer system.
+   When .es-mode-dark or .ensemble-dark-mode class is applied,
+   the --ensemble-* variables are overridden with dark values
+   by the ES_CSS_Generator PHP class.
+   
+   Available dark variables:
+   --ensemble-dark-primary, --ensemble-dark-text,
+   --ensemble-dark-card-bg, --ensemble-dark-border, etc.
+   
+   See CSS-ARCHITECTURE.md for full reference.
+   ============================================ */

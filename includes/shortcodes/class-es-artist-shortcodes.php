@@ -32,19 +32,32 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
 	}
 
     public function artists_list_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('artists');
+        }
+        
         // Parse attributes
         $atts = shortcode_atts(array(
             'layout' => 'grid',           // grid, list, slider, cards, compact, featured
             'columns' => '3',             // 2, 3, 4 (nur für grid)
+            'style' => 'default',
             'limit' => '12',              // Anzahl Artists
             'orderby' => 'title',         // title, date, menu_order
             'order' => 'ASC',             // ASC, DESC
             'genre' => '',                // Genre slug(s), comma-separated
             'type' => '',                 // Artist Type slug(s), comma-separated
             'category' => '',             // Alias for type (backward compatibility)
+            // Display options
             'show_image' => 'true',       // Bild anzeigen
+            'show_name' => 'true',        // Name anzeigen (immer true im Normalfall)
+            'show_position' => 'true',    // Position/Rolle anzeigen
+            'show_company' => 'true',     // Firma anzeigen
+            'show_genre' => 'false',      // Genre anzeigen
+            'show_type' => 'false',       // Artist Type anzeigen
             'show_bio' => 'true',         // Bio/Excerpt anzeigen
             'show_events' => 'false',     // Kommende Events anzeigen
+            'show_social' => 'false',     // Social Links anzeigen
             'show_link' => 'true',        // Link zum Artist
             'link_text' => 'View Profile', // Link Text
             // Slider options
@@ -178,9 +191,23 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
         // STANDARD GRID / LIST / CARDS / COMPACT LAYOUT
         // ========================================
         
+        // Check if using Kongress layout set for correct CSS class
+        $active_set = '';
+        if (class_exists('ES_Layout_Sets')) {
+            $active_set = ES_Layout_Sets::get_active_set();
+        }
+        
+        // Build container class - ALWAYS include base classes for grid functionality
         $container_class = 'ensemble-artists-list ensemble-layout-' . $layout;
+        
+        // Add column classes for grid layouts
         if (in_array($layout, array('grid', 'cards', 'compact'))) {
             $container_class .= ' ensemble-columns-' . $columns;
+        }
+        
+        // Add Kongress-specific class as additional class (not replacement!)
+        if ($active_set === 'kongress') {
+            $container_class .= ' es-kongress-speakers-grid';
         }
         
         echo '<div class="' . esc_attr($container_class) . '">';
@@ -213,9 +240,16 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
      * Render Artist Grid Item
      */
     private function render_artist_grid_item($artist_id, $atts) {
+        // Parse ALL display options
         $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
+        $show_name = isset($atts['show_name']) ? filter_var($atts['show_name'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_position = isset($atts['show_position']) ? filter_var($atts['show_position'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_company = isset($atts['show_company']) ? filter_var($atts['show_company'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_genre = isset($atts['show_genre']) ? filter_var($atts['show_genre'], FILTER_VALIDATE_BOOLEAN) : false;
+        $show_type = isset($atts['show_type']) ? filter_var($atts['show_type'], FILTER_VALIDATE_BOOLEAN) : false;
         $show_bio = filter_var($atts['show_bio'], FILTER_VALIDATE_BOOLEAN);
         $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
+        $show_social = isset($atts['show_social']) ? filter_var($atts['show_social'], FILTER_VALIDATE_BOOLEAN) : false;
         $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
         $link_text = sanitize_text_field($atts['link_text']);
         
@@ -265,7 +299,9 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
                     'excerpt' => $artist_post->post_excerpt,
                 );
                 
+                // Pass ALL attributes to template
                 $shortcode_atts = $atts;
+                $style = isset($atts['style']) ? $atts['style'] : 'default';
                 include $template_path;
                 return;
             }
@@ -333,13 +369,28 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
      */
     private function render_artist_list_item($artist_id, $atts) {
         $show_image = filter_var($atts['show_image'], FILTER_VALIDATE_BOOLEAN);
+        $show_name = isset($atts['show_name']) ? filter_var($atts['show_name'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_position = isset($atts['show_position']) ? filter_var($atts['show_position'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_company = isset($atts['show_company']) ? filter_var($atts['show_company'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_genre = isset($atts['show_genre']) ? filter_var($atts['show_genre'], FILTER_VALIDATE_BOOLEAN) : false;
         $show_bio = filter_var($atts['show_bio'], FILTER_VALIDATE_BOOLEAN);
         $show_events = filter_var($atts['show_events'], FILTER_VALIDATE_BOOLEAN);
         $show_link = filter_var($atts['show_link'], FILTER_VALIDATE_BOOLEAN);
         $link_text = sanitize_text_field($atts['link_text']);
         
         $artist = get_post($artist_id);
-        $genre = get_post_meta($artist_id, 'es_artist_genre', true);
+        
+        // Get professional info
+        $position = get_post_meta($artist_id, '_es_artist_position', true);
+        $company = get_post_meta($artist_id, '_es_artist_company', true);
+        
+        // Get genre from taxonomy
+        $genre = '';
+        $genre_terms = get_the_terms($artist_id, 'ensemble_genre');
+        if ($genre_terms && !is_wp_error($genre_terms)) {
+            $genre_names = wp_list_pluck($genre_terms, 'name');
+            $genre = implode(', ', $genre_names);
+        }
         ?>
         <div class="ensemble-artist-list-item">
             
@@ -350,8 +401,11 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
                         <?php echo get_the_post_thumbnail($artist_id, 'thumbnail'); ?>
                     </a>
                 <?php else: ?>
-                    <div class="ensemble-artist-placeholder-small">
-                        <span class="dashicons dashicons-admin-users"></span>
+                    <div class="ensemble-artist-placeholder-small" style="width: 80px; height: 80px; background: var(--ensemble-placeholder-bg, #f0f0f0); border-radius: var(--ensemble-card-radius, 8px); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ensemble-placeholder-icon, #999)" stroke-width="1" style="width: 32px; height: 32px;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
                     </div>
                 <?php endif; ?>
             </div>
@@ -360,20 +414,36 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
             <div class="ensemble-artist-list-content">
                 
                 <div class="ensemble-artist-header">
-                    <h4 class="ensemble-artist-title">
-                        <a href="<?php echo get_permalink($artist_id); ?>">
+                    <?php if ($show_name): ?>
+                    <h4 class="ensemble-artist-title" style="font-family: var(--ensemble-font-heading); font-size: var(--ensemble-lg-size, 1.125rem); font-weight: var(--ensemble-heading-weight, 600); color: var(--ensemble-text); margin: 0 0 4px 0;">
+                        <a href="<?php echo get_permalink($artist_id); ?>" style="color: inherit; text-decoration: none;">
                             <?php echo esc_html($artist->post_title); ?>
                         </a>
                     </h4>
+                    <?php endif; ?>
                     
-                    <?php if ($genre): ?>
-                    <span class="ensemble-artist-genre"><?php echo esc_html($genre); ?></span>
+                    <?php if ($show_position && $position): ?>
+                    <div class="ensemble-artist-position" style="font-size: var(--ensemble-small-size, 0.875rem); color: var(--ensemble-secondary); margin-bottom: 2px;">
+                        <?php echo esc_html($position); ?>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <?php if ($show_company && $company): ?>
+                    <div class="ensemble-artist-company" style="font-size: var(--ensemble-small-size, 0.875rem); color: var(--ensemble-text-secondary);">
+                        <?php echo esc_html($company); ?>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <?php if ($show_genre && $genre): ?>
+                    <span class="ensemble-artist-genre" style="display: inline-block; margin-top: 6px; padding: 2px 8px; background: var(--ensemble-surface, #f5f5f5); color: var(--ensemble-text-secondary); font-size: var(--ensemble-xs-size, 0.75rem); border-radius: 4px;">
+                        <?php echo esc_html($genre); ?>
+                    </span>
                     <?php endif; ?>
                 </div>
                 
                 <?php if ($show_bio && $artist->post_excerpt): ?>
-                <div class="ensemble-artist-bio">
-                    <?php echo wpautop(wp_trim_words($artist->post_excerpt, 30)); ?>
+                <div class="ensemble-artist-bio" style="margin-top: 8px; font-size: var(--ensemble-small-size, 0.875rem); color: var(--ensemble-text-secondary); line-height: 1.5;">
+                    <?php echo wp_trim_words($artist->post_excerpt, 30); ?>
                 </div>
                 <?php endif; ?>
                 
@@ -386,7 +456,7 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
             <?php if ($show_link): ?>
             <div class="ensemble-artist-list-action">
                 <a href="<?php echo get_permalink($artist_id); ?>" 
-                   class="ensemble-btn ensemble-btn-secondary">
+                   style="display: inline-block; padding: var(--ensemble-button-padding-v, 10px) var(--ensemble-button-padding-h, 20px); background: var(--ensemble-button-bg); color: var(--ensemble-button-text); font-size: var(--ensemble-button-font-size, 14px); font-weight: var(--ensemble-button-weight, 600); text-decoration: none; border-radius: var(--ensemble-button-radius, 4px); transition: all 0.3s ease;">
                     <?php echo esc_html($link_text); ?>
                 </a>
             </div>
@@ -485,38 +555,66 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
             }
         }
         
-        // Fallback: Default template
+        // Fallback: Default template with Designer variables
+        $show_position = isset($atts['show_position']) ? filter_var($atts['show_position'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_company = isset($atts['show_company']) ? filter_var($atts['show_company'], FILTER_VALIDATE_BOOLEAN) : true;
+        $show_genre_opt = isset($atts['show_genre']) ? filter_var($atts['show_genre'], FILTER_VALIDATE_BOOLEAN) : false;
+        
+        // Get professional info
+        $position = get_post_meta($artist_id, '_es_artist_position', true);
+        $company = get_post_meta($artist_id, '_es_artist_company', true);
         ?>
-        <div class="ensemble-artist-card ensemble-artist-card--large">
+        <div class="ensemble-artist-card ensemble-artist-card--large" style="background: var(--ensemble-card-bg); border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border); border-radius: var(--ensemble-card-radius, 8px); overflow: hidden; box-shadow: var(--ensemble-card-shadow); transition: all 0.3s ease;">
             <?php if ($show_image): ?>
-            <div class="ensemble-artist-portrait">
+            <div class="ensemble-artist-portrait" style="aspect-ratio: 4/5; overflow: hidden;">
                 <?php if (has_post_thumbnail($artist_id)): ?>
                     <a href="<?php echo esc_url($artist_permalink); ?>" <?php echo $link_target === '_blank' ? 'target="_blank" rel="noopener"' : ''; ?>>
-                        <?php echo get_the_post_thumbnail($artist_id, 'large'); ?>
+                        <img src="<?php echo get_the_post_thumbnail_url($artist_id, 'large'); ?>" alt="<?php echo esc_attr($artist_post->post_title); ?>" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
                     </a>
                 <?php else: ?>
-                    <div class="ensemble-artist-placeholder-large">
-                        <span class="dashicons dashicons-admin-users"></span>
+                    <div class="ensemble-artist-placeholder-large" style="width: 100%; height: 100%; background: var(--ensemble-placeholder-bg, #f0f0f0); display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="var(--ensemble-placeholder-icon, #999)" stroke-width="1" style="width: 64px; height: 64px;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
                     </div>
                 <?php endif; ?>
             </div>
             <?php endif; ?>
             
-            <div class="ensemble-artist-card-content">
-                <h3 class="ensemble-artist-title">
-                    <a href="<?php echo esc_url($artist_permalink); ?>" <?php echo $link_target === '_blank' ? 'target="_blank" rel="noopener"' : ''; ?>><?php echo esc_html($artist_post->post_title); ?></a>
+            <div class="ensemble-artist-card-content" style="padding: var(--ensemble-card-padding, 20px);">
+                <h3 class="ensemble-artist-title" style="font-family: var(--ensemble-font-heading); font-size: var(--ensemble-lg-size, 1.125rem); font-weight: var(--ensemble-heading-weight, 600); color: var(--ensemble-text); margin: 0 0 8px 0;">
+                    <a href="<?php echo esc_url($artist_permalink); ?>" style="color: inherit; text-decoration: none;" <?php echo $link_target === '_blank' ? 'target="_blank" rel="noopener"' : ''; ?>><?php echo esc_html($artist_post->post_title); ?></a>
                 </h3>
                 
-                <?php if ($genre): ?>
-                <div class="ensemble-artist-genre"><?php echo esc_html($genre); ?></div>
+                <?php if ($show_position && $position): ?>
+                <div class="ensemble-artist-position" style="font-size: var(--ensemble-small-size, 0.875rem); color: var(--ensemble-secondary); margin-bottom: 4px;">
+                    <?php echo esc_html($position); ?>
+                </div>
+                <?php endif; ?>
+                
+                <?php if ($show_company && $company): ?>
+                <div class="ensemble-artist-company" style="font-size: var(--ensemble-small-size, 0.875rem); color: var(--ensemble-text-secondary); margin-bottom: 8px;">
+                    <?php echo esc_html($company); ?>
+                </div>
+                <?php endif; ?>
+                
+                <?php if ($show_genre_opt && $genre): ?>
+                <div class="ensemble-artist-genre" style="font-size: var(--ensemble-xs-size, 0.75rem); color: var(--ensemble-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">
+                    <?php echo esc_html($genre); ?>
+                </div>
                 <?php endif; ?>
                 
                 <?php if ($show_bio && $artist_post->post_excerpt): ?>
-                <div class="ensemble-artist-bio"><?php echo wp_trim_words($artist_post->post_excerpt, 25, '...'); ?></div>
+                <div class="ensemble-artist-bio" style="font-size: var(--ensemble-small-size, 0.875rem); color: var(--ensemble-text-secondary); line-height: 1.5; margin-bottom: 16px;">
+                    <?php echo wp_trim_words($artist_post->post_excerpt, 25, '...'); ?>
+                </div>
                 <?php endif; ?>
                 
                 <?php if ($show_link): ?>
-                <a href="<?php echo esc_url($artist_permalink); ?>" class="ensemble-btn ensemble-btn-primary" <?php echo $link_target === '_blank' ? 'target="_blank" rel="noopener"' : ''; ?>>
+                <a href="<?php echo esc_url($artist_permalink); ?>" 
+                   style="display: inline-block; padding: var(--ensemble-button-padding-v, 12px) var(--ensemble-button-padding-h, 24px); background: var(--ensemble-button-bg); color: var(--ensemble-button-text); font-size: var(--ensemble-button-font-size, 14px); font-weight: var(--ensemble-button-weight, 600); text-decoration: none; border-radius: var(--ensemble-button-radius, 4px); transition: all 0.3s ease;"
+                   <?php echo $link_target === '_blank' ? 'target="_blank" rel="noopener"' : ''; ?>>
                     <?php echo esc_html($link_text); ?>
                 </a>
                 <?php endif; ?>
@@ -526,6 +624,11 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
     }
     
     /**
+     * Render upcoming events for an artist
+     * 
+     * @param int $artist_id Artist post ID
+     */
+    private function render_artist_upcoming_events($artist_id) {
         // Query upcoming events for this artist
         $args = array(
             'post_type' => ensemble_get_post_type(),
@@ -588,6 +691,11 @@ class ES_Artist_Shortcodes extends ES_Shortcode_Base {
      * @return string HTML output
      */
     public function single_artist_shortcode($atts) {
+        // Load CSS module
+        if (class_exists('ES_CSS_Loader')) {
+            ES_CSS_Loader::enqueue('artists');
+        }
+        
         // Parse attributes
         $atts = shortcode_atts(array(
             'id' => 0,                      // Artist Post ID (required)

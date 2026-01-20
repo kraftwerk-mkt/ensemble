@@ -346,7 +346,7 @@ if (!defined('ABSPATH')) exit;
             </script>
             
             <?php else: 
-                // Fallback wenn Theme Mode nicht verfügbar - immer Custom Mode
+                // Fallback wenn Theme Mode nicht verfÃ¼gbar - immer Custom Mode
                 $is_custom_mode = true;
             ?>
             <?php endif; // Ende Theme Mode Check ?>
@@ -391,7 +391,7 @@ if (!defined('ABSPATH')) exit;
                     <h3><?php _e('Design Customization', 'ensemble'); ?></h3>
                     <p class="es-card-description">
                         <?php printf(__('Active Layout: %s', 'ensemble'), '<strong>' . esc_html($layout_name) . '</strong>'); ?>
-                        — <?php _e('Customize the values below or reset to layout defaults.', 'ensemble'); ?>
+                        â€” <?php _e('Customize the values below or reset to layout defaults.', 'ensemble'); ?>
                     </p>
                 </div>
                 <div class="es-card-body" style="padding: 15px 20px;">
@@ -505,6 +505,98 @@ if (!defined('ABSPATH')) exit;
                     'dark_link_color' => sanitize_hex_color($_POST['dark_link_color'] ?? ''),
                     'dark_text_muted' => sanitize_hex_color($_POST['dark_text_muted'] ?? ''),
                     'dark_placeholder_bg' => sanitize_hex_color($_POST['dark_placeholder_bg'] ?? ''),
+                    
+                    // =====================
+                    // EXTENDED - UI Components
+                    // =====================
+                    
+                    // Focus Ring (Accessibility)
+                    'focus_ring_color' => sanitize_hex_color($_POST['focus_ring_color'] ?? ''),
+                    'focus_ring_width' => intval($_POST['focus_ring_width'] ?? 3),
+                    'focus_ring_offset' => intval($_POST['focus_ring_offset'] ?? 2),
+                    'dark_focus_ring_color' => sanitize_hex_color($_POST['dark_focus_ring_color'] ?? ''),
+                    
+                    // Form Inputs
+                    'input_bg' => sanitize_hex_color($_POST['input_bg'] ?? ''),
+                    'input_text' => sanitize_hex_color($_POST['input_text'] ?? ''),
+                    'input_border' => sanitize_hex_color($_POST['input_border'] ?? ''),
+                    'input_radius' => intval($_POST['input_radius'] ?? 6),
+                    'input_placeholder' => sanitize_hex_color($_POST['input_placeholder'] ?? ''),
+                    'input_focus_border' => sanitize_hex_color($_POST['input_focus_border'] ?? ''),
+                    'input_error_border' => sanitize_hex_color($_POST['input_error_border'] ?? ''),
+                    'input_success_border' => sanitize_hex_color($_POST['input_success_border'] ?? ''),
+                    'dark_input_bg' => sanitize_hex_color($_POST['dark_input_bg'] ?? ''),
+                    'dark_input_text' => sanitize_hex_color($_POST['dark_input_text'] ?? ''),
+                    'dark_input_border' => sanitize_hex_color($_POST['dark_input_border'] ?? ''),
+                    'dark_input_focus_border' => sanitize_hex_color($_POST['dark_input_focus_border'] ?? ''),
+                    
+                    // Badges & Tags
+                    'badge_bg' => sanitize_hex_color($_POST['badge_bg'] ?? ''),
+                    'badge_text' => sanitize_hex_color($_POST['badge_text'] ?? ''),
+                    'badge_radius' => intval($_POST['badge_radius'] ?? 4),
+                    'badge_font_size' => intval($_POST['badge_font_size'] ?? 12),
+                    'badge_primary_bg' => sanitize_hex_color($_POST['badge_primary_bg'] ?? ''),
+                    'badge_success_bg' => sanitize_hex_color($_POST['badge_success_bg'] ?? ''),
+                    'badge_warning_bg' => sanitize_hex_color($_POST['badge_warning_bg'] ?? ''),
+                    'badge_error_bg' => sanitize_hex_color($_POST['badge_error_bg'] ?? ''),
+                    
+                    // Tooltips
+                    'tooltip_bg' => sanitize_hex_color($_POST['tooltip_bg'] ?? ''),
+                    'tooltip_text' => sanitize_hex_color($_POST['tooltip_text'] ?? ''),
+                    'tooltip_radius' => intval($_POST['tooltip_radius'] ?? 6),
+                    'tooltip_font_size' => intval($_POST['tooltip_font_size'] ?? 13),
+                    
+                    // Scrollbar
+                    'scrollbar_width' => intval($_POST['scrollbar_width'] ?? 8),
+                    'scrollbar_track' => sanitize_hex_color($_POST['scrollbar_track'] ?? ''),
+                    'scrollbar_thumb' => sanitize_hex_color($_POST['scrollbar_thumb'] ?? ''),
+                    'scrollbar_thumb_hover' => sanitize_hex_color($_POST['scrollbar_thumb_hover'] ?? ''),
+                    'dark_scrollbar_track' => sanitize_hex_color($_POST['dark_scrollbar_track'] ?? ''),
+                    'dark_scrollbar_thumb' => sanitize_hex_color($_POST['dark_scrollbar_thumb'] ?? ''),
+                    
+                    // Loading States
+                    'loading_spinner_color' => sanitize_hex_color($_POST['loading_spinner_color'] ?? ''),
+                    'loading_spinner_size' => intval($_POST['loading_spinner_size'] ?? 40),
+                    'loading_overlay_bg' => sanitize_text_field($_POST['loading_overlay_bg'] ?? ''),
+                    'dark_loading_spinner_color' => sanitize_hex_color($_POST['dark_loading_spinner_color'] ?? ''),
+                    
+                    // Skeleton Loading
+                    'skeleton_bg' => sanitize_hex_color($_POST['skeleton_bg'] ?? ''),
+                    'skeleton_highlight' => sanitize_hex_color($_POST['skeleton_highlight'] ?? ''),
+                    'dark_skeleton_bg' => sanitize_hex_color($_POST['dark_skeleton_bg'] ?? ''),
+                    'dark_skeleton_highlight' => sanitize_hex_color($_POST['dark_skeleton_highlight'] ?? ''),
+                    
+                    // Dropdowns
+                    'dropdown_bg' => sanitize_hex_color($_POST['dropdown_bg'] ?? ''),
+                    'dropdown_border' => sanitize_hex_color($_POST['dropdown_border'] ?? ''),
+                    'dropdown_radius' => intval($_POST['dropdown_radius'] ?? 8),
+                    'dropdown_item_hover' => sanitize_hex_color($_POST['dropdown_item_hover'] ?? ''),
+                    'dropdown_item_active' => sanitize_hex_color($_POST['dropdown_item_active'] ?? ''),
+                    'dropdown_item_active_text' => sanitize_hex_color($_POST['dropdown_item_active_text'] ?? ''),
+                    
+                    // Modals
+                    'modal_bg' => sanitize_hex_color($_POST['modal_bg'] ?? ''),
+                    'modal_border' => sanitize_hex_color($_POST['modal_border'] ?? ''),
+                    'modal_radius' => intval($_POST['modal_radius'] ?? 12),
+                    'modal_backdrop' => sanitize_text_field($_POST['modal_backdrop'] ?? ''),
+                    'modal_header_border' => sanitize_hex_color($_POST['modal_header_border'] ?? ''),
+                    'modal_footer_bg' => sanitize_hex_color($_POST['modal_footer_bg'] ?? ''),
+                    
+                    // Tables
+                    'table_header_bg' => sanitize_hex_color($_POST['table_header_bg'] ?? ''),
+                    'table_header_text' => sanitize_hex_color($_POST['table_header_text'] ?? ''),
+                    'table_row_bg' => sanitize_hex_color($_POST['table_row_bg'] ?? ''),
+                    'table_row_alt_bg' => sanitize_hex_color($_POST['table_row_alt_bg'] ?? ''),
+                    'table_row_hover' => sanitize_hex_color($_POST['table_row_hover'] ?? ''),
+                    'table_border' => sanitize_hex_color($_POST['table_border'] ?? ''),
+                    
+                    // Pagination
+                    'pagination_bg' => sanitize_hex_color($_POST['pagination_bg'] ?? ''),
+                    'pagination_text' => sanitize_hex_color($_POST['pagination_text'] ?? ''),
+                    'pagination_hover_bg' => sanitize_hex_color($_POST['pagination_hover_bg'] ?? ''),
+                    'pagination_active_bg' => sanitize_hex_color($_POST['pagination_active_bg'] ?? ''),
+                    'pagination_active_text' => sanitize_hex_color($_POST['pagination_active_text'] ?? ''),
+                    'pagination_radius' => intval($_POST['pagination_radius'] ?? 6),
                 );
                 
                 ES_Design_Settings::save_settings($custom_settings);
@@ -515,7 +607,7 @@ if (!defined('ABSPATH')) exit;
             // Handle reset to layout defaults
             if (isset($_POST['es_reset_to_layout']) && check_admin_referer('es_design_action', 'es_design_nonce')) {
                 ES_Design_Settings::apply_layout_preset();
-                echo '<div class="notice notice-success is-dismissible"><p>' . __('Designer wurde auf die Standardwerte des Layouts zurückgesetzt!', 'ensemble') . '</p></div>';
+                echo '<div class="notice notice-success is-dismissible"><p>' . __('Designer wurde auf die Standardwerte des Layouts zurÃ¼ckgesetzt!', 'ensemble') . '</p></div>';
                 $settings = ES_Design_Settings::get_settings(); // Reload
             }
             ?>
@@ -548,6 +640,10 @@ if (!defined('ABSPATH')) exit;
                             <button type="button" class="es-designer-tab" data-tab="advanced">
                                 <span class="dashicons dashicons-admin-generic"></span>
                                 <?php _e('Erweitert', 'ensemble'); ?>
+                            </button>
+                            <button type="button" class="es-designer-tab" data-tab="extended">
+                                <span class="dashicons dashicons-admin-settings"></span>
+                                <?php _e('Extended', 'ensemble'); ?>
                             </button>
                         </div>
                         
@@ -1035,11 +1131,11 @@ if (!defined('ABSPATH')) exit;
                             <!-- Surface & Links -->
                             <div class="es-designer-section-title">
                                 <span class="dashicons dashicons-admin-appearance"></span>
-                                <?php _e('Oberflächen & Links', 'ensemble'); ?>
+                                <?php _e('OberflÃ¤chen & Links', 'ensemble'); ?>
                             </div>
                             <div class="es-designer-grid">
                                 <div class="es-designer-field">
-                                    <label><?php _e('Oberfläche', 'ensemble'); ?></label>
+                                    <label><?php _e('OberflÃ¤che', 'ensemble'); ?></label>
                                     <input type="color" name="surface_color" value="<?php echo esc_attr($settings['surface_color'] ?? '#ffffff'); ?>" class="es-color-input">
                                     <input type="text" value="<?php echo esc_attr($settings['surface_color'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
                                 </div>
@@ -1054,7 +1150,7 @@ if (!defined('ABSPATH')) exit;
                                     <input type="text" value="<?php echo esc_attr($settings['link_color'] ?? $settings['primary_color']); ?>" class="es-color-text" readonly>
                                 </div>
                                 <div class="es-designer-field">
-                                    <label><?php _e('Gedämpfter Text', 'ensemble'); ?></label>
+                                    <label><?php _e('GedÃ¤mpfter Text', 'ensemble'); ?></label>
                                     <input type="color" name="text_muted" value="<?php echo esc_attr($settings['text_muted'] ?? '#a0aec0'); ?>" class="es-color-input">
                                     <input type="text" value="<?php echo esc_attr($settings['text_muted'] ?? '#a0aec0'); ?>" class="es-color-text" readonly>
                                 </div>
@@ -1063,10 +1159,10 @@ if (!defined('ABSPATH')) exit;
                             <!-- Overlay Colors -->
                             <div class="es-designer-section-title" style="margin-top: 30px;">
                                 <span class="dashicons dashicons-format-image"></span>
-                                <?php _e('Overlay (Text über Bildern)', 'ensemble'); ?>
+                                <?php _e('Overlay (Text Ã¼ber Bildern)', 'ensemble'); ?>
                             </div>
                             <p class="description" style="margin: -10px 0 15px; color: #666;">
-                                <?php _e('Farben für Text-Overlays auf Bildern und Cards mit Hintergrundbildern.', 'ensemble'); ?>
+                                <?php _e('Farben fÃ¼r Text-Overlays auf Bildern und Cards mit Hintergrundbildern.', 'ensemble'); ?>
                             </p>
                             <div class="es-designer-grid">
                                 <div class="es-designer-field">
@@ -1079,7 +1175,7 @@ if (!defined('ABSPATH')) exit;
                                     <input type="text" value="<?php echo esc_attr($settings['overlay_text'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
                                 </div>
                                 <div class="es-designer-field">
-                                    <label><?php _e('Overlay Sekundärtext', 'ensemble'); ?></label>
+                                    <label><?php _e('Overlay SekundÃ¤rtext', 'ensemble'); ?></label>
                                     <input type="text" name="overlay_text_secondary" value="<?php echo esc_attr($settings['overlay_text_secondary'] ?? 'rgba(255, 255, 255, 0.8)'); ?>" class="es-text-input" placeholder="rgba(255, 255, 255, 0.8)">
                                 </div>
                                 <div class="es-designer-field">
@@ -1135,7 +1231,7 @@ if (!defined('ABSPATH')) exit;
                                 <?php _e('Verlauf (Card-Overlay)', 'ensemble'); ?>
                             </div>
                             <p class="description" style="margin: -10px 0 15px; color: #666;">
-                                <?php _e('Der Verlauf über Card-Bildern für bessere Lesbarkeit.', 'ensemble'); ?>
+                                <?php _e('Der Verlauf Ã¼ber Card-Bildern fÃ¼r bessere Lesbarkeit.', 'ensemble'); ?>
                             </p>
                             <div class="es-designer-grid">
                                 <div class="es-designer-field">
@@ -1173,7 +1269,7 @@ if (!defined('ABSPATH')) exit;
                             </div>
                             <div class="es-designer-grid">
                                 <div class="es-designer-field">
-                                    <label><?php _e('Oberfläche (Dark)', 'ensemble'); ?></label>
+                                    <label><?php _e('OberflÃ¤che (Dark)', 'ensemble'); ?></label>
                                     <input type="color" name="dark_surface_color" value="<?php echo esc_attr($settings['dark_surface_color'] ?? '#111111'); ?>" class="es-color-input">
                                     <input type="text" value="<?php echo esc_attr($settings['dark_surface_color'] ?? '#111111'); ?>" class="es-color-text" readonly>
                                 </div>
@@ -1188,7 +1284,7 @@ if (!defined('ABSPATH')) exit;
                                     <input type="text" value="<?php echo esc_attr($settings['dark_link_color'] ?? '#818cf8'); ?>" class="es-color-text" readonly>
                                 </div>
                                 <div class="es-designer-field">
-                                    <label><?php _e('Gedämpfter Text (Dark)', 'ensemble'); ?></label>
+                                    <label><?php _e('GedÃ¤mpfter Text (Dark)', 'ensemble'); ?></label>
                                     <input type="color" name="dark_text_muted" value="<?php echo esc_attr($settings['dark_text_muted'] ?? '#666666'); ?>" class="es-color-input">
                                     <input type="text" value="<?php echo esc_attr($settings['dark_text_muted'] ?? '#666666'); ?>" class="es-color-text" readonly>
                                 </div>
@@ -1202,15 +1298,447 @@ if (!defined('ABSPATH')) exit;
                             
                         </div>
                         
+                        <!-- Extended Tab - UI Components -->
+                        <div class="es-designer-content" data-content="extended">
+                            
+                            <p class="es-tab-intro" style="margin: 0 0 25px; color: #9ca3af; font-size: 14px; line-height: 1.6;">
+                                <?php _e('Extended UI component styles for forms, badges, tooltips, and other interface elements. These ensure visual consistency across the entire plugin.', 'ensemble'); ?>
+                            </p>
+                            
+                            <!-- Focus Ring (Accessibility) -->
+                            <div class="es-designer-section-title">
+                                <span class="dashicons dashicons-visibility"></span>
+                                <?php _e('Focus Ring (Accessibility)', 'ensemble'); ?>
+                            </div>
+                            <p class="description" style="margin: -10px 0 15px; color: #666;">
+                                <?php _e('Visual feedback for keyboard navigation. Important for accessibility compliance.', 'ensemble'); ?>
+                            </p>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Focus Color', 'ensemble'); ?></label>
+                                    <input type="color" name="focus_ring_color" value="<?php echo esc_attr($settings['focus_ring_color'] ?? '#667eea'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['focus_ring_color'] ?? '#667eea'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Focus Width (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="focus_ring_width" value="<?php echo esc_attr($settings['focus_ring_width'] ?? 3); ?>" min="1" max="6" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Focus Offset (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="focus_ring_offset" value="<?php echo esc_attr($settings['focus_ring_offset'] ?? 2); ?>" min="0" max="6" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Focus Color (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_focus_ring_color" value="<?php echo esc_attr($settings['dark_focus_ring_color'] ?? '#818cf8'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_focus_ring_color'] ?? '#818cf8'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Form Inputs -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-editor-textcolor"></span>
+                                <?php _e('Form Inputs', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input Background', 'ensemble'); ?></label>
+                                    <input type="color" name="input_bg" value="<?php echo esc_attr($settings['input_bg'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_bg'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input Text', 'ensemble'); ?></label>
+                                    <input type="color" name="input_text" value="<?php echo esc_attr($settings['input_text'] ?? '#1a202c'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_text'] ?? '#1a202c'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input Border', 'ensemble'); ?></label>
+                                    <input type="color" name="input_border" value="<?php echo esc_attr($settings['input_border'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_border'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input Radius (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="input_radius" value="<?php echo esc_attr($settings['input_radius'] ?? 6); ?>" min="0" max="20" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Placeholder Color', 'ensemble'); ?></label>
+                                    <input type="color" name="input_placeholder" value="<?php echo esc_attr($settings['input_placeholder'] ?? '#a0aec0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_placeholder'] ?? '#a0aec0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Focus Border', 'ensemble'); ?></label>
+                                    <input type="color" name="input_focus_border" value="<?php echo esc_attr($settings['input_focus_border'] ?? '#667eea'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_focus_border'] ?? '#667eea'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Error Border', 'ensemble'); ?></label>
+                                    <input type="color" name="input_error_border" value="<?php echo esc_attr($settings['input_error_border'] ?? '#dc2626'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_error_border'] ?? '#dc2626'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Success Border', 'ensemble'); ?></label>
+                                    <input type="color" name="input_success_border" value="<?php echo esc_attr($settings['input_success_border'] ?? '#10b981'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['input_success_border'] ?? '#10b981'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Dark Mode Inputs -->
+                            <div class="es-designer-section-divider">
+                                <span class="dashicons dashicons-arrow-down-alt2"></span>
+                                <?php _e('Dark Mode Inputs', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input BG (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_input_bg" value="<?php echo esc_attr($settings['dark_input_bg'] ?? '#1a1a1a'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_input_bg'] ?? '#1a1a1a'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input Text (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_input_text" value="<?php echo esc_attr($settings['dark_input_text'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_input_text'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Input Border (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_input_border" value="<?php echo esc_attr($settings['dark_input_border'] ?? '#333333'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_input_border'] ?? '#333333'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Focus Border (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_input_focus_border" value="<?php echo esc_attr($settings['dark_input_focus_border'] ?? '#818cf8'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_input_focus_border'] ?? '#818cf8'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Badges & Tags -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-tag"></span>
+                                <?php _e('Badges & Tags', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Default Badge BG', 'ensemble'); ?></label>
+                                    <input type="color" name="badge_bg" value="<?php echo esc_attr($settings['badge_bg'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['badge_bg'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Default Badge Text', 'ensemble'); ?></label>
+                                    <input type="color" name="badge_text" value="<?php echo esc_attr($settings['badge_text'] ?? '#1a202c'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['badge_text'] ?? '#1a202c'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Badge Radius (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="badge_radius" value="<?php echo esc_attr($settings['badge_radius'] ?? 4); ?>" min="0" max="20" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Badge Font Size (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="badge_font_size" value="<?php echo esc_attr($settings['badge_font_size'] ?? 12); ?>" min="10" max="16" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Primary Badge BG', 'ensemble'); ?></label>
+                                    <input type="color" name="badge_primary_bg" value="<?php echo esc_attr($settings['badge_primary_bg'] ?? '#667eea'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['badge_primary_bg'] ?? '#667eea'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Success Badge BG', 'ensemble'); ?></label>
+                                    <input type="color" name="badge_success_bg" value="<?php echo esc_attr($settings['badge_success_bg'] ?? '#10b981'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['badge_success_bg'] ?? '#10b981'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Warning Badge BG', 'ensemble'); ?></label>
+                                    <input type="color" name="badge_warning_bg" value="<?php echo esc_attr($settings['badge_warning_bg'] ?? '#f59e0b'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['badge_warning_bg'] ?? '#f59e0b'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Error Badge BG', 'ensemble'); ?></label>
+                                    <input type="color" name="badge_error_bg" value="<?php echo esc_attr($settings['badge_error_bg'] ?? '#dc2626'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['badge_error_bg'] ?? '#dc2626'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Tooltips -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-info-outline"></span>
+                                <?php _e('Tooltips', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Tooltip Background', 'ensemble'); ?></label>
+                                    <input type="color" name="tooltip_bg" value="<?php echo esc_attr($settings['tooltip_bg'] ?? '#1a202c'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['tooltip_bg'] ?? '#1a202c'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Tooltip Text', 'ensemble'); ?></label>
+                                    <input type="color" name="tooltip_text" value="<?php echo esc_attr($settings['tooltip_text'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['tooltip_text'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Tooltip Radius (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="tooltip_radius" value="<?php echo esc_attr($settings['tooltip_radius'] ?? 6); ?>" min="0" max="16" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Tooltip Font Size (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="tooltip_font_size" value="<?php echo esc_attr($settings['tooltip_font_size'] ?? 13); ?>" min="11" max="16" class="es-number-input">
+                                </div>
+                            </div>
+                            
+                            <!-- Scrollbar -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-menu"></span>
+                                <?php _e('Scrollbar', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Scrollbar Width (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="scrollbar_width" value="<?php echo esc_attr($settings['scrollbar_width'] ?? 8); ?>" min="4" max="16" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Track Color', 'ensemble'); ?></label>
+                                    <input type="color" name="scrollbar_track" value="<?php echo esc_attr($settings['scrollbar_track'] ?? '#f1f5f9'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['scrollbar_track'] ?? '#f1f5f9'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Thumb Color', 'ensemble'); ?></label>
+                                    <input type="color" name="scrollbar_thumb" value="<?php echo esc_attr($settings['scrollbar_thumb'] ?? '#cbd5e1'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['scrollbar_thumb'] ?? '#cbd5e1'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Thumb Hover', 'ensemble'); ?></label>
+                                    <input type="color" name="scrollbar_thumb_hover" value="<?php echo esc_attr($settings['scrollbar_thumb_hover'] ?? '#94a3b8'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['scrollbar_thumb_hover'] ?? '#94a3b8'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Dark Mode Scrollbar -->
+                            <div class="es-designer-section-divider">
+                                <span class="dashicons dashicons-arrow-down-alt2"></span>
+                                <?php _e('Dark Mode Scrollbar', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Track (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_scrollbar_track" value="<?php echo esc_attr($settings['dark_scrollbar_track'] ?? '#1a1a1a'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_scrollbar_track'] ?? '#1a1a1a'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Thumb (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_scrollbar_thumb" value="<?php echo esc_attr($settings['dark_scrollbar_thumb'] ?? '#404040'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_scrollbar_thumb'] ?? '#404040'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Loading States -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-update"></span>
+                                <?php _e('Loading States', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Spinner Color', 'ensemble'); ?></label>
+                                    <input type="color" name="loading_spinner_color" value="<?php echo esc_attr($settings['loading_spinner_color'] ?? '#667eea'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['loading_spinner_color'] ?? '#667eea'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Spinner Size (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="loading_spinner_size" value="<?php echo esc_attr($settings['loading_spinner_size'] ?? 40); ?>" min="20" max="80" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Overlay BG', 'ensemble'); ?></label>
+                                    <input type="text" name="loading_overlay_bg" value="<?php echo esc_attr($settings['loading_overlay_bg'] ?? 'rgba(255, 255, 255, 0.8)'); ?>" class="es-text-input" placeholder="rgba(255, 255, 255, 0.8)">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Spinner (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_loading_spinner_color" value="<?php echo esc_attr($settings['dark_loading_spinner_color'] ?? '#818cf8'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_loading_spinner_color'] ?? '#818cf8'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Skeleton Loading -->
+                            <div class="es-designer-section-divider">
+                                <span class="dashicons dashicons-arrow-down-alt2"></span>
+                                <?php _e('Skeleton Loading', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Skeleton BG', 'ensemble'); ?></label>
+                                    <input type="color" name="skeleton_bg" value="<?php echo esc_attr($settings['skeleton_bg'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['skeleton_bg'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Skeleton Highlight', 'ensemble'); ?></label>
+                                    <input type="color" name="skeleton_highlight" value="<?php echo esc_attr($settings['skeleton_highlight'] ?? '#f8fafc'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['skeleton_highlight'] ?? '#f8fafc'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Skeleton BG (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_skeleton_bg" value="<?php echo esc_attr($settings['dark_skeleton_bg'] ?? '#333333'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_skeleton_bg'] ?? '#333333'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Skeleton Highlight (Dark)', 'ensemble'); ?></label>
+                                    <input type="color" name="dark_skeleton_highlight" value="<?php echo esc_attr($settings['dark_skeleton_highlight'] ?? '#404040'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dark_skeleton_highlight'] ?? '#404040'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Dropdowns -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-arrow-down-alt2"></span>
+                                <?php _e('Dropdowns & Selects', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Dropdown BG', 'ensemble'); ?></label>
+                                    <input type="color" name="dropdown_bg" value="<?php echo esc_attr($settings['dropdown_bg'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dropdown_bg'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Dropdown Border', 'ensemble'); ?></label>
+                                    <input type="color" name="dropdown_border" value="<?php echo esc_attr($settings['dropdown_border'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dropdown_border'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Dropdown Radius (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="dropdown_radius" value="<?php echo esc_attr($settings['dropdown_radius'] ?? 8); ?>" min="0" max="20" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Item Hover', 'ensemble'); ?></label>
+                                    <input type="color" name="dropdown_item_hover" value="<?php echo esc_attr($settings['dropdown_item_hover'] ?? '#f7fafc'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dropdown_item_hover'] ?? '#f7fafc'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Active Item BG', 'ensemble'); ?></label>
+                                    <input type="color" name="dropdown_item_active" value="<?php echo esc_attr($settings['dropdown_item_active'] ?? '#667eea'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dropdown_item_active'] ?? '#667eea'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Active Item Text', 'ensemble'); ?></label>
+                                    <input type="color" name="dropdown_item_active_text" value="<?php echo esc_attr($settings['dropdown_item_active_text'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['dropdown_item_active_text'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Modals -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-editor-expand"></span>
+                                <?php _e('Modals & Dialogs', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Modal Background', 'ensemble'); ?></label>
+                                    <input type="color" name="modal_bg" value="<?php echo esc_attr($settings['modal_bg'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['modal_bg'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Modal Border', 'ensemble'); ?></label>
+                                    <input type="color" name="modal_border" value="<?php echo esc_attr($settings['modal_border'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['modal_border'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Modal Radius (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="modal_radius" value="<?php echo esc_attr($settings['modal_radius'] ?? 12); ?>" min="0" max="32" class="es-number-input">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Backdrop', 'ensemble'); ?></label>
+                                    <input type="text" name="modal_backdrop" value="<?php echo esc_attr($settings['modal_backdrop'] ?? 'rgba(0, 0, 0, 0.5)'); ?>" class="es-text-input" placeholder="rgba(0, 0, 0, 0.5)">
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Header Border', 'ensemble'); ?></label>
+                                    <input type="color" name="modal_header_border" value="<?php echo esc_attr($settings['modal_header_border'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['modal_header_border'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Footer BG', 'ensemble'); ?></label>
+                                    <input type="color" name="modal_footer_bg" value="<?php echo esc_attr($settings['modal_footer_bg'] ?? '#f7fafc'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['modal_footer_bg'] ?? '#f7fafc'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Tables -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-editor-table"></span>
+                                <?php _e('Tables', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Header BG', 'ensemble'); ?></label>
+                                    <input type="color" name="table_header_bg" value="<?php echo esc_attr($settings['table_header_bg'] ?? '#f7fafc'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['table_header_bg'] ?? '#f7fafc'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Header Text', 'ensemble'); ?></label>
+                                    <input type="color" name="table_header_text" value="<?php echo esc_attr($settings['table_header_text'] ?? '#1a202c'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['table_header_text'] ?? '#1a202c'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Row BG', 'ensemble'); ?></label>
+                                    <input type="color" name="table_row_bg" value="<?php echo esc_attr($settings['table_row_bg'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['table_row_bg'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Alt Row BG', 'ensemble'); ?></label>
+                                    <input type="color" name="table_row_alt_bg" value="<?php echo esc_attr($settings['table_row_alt_bg'] ?? '#f7fafc'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['table_row_alt_bg'] ?? '#f7fafc'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Row Hover', 'ensemble'); ?></label>
+                                    <input type="color" name="table_row_hover" value="<?php echo esc_attr($settings['table_row_hover'] ?? '#edf2f7'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['table_row_hover'] ?? '#edf2f7'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Border', 'ensemble'); ?></label>
+                                    <input type="color" name="table_border" value="<?php echo esc_attr($settings['table_border'] ?? '#e2e8f0'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['table_border'] ?? '#e2e8f0'); ?>" class="es-color-text" readonly>
+                                </div>
+                            </div>
+                            
+                            <!-- Pagination -->
+                            <div class="es-designer-section-title" style="margin-top: 30px;">
+                                <span class="dashicons dashicons-arrow-right-alt"></span>
+                                <?php _e('Pagination', 'ensemble'); ?>
+                            </div>
+                            <div class="es-designer-grid">
+                                <div class="es-designer-field">
+                                    <label><?php _e('Pagination BG', 'ensemble'); ?></label>
+                                    <input type="color" name="pagination_bg" value="<?php echo esc_attr($settings['pagination_bg'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['pagination_bg'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Pagination Text', 'ensemble'); ?></label>
+                                    <input type="color" name="pagination_text" value="<?php echo esc_attr($settings['pagination_text'] ?? '#1a202c'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['pagination_text'] ?? '#1a202c'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Hover BG', 'ensemble'); ?></label>
+                                    <input type="color" name="pagination_hover_bg" value="<?php echo esc_attr($settings['pagination_hover_bg'] ?? '#f7fafc'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['pagination_hover_bg'] ?? '#f7fafc'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Active BG', 'ensemble'); ?></label>
+                                    <input type="color" name="pagination_active_bg" value="<?php echo esc_attr($settings['pagination_active_bg'] ?? '#667eea'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['pagination_active_bg'] ?? '#667eea'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Active Text', 'ensemble'); ?></label>
+                                    <input type="color" name="pagination_active_text" value="<?php echo esc_attr($settings['pagination_active_text'] ?? '#ffffff'); ?>" class="es-color-input">
+                                    <input type="text" value="<?php echo esc_attr($settings['pagination_active_text'] ?? '#ffffff'); ?>" class="es-color-text" readonly>
+                                </div>
+                                <div class="es-designer-field">
+                                    <label><?php _e('Radius (px)', 'ensemble'); ?></label>
+                                    <input type="number" name="pagination_radius" value="<?php echo esc_attr($settings['pagination_radius'] ?? 6); ?>" min="0" max="20" class="es-number-input">
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
                         <div class="es-designer-actions">
                             <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
                                 <button type="submit" name="es_save_custom_design" class="button button-primary button-large">
                                     <span class="dashicons dashicons-saved"></span>
                                     <?php _e('Save Custom Design', 'ensemble'); ?>
                                 </button>
-                                <button type="submit" name="es_reset_to_layout" class="button button-secondary" onclick="return confirm('<?php esc_attr_e('Alle Designer-Einstellungen auf die Standardwerte des aktuellen Layouts zurücksetzen?', 'ensemble'); ?>');">
+                                <button type="submit" name="es_reset_to_layout" class="button button-secondary" onclick="return confirm('<?php esc_attr_e('Alle Designer-Einstellungen auf die Standardwerte des aktuellen Layouts zurÃ¼cksetzen?', 'ensemble'); ?>');">
                                     <span class="dashicons dashicons-image-rotate"></span>
-                                    <?php _e('Auf Layout-Standard zurücksetzen', 'ensemble'); ?>
+                                    <?php _e('Auf Layout-Standard zurÃ¼cksetzen', 'ensemble'); ?>
                                 </button>
                             </div>
                             <p class="description" style="margin-top: 12px;">

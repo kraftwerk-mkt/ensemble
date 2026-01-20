@@ -1,0 +1,608 @@
+/**
+ * Ensemble Shortcodes - Lineup
+ * 
+ * Styles for lineup-related shortcodes:
+ * - [ensemble_lineup] - Event Lineup
+ * - Timeline view
+ * - Multivenue layouts
+ * 
+ * @package Ensemble
+ * @subpackage Shortcodes
+ * @version 3.0.0
+ * 
+ * DEPENDENCIES:
+ * - _base.css
+ * - _components.css
+ * 
+ * CONDITIONAL LOADING:
+ * Only loaded when lineup shortcodes are present on page.
+ */
+
+/* ============================================
+   LINEUP WRAPPER
+   ============================================ */
+
+.ensemble-lineup {
+    margin: var(--ensemble-section-spacing, 48px) 0;
+}
+
+/* ============================================
+   LINEUP DATE GROUPS
+   ============================================ */
+
+.ensemble-lineup-date {
+    margin-bottom: 32px;
+}
+
+.ensemble-lineup-date-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ensemble-primary, #667eea);
+}
+
+.ensemble-lineup-date-header h3 {
+    margin: 0;
+    font-family: var(--ensemble-font-heading, inherit);
+    font-size: var(--ensemble-h2-size, 28px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-lineup-date-count {
+    padding: var(--ensemble-badge-padding-v, 4px) var(--ensemble-badge-padding-h, 12px);
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: var(--ensemble-badge-radius, 16px);
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+/* ============================================
+   LINEUP EVENTS LIST
+   ============================================ */
+
+.ensemble-lineup-events {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ensemble-lineup-event {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: var(--ensemble-card-bg, #ffffff);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    border-radius: var(--ensemble-card-radius, 12px);
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-lineup-event:hover {
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: var(--ensemble-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Time Badge */
+.ensemble-lineup-time {
+    flex-shrink: 0;
+    width: 70px;
+    text-align: center;
+    padding: 8px;
+    background: var(--ensemble-primary, #667eea);
+    color: var(--ensemble-button-text, #ffffff);
+    border-radius: calc(var(--ensemble-radius, 8px) / 2);
+    font-weight: var(--ensemble-button-weight, 600);
+    font-size: var(--ensemble-small-size, 14px);
+}
+
+/* Event Info */
+.ensemble-lineup-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ensemble-lineup-event-title {
+    margin: 0 0 4px 0;
+}
+
+.ensemble-lineup-event-title a {
+    color: var(--ensemble-text, #1a202c);
+    text-decoration: none;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+.ensemble-lineup-event-title a:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-lineup-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+}
+
+.ensemble-lineup-artist,
+.ensemble-lineup-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ensemble-lineup-artist .dashicons,
+.ensemble-lineup-location .dashicons {
+    width: 14px;
+    height: 14px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* ============================================
+   TIMELINE SECTION
+   ============================================ */
+
+.ensemble-timeline-section {
+    margin: 30px 0;
+    padding: var(--ensemble-card-padding, 24px);
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+.ensemble-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--ensemble-xl-size, 20px);
+    font-weight: var(--ensemble-button-weight, 600);
+    margin: 0 0 20px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ensemble-card-border, #e2e8f0);
+    color: var(--ensemble-text, #1a202c);
+}
+
+.ensemble-section-title .dashicons {
+    color: var(--ensemble-primary, #667eea);
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+
+.ensemble-timeline {
+    position: relative;
+    padding-left: 20px;
+}
+
+/* Vertical line */
+.ensemble-timeline::before {
+    content: '';
+    position: absolute;
+    left: 80px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--ensemble-primary, #667eea), var(--ensemble-card-border, #e2e8f0));
+}
+
+/* Timeline Item */
+.ensemble-timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.ensemble-timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Time */
+.ensemble-timeline-time {
+    min-width: 60px;
+    text-align: right;
+    padding-top: 8px;
+}
+
+.ensemble-timeline-time .time-value {
+    font-weight: var(--ensemble-heading-weight, 700);
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-timeline-time .time-tba {
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-muted, #a0aec0);
+    font-style: italic;
+}
+
+/* Marker */
+.ensemble-timeline-marker {
+    position: absolute;
+    left: 74px;
+    top: 12px;
+    width: 14px;
+    height: 14px;
+    background: var(--ensemble-primary, #667eea);
+    border-radius: 50%;
+    border: 3px solid var(--ensemble-card-bg, #ffffff);
+    box-shadow: 0 0 0 2px var(--ensemble-primary, #667eea);
+    z-index: 1;
+}
+
+/* Content */
+.ensemble-timeline-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--ensemble-card-bg, #ffffff);
+    padding: 12px 16px;
+    border-radius: var(--ensemble-radius, 8px);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    margin-left: 20px;
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-timeline-content:hover {
+    border-color: var(--ensemble-primary, #667eea);
+    box-shadow: var(--ensemble-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
+}
+
+/* Timeline Image */
+.ensemble-timeline-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.ensemble-timeline-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Timeline Info */
+.ensemble-timeline-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ensemble-timeline-name {
+    display: block;
+    font-weight: var(--ensemble-button-weight, 600);
+    font-size: var(--ensemble-body-size, 16px);
+    color: var(--ensemble-text, #1a202c);
+    text-decoration: none;
+}
+
+.ensemble-timeline-name:hover {
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-timeline-venue {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--ensemble-small-size, 14px);
+    color: var(--ensemble-text-secondary, #718096);
+    margin-top: 4px;
+}
+
+.ensemble-timeline-venue .dashicons {
+    font-size: var(--ensemble-small-size, 14px);
+    width: 14px;
+    height: 14px;
+}
+
+/* ============================================
+   MULTIVENUE SECTION
+   ============================================ */
+
+.ensemble-multivenue-section {
+    margin: 30px 0;
+    padding: var(--ensemble-card-padding, 24px);
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+}
+
+.ensemble-venues-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* Venue Card */
+.ensemble-venue-card {
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    overflow: hidden;
+}
+
+.ensemble-venue-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, var(--ensemble-primary, #667eea), var(--ensemble-secondary, #764ba2));
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+.ensemble-venue-header .dashicons {
+    font-size: var(--ensemble-xl-size, 20px);
+    width: 20px;
+    height: 20px;
+}
+
+.ensemble-venue-name {
+    margin: 0;
+    font-size: var(--ensemble-body-size, 16px);
+    font-weight: var(--ensemble-button-weight, 600);
+}
+
+/* Venue Artists */
+.ensemble-venue-artists {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ensemble-venue-artist {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-radius, 8px);
+    text-decoration: none;
+    color: var(--ensemble-text, #1a202c);
+    transition: var(--ensemble-transition, all 0.3s ease);
+}
+
+.ensemble-venue-artist:hover {
+    background: var(--ensemble-card-border, #e2e8f0);
+    color: var(--ensemble-primary, #667eea);
+}
+
+.ensemble-venue-artist img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.ensemble-venue-artist .artist-name {
+    font-weight: var(--ensemble-body-weight, 400);
+}
+
+/* ============================================
+   MULTIVENUE LINEUP (Advanced)
+   ============================================ */
+
+.es-multivenue-lineup {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.es-venue-group {
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    overflow: hidden;
+}
+
+.es-venue-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 16px 20px;
+    font-size: var(--ensemble-lg-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    background: linear-gradient(135deg, var(--ensemble-primary, #667eea), var(--ensemble-secondary, #764ba2));
+    color: var(--ensemble-button-text, #ffffff);
+}
+
+.es-venue-title .dashicons {
+    font-size: var(--ensemble-xl-size, 20px);
+    width: 20px;
+    height: 20px;
+}
+
+.es-venue-count {
+    margin-left: auto;
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-body-weight, 400);
+    opacity: 0.85;
+}
+
+/* Artist grid within venue */
+.es-artist-grid-in-venue {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.es-artist-card-compact {
+    background: var(--ensemble-card-bg, #ffffff);
+    border-radius: var(--ensemble-radius, 8px);
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+    overflow: hidden;
+}
+
+.es-artist-card-compact .es-artist-card-image {
+    height: 120px;
+    overflow: hidden;
+}
+
+.es-artist-card-compact .es-artist-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-artist-card-compact .es-artist-card-content {
+    padding: 12px;
+}
+
+.es-artist-card-compact .es-artist-card-name {
+    font-size: var(--ensemble-small-size, 14px);
+    font-weight: var(--ensemble-button-weight, 600);
+    margin: 0 0 4px 0;
+    color: var(--ensemble-text, #1a202c);
+}
+
+.es-artist-card-compact .es-artist-card-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.es-artist-card-compact .es-genre-tag-small {
+    font-size: var(--ensemble-xs-size, 12px);
+    padding: 2px 6px;
+    background: var(--ensemble-badge-bg, var(--ensemble-surface, #ffffff));
+    border-radius: var(--ensemble-badge-radius, 4px);
+    color: var(--ensemble-badge-text, var(--ensemble-text-secondary, #718096));
+}
+
+/* Timeline within venue */
+.es-timeline-in-venue {
+    padding: 20px;
+    padding-top: 10px;
+}
+
+.es-timeline-in-venue .es-timeline-item {
+    padding: 12px 0;
+}
+
+.es-timeline-in-venue .es-artist-name {
+    font-size: var(--ensemble-body-size, 16px);
+}
+
+.es-timeline-in-venue .es-artist-image {
+    width: 48px;
+    height: 48px;
+}
+
+/* ============================================
+   LOCATION CARD (Full width in lineup)
+   ============================================ */
+
+.es-location-card-full {
+    display: flex;
+    gap: 24px;
+    background: var(--ensemble-surface, #ffffff);
+    border-radius: var(--ensemble-card-radius, 12px);
+    overflow: hidden;
+    border: var(--ensemble-card-border-width, 1px) solid var(--ensemble-card-border, #e2e8f0);
+}
+
+.es-location-card-full .es-location-card-image {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.es-location-card-full .es-location-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.es-location-card-full .es-location-card-content {
+    padding: 20px;
+    flex: 1;
+}
+
+.es-location-card-name {
+    margin: 0 0 8px 0;
+    font-size: var(--ensemble-lg-size, 18px);
+    font-weight: var(--ensemble-heading-weight, 700);
+    color: var(--ensemble-text, #1a202c);
+}
+
+/* ============================================
+   RESPONSIVE - Timeline & Multivenue
+   ============================================ */
+
+@media (max-width: 768px) {
+    .es-venue-title {
+        font-size: var(--ensemble-body-size, 16px);
+        padding: 12px 16px;
+    }
+    
+    .es-venue-count {
+        display: none;
+    }
+    
+    .es-artist-grid-in-venue {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    .es-artist-card-compact .es-artist-card-image {
+        height: 100px;
+    }
+    
+    .es-location-card-full {
+        flex-direction: column;
+    }
+    
+    .es-location-card-full .es-location-card-image {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+@media (max-width: 600px) {
+    .ensemble-timeline::before {
+        left: 20px;
+    }
+    
+    .ensemble-timeline-item {
+        flex-direction: column;
+        padding-left: 40px;
+    }
+    
+    .ensemble-timeline-time {
+        text-align: left;
+        padding-top: 0;
+        margin-bottom: 8px;
+    }
+    
+    .ensemble-timeline-marker {
+        left: 14px;
+        top: 4px;
+    }
+    
+    .ensemble-timeline-content {
+        margin-left: 0;
+    }
+    
+    .ensemble-venues-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .ensemble-lineup-event {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .ensemble-lineup-time {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}

@@ -50,7 +50,7 @@ class ES_Design_Settings {
         'surface_color' => '#ffffff',
         'divider_color' => '#e2e8f0',
         
-        // Overlay (Text über Bildern)
+        // Overlay (Text Ã¼ber Bildern)
         'overlay_bg' => 'rgba(0, 0, 0, 0.7)',
         'overlay_text' => '#ffffff',
         'overlay_text_secondary' => 'rgba(255, 255, 255, 0.8)',
@@ -189,6 +189,147 @@ class ES_Design_Settings {
         'filter_bg' => '#f7fafc',
         'dark_filter_bg' => '#1a1a1a',
         'filter_position' => 'above',
+        
+        // =====================
+        // EXTENDED - UI Components
+        // =====================
+        
+        // Focus Ring (Accessibility)
+        'focus_ring_color' => '#667eea',
+        'focus_ring_width' => 3,
+        'focus_ring_offset' => 2,
+        'focus_ring_style' => 'solid', // solid, dashed, dotted
+        'dark_focus_ring_color' => '#818cf8',
+        
+        // Form Inputs
+        'input_bg' => '#ffffff',
+        'input_text' => '#1a202c',
+        'input_border' => '#e2e8f0',
+        'input_border_width' => 1,
+        'input_radius' => 6,
+        'input_padding_v' => 10,
+        'input_padding_h' => 14,
+        'input_placeholder' => '#a0aec0',
+        'input_focus_border' => '#667eea',
+        'input_focus_shadow' => 'rgba(102, 126, 234, 0.25)',
+        'input_error_border' => '#dc2626',
+        'input_success_border' => '#10b981',
+        'dark_input_bg' => '#1a1a1a',
+        'dark_input_text' => '#ffffff',
+        'dark_input_border' => '#333333',
+        'dark_input_placeholder' => '#666666',
+        'dark_input_focus_border' => '#818cf8',
+        'dark_input_focus_shadow' => 'rgba(129, 140, 248, 0.25)',
+        
+        // Badges & Tags
+        'badge_bg' => '#e2e8f0',
+        'badge_text' => '#1a202c',
+        'badge_radius' => 4,
+        'badge_padding_v' => 4,
+        'badge_padding_h' => 8,
+        'badge_font_size' => 12,
+        'badge_font_weight' => 600,
+        'badge_primary_bg' => '#667eea',
+        'badge_primary_text' => '#ffffff',
+        'badge_success_bg' => '#10b981',
+        'badge_success_text' => '#ffffff',
+        'badge_warning_bg' => '#f59e0b',
+        'badge_warning_text' => '#1a202c',
+        'badge_error_bg' => '#dc2626',
+        'badge_error_text' => '#ffffff',
+        'dark_badge_bg' => '#333333',
+        'dark_badge_text' => '#e0e0e0',
+        
+        // Tooltips
+        'tooltip_bg' => '#1a202c',
+        'tooltip_text' => '#ffffff',
+        'tooltip_radius' => 6,
+        'tooltip_padding_v' => 8,
+        'tooltip_padding_h' => 12,
+        'tooltip_font_size' => 13,
+        'tooltip_shadow' => '0 4px 12px rgba(0, 0, 0, 0.15)',
+        'tooltip_arrow_size' => 6,
+        'dark_tooltip_bg' => '#fafafa',
+        'dark_tooltip_text' => '#1a202c',
+        
+        // Scrollbar
+        'scrollbar_width' => 8,
+        'scrollbar_track' => '#f1f5f9',
+        'scrollbar_thumb' => '#cbd5e1',
+        'scrollbar_thumb_hover' => '#94a3b8',
+        'scrollbar_radius' => 4,
+        'dark_scrollbar_track' => '#1a1a1a',
+        'dark_scrollbar_thumb' => '#404040',
+        'dark_scrollbar_thumb_hover' => '#525252',
+        
+        // Loading States
+        'loading_spinner_color' => '#667eea',
+        'loading_spinner_size' => 40,
+        'loading_overlay_bg' => 'rgba(255, 255, 255, 0.8)',
+        'dark_loading_spinner_color' => '#818cf8',
+        'dark_loading_overlay_bg' => 'rgba(0, 0, 0, 0.8)',
+        
+        // Skeleton Loading
+        'skeleton_bg' => '#e2e8f0',
+        'skeleton_highlight' => '#f8fafc',
+        'skeleton_radius' => 4,
+        'dark_skeleton_bg' => '#333333',
+        'dark_skeleton_highlight' => '#404040',
+        
+        // Dropdown/Select
+        'dropdown_bg' => '#ffffff',
+        'dropdown_border' => '#e2e8f0',
+        'dropdown_shadow' => '0 4px 16px rgba(0, 0, 0, 0.12)',
+        'dropdown_radius' => 8,
+        'dropdown_item_hover' => '#f7fafc',
+        'dropdown_item_active' => '#667eea',
+        'dropdown_item_active_text' => '#ffffff',
+        'dark_dropdown_bg' => '#1a1a1a',
+        'dark_dropdown_border' => '#333333',
+        'dark_dropdown_shadow' => '0 4px 16px rgba(0, 0, 0, 0.4)',
+        'dark_dropdown_item_hover' => '#252525',
+        
+        // Modals
+        'modal_bg' => '#ffffff',
+        'modal_border' => '#e2e8f0',
+        'modal_radius' => 12,
+        'modal_shadow' => '0 20px 60px rgba(0, 0, 0, 0.2)',
+        'modal_backdrop' => 'rgba(0, 0, 0, 0.5)',
+        'modal_header_border' => '#e2e8f0',
+        'modal_footer_bg' => '#f7fafc',
+        'dark_modal_bg' => '#1a1a1a',
+        'dark_modal_border' => '#333333',
+        'dark_modal_backdrop' => 'rgba(0, 0, 0, 0.7)',
+        'dark_modal_header_border' => '#333333',
+        'dark_modal_footer_bg' => '#111111',
+        
+        // Tables
+        'table_header_bg' => '#f7fafc',
+        'table_header_text' => '#1a202c',
+        'table_row_bg' => '#ffffff',
+        'table_row_alt_bg' => '#f7fafc',
+        'table_row_hover' => '#edf2f7',
+        'table_border' => '#e2e8f0',
+        'dark_table_header_bg' => '#1a1a1a',
+        'dark_table_header_text' => '#fafafa',
+        'dark_table_row_bg' => '#0a0a0a',
+        'dark_table_row_alt_bg' => '#111111',
+        'dark_table_row_hover' => '#1a1a1a',
+        'dark_table_border' => '#333333',
+        
+        // Pagination
+        'pagination_bg' => '#ffffff',
+        'pagination_text' => '#1a202c',
+        'pagination_border' => '#e2e8f0',
+        'pagination_hover_bg' => '#f7fafc',
+        'pagination_active_bg' => '#667eea',
+        'pagination_active_text' => '#ffffff',
+        'pagination_radius' => 6,
+        'dark_pagination_bg' => '#1a1a1a',
+        'dark_pagination_text' => '#e0e0e0',
+        'dark_pagination_border' => '#333333',
+        'dark_pagination_hover_bg' => '#252525',
+        'dark_pagination_active_bg' => '#818cf8',
     );
     
     /**

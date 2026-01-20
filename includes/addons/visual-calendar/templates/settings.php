@@ -2,6 +2,8 @@
 /**
  * Visual Calendar Pro - Settings Template
  * 
+ * USES: admin-unified.css for all styles
+ * 
  * @package Ensemble
  * @subpackage Addons/VisualCalendar
  * 
@@ -84,7 +86,7 @@ if (!defined('ABSPATH')) exit;
     <div class="es-settings-section">
         <h3><?php _e('Content Options', 'ensemble'); ?></h3>
         
-        <div class="es-toggle-group" style="margin-top: 16px;">
+        <div class="es-toggle-group">
             <label class="es-toggle es-toggle--reverse es-toggle--block">
                 <input type="checkbox" name="show_time" value="1" <?php checked($settings['show_time'] ?? true); ?>>
                 <span class="es-toggle-track"></span>
@@ -149,22 +151,22 @@ if (!defined('ABSPATH')) exit;
             <p><strong><?php _e('Basic Usage:', 'ensemble'); ?></strong></p>
             <code>[ensemble_visual_calendar]</code>
             
-            <p style="margin-top: 15px;"><strong><?php _e('With Options:', 'ensemble'); ?></strong></p>
+            <p><strong><?php _e('With Options:', 'ensemble'); ?></strong></p>
             <code>[ensemble_visual_calendar color_scheme="dark" show_navigation="true"]</code>
             
-            <p style="margin-top: 15px;"><strong><?php _e('Filter by Category:', 'ensemble'); ?></strong></p>
+            <p><strong><?php _e('Filter by Category:', 'ensemble'); ?></strong></p>
             <code>[ensemble_visual_calendar category="concerts"]</code>
             
-            <p style="margin-top: 15px;"><strong><?php _e('Specific Month:', 'ensemble'); ?></strong></p>
+            <p><strong><?php _e('Specific Month:', 'ensemble'); ?></strong></p>
             <code>[ensemble_visual_calendar year="2025" month="12"]</code>
             
-            <p style="margin-top: 15px;"><strong><?php _e('Alternative Shortcode Names:', 'ensemble'); ?></strong></p>
+            <p><strong><?php _e('Alternative Shortcode Names:', 'ensemble'); ?></strong></p>
             <code>[ensemble_photo_calendar]</code>
             <code>[ensemble_calendar_grid]</code>
         </div>
         
-        <h4 style="margin-top: 20px;"><?php _e('Available Attributes', 'ensemble'); ?></h4>
-        <table class="widefat" style="max-width: 600px;">
+        <h4><?php _e('Available Attributes', 'ensemble'); ?></h4>
+        <table class="widefat">
             <thead>
                 <tr>
                     <th><?php _e('Attribute', 'ensemble'); ?></th>
@@ -218,32 +220,3 @@ if (!defined('ABSPATH')) exit;
     </div>
         
 </div>
-
-<style>
-.es-addon-settings-content .es-settings-section {
-    background: #fff;
-    border: 1px solid #ccd0d4;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 0;
-}
-
-.es-addon-settings-content .es-settings-section:first-child {
-    margin-top: 0;
-}
-
-.es-addon-settings-content .es-settings-section h3 {
-    margin-top: 0;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
-
-.es-addon-settings-content .es-shortcode-examples code {
-    display: block;
-    padding: 10px 15px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    font-size: 13px;
-    margin-bottom: 5px;
-}
-</style>

@@ -386,6 +386,11 @@
                                 </svg>
                                 Edit
                             </button>
+                            <button class="es-icon-btn es-copy-location" data-location-id="${location.id}" title="Copy">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
                             <button class="es-icon-btn es-icon-btn-danger es-delete-location" data-location-id="${location.id}" title="Löschen">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M4 7h16"/><path d="M10 4h4"/><path d="M6 7l1 13h10l1-13"/>
@@ -404,6 +409,12 @@
             e.stopPropagation();
             const locationId = $(this).data('location-id');
             editLocation(locationId);
+        });
+        
+        $('.es-copy-location').on('click', function(e) {
+            e.stopPropagation();
+            const locationId = $(this).data('location-id');
+            copyLocation(locationId, $(this));
         });
         
         $('.es-delete-location').on('click', function(e) {
@@ -789,9 +800,7 @@
      * Delete location
      */
     function deleteLocation(locationId) {
-        if (!confirm('Are you sure you want to delete this location?')) {
-            return;
-        }
+        console.log('🗑️ deleteLocation called with ID:', locationId);
         
         $.ajax({
             url: ensembleAjax.ajaxurl,
@@ -802,6 +811,7 @@
                 location_id: locationId
             },
             success: function(response) {
+                console.log('🗑️ Delete response:', response);
                 if (response.success) {
                     showMessage('success', response.data.message);
                     $('#es-location-modal').fadeOut();
@@ -812,6 +822,49 @@
             },
             error: function() {
                 showMessage('error', 'Failed to delete location');
+            }
+        });
+    }
+    
+    /**
+     * Copy location
+     */
+    function copyLocation(locationId, $btn) {
+        console.log('📋 copyLocation called with ID:', locationId);
+        
+        // Show loading state
+        const $icon = $btn.find('svg');
+        const originalSvg = $icon.prop('outerHTML');
+        $btn.prop('disabled', true);
+        $icon.replaceWith('<span class="dashicons dashicons-update es-spin"></span>');
+        
+        $.ajax({
+            url: ensembleAjax.ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'es_copy_location',
+                nonce: ensembleAjax.nonce,
+                location_id: locationId
+            },
+            success: function(response) {
+                console.log('📋 Copy response:', response);
+                if (response.success) {
+                    showMessage('success', response.data.message || 'Location copied!');
+                    loadLocations();
+                    // Open the copy for editing
+                    setTimeout(function() {
+                        editLocation(response.data.location_id);
+                    }, 500);
+                } else {
+                    showMessage('error', response.data.message || 'Failed to copy location');
+                }
+            },
+            error: function() {
+                showMessage('error', 'Failed to copy location');
+            },
+            complete: function() {
+                $btn.prop('disabled', false);
+                $btn.find('.dashicons').replaceWith(originalSvg);
             }
         });
     }
@@ -874,9 +927,7 @@
     function bulkDeleteLocations() {
         if (selectedLocations.length === 0) return;
         
-        if (!confirm(`Are you sure you want to delete ${selectedLocations.length} location(s)?`)) {
-            return;
-        }
+        console.log('🗑️ bulkDeleteLocations called, count:', selectedLocations.length);
         
         $.ajax({
             url: ensembleAjax.ajaxurl,
@@ -887,6 +938,7 @@
                 location_ids: selectedLocations
             },
             success: function(response) {
+                console.log('🗑️ Bulk delete response:', response);
                 if (response.success) {
                     showMessage('success', `Deleted ${response.data.deleted} location(s)`);
                     selectedLocations = [];

@@ -378,6 +378,17 @@ class ES_Wizard {
         $event['reservation_deadline_hours'] = get_post_meta($post->ID, '_reservation_deadline_hours', true) ?: 24;
         $event['reservation_auto_confirm'] = get_post_meta($post->ID, '_reservation_auto_confirm', true) == '1';
         
+        // NEW: Capacity per type
+        $event['reservation_capacity_guestlist'] = get_post_meta($post->ID, '_reservation_capacity_guestlist', true);
+        $event['reservation_capacity_vip'] = get_post_meta($post->ID, '_reservation_capacity_vip', true);
+        $event['reservation_capacity_table'] = get_post_meta($post->ID, '_reservation_capacity_table', true);
+        
+        // NEW: Max guests per booking
+        $event['reservation_max_guests'] = get_post_meta($post->ID, '_reservation_max_guests', true) ?: 10;
+        
+        // NEW: Ticket integration mode
+        $event['reservation_ticket_mode'] = get_post_meta($post->ID, '_reservation_ticket_mode', true) ?: 'none';
+        
         // Get event contacts (from Staff addon)
         $contacts = get_post_meta($post->ID, '_es_event_contacts', true);
         $event['contacts'] = is_array($contacts) ? $contacts : array();
